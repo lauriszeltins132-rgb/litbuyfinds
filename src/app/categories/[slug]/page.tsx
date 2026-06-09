@@ -1,0 +1,92 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { Suspense } from "react";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import CatalogPanel from "@/components/CatalogPanel";
+import RelatedSeoLinks from "@/components/RelatedSeoLinks";
+import { getBrandsFromProducts } from "@/lib/brands";
+import {
+  CATEGORY_ALIAS_SLUGS,
+  getResolvedCategorySeo,
+  resolveCategorySlug,
+} from "@/lib/category-aliases";
+import { getCategories } from "@/lib/products";
+import { buildPageMetadata } from "@/lib/seo";
+
+type CategoryPageProps = {
+  params: Promise<{ slug: string }>;
+};
+
+export async function generateStaticParams() {
+  const canonical = getCategories()
+    .filter((category) => category.group === "category")
+    .map((category) => ({ slug: category.slug }));
+
+  const aliases = CATEGORY_ALIAS_SLUGS.map((slug) => ({ slug }));
+  return [...canonical, ...aliases];
+}
+
+export async function generateMetadata({
+  params,
+}: CategoryPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const resolved = resolveCategorySlug(slug);
+  if (!resolved) return {};
+
+  const copy = getResolvedCategorySeo(resolved);
+  return buildPageMetadata({
+    title: copy.title,
+    description: copy.description,
+    path: `/categories/${slug}`,
+  });
+}
+
+export default async function CategoryLandingPage({ params }: CategoryPageProps) {
+  const { slug } = await params;
+  const resolved = resolveCategorySlug(slug);
+
+  if (!resolved) {
+    notFound();
+  }
+
+  const copy = getResolvedCategorySeo(resolved);
+  const brands = getBrandsFromProducts(resolved.products);
+
+  return (
+    <>
+      <Breadcrumbs
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Categories", href: "/categories" },
+          { label: resolved.name },
+        ]}
+      />
+
+      <section className="px-4 pb-6 pt-4 sm:px-6">
+        <div className="mx-auto max-w-7xl">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
+            Category
+          </p>
+          <h1 className="mt-3 text-3xl font-black sm:text-4xl">{copy.title}</h1>
+          <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted">
+            {copy.intro}
+          </p>
+          <p className="mt-3 text-sm text-muted">
+            {resolved.count.toLocaleString()} products indexed
+          </p>
+        </div>
+      </section>
+
+      <RelatedSeoLinks />
+
+      <Suspense fallback={<div className="py-24 text-center text-muted">Loading...</div>}>
+        <CatalogPanel
+          products={resolved.products}
+          categories={getCategories()}
+          brands={brands}
+          basePath={resolved.href}
+        />
+      </Suspense>
+    </>
+  );
+}

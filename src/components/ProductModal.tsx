@@ -1,0 +1,144 @@
+"use client";
+
+import Link from "next/link";
+import { useEffect } from "react";
+import type { Product } from "@/lib/types";
+import { getProductHref } from "@/lib/slugs";
+import { extractBrand } from "@/lib/brands";
+import { formatPrice } from "@/lib/currency";
+import { getProductSource } from "@/lib/filters";
+import {
+  getProductDescription,
+  getProductHighlights,
+} from "@/lib/product-details";
+import { usePreferences } from "@/context/PreferencesContext";
+import ProductImage from "./ProductImage";
+
+type ProductModalProps = {
+  product: Product | null;
+  onClose: () => void;
+};
+
+export default function ProductModal({ product, onClose }: ProductModalProps) {
+  const { currency } = usePreferences();
+
+  useEffect(() => {
+    if (!product) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [product, onClose]);
+
+  if (!product) return null;
+
+  const brand = extractBrand(product.product_name);
+  const source = getProductSource(product.affiliate_link);
+
+  return (
+    <div className="fixed inset-0 z-[150] flex items-end justify-center sm:items-center sm:p-4">
+      <button
+        type="button"
+        aria-label="Close"
+        className="absolute inset-0 bg-black/85 backdrop-blur-md"
+        onClick={onClose}
+      />
+
+      <div className="modal-enter panel-shell relative flex max-h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-t-3xl border border-border sm:rounded-3xl">
+        <div className="flex items-center justify-between border-b border-border px-5 py-4">
+          <p className="text-xs font-bold uppercase tracking-wider text-accent">
+            Product detail
+          </p>
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-full border border-border px-3 py-1.5 text-sm font-semibold"
+          >
+            Close
+          </button>
+        </div>
+
+        <div className="grid flex-1 overflow-y-auto lg:grid-cols-2">
+          <div className="border-b border-border p-5 lg:border-b-0 lg:border-r">
+            <div className="product-image-shell product-image-hover relative aspect-square overflow-hidden rounded-2xl">
+              <ProductImage
+                src={product.image}
+                alt={product.product_name}
+                variant="card"
+              />
+            </div>
+            {product.qc_link && (
+              <a
+                href={product.qc_link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 inline-flex rounded-full border border-accent/30 bg-accent/10 px-4 py-2 text-sm font-bold text-accent"
+              >
+                View QC on Telegram →
+              </a>
+            )}
+          </div>
+
+          <div className="flex flex-col p-5">
+            <h2 className="text-2xl font-black">{product.product_name}</h2>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {brand && (
+                <span className="rounded-full border border-border px-3 py-1 text-xs font-bold">
+                  {brand}
+                </span>
+              )}
+              <span className="rounded-full border border-border px-3 py-1 text-xs font-bold uppercase text-muted">
+                {source}
+              </span>
+              <span className="rounded-full border border-border px-3 py-1 text-xs font-bold text-muted">
+                {product.category}
+              </span>
+            </div>
+
+            <p className="mt-5 text-3xl font-black text-accent">
+              {formatPrice(product.price, currency)}
+            </p>
+
+            <p className="mt-4 text-sm leading-relaxed text-muted">
+              {getProductDescription(product)}
+            </p>
+
+            <ul className="mt-4 space-y-2">
+              {getProductHighlights(product).map((item) => (
+                <li key={item} className="flex gap-2 text-sm">
+                  <span className="text-accent">•</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-auto space-y-3 pt-8">
+              <Link
+                href={getProductHref(product)}
+                onClick={onClose}
+                className="flex w-full items-center justify-center rounded-full border border-border py-3 text-sm font-bold text-foreground hover:border-accent/40"
+              >
+                Open full product page
+              </Link>
+              {product.affiliate_link ? (
+                <a
+                  href={product.affiliate_link}
+                  target="_blank"
+                  rel="noopener noreferrer sponsored"
+                  className="flex w-full items-center justify-center rounded-full bg-accent py-4 text-sm font-black text-background hover:bg-accent-hover"
+                >
+                  Buy on LitBuy →
+                </a>
+              ) : (
+                <p className="text-center text-sm text-muted">No buy link available</p>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
