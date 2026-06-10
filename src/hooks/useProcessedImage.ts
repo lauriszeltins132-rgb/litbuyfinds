@@ -1,44 +1,60 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { removeWhiteBackground } from "@/lib/image-processing";
+import { useEffect, useMemo, useState } from "react";
+import { probeImageLoad, removeWhiteBackground } from "@/lib/image-processing";
+import { validateImageUrl } from "@/lib/image-url";
 
-export type ProcessedImageState = "loading" | "processed" | "fallback";
+export type ProcessedImageState = "idle" | "loading" | "ready" | "failed";
 
-export function useProcessedImage(src: string) {
-  const [displaySrc, setDisplaySrc] = useState(src);
-  const [state, setState] = useState<ProcessedImageState>(
-    src ? "loading" : "fallback"
+export function useProcessedImage(rawSrc: string) {
+  const validation = useMemo(() => validateImageUrl(rawSrc), [rawSrc]);
+  const [displaySrc, setDisplaySrc] = useState("");
+  const [state, setState] = useState<ProcessedImageState>(() =>
+    validation.valid ? "loading" : "failed"
   );
 
   useEffect(() => {
-    if (!src) {
-      setState("fallback");
+    if (!validation.valid) {
+      setDisplaySrc("");
+      setState("failed");
       return;
     }
 
     let cancelled = false;
-    setDisplaySrc(src);
+    setDisplaySrc("");
     setState("loading");
 
-    removeWhiteBackground(src)
+    removeWhiteBackground(validation.normalized)
       .then((processed) => {
         if (!cancelled) {
           setDisplaySrc(processed);
-          setState("processed");
+          setState("ready");
         }
       })
       .catch(() => {
-        if (!cancelled) {
-          setDisplaySrc(src);
-          setState("fallback");
-        }
+        void probeImageLoad(validation.normalized).then((ok) => {
+          if (cancelled) return;
+          if (ok) {
+            setDisplaySrc(validation.normalized);
+            setState("ready");
+            return;
+          }
+          setDisplaySrc("");
+          setState("failed");
+        });
       });
 
     return () => {
       cancelled = true;
     };
-  }, [src]);
+  }, [validation.normalized, validation.valid]);
 
-  return { displaySrc, state };
+  return {
+    displaySrc,
+    state,
+    normalizedSrc: validation.normalized,
+    failed: state === "failed",
+    loading: state === "loading",
+    ready: state === "ready",
+  };
 }

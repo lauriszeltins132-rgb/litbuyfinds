@@ -59,3 +59,13 @@ export function getNewThisMonth(limit = 120): Product[] {
 export function getRecentlyAddedPreview(limit = 12): Product[] {
   return getNewToday(limit);
 }
+
+export function getRecencyCounts() {
+  const pool = getRecencyPool();
+  const withImages = pool.filter((product) => product.image);
+  return {
+    today: getNewToday(withImages.length).length,
+    week: getNewThisWeek(pool.length).length,
+    month: pool.length,
+  };
+}

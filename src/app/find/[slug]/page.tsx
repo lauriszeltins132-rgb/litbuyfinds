@@ -14,6 +14,7 @@ import {
 } from "@/lib/product-details";
 import { getAllProductSlugs, getProductBySlug, slugify } from "@/lib/slugs";
 import { buildPageMetadata } from "@/lib/seo";
+import FloatingBackButton from "@/components/FloatingBackButton";
 import ProductJsonLd from "@/components/ProductJsonLd";
 import RecordRecentlyViewed from "@/components/RecordRecentlyViewed";
 import TrackProductView from "@/components/TrackProductView";
@@ -62,6 +63,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   return (
     <>
       <ProductJsonLd product={product} slug={slug} />
+      <FloatingBackButton />
       <TrackProductView product={product} />
       <RecordRecentlyViewed productId={product.id} />
       <Breadcrumbs

@@ -1,7 +1,16 @@
 import type { CategoryInfo, Product } from "./types";
 import productsData from "@/data/products.json";
+import { validateImageUrl } from "./image-url";
 
-const products = productsData as Product[];
+function normalizeProduct(product: Product): Product {
+  const validation = validateImageUrl(product.image);
+  return {
+    ...product,
+    image: validation.valid ? validation.normalized : "",
+  };
+}
+
+const products = (productsData as Product[]).map(normalizeProduct);
 
 export function sortWithImagesFirst(items: Product[]): Product[] {
   return [...items].sort((a, b) => {

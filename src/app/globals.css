@@ -248,6 +248,106 @@ body::before {
   min-height: 5rem;
 }
 
+.image-unavailable {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  overflow: hidden;
+  background: linear-gradient(165deg, #0a0a0e 0%, #121218 45%, #0e0e13 100%);
+}
+
+.image-unavailable--card {
+  min-height: 100%;
+}
+
+.image-unavailable--featured {
+  min-height: 380px;
+}
+
+.image-unavailable--hero {
+  min-height: 400px;
+}
+
+@media (min-width: 1024px) {
+  .image-unavailable--featured {
+    min-height: 460px;
+  }
+
+  .image-unavailable--hero {
+    min-height: 500px;
+  }
+}
+
+.image-unavailable__glow {
+  position: absolute;
+  width: 70%;
+  height: 70%;
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle,
+    rgba(212, 255, 60, 0.08) 0%,
+    transparent 70%
+  );
+  filter: blur(20px);
+  pointer-events: none;
+}
+
+.image-unavailable__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 1rem;
+  text-align: center;
+}
+
+.image-unavailable__logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+  border: 1px solid rgba(212, 255, 60, 0.18);
+  background: rgba(12, 12, 16, 0.85);
+  padding: 0.55rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.image-unavailable__label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(245, 245, 248, 0.42);
+}
+
+.image-unavailable--loading .image-unavailable__logo {
+  animation: image-unavailable-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes image-unavailable-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.product-float-asset--hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
 .glow-spot {
   background: radial-gradient(circle at 50% 35%, rgba(212, 255, 60, 0.12), transparent 60%);
 }
@@ -307,6 +407,80 @@ body::before {
 
 .product-image-hover:hover .product-float-asset {
   transform: scale(1.03);
+}
+
+.floating-back-btn {
+  position: fixed;
+  z-index: 85;
+  top: max(0.85rem, env(safe-area-inset-top, 0px));
+  left: max(0.85rem, env(safe-area-inset-left, 0px));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(12, 12, 16, 0.55);
+  color: var(--color-foreground);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  cursor: pointer;
+  transition:
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.28s ease,
+    border-color 0.28s ease,
+    box-shadow 0.28s ease,
+    color 0.28s ease;
+}
+
+@media (min-width: 640px) {
+  .floating-back-btn {
+    top: max(1.15rem, env(safe-area-inset-top, 0px));
+    left: max(1.15rem, env(safe-area-inset-left, 0px));
+    width: 3rem;
+    height: 3rem;
+  }
+}
+
+.floating-back-btn__icon {
+  width: 1.15rem;
+  height: 1.15rem;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (min-width: 640px) {
+  .floating-back-btn__icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+}
+
+.floating-back-btn:hover {
+  transform: translateY(-1px) scale(1.04);
+  border-color: rgba(212, 255, 60, 0.35);
+  background: rgba(18, 18, 24, 0.72);
+  color: var(--color-accent);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(212, 255, 60, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.floating-back-btn:hover .floating-back-btn__icon {
+  transform: translateX(-2px);
+}
+
+.floating-back-btn:active {
+  transform: translateY(0) scale(0.97);
+}
+
+.floating-back-btn:focus-visible {
+  outline: 2px solid rgba(212, 255, 60, 0.55);
+  outline-offset: 3px;
 }
 
 .mobile-search-bar {

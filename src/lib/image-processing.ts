@@ -3,6 +3,7 @@ import {
   getCachedImageAsync,
   setCachedImage,
 } from "./image-cache";
+import { hasPlausibleImageDimensions, validateImageUrl } from "./image-url";
 
 const MAX_DIMENSION = 900;
 
@@ -42,14 +43,47 @@ function loadImage(url: string): Promise<HTMLImageElement> {
   });
 }
 
+const PROBE_TIMEOUT_MS = 12_000;
+
+/** Returns true only when the URL resolves to a real, usable image. */
+export function probeImageLoad(url: string): Promise<boolean> {
+  return new Promise((resolve) => {
+    const img = new Image();
+    const timer = window.setTimeout(() => {
+      img.src = "";
+      resolve(false);
+    }, PROBE_TIMEOUT_MS);
+
+    img.decoding = "async";
+    img.referrerPolicy = "no-referrer";
+    img.onload = () => {
+      window.clearTimeout(timer);
+      resolve(
+        hasPlausibleImageDimensions(img.naturalWidth, img.naturalHeight)
+      );
+    };
+    img.onerror = () => {
+      window.clearTimeout(timer);
+      resolve(false);
+    };
+    img.src = url;
+  });
+}
+
 export async function removeWhiteBackground(
   imageUrl: string,
   threshold = 238
 ): Promise<string> {
-  const cached = getCachedImage(imageUrl) ?? (await getCachedImageAsync(imageUrl));
+  const { valid, normalized } = validateImageUrl(imageUrl);
+  if (!valid) {
+    throw new Error("Invalid image URL");
+  }
+
+  const cached =
+    getCachedImage(normalized) ?? (await getCachedImageAsync(normalized));
   if (cached) return cached;
 
-  const img = await loadImage(imageUrl);
+  const img = await loadImage(normalized);
 
   let width = img.naturalWidth;
   let height = img.naturalHeight;
@@ -76,7 +110,7 @@ export async function removeWhiteBackground(
     processImageData(imageData.data, threshold);
     ctx.putImageData(imageData, 0, 0);
     const dataUrl = canvas.toDataURL("image/png");
-    setCachedImage(imageUrl, dataUrl);
+    setCachedImage(normalized, dataUrl);
     return dataUrl;
   } catch {
     throw new Error("Canvas tainted");
