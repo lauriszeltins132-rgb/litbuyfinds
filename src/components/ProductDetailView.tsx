@@ -8,6 +8,7 @@ import { getProductSource } from "@/lib/filters";
 import { getProductHref, slugify } from "@/lib/slugs";
 import { usePreferences } from "@/context/PreferencesContext";
 import { useWishlist } from "@/context/WishlistContext";
+import { trackProductContext } from "@/lib/analytics-events";
 import ProductImage from "./ProductImage";
 
 type ProductDetailViewProps = {
@@ -120,6 +121,7 @@ export default function ProductDetailView({
                 href={product.affiliate_link}
                 target="_blank"
                 rel="noopener noreferrer sponsored"
+                onClick={() => trackProductContext("buy_click", product, "product_page")}
                 className="inline-flex items-center justify-center rounded-full bg-accent px-8 py-3.5 text-sm font-black text-background hover:bg-accent-hover"
               >
                 Buy on LitBuy
@@ -130,6 +132,7 @@ export default function ProductDetailView({
                 href={product.qc_link}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackProductContext("qc_click", product, "product_page")}
                 className="inline-flex items-center justify-center rounded-full border border-accent/30 bg-accent/10 px-6 py-3.5 text-sm font-bold text-accent"
               >
                 View QC

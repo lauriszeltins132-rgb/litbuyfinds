@@ -16,6 +16,7 @@ import { getAllProductSlugs, getProductBySlug, slugify } from "@/lib/slugs";
 import { buildPageMetadata } from "@/lib/seo";
 import ProductJsonLd from "@/components/ProductJsonLd";
 import RecordRecentlyViewed from "@/components/RecordRecentlyViewed";
+import TrackProductView from "@/components/TrackProductView";
 
 type ProductPageProps = {
   params: Promise<{ slug: string }>;
@@ -61,6 +62,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   return (
     <>
       <ProductJsonLd product={product} slug={slug} />
+      <TrackProductView product={product} />
       <RecordRecentlyViewed productId={product.id} />
       <Breadcrumbs
         items={[

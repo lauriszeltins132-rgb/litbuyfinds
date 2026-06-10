@@ -12,6 +12,7 @@ import {
   getProductHighlights,
 } from "@/lib/product-details";
 import { usePreferences } from "@/context/PreferencesContext";
+import { trackProductContext } from "@/lib/analytics-events";
 import ProductImage from "./ProductImage";
 
 type ProductModalProps = {
@@ -75,6 +76,7 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
                 href={product.qc_link}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackProductContext("qc_click", product, "product_modal")}
                 className="mt-4 inline-flex rounded-full border border-accent/30 bg-accent/10 px-4 py-2 text-sm font-bold text-accent"
               >
                 View QC on Telegram →
@@ -128,6 +130,7 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
                   href={product.affiliate_link}
                   target="_blank"
                   rel="noopener noreferrer sponsored"
+                  onClick={() => trackProductContext("buy_click", product, "product_modal")}
                   className="flex w-full items-center justify-center rounded-full bg-accent py-4 text-sm font-black text-background hover:bg-accent-hover"
                 >
                   Buy on LitBuy →

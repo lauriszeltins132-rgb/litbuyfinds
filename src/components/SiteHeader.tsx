@@ -4,8 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useWishlist } from "@/context/WishlistContext";
-import { LITBUY_SIGNUP_URL, SITE_NAME } from "@/lib/constants";
+import { SITE_NAME } from "@/lib/constants";
 import CommunityLinks from "./CommunityLinks";
+import RegisterLink from "./RegisterLink";
 import GlobalSearch from "./GlobalSearch";
 
 const navLinks = [
@@ -59,16 +60,14 @@ export default function SiteHeader() {
           </nav>
 
           <div className="flex items-center gap-2">
-            <CommunityLinks variant="header" />
+            <CommunityLinks variant="header" location="header" />
             <GlobalSearch />
-            <Link
-              href={LITBUY_SIGNUP_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+            <RegisterLink
+              location="header"
               className="hidden rounded-full bg-accent px-4 py-2 text-sm font-black text-background sm:inline-flex"
             >
               Register
-            </Link>
+            </RegisterLink>
           </div>
         </div>
       </header>

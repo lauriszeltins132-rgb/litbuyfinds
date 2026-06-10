@@ -1,12 +1,15 @@
+"use client";
+
 import Link from "next/link";
 import {
   CONTACT_EMAIL,
   LITBUY_OFFER_HEADLINE,
-  LITBUY_SIGNUP_URL,
   SITE_NAME,
   SOCIAL_LINKS,
   TELEGRAM_HANDLE,
 } from "@/lib/constants";
+import { trackDiscordClick, trackTelegramClick } from "@/lib/analytics-events";
+import RegisterLink from "./RegisterLink";
 import { getBrandsFromProducts } from "@/lib/brands";
 import { getCategories, getAllProducts } from "@/lib/products";
 
@@ -56,6 +59,7 @@ export default function Footer() {
                 href={SOCIAL_LINKS.discord}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackDiscordClick("footer_cta")}
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-[#5865F2] px-7 py-3.5 text-sm font-black text-white shadow-lg shadow-[#5865F2]/20 transition hover:brightness-110"
               >
                 <span aria-hidden>💬</span> Discord
@@ -64,6 +68,7 @@ export default function Footer() {
                 href={SOCIAL_LINKS.telegram}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackTelegramClick("footer_cta")}
                 className="inline-flex items-center justify-center gap-2 rounded-full border border-border bg-surface/80 px-7 py-3.5 text-sm font-black text-foreground backdrop-blur transition hover:border-accent/40"
               >
                 <span aria-hidden>✈️</span> Telegram {TELEGRAM_HANDLE}
@@ -149,14 +154,12 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link
-                  href={LITBUY_SIGNUP_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <RegisterLink
+                  location="footer"
                   className="font-bold text-accent hover:underline"
                 >
                   {LITBUY_OFFER_HEADLINE}
-                </Link>
+                </RegisterLink>
               </li>
             </ul>
           </div>

@@ -1,11 +1,16 @@
+"use client";
+
 import { SOCIAL_LINKS } from "@/lib/constants";
+import { trackDiscordClick, trackTelegramClick } from "@/lib/analytics-events";
 
 type CommunityLinksProps = {
   variant?: "header" | "footer" | "inline";
+  location?: string;
 };
 
 export default function CommunityLinks({
   variant = "inline",
+  location = variant,
 }: CommunityLinksProps) {
   const linkClass =
     variant === "header"
@@ -22,6 +27,7 @@ export default function CommunityLinks({
         rel="noopener noreferrer"
         className={linkClass}
         aria-label="Join Discord"
+        onClick={() => trackDiscordClick(location)}
       >
         {variant === "header" ? (
           <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
@@ -37,6 +43,7 @@ export default function CommunityLinks({
         rel="noopener noreferrer"
         className={linkClass}
         aria-label="Join Telegram"
+        onClick={() => trackTelegramClick(location)}
       >
         {variant === "header" ? (
           <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">

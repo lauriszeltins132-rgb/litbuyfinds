@@ -1,5 +1,7 @@
-import Link from "next/link";
-import { LITBUY_OFFER_HEADLINE, LITBUY_SIGNUP_URL } from "@/lib/constants";
+"use client";
+
+import { LITBUY_OFFER_HEADLINE } from "@/lib/constants";
+import RegisterLink from "./RegisterLink";
 
 const text = `REGISTER ON LITBUY — ${LITBUY_OFFER_HEADLINE.toUpperCase()}`;
 
@@ -14,14 +16,12 @@ export default function PromoBanner() {
             <span className="text-xs font-bold uppercase tracking-[0.16em] text-accent">
               {item}
             </span>
-            <Link
-              href={LITBUY_SIGNUP_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+            <RegisterLink
+              location="promo_banner"
               className="text-xs font-bold text-foreground underline"
             >
               Register →
-            </Link>
+            </RegisterLink>
           </div>
         ))}
       </div>

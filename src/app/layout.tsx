@@ -9,6 +9,7 @@ import CouponModal from "@/components/CouponModal";
 import FloatingCouponButton from "@/components/FloatingCouponButton";
 import PreferencesBar from "@/components/PreferencesBar";
 import AnimatedBackground from "@/components/AnimatedBackground";
+import AnalyticsBoot from "@/components/AnalyticsBoot";
 import JsonLd from "@/components/JsonLd";
 import MobileSearchBar from "@/components/MobileSearchBar";
 import { WishlistProvider } from "@/context/WishlistContext";
@@ -70,6 +71,7 @@ export default function RootLayout({
               <RecentlyViewedProvider>
                 <AnimatedBackground />
                 <JsonLd />
+                <AnalyticsBoot />
                 <PromoBanner />
                 <PreferencesBar />
                 <SiteHeader />

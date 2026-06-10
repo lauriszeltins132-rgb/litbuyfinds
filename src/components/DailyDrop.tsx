@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { Product } from "@/lib/types";
 import { formatPrice } from "@/lib/currency";
+import { trackProductContext } from "@/lib/analytics-events";
 import { getProductHref } from "@/lib/slugs";
 import ProductImage from "./ProductImage";
 
@@ -81,6 +82,7 @@ export default function DailyDrop() {
                     href={product.affiliate_link}
                     target="_blank"
                     rel="noopener noreferrer sponsored"
+                    onClick={() => trackProductContext("buy_click", product, "daily_drop")}
                     className="rounded-full border border-border px-6 py-3 text-sm font-bold text-foreground hover:border-accent/40"
                   >
                     Buy on LitBuy

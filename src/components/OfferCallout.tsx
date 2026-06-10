@@ -1,10 +1,9 @@
-import Link from "next/link";
 import {
   LITBUY_OFFER_DESCRIPTION,
   LITBUY_OFFER_HEADLINE,
-  LITBUY_SIGNUP_URL,
 } from "@/lib/constants";
 import CommunityLinks from "./CommunityLinks";
+import RegisterLink from "./RegisterLink";
 
 export default function OfferCallout() {
   return (
@@ -25,15 +24,13 @@ export default function OfferCallout() {
           </div>
 
           <div className="flex shrink-0 flex-col items-stretch gap-3 sm:items-end">
-            <Link
-              href={LITBUY_SIGNUP_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+            <RegisterLink
+              location="offer_callout"
               className="inline-flex items-center justify-center rounded-full bg-accent px-8 py-4 text-sm font-black text-background transition-transform hover:scale-[1.02] hover:bg-accent-hover"
             >
               Register on LitBuy
-            </Link>
-            <CommunityLinks variant="inline" />
+            </RegisterLink>
+            <CommunityLinks variant="inline" location="offer_callout" />
           </div>
         </div>
       </div>

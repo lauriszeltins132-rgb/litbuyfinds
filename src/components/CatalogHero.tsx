@@ -1,5 +1,5 @@
-import Link from "next/link";
-import { LITBUY_SIGNUP_URL, SITE_NAME, SITE_TAGLINE } from "@/lib/constants";
+import { SITE_NAME, SITE_TAGLINE } from "@/lib/constants";
+import RegisterLink from "./RegisterLink";
 
 type CatalogHeroProps = {
   badge?: string;
@@ -33,15 +33,13 @@ export default function CatalogHero({
 
         <p className="mt-2 text-sm font-semibold text-muted">{SITE_TAGLINE}</p>
 
-        <Link
-          href={LITBUY_SIGNUP_URL}
-          target="_blank"
-          rel="noopener noreferrer"
+        <RegisterLink
+          location="catalog_hero"
           className="mt-8 inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-black text-background transition-transform hover:scale-[1.03] hover:bg-accent-hover"
         >
           Register on LitBuy
           <span aria-hidden>→</span>
-        </Link>
+        </RegisterLink>
       </div>
     </section>
   );

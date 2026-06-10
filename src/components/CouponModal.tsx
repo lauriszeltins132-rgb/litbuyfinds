@@ -1,13 +1,12 @@
 "use client";
 
-import Link from "next/link";
 import {
   LITBUY_OFFER_DESCRIPTION,
   LITBUY_OFFER_HEADLINE,
-  LITBUY_SIGNUP_URL,
 } from "@/lib/constants";
 import { useCoupon } from "@/context/CouponContext";
 import CommunityLinks from "./CommunityLinks";
+import RegisterLink from "./RegisterLink";
 
 export default function CouponModal() {
   const { isOpen, closeCoupon } = useCoupon();
@@ -37,15 +36,13 @@ export default function CouponModal() {
 
           <p className="mt-3 text-sm text-muted">{LITBUY_OFFER_DESCRIPTION}</p>
 
-          <Link
-            href={LITBUY_SIGNUP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+          <RegisterLink
+            location="coupon_modal"
             onClick={closeCoupon}
             className="mt-8 inline-flex w-full items-center justify-center rounded-full bg-accent py-4 text-base font-black text-background hover:bg-accent-hover"
           >
             Register on LitBuy
-          </Link>
+          </RegisterLink>
 
           <button
             type="button"

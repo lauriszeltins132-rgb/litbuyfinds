@@ -10,6 +10,7 @@ import { getProductSource } from "@/lib/filters";
 import { getProductHref } from "@/lib/slugs";
 import { usePreferences } from "@/context/PreferencesContext";
 import { useWishlist } from "@/context/WishlistContext";
+import { trackProductContext } from "@/lib/analytics-events";
 import ProductImage from "./ProductImage";
 
 type ProductCardProps = {
@@ -121,6 +122,7 @@ export default function ProductCard({
               href={product.affiliate_link}
               target="_blank"
               rel="noopener noreferrer sponsored"
+              onClick={() => trackProductContext("buy_click", product, "product_card")}
               className="rounded-full bg-accent px-3 py-1.5 text-[11px] font-black text-background"
             >
               Buy
@@ -140,6 +142,7 @@ export default function ProductCard({
               href={product.qc_link}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackProductContext("qc_click", product, "product_card")}
               className="rounded-full border border-border px-2.5 py-1.5 text-[11px] font-bold text-foreground hover:border-accent/40"
             >
               QC
