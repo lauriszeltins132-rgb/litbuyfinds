@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import SiteHeader from "@/components/SiteHeader";
 import Footer from "@/components/Footer";
@@ -73,6 +74,7 @@ export default function RootLayout({
                 <CouponModal />
                 <FloatingCouponButton />
                 <MobileSearchBar />
+                <Analytics />
               </RecentlyViewedProvider>
             </WishlistProvider>
           </CouponProvider>
