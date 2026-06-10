@@ -5,7 +5,7 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import ProductDetailView from "@/components/ProductDetailView";
 import ProductGrid from "@/components/ProductGrid";
 import { extractBrand } from "@/lib/brands";
-import { getRelatedProducts } from "@/lib/discovery";
+import { getRelatedProducts, getYouMayAlsoLike } from "@/lib/discovery";
 import {
   getProductDescription,
   getProductHighlights,
@@ -50,6 +50,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   const brand = extractBrand(product.product_name);
   const related = getRelatedProducts(product);
+  const alsoLike = getYouMayAlsoLike(product);
   const categoryHref =
     product.group === "featured"
       ? product.category_slug === "trending-now"
@@ -78,8 +79,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
         categoryHref={categoryHref}
       />
 
-      {related.length > 0 && (
-        <section className="px-4 pb-16 pt-4 sm:px-6">
+      {related.length > 0 ? (
+        <section className="px-4 pt-4 sm:px-6">
           <div className="mx-auto max-w-7xl">
             <h2 className="text-xl font-black">Similar finds</h2>
             <p className="mt-1 text-sm text-muted">
@@ -89,25 +90,45 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <div className="mt-6">
               <ProductGrid products={related} />
             </div>
-            <div className="mt-8 flex flex-wrap justify-center gap-4 text-center">
-              <Link href={categoryHref} className="text-sm font-bold text-accent hover:underline">
-                Browse more in {product.category} →
-              </Link>
-              {brand ? (
-                <Link
-                  href={`/brands/${slugify(brand)}`}
-                  className="text-sm font-bold text-accent hover:underline"
-                >
-                  More {brand} finds →
-                </Link>
-              ) : null}
-              <Link href="/how-to-buy" className="text-sm font-bold text-muted hover:text-accent">
-                How to buy →
-              </Link>
+          </div>
+        </section>
+      ) : null}
+
+      {alsoLike.length > 0 ? (
+        <section className="px-4 py-10 sm:px-6">
+          <div className="mx-auto max-w-7xl">
+            <h2 className="text-xl font-black">You may also like</h2>
+            <p className="mt-1 text-sm text-muted">
+              Other picks in a similar price range and style.
+            </p>
+            <div className="mt-6">
+              <ProductGrid products={alsoLike} />
             </div>
           </div>
         </section>
-      )}
+      ) : null}
+
+      <section className="px-4 pb-16 pt-4 sm:px-6">
+        <div className="mx-auto flex max-w-7xl flex-wrap justify-center gap-4 text-center">
+          <Link href={categoryHref} className="text-sm font-bold text-accent hover:underline">
+            Browse more in {product.category} →
+          </Link>
+          {brand ? (
+            <Link
+              href={`/brands/${slugify(brand)}`}
+              className="text-sm font-bold text-accent hover:underline"
+            >
+              More {brand} finds →
+            </Link>
+          ) : null}
+          <Link href="/recently-added" className="text-sm font-bold text-muted hover:text-accent">
+            Recently added →
+          </Link>
+          <Link href="/how-to-buy" className="text-sm font-bold text-muted hover:text-accent">
+            How to buy →
+          </Link>
+        </div>
+      </section>
     </>
   );
 }

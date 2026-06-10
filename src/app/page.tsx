@@ -1,13 +1,5 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { SITE_DESCRIPTION } from "@/lib/constants";
-import { buildPageMetadata } from "@/lib/seo";
-
-export const metadata: Metadata = buildPageMetadata({
-  title: "Premium LitBuy Product Discovery",
-  description: SITE_DESCRIPTION,
-  path: "/",
-});
 import BrandSpotlight from "@/components/BrandSpotlight";
 import CatalogPanel from "@/components/CatalogPanel";
 import DailyDrop from "@/components/DailyDrop";
@@ -15,6 +7,7 @@ import DiscoveryHero from "@/components/DiscoveryHero";
 import DiscoveryRail from "@/components/DiscoveryRail";
 import OfferCallout from "@/components/OfferCallout";
 import PopularBrands from "@/components/PopularBrands";
+import RecentlyAddedPreview from "@/components/RecentlyAddedPreview";
 import RecentlyViewedRail from "@/components/RecentlyViewedRail";
 import StatsStrip from "@/components/StatsStrip";
 import {
@@ -23,11 +16,18 @@ import {
   getHiddenGems,
   getMostSavedPicks,
   getNewestFinds,
-  getRecentlyAdded,
   getTrendingThisWeek,
 } from "@/lib/discovery";
 import { getBrandsFromProducts } from "@/lib/brands";
+import { SITE_DESCRIPTION } from "@/lib/constants";
 import { getAllProducts, getCategories } from "@/lib/products";
+import { buildPageMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = buildPageMetadata({
+  title: "Premium LitBuy Product Discovery",
+  description: SITE_DESCRIPTION,
+  path: "/",
+});
 
 export default function HomePage() {
   const products = getAllProducts();
@@ -41,6 +41,7 @@ export default function HomePage() {
       <StatsStrip />
       <DailyDrop />
       <RecentlyViewedRail />
+      <RecentlyAddedPreview />
 
       <DiscoveryRail
         title="Trending This Week"
@@ -60,14 +61,14 @@ export default function HomePage() {
       <DiscoveryRail
         title="Editor's Picks"
         subtitle="Hand-selected listings with photos and QC"
-        href="/trending"
+        href="/editors-picks"
         products={getEditorsPicks()}
       />
 
       <DiscoveryRail
         title="Hidden Gems"
         subtitle="Strong quality picks outside the main spotlight"
-        href="/categories/shoes"
+        href="/hidden-gems"
         products={getHiddenGems()}
       />
 
@@ -87,13 +88,6 @@ export default function HomePage() {
 
       <BrandSpotlight />
       <PopularBrands />
-
-      <DiscoveryRail
-        title="Recently Added"
-        subtitle="Latest arrivals across the catalog"
-        href="/latest"
-        products={getRecentlyAdded()}
-      />
 
       <section id="browse" className="scroll-mt-24 px-4 pt-4 sm:px-6">
         <div className="mx-auto max-w-7xl pb-4">

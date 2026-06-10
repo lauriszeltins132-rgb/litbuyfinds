@@ -1,4 +1,5 @@
 import { extractBrand, getBrandsFromProducts } from "./brands";
+import { getRecentlyAddedPreview } from "./recency";
 import {
   getAllProducts,
   getDealProducts,
@@ -103,6 +104,22 @@ export function getBrandSpotlight() {
   return { brand, products: brandProducts };
 }
 
+function relatedScore(base: Product, candidate: Product, brand: string | null): number {
+  let score = 0;
+  if (candidate.category_slug === base.category_slug) score += 40;
+  if (brand && extractBrand(candidate.product_name) === brand) score += 35;
+  if (candidate.qc_link) score += 10;
+  if (candidate.image) score += 15;
+  if (
+    base.price !== null &&
+    candidate.price !== null &&
+    Math.abs(candidate.price - base.price) <= 15
+  ) {
+    score += 12;
+  }
+  return score;
+}
+
 export function getRelatedProducts(product: Product, limit = 6): Product[] {
   const brand = extractBrand(product.product_name);
 
@@ -114,11 +131,31 @@ export function getRelatedProducts(product: Product, limit = 6): Product[] {
         (brand && extractBrand(item.product_name) === brand)
     )
     .filter((item) => item.image)
+    .sort((a, b) => relatedScore(product, b, brand) - relatedScore(product, a, brand))
+    .slice(0, limit);
+}
+
+/** Broader recommendations — price band, different brand, same category family. */
+export function getYouMayAlsoLike(product: Product, limit = 6): Product[] {
+  const brand = extractBrand(product.product_name);
+  const relatedIds = new Set(getRelatedProducts(product, limit).map((p) => p.id));
+
+  return getAllProducts()
+    .filter((item) => item.id !== product.id && !relatedIds.has(item.id))
+    .filter((item) => item.image)
+    .map((item) => ({
+      item,
+      score: relatedScore(product, item, null) +
+        (brand && extractBrand(item.product_name) !== brand ? 8 : 0) +
+        (item.category_slug === product.category_slug ? 20 : 0),
+    }))
+    .sort((a, b) => b.score - a.score)
+    .map(({ item }) => item)
     .slice(0, limit);
 }
 
 export function getRecentlyAdded(limit = 12): Product[] {
-  return getLatestProducts().slice(0, limit);
+  return getRecentlyAddedPreview(limit);
 }
 
 export function getTrendingThisWeek(limit = 12): Product[] {

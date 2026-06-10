@@ -9,14 +9,13 @@ import {
 } from "@/lib/constants";
 import { getBrandsFromProducts } from "@/lib/brands";
 import { getCategories, getAllProducts } from "@/lib/products";
-import CommunityLinks from "./CommunityLinks";
 
 const GUIDE_LINKS = [
   { href: "/how-to-buy", label: "How to buy" },
   { href: "/new-user-guide", label: "New user guide" },
+  { href: "/recently-added", label: "Recently added" },
   { href: "/best-rep-sneakers", label: "Best rep sneakers" },
   { href: "/best-budget-finds", label: "Best budget finds" },
-  { href: "/litbuy-vs-other-agents", label: "LitBuy vs agents" },
 ];
 
 const TRUST_LINKS = [
@@ -31,79 +30,70 @@ export default function Footer() {
   const brands = getBrandsFromProducts(getAllProducts()).slice(0, 8);
 
   return (
-    <footer className="mt-auto border-t border-border bg-surface/50 px-4 py-14 sm:px-6">
+    <footer className="relative mt-auto border-t border-border bg-[#0a0a0c] px-4 py-16 sm:px-6">
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent"
+        aria-hidden
+      />
+
       <div className="mx-auto max-w-7xl">
-        <div className="mb-10 rounded-2xl border border-accent/15 bg-gradient-to-br from-accent/8 via-surface/60 to-surface/40 p-6 sm:p-8">
-          <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-accent">
-                Join the community
+        <div className="overflow-hidden rounded-3xl border border-accent/20 bg-gradient-to-br from-accent/10 via-[#121214] to-[#0d1210] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.35)] sm:p-8">
+          <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
+            <div className="max-w-xl">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
+                Community
               </p>
-              <p className="mt-2 text-lg font-black text-foreground">
-                QC tips, drops, and buyer chat daily
-              </p>
-              <p className="mt-2 max-w-md text-sm text-muted">
-                Get help from real buyers on Discord and Telegram before you
-                ship your haul.
+              <h2 className="mt-2 text-2xl font-black text-foreground sm:text-3xl">
+                Join buyers on Discord & Telegram
+              </h2>
+              <p className="mt-3 text-sm leading-relaxed text-muted">
+                QC checks, shipping advice, and daily finds from real buyers.
+                The fastest way to get help before you ship your haul.
               </p>
             </div>
-            <div className="flex flex-col gap-3 sm:flex-row">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
               <a
                 href={SOCIAL_LINKS.discord}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center rounded-full bg-[#5865F2] px-6 py-3 text-sm font-black text-white hover:opacity-90"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#5865F2] px-7 py-3.5 text-sm font-black text-white shadow-lg shadow-[#5865F2]/20 transition hover:brightness-110"
               >
-                Discord
+                <span aria-hidden>💬</span> Discord
               </a>
               <a
                 href={SOCIAL_LINKS.telegram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center rounded-full border border-border bg-surface px-6 py-3 text-sm font-black text-foreground hover:border-accent/40"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-border bg-surface/80 px-7 py-3.5 text-sm font-black text-foreground backdrop-blur transition hover:border-accent/40"
               >
-                Telegram {TELEGRAM_HANDLE}
+                <span aria-hidden>✈️</span> Telegram {TELEGRAM_HANDLE}
               </a>
             </div>
           </div>
         </div>
 
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
+        <div className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-2">
-            <p className="text-lg font-black text-foreground">{SITE_NAME}</p>
-            <p className="mt-3 text-sm leading-relaxed text-muted">
-              A curated discovery platform for LitBuy finds — verified links,
-              real QC references, and daily product drops.
+            <p className="text-xl font-black text-foreground">{SITE_NAME}</p>
+            <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted">
+              Curated LitBuy discovery — verified links, QC references, and
+              fresh catalog updates across fashion, sneakers, and accessories.
             </p>
-            <div className="mt-5 flex flex-wrap gap-2">
-              <CommunityLinks variant="footer" />
-              <a
-                href={SOCIAL_LINKS.tiktok}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full border border-border px-3 py-1.5 text-xs font-bold text-muted hover:border-accent/40 hover:text-accent"
-              >
-                TikTok
+            <p className="mt-4 text-xs text-muted">
+              <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-accent">
+                {CONTACT_EMAIL}
               </a>
-              <a
-                href={SOCIAL_LINKS.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full border border-border px-3 py-1.5 text-xs font-bold text-muted hover:border-accent/40 hover:text-accent"
-              >
-                Instagram
-              </a>
-            </div>
+            </p>
           </div>
 
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-muted">
               Categories
             </p>
-            <ul className="mt-4 space-y-2 text-sm">
+            <ul className="mt-4 space-y-2.5 text-sm">
               {categories.map((category) => (
                 <li key={category.slug}>
-                  <Link href={category.href} className="text-foreground/80 hover:text-accent">
+                  <Link href={category.href} className="text-foreground/75 transition hover:text-accent">
                     {category.name}
                   </Link>
                 </li>
@@ -113,14 +103,14 @@ export default function Footer() {
 
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-muted">
-              Brands
+              Top brands
             </p>
-            <ul className="mt-4 space-y-2 text-sm">
+            <ul className="mt-4 space-y-2.5 text-sm">
               {brands.map((brand) => (
                 <li key={brand.slug}>
                   <Link
                     href={`/brands/${brand.slug}`}
-                    className="text-foreground/80 hover:text-accent"
+                    className="text-foreground/75 transition hover:text-accent"
                   >
                     {brand.name}
                   </Link>
@@ -138,48 +128,50 @@ export default function Footer() {
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-muted">
               Guides & trust
             </p>
-            <ul className="mt-4 space-y-2 text-sm">
+            <ul className="mt-4 space-y-2.5 text-sm">
               {GUIDE_LINKS.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-foreground/80 hover:text-accent">
+                  <Link href={link.href} className="text-foreground/75 transition hover:text-accent">
                     {link.label}
                   </Link>
                 </li>
               ))}
               {TRUST_LINKS.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-foreground/80 hover:text-accent">
+                  <Link href={link.href} className="text-foreground/75 transition hover:text-accent">
                     {link.label}
                   </Link>
                 </li>
               ))}
               <li>
-                <Link href="/trending" className="text-foreground/80 hover:text-accent">
+                <Link href="/trending" className="text-foreground/75 transition hover:text-accent">
                   Trending finds
                 </Link>
               </li>
               <li>
-                <Link href={LITBUY_SIGNUP_URL} target="_blank" rel="noopener noreferrer" className="text-foreground/80 hover:text-accent">
+                <Link
+                  href={LITBUY_SIGNUP_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-bold text-accent hover:underline"
+                >
                   {LITBUY_OFFER_HEADLINE}
                 </Link>
-              </li>
-              <li>
-                <a href={`mailto:${CONTACT_EMAIL}`} className="text-foreground/80 hover:text-accent">
-                  {CONTACT_EMAIL}
-                </a>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col gap-4 border-t border-border pt-6 text-xs leading-relaxed text-muted sm:flex-row sm:items-center sm:justify-between">
-          <p className="max-w-3xl">
-            Disclaimer: LitBuy Finds is an independent discovery catalog. Product
-            images and links are sourced from public spreadsheets and affiliate
-            programs. We do not sell products directly. Always verify QC photos and
-            seller details before purchasing.
+        <div className="mt-12 flex flex-col gap-4 border-t border-border/80 pt-8 text-xs leading-relaxed text-muted sm:flex-row sm:items-start sm:justify-between">
+          <p className="max-w-2xl">
+            LitBuy Finds is an independent discovery catalog. We do not sell
+            products directly. Images and links are sourced from public
+            spreadsheets and affiliate programs. Always verify QC and seller
+            details before purchasing.
           </p>
-          <p className="shrink-0">© {new Date().getFullYear()} {SITE_NAME}</p>
+          <p className="shrink-0 text-foreground/50">
+            © {new Date().getFullYear()} {SITE_NAME}
+          </p>
         </div>
       </div>
     </footer>

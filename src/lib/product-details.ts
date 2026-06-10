@@ -57,29 +57,104 @@ function getCategoryTone(product: Product): CategoryTone {
   return "default";
 }
 
+function nameHook(product: Product): string | null {
+  const name = product.product_name.toLowerCase();
+
+  const hooks: [RegExp, string[]][] = [
+    [/dunk/i, ["Dunk-style silhouette", "A Dunk listing", "This Dunk pair"]],
+    [/jordan/i, ["Jordan-style build", "A Jordan listing", "This Jordan pair"]],
+    [/yeezy/i, ["Yeezy-style runner", "A Yeezy listing", "This Yeezy pair"]],
+    [/moncler/i, ["Moncler-style piece", "A Moncler listing", "This Moncler item"]],
+    [/gallery dept/i, ["Gallery Dept-style wash", "A Gallery Dept listing", "This Gallery Dept piece"]],
+    [/jeans|denim/i, ["Denim listing", "A jeans pick", "This denim piece"]],
+    [/hoodie|crewneck/i, ["Hoodie/crew listing", "A top-layer pick", "This sweat piece"]],
+    [/beanie|hat|cap/i, ["Headwear listing", "A hat/beanie pick", "This small accessory"]],
+    [/bag|backpack/i, ["Bag listing", "A carry piece", "This bag pick"]],
+  ];
+
+  for (const [pattern, variants] of hooks) {
+    if (pattern.test(name)) {
+      return pickVariant(product.id + name, variants);
+    }
+  }
+
+  return null;
+}
+
 function qcSentence(product: Product, seed: string): string {
   if (!product.qc_link) {
     return pickVariant(seed, [
-      "No QC link is listed for this one — check the LitBuy listing before you order.",
-      "QC is not linked here, so review the seller page on LitBuy first.",
-      "There is no QC reference attached. Worth a closer look on LitBuy before buying.",
+      "No QC is linked here — open the LitBuy page and check seller photos before you order.",
+      "QC is not attached to this listing, so review the seller page carefully first.",
+      "There is no QC reference on this one. Worth a closer look on LitBuy before buying.",
     ]);
   }
 
   return pickVariant(seed, [
-    "QC photos are linked — open them first and compare details before ordering.",
-    "There is a QC link available, which makes it easier to check the item before you buy.",
-    "Check the QC photos first if you want a closer look before placing the order.",
+    "QC photos are linked — compare stitching, logos, and shape before you ship.",
+    "There is a QC link, which makes it easier to vet the item before checkout.",
+    "Check the QC set first if you want a closer look before placing the order.",
   ]);
 }
 
-function budgetSentence(product: Product, seed: string): string | null {
-  if (product.price === null || product.price > 30) return null;
+function priceSentence(product: Product, seed: string): string | null {
+  if (product.price === null) return null;
+  const price = formatPrice(product.price, "USD");
+
+  if (product.price <= 20) {
+    return pickVariant(seed, [
+      `Listed around ${price}, so it is an easy low-risk add to a haul.`,
+      `At ${price}, this is squarely in budget territory.`,
+      `Priced near ${price} — good if you want something cheap without thinking too hard.`,
+    ]);
+  }
+
+  if (product.price <= 45) {
+    return pickVariant(seed, [
+      `Listed around ${price}, which is reasonable for this category.`,
+      `Sits near ${price} — compare a few similar listings before you pick one.`,
+      `At ${price}, it is mid-range for the catalog: not the cheapest, not the craziest.`,
+    ]);
+  }
 
   return pickVariant(seed, [
-    "At this price, it is an easy low-cost add if you are putting together a budget haul.",
-    "A solid budget pick if you want something simple without pushing the spend too high.",
-    "Good value territory — worth a look if you are shopping under $30.",
+    `Listed around ${price}, so take your time with QC on this one.`,
+    `Higher ticket at ${price} — QC and seller reputation matter more here.`,
+    `Priced near ${price}. Worth comparing against a couple of alternatives first.`,
+  ]);
+}
+
+function sellerSentence(product: Product, seed: string): string {
+  const source = getProductSource(product.affiliate_link);
+
+  if (source === "weidian") {
+    return pickVariant(seed, [
+      "Pulled from Weidian through LitBuy — usual agent flow applies.",
+      "Weidian listing via LitBuy. Standard buy → warehouse → ship steps.",
+      "This one routes through Weidian on LitBuy.",
+    ]);
+  }
+
+  if (source === "taobao") {
+    return pickVariant(seed, [
+      "Taobao listing through LitBuy.",
+      "Sourced from Taobao via LitBuy — same agent checkout flow.",
+      "This routes through Taobao on LitBuy.",
+    ]);
+  }
+
+  if (source === "1688") {
+    return pickVariant(seed, [
+      "1688 listing through LitBuy — often solid for basics and accessories.",
+      "Pulled from 1688 via LitBuy.",
+      "This one comes from 1688 through LitBuy.",
+    ]);
+  }
+
+  return pickVariant(seed, [
+    "Buy through LitBuy with the usual agent checkout flow.",
+    "Outbound link goes to LitBuy for purchase.",
+    "Checkout happens on LitBuy like any other find here.",
   ]);
 }
 
@@ -89,55 +164,59 @@ function buildToneDescription(
   brand: string | null
 ): string {
   const seed = product.id + product.product_name;
+  const hook = nameHook(product);
   const brandBit = brand ? `${brand} ` : "";
   const qc = qcSentence(product, seed + "qc");
-  const budget = budgetSentence(product, seed + "budget");
+  const price = priceSentence(product, seed + "price");
+  const seller = sellerSentence(product, seed + "seller");
 
   const openers: Record<CategoryTone, string[]> = {
     shoes: [
-      `A ${brandBit}sneaker find that fits nicely into a rotation without feeling overpriced.`,
-      `Clean ${brandBit}footwear if you are building out pairs and do not want to overpay.`,
-      `A practical ${brandBit}shoe pick — easy to browse and compare before you commit.`,
+      `${hook ?? `A ${brandBit}footwear listing`} from the ${product.category.toLowerCase()} sheet.`,
+      `${hook ?? `This ${brandBit}shoe find`} is worth comparing if you are building a rotation.`,
+      `${hook ?? `Listed under ${product.category.toLowerCase()}`} — ${brandBit}footwear with agent pricing.`,
     ],
     outerwear: [
-      `A ${brandBit}outerwear find with a straightforward winter-ready look.`,
-      `Useful if you want a ${brandBit}jacket-style piece without retail pricing.`,
-      `A solid ${brandBit}layer for colder days — worth checking if you need outerwear.`,
+      `${hook ?? `A ${brandBit}outerwear listing`} for colder months.`,
+      `${hook ?? `This ${brandBit}jacket-style find`} sits in ${product.category.toLowerCase()}.`,
+      `${hook ?? `Outerwear pick`} — ${brandBit}layer listed on LitBuy.`,
     ],
     streetwear: [
-      `An everyday ${brandBit}streetwear piece that works well in a casual outfit.`,
-      `A relaxed ${brandBit}find if you are putting together hoodies, pants, or daily wear.`,
-      `Easy ${brandBit}wardrobe add — simple styling, easy to pair with other pieces.`,
+      `${hook ?? `A ${brandBit}streetwear listing`} for everyday fits.`,
+      `${hook ?? `This ${brandBit}casual find`} is in ${product.category.toLowerCase()}.`,
+      `${hook ?? `Everyday ${brandBit}piece`} from the ${product.category.toLowerCase()} section.`,
     ],
     accessories: [
-      `A small ${brandBit}accessory find that can finish off an outfit.`,
-      `Handy if you need a ${brandBit}extra piece without spending much.`,
-      `An easy add-on ${brandBit}pick — good for bags, belts, hats, and similar items.`,
+      `${hook ?? `A ${brandBit}accessory listing`} that can finish an outfit.`,
+      `${hook ?? `Small ${brandBit}add-on`} from ${product.category.toLowerCase()}.`,
+      `${hook ?? `Accessory find`} — ${brandBit}listed with a LitBuy link.`,
     ],
     electronics: [
-      `A ${brandBit}gadget find worth comparing if you are hunting tech at agent pricing.`,
-      `Practical ${brandBit}electronics pick — check specs and QC before ordering.`,
-      `A simple ${brandBit}tech find if you want something useful without retail markup.`,
+      `${hook ?? `A ${brandBit}tech listing`} if you are hunting gadgets at agent prices.`,
+      `${hook ?? `This ${brandBit}electronics find`} is in ${product.category.toLowerCase()}.`,
+      `${hook ?? `Gadget pick`} — check specs and QC before ordering.`,
     ],
     default: [
-      `A ${brandBit}find from the ${product.category.toLowerCase()} section worth a closer look.`,
-      `Listed under ${product.category.toLowerCase()} — useful if you are browsing this category right now.`,
-      `A ${brandBit}pick in ${product.category.toLowerCase()} with a direct LitBuy purchase link.`,
+      `${hook ?? `A ${brandBit}find`} listed under ${product.category.toLowerCase()}.`,
+      `${hook ?? `This ${brandBit}listing`} is in the ${product.category.toLowerCase()} section.`,
+      `${hook ?? `Catalog pick`} from ${product.category.toLowerCase()} with a direct LitBuy link.`,
     ],
   };
 
-  const parts = [pickVariant(seed, openers[tone]), qc];
-  if (budget) parts.push(budget);
+  const closers = [
+    "If the photos look right, it is a straightforward add to cart.",
+    "Compare it against a couple of similar listings before you commit.",
+    "Save it if you are building a haul and come back when you are ready to ship.",
+    "Fine everyday pickup if the QC checks out on your end.",
+  ];
 
-  const source = getProductSource(product.affiliate_link);
-  if (source !== "litbuy") {
-    parts.push(
-      pickVariant(seed + "source", [
-        `Listed via ${source.toUpperCase()} through LitBuy.`,
-        `Source marketplace: ${source.toUpperCase()}.`,
-      ])
-    );
-  }
+  const parts = [
+    pickVariant(seed, openers[tone]),
+    price,
+    qc,
+    seller,
+    pickVariant(seed + "close", closers),
+  ].filter(Boolean) as string[];
 
   return parts.join(" ");
 }
@@ -154,13 +233,13 @@ export function getProductHighlights(product: Product): string[] {
   const highlights: string[] = [];
 
   if (brand) highlights.push(`${brand} listing`);
-  highlights.push(`${product.category} category`);
+  highlights.push(`${product.category}`);
   if (product.price !== null) {
-    highlights.push(`Listed around ${formatPrice(product.price, "USD")}`);
+    highlights.push(`About ${formatPrice(product.price, "USD")}`);
   }
-  highlights.push(`Source: ${source.toUpperCase()}`);
+  highlights.push(`Seller: ${source.toUpperCase()}`);
   highlights.push(
-    product.qc_link ? "QC link included" : "No QC link on this listing"
+    product.qc_link ? "QC photos linked" : "No QC on this listing"
   );
 
   return highlights;
@@ -182,9 +261,10 @@ export function getProductSeoDescription(product: Product): string {
   const brandLabel = brand ? `${brand} ` : "";
   const priceBit =
     product.price !== null
-      ? ` around ${formatPrice(product.price, "USD")}`
+      ? ` from ${formatPrice(product.price, "USD")}`
       : "";
-  const qcBit = product.qc_link ? " QC references," : "";
+  const qcBit = product.qc_link ? " with QC photos" : "";
+  const source = getProductSource(product.affiliate_link);
 
-  return `Browse this ${brandLabel}${product.category.toLowerCase()} find${priceBit} with${qcBit} related items, and a LitBuy purchase link.`;
+  return `${product.product_name} — ${brandLabel}${product.category} find${priceBit}${qcBit}. Listed via ${source.toUpperCase()} on LitBuy Finds.`;
 }
