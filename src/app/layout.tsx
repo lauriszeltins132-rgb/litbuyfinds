@@ -37,7 +37,6 @@ export const metadata: Metadata = {
     "product discovery",
   ],
   metadataBase: new URL("https://litbuyfinds.io"),
-  alternates: { canonical: "https://litbuyfinds.io" },
   openGraph: {
     title: SITE_NAME,
     description: SITE_DESCRIPTION,

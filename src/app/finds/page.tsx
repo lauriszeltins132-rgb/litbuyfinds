@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { permanentRedirect } from "next/navigation";
 
 type FindsPageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
@@ -13,5 +13,5 @@ export default async function FindsPage({ searchParams }: FindsPageProps) {
   }
 
   const qs = query.toString();
-  redirect(qs ? `/?${qs}` : "/");
+  permanentRedirect(qs ? `/?${qs}` : "/");
 }

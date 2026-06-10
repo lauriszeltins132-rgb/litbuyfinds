@@ -4,11 +4,13 @@ import CatalogHero from "@/components/CatalogHero";
 import CatalogPanel from "@/components/CatalogPanel";
 import { getBrandsFromProducts } from "@/lib/brands";
 import { getCategories, getDealProducts } from "@/lib/products";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "Deals Under $30",
   description: "Budget-friendly LitBuy finds under $30 — curated picks with verified buy links.",
-};
+  path: "/deals",
+});
 
 export default function DealsPage() {
   const products = getDealProducts(30);

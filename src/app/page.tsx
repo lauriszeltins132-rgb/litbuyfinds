@@ -1,4 +1,13 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
+import { SITE_DESCRIPTION } from "@/lib/constants";
+import { buildPageMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = buildPageMetadata({
+  title: "Premium LitBuy Product Discovery",
+  description: SITE_DESCRIPTION,
+  path: "/",
+});
 import BrandSpotlight from "@/components/BrandSpotlight";
 import CatalogPanel from "@/components/CatalogPanel";
 import DailyDrop from "@/components/DailyDrop";

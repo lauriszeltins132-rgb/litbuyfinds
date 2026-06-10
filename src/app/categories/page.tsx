@@ -1,5 +1,14 @@
+import type { Metadata } from "next";
 import CategoryBrandGrid from "@/components/CategoryBrandGrid";
 import { getCategories } from "@/lib/products";
+import { buildPageMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = buildPageMetadata({
+  title: "Browse by Category",
+  description:
+    "Browse LitBuy finds by category — shoes, streetwear, outerwear, accessories, and more.",
+  path: "/categories",
+});
 
 export default function CategoriesPage() {
   return (

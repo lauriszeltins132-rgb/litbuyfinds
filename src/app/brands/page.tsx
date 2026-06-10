@@ -3,11 +3,13 @@ import Link from "next/link";
 import CatalogHero from "@/components/CatalogHero";
 import { getBrandsFromProducts } from "@/lib/brands";
 import { getAllProducts } from "@/lib/products";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "Shop by Brand",
   description: "Browse finds organized by brand — Nike, Jordan, Balenciaga and more.",
-};
+  path: "/brands",
+});
 
 export default function BrandsPage() {
   const brands = getBrandsFromProducts(getAllProducts());

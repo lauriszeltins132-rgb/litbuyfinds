@@ -15,7 +15,7 @@ export function buildPageMetadata({
   image?: string;
 }): Metadata {
   const url = `${BASE_URL}${path}`;
-  const ogImage = image ?? `${BASE_URL}/og-default.png`;
+  const ogImage = image ?? `${BASE_URL}/opengraph-image`;
 
   return {
     title,
