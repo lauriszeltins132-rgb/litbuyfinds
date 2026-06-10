@@ -5,11 +5,14 @@ import { buildPageMetadata } from "@/lib/seo";
 
 const collection = COLLECTIONS["best-under-30"];
 
-export const metadata: Metadata = buildPageMetadata({
-  title: collection.title,
-  description: collection.description,
-  path: collection.href,
-});
+export const metadata: Metadata = {
+  ...buildPageMetadata({
+    title: collection.title,
+    description: collection.description,
+    path: collection.href,
+  }),
+  alternates: { canonical: "https://litbuyfinds.io/deals" },
+};
 
 export default function BestUnder30Page() {
   return <CollectionLanding collection={collection} />;

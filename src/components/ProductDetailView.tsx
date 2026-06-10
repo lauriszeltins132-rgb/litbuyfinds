@@ -15,6 +15,7 @@ type ProductDetailViewProps = {
   description: string;
   highlights: string[];
   brand: string | null;
+  categoryHref: string;
 };
 
 export default function ProductDetailView({
@@ -22,6 +23,7 @@ export default function ProductDetailView({
   description,
   highlights,
   brand,
+  categoryHref,
 }: ProductDetailViewProps) {
   const { currency } = usePreferences();
   const { isInWishlist, toggleWishlist } = useWishlist();
@@ -64,9 +66,12 @@ export default function ProductDetailView({
                 QC available
               </span>
             )}
-            <span className="rounded-full border border-border px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-muted">
+            <Link
+              href={categoryHref}
+              className="rounded-full border border-border px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-muted hover:border-accent/40 hover:text-accent"
+            >
               {product.category}
-            </span>
+            </Link>
           </div>
 
           <h1 className="mt-4 text-3xl font-black leading-[1.1] tracking-tight sm:text-4xl lg:text-[2.6rem]">

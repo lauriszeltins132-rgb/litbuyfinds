@@ -1,4 +1,6 @@
 import Link from "next/link";
+import SchemaScript from "@/components/SchemaScript";
+import { buildBreadcrumbSchema } from "@/lib/schema";
 
 export type BreadcrumbItem = {
   label: string;
@@ -7,10 +9,13 @@ export type BreadcrumbItem = {
 
 type BreadcrumbsProps = {
   items: BreadcrumbItem[];
+  currentPath?: string;
 };
 
-export default function Breadcrumbs({ items }: BreadcrumbsProps) {
+export default function Breadcrumbs({ items, currentPath }: BreadcrumbsProps) {
   return (
+    <>
+      <SchemaScript data={buildBreadcrumbSchema(items, currentPath)} />
     <nav aria-label="Breadcrumb" className="px-4 pt-6 sm:px-6">
       <ol className="mx-auto flex max-w-7xl flex-wrap items-center gap-2 text-sm text-muted">
         {items.map((item, index) => {
@@ -32,5 +37,6 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
         })}
       </ol>
     </nav>
+    </>
   );
 }

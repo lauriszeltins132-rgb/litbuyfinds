@@ -4,27 +4,44 @@ import { COLLECTION_SLUGS, COLLECTIONS } from "@/lib/collections";
 import { getBrandsFromProducts } from "@/lib/brands";
 import { getCategories, getAllProducts } from "@/lib/products";
 import { getAllProductSlugs } from "@/lib/slugs";
+import { STATIC_PAGES } from "@/lib/static-pages";
+import { SITE_URL } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://litbuyfinds.io";
   const categories = getCategories();
   const brands = getBrandsFromProducts(getAllProducts());
   const productSlugs = getAllProductSlugs();
 
   const routes: MetadataRoute.Sitemap = [
-    { url: baseUrl, changeFrequency: "daily", priority: 1 },
-    { url: `${baseUrl}/trending`, changeFrequency: "daily", priority: 0.9 },
-    { url: `${baseUrl}/latest`, changeFrequency: "daily", priority: 0.9 },
-    { url: `${baseUrl}/deals`, changeFrequency: "daily", priority: 0.85 },
-    { url: `${baseUrl}/brands`, changeFrequency: "weekly", priority: 0.8 },
-    { url: `${baseUrl}/categories`, changeFrequency: "weekly", priority: 0.8 },
+    { url: SITE_URL, changeFrequency: "daily", priority: 1 },
+    { url: `${SITE_URL}/trending`, changeFrequency: "daily", priority: 0.9 },
+    { url: `${SITE_URL}/latest`, changeFrequency: "daily", priority: 0.9 },
+    { url: `${SITE_URL}/deals`, changeFrequency: "daily", priority: 0.9 },
+    { url: `${SITE_URL}/brands`, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${SITE_URL}/categories`, changeFrequency: "weekly", priority: 0.8 },
   ];
+
+  const highPriorityGuides = new Set([
+    "/how-to-buy",
+    "/new-user-guide",
+    "/best-rep-sneakers",
+    "/best-budget-finds",
+    "/litbuy-vs-other-agents",
+  ]);
+
+  for (const page of Object.values(STATIC_PAGES)) {
+    routes.push({
+      url: `${SITE_URL}${page.path}`,
+      changeFrequency: "monthly",
+      priority: highPriorityGuides.has(page.path) ? 0.85 : 0.75,
+    });
+  }
 
   for (const slug of COLLECTION_SLUGS) {
     const collection = COLLECTIONS[slug];
-    if (collection.href !== "/trending") {
+    if (collection.href !== "/trending" && collection.href !== "/deals") {
       routes.push({
-        url: `${baseUrl}${collection.href}`,
+        url: `${SITE_URL}${collection.href}`,
         changeFrequency: "daily",
         priority: 0.88,
       });
@@ -34,7 +51,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   for (const category of categories) {
     if (category.group === "category") {
       routes.push({
-        url: `${baseUrl}/categories/${category.slug}`,
+        url: `${SITE_URL}/categories/${category.slug}`,
         changeFrequency: "weekly",
         priority: 0.8,
       });
@@ -43,7 +60,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   for (const slug of CATEGORY_ALIAS_SLUGS) {
     routes.push({
-      url: `${baseUrl}/categories/${slug}`,
+      url: `${SITE_URL}/categories/${slug}`,
       changeFrequency: "weekly",
       priority: 0.82,
     });
@@ -51,7 +68,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   for (const brand of brands) {
     routes.push({
-      url: `${baseUrl}/brands/${brand.slug}`,
+      url: `${SITE_URL}/brands/${brand.slug}`,
       changeFrequency: "weekly",
       priority: 0.75,
     });
@@ -59,7 +76,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   for (const slug of productSlugs) {
     routes.push({
-      url: `${baseUrl}/find/${slug}`,
+      url: `${SITE_URL}/find/${slug}`,
       changeFrequency: "weekly",
       priority: 0.6,
     });

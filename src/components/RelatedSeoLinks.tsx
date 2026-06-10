@@ -13,6 +13,13 @@ const FEATURED_BRANDS = [
   "ralph-lauren",
 ];
 
+const GUIDE_LINKS = [
+  { href: "/how-to-buy", label: "How to buy" },
+  { href: "/best-rep-sneakers", label: "Best sneakers" },
+  { href: "/best-budget-finds", label: "Budget finds" },
+  { href: "/new-user-guide", label: "New user guide" },
+];
+
 export default function RelatedSeoLinks() {
   const collections = COLLECTION_SLUGS.filter((slug) => slug !== "trending")
     .slice(0, 5)
@@ -50,6 +57,15 @@ export default function RelatedSeoLinks() {
               className="rounded-full border border-border px-3 py-1.5 text-xs font-bold text-muted hover:border-accent/40 hover:text-accent"
             >
               {slug.replace(/-/g, " ")}
+            </Link>
+          ))}
+          {GUIDE_LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="rounded-full border border-border px-3 py-1.5 text-xs font-bold text-muted hover:border-accent/40 hover:text-accent"
+            >
+              {link.label}
             </Link>
           ))}
         </div>

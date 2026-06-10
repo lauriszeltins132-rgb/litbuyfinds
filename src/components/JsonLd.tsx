@@ -1,38 +1,68 @@
-import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/constants";
+import {
+  CONTACT_EMAIL,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SOCIAL_LINKS,
+} from "@/lib/constants";
 import { getAllProducts, getCategories } from "@/lib/products";
+import { SITE_URL } from "@/lib/site";
+import SchemaScript from "@/components/SchemaScript";
 
 export default function JsonLd() {
   const products = getAllProducts();
   const categories = getCategories();
 
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: SITE_NAME,
-    url: "https://litbuyfinds.io",
-    description: SITE_DESCRIPTION,
-    potentialAction: {
-      "@type": "SearchAction",
-      target: "https://litbuyfinds.io/?q={search_term_string}",
-      "query-input": "required name=search_term_string",
+  const graph = [
+    {
+      "@type": "Organization",
+      "@id": `${SITE_URL}/#organization`,
+      name: SITE_NAME,
+      url: SITE_URL,
+      logo: `${SITE_URL}/logo.svg`,
+      description: SITE_DESCRIPTION,
+      email: CONTACT_EMAIL,
+      sameAs: [
+        SOCIAL_LINKS.discord,
+        SOCIAL_LINKS.telegram,
+        SOCIAL_LINKS.tiktok,
+        SOCIAL_LINKS.instagram,
+      ],
     },
-    about: categories.map((category) => ({
-      "@type": "CollectionPage",
-      name: category.name,
-      url: `https://litbuyfinds.io${category.href}`,
-      numberOfItems: category.count,
-    })),
-    offers: {
-      "@type": "AggregateOffer",
-      offerCount: products.length,
-      priceCurrency: "USD",
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      name: SITE_NAME,
+      url: SITE_URL,
+      description: SITE_DESCRIPTION,
+      publisher: { "@id": `${SITE_URL}/#organization` },
+      potentialAction: {
+        "@type": "SearchAction",
+        target: {
+          "@type": "EntryPoint",
+          urlTemplate: `${SITE_URL}/?q={search_term_string}`,
+        },
+        "query-input": "required name=search_term_string",
+      },
     },
-  };
+    {
+      "@type": "ItemList",
+      name: `${SITE_NAME} catalog`,
+      numberOfItems: products.length,
+      itemListElement: categories.slice(0, 12).map((category, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        url: `${SITE_URL}${category.href}`,
+        name: category.name,
+      })),
+    },
+  ];
 
   return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    <SchemaScript
+      data={{
+        "@context": "https://schema.org",
+        "@graph": graph,
+      }}
     />
   );
 }

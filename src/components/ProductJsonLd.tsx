@@ -1,5 +1,8 @@
 import type { Product } from "@/lib/types";
 import { SITE_NAME } from "@/lib/constants";
+import { extractBrand } from "@/lib/brands";
+import { SITE_URL } from "@/lib/site";
+import SchemaScript from "@/components/SchemaScript";
 
 type ProductJsonLdProps = {
   product: Product;
@@ -7,6 +10,9 @@ type ProductJsonLdProps = {
 };
 
 export default function ProductJsonLd({ product, slug }: ProductJsonLdProps) {
+  const brand = extractBrand(product.product_name);
+  const url = `${SITE_URL}/find/${slug}`;
+
   const schema = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -14,22 +20,25 @@ export default function ProductJsonLd({ product, slug }: ProductJsonLdProps) {
     description: `${product.product_name} — curated on ${SITE_NAME}`,
     image: product.image ? [product.image] : undefined,
     category: product.category,
-    url: `https://litbuyfinds.io/find/${slug}`,
+    url,
+    ...(brand
+      ? {
+          brand: {
+            "@type": "Brand",
+            name: brand,
+          },
+        }
+      : {}),
     offers: product.price
       ? {
           "@type": "Offer",
           price: product.price,
           priceCurrency: "USD",
           availability: "https://schema.org/InStock",
-          url: product.affiliate_link || `https://litbuyfinds.io/find/${slug}`,
+          url: product.affiliate_link || url,
         }
       : undefined,
   };
 
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-    />
-  );
+  return <SchemaScript data={schema} />;
 }

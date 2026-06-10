@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import CatalogPanel from "@/components/CatalogPanel";
 import RelatedSeoLinks from "@/components/RelatedSeoLinks";
+import BrandSeoBlock from "@/components/seo/BrandSeoBlock";
+import SchemaScript from "@/components/SchemaScript";
+import { buildCollectionPageSchema } from "@/lib/schema";
 import {
   getBrandBySlug,
   getBrandsFromProducts,
@@ -52,16 +54,26 @@ export default async function BrandLandingPage({ params }: BrandPageProps) {
   const copy = getBrandSeo(slug, brand.name, brand.count);
   const relatedBrands = getBrandsFromProducts(allProducts)
     .filter((item) => item.slug !== slug)
-    .slice(0, 6);
+    .slice(0, 8);
+  const pagePath = `/brands/${slug}`;
 
   return (
     <>
+      <SchemaScript
+        data={buildCollectionPageSchema({
+          name: copy.title,
+          description: copy.description,
+          path: pagePath,
+          numberOfItems: brand.count,
+        })}
+      />
       <Breadcrumbs
         items={[
           { label: "Home", href: "/" },
           { label: "Brands", href: "/brands" },
           { label: brand.name },
         ]}
+        currentPath={pagePath}
       />
 
       <section className="px-4 pb-6 pt-4 sm:px-6">
@@ -77,21 +89,15 @@ export default async function BrandLandingPage({ params }: BrandPageProps) {
             {brand.count.toLocaleString()} {brand.name} finds indexed
           </p>
 
-          {relatedBrands.length > 0 && (
-            <div className="mt-6 flex flex-wrap gap-2">
-              {relatedBrands.map((item) => (
-                <Link
-                  key={item.slug}
-                  href={`/brands/${item.slug}`}
-                  className="rounded-full border border-border px-3 py-1.5 text-xs font-bold text-muted hover:border-accent/40 hover:text-accent"
-                >
-                  {item.name}
-                </Link>
-              ))}
-            </div>
-          )}
         </div>
       </section>
+
+      <BrandSeoBlock
+        brandName={brand.name}
+        intro={copy.intro}
+        topProducts={products.slice(0, 5)}
+        relatedBrands={relatedBrands}
+      />
 
       <RelatedSeoLinks />
 
@@ -100,7 +106,7 @@ export default async function BrandLandingPage({ params }: BrandPageProps) {
           products={products}
           categories={getCategories()}
           brands={getBrandsFromProducts(allProducts)}
-          basePath={`/brands/${slug}`}
+          basePath={pagePath}
         />
       </Suspense>
     </>

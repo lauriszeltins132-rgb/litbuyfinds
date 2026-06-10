@@ -4,6 +4,9 @@ import { Suspense } from "react";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import CatalogPanel from "@/components/CatalogPanel";
 import RelatedSeoLinks from "@/components/RelatedSeoLinks";
+import CategorySeoBlock from "@/components/seo/CategorySeoBlock";
+import SchemaScript from "@/components/SchemaScript";
+import { buildCollectionPageSchema } from "@/lib/schema";
 import { getBrandsFromProducts } from "@/lib/brands";
 import {
   CATEGORY_ALIAS_SLUGS,
@@ -51,15 +54,29 @@ export default async function CategoryLandingPage({ params }: CategoryPageProps)
 
   const copy = getResolvedCategorySeo(resolved);
   const brands = getBrandsFromProducts(resolved.products);
+  const allCategories = getCategories();
+  const relatedCategories = allCategories
+    .filter((c) => c.slug !== resolved.slug && c.group === "category")
+    .slice(0, 6);
+  const pagePath = `/categories/${slug}`;
 
   return (
     <>
+      <SchemaScript
+        data={buildCollectionPageSchema({
+          name: copy.title,
+          description: copy.description,
+          path: pagePath,
+          numberOfItems: resolved.count,
+        })}
+      />
       <Breadcrumbs
         items={[
           { label: "Home", href: "/" },
           { label: "Categories", href: "/categories" },
           { label: resolved.name },
         ]}
+        currentPath={pagePath}
       />
 
       <section className="px-4 pb-6 pt-4 sm:px-6">
@@ -77,12 +94,19 @@ export default async function CategoryLandingPage({ params }: CategoryPageProps)
         </div>
       </section>
 
+      <CategorySeoBlock
+        categoryName={resolved.name}
+        intro={copy.intro}
+        brands={brands}
+        relatedCategories={relatedCategories}
+      />
+
       <RelatedSeoLinks />
 
       <Suspense fallback={<div className="py-24 text-center text-muted">Loading...</div>}>
         <CatalogPanel
           products={resolved.products}
-          categories={getCategories()}
+          categories={allCategories}
           brands={brands}
           basePath={resolved.href}
         />

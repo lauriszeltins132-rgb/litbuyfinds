@@ -22,6 +22,7 @@ export default function CollectionLanding({ collection }: CollectionLandingProps
           { label: "Home", href: "/" },
           { label: collection.title },
         ]}
+        currentPath={collection.href}
       />
 
       <section className="px-4 pb-6 pt-4 sm:px-6">

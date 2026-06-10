@@ -18,6 +18,8 @@ export const SOCIAL_LINKS = {
   telegram: "https://t.me/RNFinds",
 };
 
+export const TELEGRAM_HANDLE = "@RNFinds";
+
 export const CONTACT_EMAIL = "hello@litbuyfinds.io";
 
 export const EXCHANGE_RATES = {

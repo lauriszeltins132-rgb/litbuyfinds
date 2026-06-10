@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { SITE_NAME } from "./constants";
+import { SITE_URL } from "./site";
 
-const BASE_URL = "https://litbuyfinds.io";
+const BASE_URL = SITE_URL;
 
 export function buildPageMetadata({
   title,

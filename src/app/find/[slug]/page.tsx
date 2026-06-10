@@ -12,9 +12,8 @@ import {
   getProductSeoDescription,
   getProductSeoTitle,
 } from "@/lib/product-details";
-import { getAllProductSlugs, getProductBySlug } from "@/lib/slugs";
+import { getAllProductSlugs, getProductBySlug, slugify } from "@/lib/slugs";
 import { buildPageMetadata } from "@/lib/seo";
-import { SITE_NAME } from "@/lib/constants";
 import ProductJsonLd from "@/components/ProductJsonLd";
 import RecordRecentlyViewed from "@/components/RecordRecentlyViewed";
 
@@ -68,6 +67,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           { label: product.category, href: categoryHref },
           { label: product.product_name },
         ]}
+        currentPath={`/find/${slug}`}
       />
 
       <ProductDetailView
@@ -75,6 +75,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         description={getProductDescription(product)}
         highlights={getProductHighlights(product)}
         brand={brand}
+        categoryHref={categoryHref}
       />
 
       {related.length > 0 && (
@@ -88,9 +89,20 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <div className="mt-6">
               <ProductGrid products={related} />
             </div>
-            <div className="mt-8 text-center">
+            <div className="mt-8 flex flex-wrap justify-center gap-4 text-center">
               <Link href={categoryHref} className="text-sm font-bold text-accent hover:underline">
                 Browse more in {product.category} →
+              </Link>
+              {brand ? (
+                <Link
+                  href={`/brands/${slugify(brand)}`}
+                  className="text-sm font-bold text-accent hover:underline"
+                >
+                  More {brand} finds →
+                </Link>
+              ) : null}
+              <Link href="/how-to-buy" className="text-sm font-bold text-muted hover:text-accent">
+                How to buy →
               </Link>
             </div>
           </div>
