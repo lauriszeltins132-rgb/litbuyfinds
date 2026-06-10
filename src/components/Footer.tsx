@@ -5,11 +5,9 @@ import {
   CONTACT_EMAIL,
   LITBUY_OFFER_HEADLINE,
   SITE_NAME,
-  SOCIAL_LINKS,
-  TELEGRAM_HANDLE,
 } from "@/lib/constants";
-import { trackDiscordClick, trackTelegramClick } from "@/lib/analytics-events";
 import RegisterLink from "./RegisterLink";
+import CommunityLinks from "./CommunityLinks";
 import { getBrandsFromProducts } from "@/lib/brands";
 import { getCategories, getAllProducts } from "@/lib/products";
 
@@ -54,26 +52,11 @@ export default function Footer() {
                 The fastest way to get help before you ship your haul.
               </p>
             </div>
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <a
-                href={SOCIAL_LINKS.discord}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => trackDiscordClick("footer_cta")}
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#5865F2] px-7 py-3.5 text-sm font-black text-white shadow-lg shadow-[#5865F2]/20 transition hover:brightness-110"
-              >
-                <span aria-hidden>💬</span> Discord
-              </a>
-              <a
-                href={SOCIAL_LINKS.telegram}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => trackTelegramClick("footer_cta")}
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-border bg-surface/80 px-7 py-3.5 text-sm font-black text-foreground backdrop-blur transition hover:border-accent/40"
-              >
-                <span aria-hidden>✈️</span> Telegram {TELEGRAM_HANDLE}
-              </a>
-            </div>
+            <CommunityLinks
+              variant="cta"
+              location="footer_cta"
+              showTelegramHandle
+            />
           </div>
         </div>
 

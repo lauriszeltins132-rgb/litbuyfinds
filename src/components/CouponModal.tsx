@@ -52,8 +52,12 @@ export default function CouponModal() {
             Already have an account? Browse finds
           </button>
 
-          <div className="mt-6 flex justify-center">
-            <CommunityLinks variant="inline" />
+          <div className="mt-6">
+            <CommunityLinks
+              variant="inline"
+              location="coupon_modal"
+              fullWidth
+            />
           </div>
         </div>
       </div>
