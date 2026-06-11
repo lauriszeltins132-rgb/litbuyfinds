@@ -84,11 +84,6 @@ export function auditCatalogPrices(items: Product[]): PriceAudit {
   return audit;
 }
 
-export function getCatalogPriceAudit(): PriceAudit {
-  const { products } = require("./products") as { products: Product[] };
-  return auditCatalogPrices(products);
-}
-
 /** Verify converted amounts stay reasonable (no double-conversion bugs). */
 export function verifyCurrencyConversion(usd: number, currency: CurrencyCode): boolean {
   const converted = convertFromUsd(usd, currency);

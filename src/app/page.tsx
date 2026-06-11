@@ -12,6 +12,7 @@ import PopularBrands from "@/components/PopularBrands";
 import RecentlyAddedPreview from "@/components/RecentlyAddedPreview";
 import RecentlyViewedRail from "@/components/RecentlyViewedRail";
 import StatsStrip from "@/components/StatsStrip";
+import TrustStrip from "@/components/TrustStrip";
 import {
   getBudgetFinds,
   getEditorsPicks,
@@ -39,6 +40,7 @@ export default function HomePage() {
   return (
     <>
       <DiscoveryHero />
+      <TrustStrip compact />
       <OfferCallout />
       <StatsStrip />
       <DailyDrop />

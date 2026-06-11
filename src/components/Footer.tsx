@@ -8,6 +8,7 @@ import {
 } from "@/lib/constants";
 import RegisterLink from "./RegisterLink";
 import CommunityLinks from "./CommunityLinks";
+import TrustStrip from "./TrustStrip";
 import { getBrandsFromProducts } from "@/lib/brands";
 import { getCategories, getAllProducts } from "@/lib/products";
 
@@ -39,7 +40,8 @@ export default function Footer() {
       />
 
       <div className="mx-auto max-w-7xl">
-        <div className="overflow-hidden rounded-3xl border border-accent/20 bg-gradient-to-br from-accent/10 via-[#121214] to-[#0d1210] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.35)] sm:p-8">
+        <TrustStrip compact />
+        <div className="mt-8 overflow-hidden rounded-3xl border border-accent/20 bg-gradient-to-br from-accent/10 via-[#121214] to-[#0d1210] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.35)] sm:p-8">
           <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
             <div className="max-w-xl">
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">

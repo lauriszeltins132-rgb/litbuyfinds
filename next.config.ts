@@ -1,5 +1,20 @@
 import type { NextConfig } from "next";
-import { SEO_LIST_SLUGS } from "./src/lib/seo-list-routes";
+
+const SEO_LIST_SLUGS = [
+  "top-rep-sneakers",
+  "top-nike-finds",
+  "top-designer-bags",
+  "top-budget-finds",
+  "top-streetwear-finds",
+  "top-products-under-20",
+  "top-products-under-50",
+  "top-products-under-100",
+  "top-louis-vuitton-finds",
+  "top-gucci-finds",
+  "nike-vs-adidas-finds",
+  "best-bag-brands-on-litbuy",
+  "best-seller-comparison",
+];
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,

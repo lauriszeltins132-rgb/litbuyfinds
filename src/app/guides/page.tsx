@@ -49,6 +49,57 @@ export default function GuidesHubPage() {
 
       <HowItWorks />
 
+      <section className="px-4 pb-8 sm:px-6">
+        <div className="mx-auto max-w-7xl grid gap-4 lg:grid-cols-3">
+          {[
+            {
+              title: "Buying",
+              links: [
+                { href: "/guides/how-to-order", label: "How to order" },
+                { href: "/guides/shipping-and-hauls", label: "Shipping guide" },
+                { href: "/guides/what-is-a-shopping-agent", label: "Agent guide" },
+                { href: "/guides/how-to-check-qc-photos", label: "QC guide" },
+              ],
+            },
+            {
+              title: "Sneakers",
+              links: [
+                { href: "/top-nike-finds", label: "Best Nike finds" },
+                { href: "/brands/jordan", label: "Best Jordan finds" },
+                { href: "/brands/yeezy", label: "Best Yeezy finds" },
+                { href: "/top-rep-sneakers", label: "Top rep sneakers" },
+              ],
+            },
+            {
+              title: "Fashion",
+              links: [
+                { href: "/categories/hoodies-and-pants", label: "Best hoodies" },
+                { href: "/categories/coats-and-jackets", label: "Best jackets" },
+                { href: "/top-designer-bags", label: "Best designer bags" },
+              ],
+            },
+          ].map((cluster) => (
+            <div
+              key={cluster.title}
+              className="rounded-2xl border border-border bg-surface/35 p-5"
+            >
+              <h2 className="text-sm font-black uppercase tracking-[0.14em] text-accent">
+                {cluster.title}
+              </h2>
+              <ul className="mt-3 space-y-2 text-sm">
+                {cluster.links.map((link) => (
+                  <li key={link.href}>
+                    <Link href={link.href} className="font-semibold text-muted hover:text-accent">
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <section className="px-4 pb-16 sm:px-6">
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

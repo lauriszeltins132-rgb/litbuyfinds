@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import type { Product } from "@/lib/types";
 import { getProductHref } from "@/lib/slugs";
 import { extractBrand } from "@/lib/brands";
-import { formatPrice } from "@/lib/currency";
+import { formatProductPrice } from "@/lib/pricing";
 import { getProductSource } from "@/lib/filters";
 import {
   getProductDescription,
@@ -69,6 +69,7 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
                 src={product.image}
                 alt={product.product_name}
                 variant="card"
+                productHref={getProductHref(product)}
               />
             </div>
             {product.qc_link && (
@@ -101,7 +102,7 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
             </div>
 
             <p className="mt-5 text-3xl font-black text-accent">
-              {formatPrice(product.price, currency)}
+              {formatProductPrice(product.price, currency)}
             </p>
 
             <p className="mt-4 text-sm leading-relaxed text-muted">

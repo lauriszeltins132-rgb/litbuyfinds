@@ -1,6 +1,7 @@
 import type { Product } from "./types";
 import { extractBrand } from "./brands";
 import { formatPrice } from "./currency";
+import { hasExactPrice } from "./pricing";
 import { getProductSource } from "./filters";
 
 type CategoryTone =
@@ -98,10 +99,11 @@ function qcSentence(product: Product, seed: string): string {
 }
 
 function priceSentence(product: Product, seed: string): string | null {
-  if (product.price === null) return null;
-  const price = formatPrice(product.price, "USD");
+  if (!hasExactPrice(product.price) || product.price === null) return null;
+  const usd = product.price;
+  const price = formatPrice(usd, "USD");
 
-  if (product.price <= 20) {
+  if (usd <= 20) {
     return pickVariant(seed, [
       `Listed around ${price}, so it is an easy low-risk add to a haul.`,
       `At ${price}, this is squarely in budget territory.`,
@@ -109,7 +111,7 @@ function priceSentence(product: Product, seed: string): string | null {
     ]);
   }
 
-  if (product.price <= 45) {
+  if (usd <= 45) {
     return pickVariant(seed, [
       `Listed around ${price}, which is reasonable for this category.`,
       `Sits near ${price} — compare a few similar listings before you pick one.`,

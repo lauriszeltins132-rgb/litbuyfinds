@@ -1,25 +1,13 @@
-import fs from "fs";
-import path from "path";
+import { DATASET_SYNCED_ISO } from "@/generated/dataset-meta";
 
-const DATASET_PATH = path.join(process.cwd(), "src/data/products.json");
-
-function getDatasetMtime(): Date {
-  try {
-    const stat = fs.statSync(DATASET_PATH);
-    return stat.mtime;
-  } catch {
-    return new Date();
-  }
-}
-
-const DATASET_SYNCED_AT = getDatasetMtime();
+const DATASET_SYNCED_AT = new Date(DATASET_SYNCED_ISO);
 
 export function getDatasetSyncedAt(): Date {
   return DATASET_SYNCED_AT;
 }
 
 export function getDatasetSyncedIso(): string {
-  return DATASET_SYNCED_AT.toISOString();
+  return DATASET_SYNCED_ISO;
 }
 
 export function getDatasetAgeHours(): number {

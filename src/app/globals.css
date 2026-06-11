@@ -318,12 +318,32 @@ body::before {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
 }
 
+.image-unavailable__brand {
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(212, 255, 60, 0.75);
+}
+
 .image-unavailable__label {
   font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: rgba(245, 245, 248, 0.42);
+}
+
+.image-unavailable__cta {
+  margin-top: 0.15rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.image-unavailable__cta:hover {
+  text-decoration: underline;
 }
 
 .image-unavailable--loading .image-unavailable__logo {

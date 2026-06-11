@@ -1,7 +1,8 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useProcessedImage } from "@/hooks/useProcessedImage";
+import { trackBrokenImage } from "@/lib/analytics-events";
 import {
   hasPlausibleImageDimensions,
   validateImageUrl,
@@ -16,6 +17,7 @@ type ProductImageProps = {
   className?: string;
   priority?: boolean;
   variant?: ProductImageVariant;
+  productHref?: string;
 };
 
 const VARIANT_CAP: Record<ProductImageVariant, number> = {
@@ -30,23 +32,30 @@ export default function ProductImage({
   className = "",
   priority = false,
   variant = "card",
+  productHref,
 }: ProductImageProps) {
   const validation = validateImageUrl(src);
   const { displaySrc, failed, loading, ready } = useProcessedImage(src);
   const [renderFailed, setRenderFailed] = useState(!validation.valid);
   const [visible, setVisible] = useState(false);
   const [safeMax, setSafeMax] = useState<number | null>(null);
+  const loggedRef = useRef(false);
 
   useEffect(() => {
     setRenderFailed(!validation.valid);
     setVisible(false);
     setSafeMax(null);
+    loggedRef.current = false;
   }, [validation.normalized, validation.valid]);
 
   const markFailed = useCallback(() => {
     setRenderFailed(true);
     setVisible(false);
-  }, []);
+    if (!loggedRef.current) {
+      loggedRef.current = true;
+      trackBrokenImage(validation.normalized || src, variant);
+    }
+  }, [src, validation.normalized, variant]);
 
   const handleLoad = useCallback(
     (event: React.SyntheticEvent<HTMLImageElement>) => {
@@ -77,6 +86,7 @@ export default function ProductImage({
         className={className}
         variant={variant}
         loading={!renderFailed && !failed && loading}
+        productHref={productHref}
       />
     );
   }
@@ -108,7 +118,11 @@ export default function ProductImage({
         onError={markFailed}
       />
       {!visible && (
-        <ImageUnavailablePlaceholder variant={variant} loading />
+        <ImageUnavailablePlaceholder
+          variant={variant}
+          loading
+          productHref={productHref}
+        />
       )}
     </div>
   );

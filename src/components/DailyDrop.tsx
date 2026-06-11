@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { Product } from "@/lib/types";
-import { formatPrice } from "@/lib/currency";
+import { formatProductPrice } from "@/lib/pricing";
 import { trackProductContext } from "@/lib/analytics-events";
 import { getProductHref } from "@/lib/slugs";
 import ProductImage from "./ProductImage";
@@ -63,7 +63,7 @@ export default function DailyDrop() {
                 {product.product_name}
               </h2>
               <p className="mt-3 text-3xl font-black text-accent">
-                {formatPrice(product.price, "USD")}
+                {formatProductPrice(product.price, "USD")}
               </p>
               <p className="mt-4 max-w-md text-sm leading-relaxed text-muted">
                 One standout pick from the full catalog — automatically selected by

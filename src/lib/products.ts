@@ -1,5 +1,6 @@
 import type { CategoryInfo, Product } from "./types";
 import productsData from "@/data/products.json";
+import { auditCatalogPrices } from "./pricing";
 import { validateImageUrl } from "./image-url";
 
 function normalizeProduct(product: Product): Product {
@@ -65,12 +66,20 @@ export function getCatalogStats() {
   const withQc = products.filter((p) => p.qc_link).length;
   const uniqueUrls = new Set(products.map((p) => p.affiliate_link)).size;
 
+  const priceAudit = auditCatalogPrices(products);
+
   return {
     total: products.length,
     withImages,
     withQc,
     uniqueUrls,
     categories: getCategories().filter((c) => c.group === "category").length,
+    prices: {
+      exact: priceAudit.exact,
+      unavailable: priceAudit.unavailable,
+      checkLatest: priceAudit.checkLatest,
+      nullInSource: priceAudit.nullInSource,
+    },
   };
 }
 

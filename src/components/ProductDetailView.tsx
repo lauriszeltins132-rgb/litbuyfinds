@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useState } from "react";
 import type { Product } from "@/lib/types";
-import { formatPrice } from "@/lib/currency";
+import DataFreshness from "@/components/DataFreshness";
+import { formatProductPrice, getPriceStatus } from "@/lib/pricing";
 import { getProductSource } from "@/lib/filters";
 import { getProductHref, slugify } from "@/lib/slugs";
 import { usePreferences } from "@/context/PreferencesContext";
@@ -57,6 +58,7 @@ export default function ProductDetailView({
             alt={product.product_name}
             priority
             variant="featured"
+            productHref={getProductHref(product)}
           />
         </div>
 
@@ -93,11 +95,32 @@ export default function ProductDetailView({
             </span>
           </div>
 
-          <div className="mt-6 inline-flex items-baseline gap-2 rounded-2xl border border-accent/20 bg-accent/8 px-5 py-4">
-            <span className="text-sm font-semibold text-muted">Price</span>
-            <span className="text-3xl font-black text-accent sm:text-4xl">
-              {formatPrice(product.price, currency)}
-            </span>
+          <div className="mt-6 inline-flex flex-col gap-2 rounded-2xl border border-accent/20 bg-accent/8 px-5 py-4">
+            <div className="flex items-baseline gap-2">
+              <span className="text-sm font-semibold text-muted">Catalog price</span>
+              <span
+                className={`text-3xl font-black sm:text-4xl ${
+                  getPriceStatus(product.price) === "exact"
+                    ? "text-accent"
+                    : "text-muted text-xl sm:text-2xl"
+                }`}
+              >
+                {formatProductPrice(product.price, currency)}
+              </span>
+            </div>
+            {getPriceStatus(product.price) !== "exact" ? (
+              <p className="text-xs text-muted">
+                Confirm the live price on LitBuy before checkout.
+              </p>
+            ) : (
+              <p className="text-xs text-muted">
+                From catalog data — confirm latest price on LitBuy before buying.
+              </p>
+            )}
+          </div>
+
+          <div className="mt-3">
+            <DataFreshness variant="block" label="Catalog synced" />
           </div>
 
           <p className="mt-6 text-base leading-relaxed text-foreground/90">

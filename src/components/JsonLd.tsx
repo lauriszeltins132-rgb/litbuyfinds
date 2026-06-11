@@ -21,6 +21,13 @@ export default function JsonLd() {
       logo: `${SITE_URL}/logo.svg`,
       description: SITE_DESCRIPTION,
       email: CONTACT_EMAIL,
+      knowsAbout: [
+        "LitBuy product discovery",
+        "shopping agents",
+        "QC photos",
+        "sneaker finds",
+        "streetwear finds",
+      ],
       sameAs: [
         SOCIAL_LINKS.discord,
         SOCIAL_LINKS.telegram,

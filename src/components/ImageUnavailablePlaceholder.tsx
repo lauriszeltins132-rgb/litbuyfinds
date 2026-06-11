@@ -1,17 +1,21 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
+import { SITE_NAME } from "@/lib/constants";
 
 type ImageUnavailablePlaceholderProps = {
   className?: string;
   variant?: "card" | "featured" | "hero";
   loading?: boolean;
+  productHref?: string;
 };
 
 export default function ImageUnavailablePlaceholder({
   className = "",
   variant = "card",
   loading = false,
+  productHref,
 }: ImageUnavailablePlaceholderProps) {
   const logoSize = variant === "card" ? 28 : variant === "featured" ? 36 : 40;
 
@@ -32,7 +36,13 @@ export default function ImageUnavailablePlaceholder({
             aria-hidden
           />
         </div>
+        <p className="image-unavailable__brand">{SITE_NAME}</p>
         <p className="image-unavailable__label">Image unavailable</p>
+        {productHref ? (
+          <Link href={productHref} className="image-unavailable__cta">
+            View product details
+          </Link>
+        ) : null}
       </div>
     </div>
   );

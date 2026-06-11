@@ -25,6 +25,40 @@ export function buildBreadcrumbSchema(
   };
 }
 
+export function buildArticleSchema({
+  title,
+  description,
+  path,
+  dateModified,
+}: {
+  title: string;
+  description: string;
+  path: string;
+  dateModified?: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: title,
+    description,
+    url: `${SITE_URL}${path}`,
+    author: {
+      "@type": "Organization",
+      name: "LitBuy Finds",
+      url: SITE_URL,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "LitBuy Finds",
+      logo: {
+        "@type": "ImageObject",
+        url: `${SITE_URL}/logo.svg`,
+      },
+    },
+    ...(dateModified ? { dateModified } : {}),
+  };
+}
+
 export function buildFaqSchema(faqs: { question: string; answer: string }[]) {
   return {
     "@context": "https://schema.org",

@@ -5,6 +5,7 @@ import { getBrandsFromProducts } from "@/lib/brands";
 import { getCategories, getAllProducts } from "@/lib/products";
 import { getAllProductSlugs } from "@/lib/slugs";
 import { GUIDE_SLUGS, GUIDES_HUB, GUIDE_PAGES } from "@/lib/guides";
+import { SEO_LIST_SLUGS, SEO_LIST_ROUTES } from "@/lib/seo-list-routes";
 import { STATIC_PAGES } from "@/lib/static-pages";
 import { SITE_URL } from "@/lib/site";
 
@@ -30,6 +31,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${SITE_URL}${guide.path}`,
       changeFrequency: "monthly",
       priority: 0.86,
+    });
+  }
+
+  for (const slug of SEO_LIST_SLUGS) {
+    const list = SEO_LIST_ROUTES[slug];
+    routes.push({
+      url: `${SITE_URL}${list.path}`,
+      changeFrequency: "weekly",
+      priority: 0.84,
     });
   }
 

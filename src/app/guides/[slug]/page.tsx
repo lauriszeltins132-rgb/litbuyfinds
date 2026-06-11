@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ContentPageLayout from "@/components/ContentPageLayout";
+import SchemaScript from "@/components/SchemaScript";
+import { getDatasetSyncedIso } from "@/lib/catalog-meta";
 import { GUIDE_SLUGS, getGuide } from "@/lib/guides";
+import { buildArticleSchema } from "@/lib/schema";
 import { buildPageMetadata } from "@/lib/seo";
 
 type GuidePageProps = {
@@ -35,15 +38,25 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
   }
 
   return (
-    <ContentPageLayout
-      path={guide.path}
-      badge={guide.badge}
-      h1={guide.h1}
-      intro={guide.intro}
-      sections={guide.sections}
-      faqs={guide.faqs}
-      relatedLinks={guide.relatedLinks}
-      parentCrumb={{ label: "Guides", href: "/guides" }}
-    />
+    <>
+      <SchemaScript
+        data={buildArticleSchema({
+          title: guide.title,
+          description: guide.metaDescription,
+          path: guide.path,
+          dateModified: getDatasetSyncedIso(),
+        })}
+      />
+      <ContentPageLayout
+        path={guide.path}
+        badge={guide.badge}
+        h1={guide.h1}
+        intro={guide.intro}
+        sections={guide.sections}
+        faqs={guide.faqs}
+        relatedLinks={guide.relatedLinks}
+        parentCrumb={{ label: "Guides", href: "/guides" }}
+      />
+    </>
   );
 }

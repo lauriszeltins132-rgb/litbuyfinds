@@ -10,7 +10,8 @@ export type ConversionEvent =
   | "buy_click"
   | "qc_click"
   | "discord_click"
-  | "telegram_click";
+  | "telegram_click"
+  | "broken_image";
 
 export type ConversionPayload = {
   location?: string;
@@ -82,4 +83,8 @@ export function trackDiscordClick(location: string) {
 
 export function trackTelegramClick(location: string) {
   trackConversion("telegram_click", { location });
+}
+
+export function trackBrokenImage(imageUrl: string, location: string) {
+  trackConversion("broken_image", { location, productName: imageUrl.slice(0, 120) });
 }

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import DataFreshness from "@/components/DataFreshness";
 import { getRecencyCounts } from "@/lib/recency";
 
 const BUCKETS = [
@@ -91,6 +92,9 @@ export default function RecentlyAddedPreview() {
             <p className="mt-2 max-w-2xl text-sm text-muted">
               Newest listings from the catalog — updated automatically whenever
               the dataset changes.
+            </p>
+            <p className="mt-2">
+              <DataFreshness label="Last synced" />
             </p>
           </div>
           <Link

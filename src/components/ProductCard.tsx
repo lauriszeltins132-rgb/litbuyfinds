@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import type { Product } from "@/lib/types";
 import { extractBrand } from "@/lib/brands";
-import { formatPrice } from "@/lib/currency";
+import { formatProductPrice, getPriceStatus } from "@/lib/pricing";
 import { getTrendingScore } from "@/lib/discovery";
 import { getProductSource } from "@/lib/filters";
 import { getProductHref } from "@/lib/slugs";
@@ -76,6 +76,7 @@ export default function ProductCard({
           src={product.image}
           alt={product.product_name}
           variant="card"
+          productHref={productHref}
         />
         <div className="absolute left-2 top-2 flex flex-col gap-1">
           {(showTrendingScore ? heatScore >= 68 : heatScore >= 74) && (
@@ -112,8 +113,14 @@ export default function ProductCard({
           <span className="rounded bg-surface px-1.5 py-0.5 uppercase">{source}</span>
         </div>
 
-        <p className={`font-black text-accent ${compact ? "text-sm" : "text-base"}`}>
-          {formatPrice(product.price, currency)}
+        <p
+          className={`font-black ${
+            getPriceStatus(product.price) === "exact"
+              ? "text-accent"
+              : "text-muted text-sm"
+          } ${compact ? "text-sm" : "text-base"}`}
+        >
+          {formatProductPrice(product.price, currency)}
         </p>
 
         <div className="mt-auto flex flex-wrap items-center gap-1.5 pt-1">

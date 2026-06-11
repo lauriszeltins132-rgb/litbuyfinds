@@ -1,4 +1,6 @@
 import { extractBrand, getBrandsFromProducts } from "./brands";
+import { isFeaturedEligible } from "./product-media";
+import { hasExactPrice } from "./pricing";
 import { getRecentlyAddedPreview } from "./recency";
 import {
   getAllProducts,
@@ -13,11 +15,11 @@ function qualityScore(product: Product, trendingIndex = 999): number {
   let score = 0;
   if (product.image) score += 25;
   if (product.qc_link) score += 20;
-  if (product.price !== null) score += 10;
+  if (hasExactPrice(product.price)) score += 10;
   if (product.category_slug === "trending-now") score += 30 - Math.min(trendingIndex, 29);
   if (product.category_slug === "latest-finds") score += 15;
-  if (product.price !== null && product.price <= 30) score += 10;
-  if (product.price !== null && product.price <= 50) score += 5;
+  if (hasExactPrice(product.price) && product.price! <= 30) score += 10;
+  if (hasExactPrice(product.price) && product.price! <= 50) score += 5;
   return score;
 }
 
@@ -33,7 +35,7 @@ export function getEditorsPicks(limit = 12): Product[] {
   const seen = new Set<string>();
 
   return pool
-    .filter((product) => product.image && product.qc_link)
+    .filter((product) => isFeaturedEligible(product) && product.qc_link)
     .filter((product) => {
       if (seen.has(product.id)) return false;
       seen.add(product.id);
@@ -50,7 +52,7 @@ export function getHiddenGems(limit = 12): Product[] {
     .filter(
       (product) =>
         product.group === "category" &&
-        product.image &&
+        isFeaturedEligible(product) &&
         product.qc_link &&
         !trendingIds.has(product.id)
     )
@@ -60,7 +62,7 @@ export function getHiddenGems(limit = 12): Product[] {
 
 export function getMostSavedPicks(limit = 12): Product[] {
   return getAllProducts()
-    .filter((product) => product.image)
+    .filter((product) => isFeaturedEligible(product))
     .sort((a, b) => qualityScore(b) - qualityScore(a))
     .slice(0, limit);
 }
@@ -72,7 +74,7 @@ export function getUtcDayIndex(): number {
 
 export function getDailyDropPool(): Product[] {
   return getAllProducts()
-    .filter((product) => product.image)
+    .filter((product) => isFeaturedEligible(product))
     .sort((a, b) => Number(a.id) - Number(b.id));
 }
 
@@ -98,7 +100,7 @@ export function getBrandSpotlight() {
 
   const brandProducts = getAllProducts()
     .filter((product) => extractBrand(product.product_name) === brand.name)
-    .filter((product) => product.image)
+    .filter((product) => isFeaturedEligible(product))
     .slice(0, 8);
 
   return { brand, products: brandProducts };

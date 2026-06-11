@@ -3,11 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "node scripts/generate-dataset-meta.mjs && next dev",
+    "build": "node scripts/generate-dataset-meta.mjs && next build",
     "start": "next start",
     "lint": "next lint",
-    "convert-data": "node scripts/convert-spreadsheet.mjs"
+    "convert-data": "node scripts/convert-spreadsheet.mjs",
+    "audit:site": "node scripts/site-audit.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
