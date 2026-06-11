@@ -182,8 +182,8 @@ body::before {
 }
 
 .product-float-asset--matte {
-  mix-blend-mode: darken;
-  filter: contrast(1.1) saturate(1.05)
+  mix-blend-mode: multiply;
+  filter: contrast(1.12) brightness(1.22) saturate(1.05)
     drop-shadow(0 10px 28px rgba(0, 0, 0, 0.42));
 }
 

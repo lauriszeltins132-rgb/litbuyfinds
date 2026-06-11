@@ -75,9 +75,7 @@ export default function ProductImage({
     );
   }
 
-  const useMatteBlend =
-    needsDarkMatte || (variant === "card" && !processedToPng);
-  const assetClass = useMatteBlend
+  const assetClass = needsDarkMatte
     ? "product-float-asset product-float-asset--matte"
     : processedToPng
       ? "product-float-asset product-float-asset--processed"
@@ -90,7 +88,7 @@ export default function ProductImage({
       <div className="product-float-glow" aria-hidden />
       <div
         className={
-          useMatteBlend || variant === "card"
+          needsDarkMatte
             ? "product-float-matte product-float-matte--active"
             : "product-float-matte"
         }

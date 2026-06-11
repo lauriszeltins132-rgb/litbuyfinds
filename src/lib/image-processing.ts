@@ -2,6 +2,7 @@ import {
   getCachedImage,
   getCachedImageAsync,
   setCachedImage,
+  type ProcessedImageEntry,
 } from "./image-cache";
 import { hasPlausibleImageDimensions, validateImageUrl } from "./image-url";
 
@@ -43,7 +44,7 @@ function cornersLookWhite(
     }
   }
 
-  return whiteCorners >= 1;
+  return whiteCorners >= 2;
 }
 
 function borderLooksBright(
@@ -78,7 +79,7 @@ function borderLooksBright(
     }
   }
 
-  return bright / (samples.length / 3) >= 0.55;
+  return bright / (samples.length / 3) >= 0.72;
 }
 
 function removeEdgeBackground(
@@ -213,10 +214,25 @@ export function probeImageLoad(url: string): Promise<boolean> {
   });
 }
 
-export async function removeWhiteBackground(
+function cacheResult(
+  normalized: string,
+  src: string,
+  hasBrightBackground: boolean,
+  processedToPng: boolean
+): ProcessedImageEntry {
+  const entry: ProcessedImageEntry = {
+    src,
+    hasBrightBackground,
+    processedToPng,
+  };
+  setCachedImage(normalized, entry);
+  return entry;
+}
+
+export async function processProductImage(
   imageUrl: string,
   threshold = 245
-): Promise<string> {
+): Promise<ProcessedImageEntry> {
   const { valid, normalized } = validateImageUrl(imageUrl);
   if (!valid) {
     throw new Error("Invalid image URL");
@@ -256,8 +272,7 @@ export async function removeWhiteBackground(
       borderLooksBright(imageData.data, width, height, threshold);
 
     if (!hasBrightBackground) {
-      setCachedImage(normalized, normalized);
-      return normalized;
+      return cacheResult(normalized, normalized, false, false);
     }
 
     const removed = removeEdgeBackground(
@@ -269,8 +284,7 @@ export async function removeWhiteBackground(
     const ratio = removed / (width * height);
 
     if (ratio < MIN_BACKGROUND_RATIO || ratio > MAX_BACKGROUND_RATIO) {
-      setCachedImage(normalized, normalized);
-      return normalized;
+      return cacheResult(normalized, normalized, true, false);
     }
 
     const bounds = getContentBounds(imageData.data, width, height);
@@ -284,9 +298,17 @@ export async function removeWhiteBackground(
     }
 
     const dataUrl = canvas.toDataURL("image/png");
-    setCachedImage(normalized, dataUrl);
-    return dataUrl;
+    return cacheResult(normalized, dataUrl, true, true);
   } catch {
     throw new Error("Canvas tainted");
   }
+}
+
+/** @deprecated Use processProductImage */
+export async function removeWhiteBackground(
+  imageUrl: string,
+  threshold = 245
+): Promise<string> {
+  const result = await processProductImage(imageUrl, threshold);
+  return result.src;
 }

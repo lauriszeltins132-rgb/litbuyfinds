@@ -1,8 +1,15 @@
 const MEMORY_LIMIT = 400;
 const memory = new Map<string, string>();
-const DB_NAME = "litbuyfinds-image-cache-v5";
+const DB_NAME = "litbuyfinds-image-cache-v6";
 const STORE = "processed";
 const DB_VERSION = 1;
+const CACHE_PREFIX = "p2:";
+
+export type ProcessedImageEntry = {
+  src: string;
+  hasBrightBackground: boolean;
+  processedToPng: boolean;
+};
 
 function trimMemory() {
   while (memory.size > MEMORY_LIMIT) {
@@ -31,13 +38,37 @@ function openDb(): Promise<IDBDatabase> {
   });
 }
 
-export function getCachedImage(url: string): string | undefined {
-  return memory.get(url);
+function serialize(entry: ProcessedImageEntry): string {
+  return `${CACHE_PREFIX}${JSON.stringify(entry)}`;
 }
 
-export async function getCachedImageAsync(url: string): Promise<string | undefined> {
+export function parseCachedImage(raw: string): ProcessedImageEntry {
+  if (raw.startsWith(CACHE_PREFIX)) {
+    try {
+      return JSON.parse(raw.slice(CACHE_PREFIX.length)) as ProcessedImageEntry;
+    } catch {
+      // fall through
+    }
+  }
+
+  const processedToPng = raw.startsWith("data:");
+  return {
+    src: raw,
+    hasBrightBackground: false,
+    processedToPng,
+  };
+}
+
+export function getCachedImage(url: string): ProcessedImageEntry | undefined {
   const hit = memory.get(url);
-  if (hit) return hit;
+  return hit ? parseCachedImage(hit) : undefined;
+}
+
+export async function getCachedImageAsync(
+  url: string
+): Promise<ProcessedImageEntry | undefined> {
+  const hit = memory.get(url);
+  if (hit) return parseCachedImage(hit);
 
   try {
     const db = await openDb();
@@ -51,7 +82,7 @@ export async function getCachedImageAsync(url: string): Promise<string | undefin
     db.close();
     if (value) {
       memory.set(url, value);
-      return value;
+      return parseCachedImage(value);
     }
   } catch {
     // ignore IDB errors
@@ -60,8 +91,9 @@ export async function getCachedImageAsync(url: string): Promise<string | undefin
   return undefined;
 }
 
-export function setCachedImage(url: string, dataUrl: string) {
-  memory.set(url, dataUrl);
+export function setCachedImage(url: string, entry: ProcessedImageEntry) {
+  const serialized = serialize(entry);
+  memory.set(url, serialized);
   trimMemory();
 
   void (async () => {
@@ -70,7 +102,7 @@ export function setCachedImage(url: string, dataUrl: string) {
       await new Promise<void>((resolve, reject) => {
         const tx = db.transaction(STORE, "readwrite");
         const store = tx.objectStore(STORE);
-        const req = store.put(dataUrl, url);
+        const req = store.put(serialized, url);
         req.onsuccess = () => resolve();
         req.onerror = () => reject(req.error);
       });
