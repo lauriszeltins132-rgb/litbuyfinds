@@ -1,7 +1,14 @@
 import type { NextConfig } from "next";
+import { SEO_LIST_SLUGS } from "./src/lib/seo-list-routes";
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  async rewrites() {
+    return SEO_LIST_SLUGS.map((slug) => ({
+      source: `/${slug}`,
+      destination: `/lists/${slug}`,
+    }));
+  },
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "i.postimg.cc" },
