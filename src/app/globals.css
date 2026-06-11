@@ -93,6 +93,16 @@ body::before {
   color: var(--color-accent);
 }
 
+.signup-card {
+  background: linear-gradient(
+    145deg,
+    rgba(18, 18, 24, 0.95) 0%,
+    rgba(14, 16, 14, 0.92) 55%,
+    rgba(18, 18, 24, 0.95) 100%
+  );
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.28);
+}
+
 .product-image-shell {
   position: relative;
   overflow: hidden;
@@ -146,7 +156,7 @@ body::before {
 }
 
 .product-float-stage--card {
-  padding: 0.35rem;
+  padding: 0.2rem;
 }
 
 .product-float-stage--featured {
@@ -209,34 +219,34 @@ body::before {
   position: relative;
   z-index: 2;
   display: block;
-  max-width: 90%;
-  max-height: 90%;
+  max-width: 98%;
+  max-height: 98%;
   width: auto;
   height: auto;
   object-fit: contain;
   object-position: center;
   image-rendering: auto;
-  filter: contrast(1.07) saturate(1.08) drop-shadow(0 10px 28px rgba(0, 0, 0, 0.45));
+  filter: contrast(1.06) saturate(1.06) drop-shadow(0 12px 32px rgba(0, 0, 0, 0.5));
   transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease;
 }
 
 .product-float-stage--featured .product-float-asset {
-  max-width: min(96%, 500px);
-  max-height: min(94%, 460px);
+  max-width: min(98%, 540px);
+  max-height: min(98%, 500px);
 }
 
 .product-float-stage--hero .product-float-asset {
-  max-width: min(98%, 580px);
-  max-height: min(96%, 520px);
+  max-width: min(99%, 600px);
+  max-height: min(98%, 560px);
 }
 
 .product-float-stage--card .product-float-asset {
-  max-width: 92%;
-  max-height: 92%;
+  max-width: 98%;
+  max-height: 98%;
 }
 
-.product-float-asset--fallback {
-  filter: contrast(1.05) saturate(1.05) drop-shadow(0 10px 28px rgba(0, 0, 0, 0.45));
+.product-float-asset--processed {
+  filter: contrast(1.05) saturate(1.05) drop-shadow(0 12px 32px rgba(0, 0, 0, 0.5));
 }
 
 .product-float-asset--loading {

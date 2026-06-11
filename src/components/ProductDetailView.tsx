@@ -10,6 +10,7 @@ import { getProductHref, slugify } from "@/lib/slugs";
 import { usePreferences } from "@/context/PreferencesContext";
 import { useWishlist } from "@/context/WishlistContext";
 import { trackProductContext } from "@/lib/analytics-events";
+import HowToBuySteps from "./HowToBuySteps";
 import ProductImage from "./ProductImage";
 
 type ProductDetailViewProps = {
@@ -163,7 +164,9 @@ export default function ProductDetailView({
             ) : null}
           </div>
 
-          <div className="mt-3 flex flex-wrap gap-2">
+          <HowToBuySteps />
+
+          <div className="mt-6 flex flex-wrap gap-2">
             <button
               type="button"
               onClick={() => toggleWishlist(product.id)}

@@ -10,6 +10,7 @@ import NewToLitBuy from "@/components/NewToLitBuy";
 import RecentlyAddedPreview from "@/components/RecentlyAddedPreview";
 import RecentlyViewedRail from "@/components/RecentlyViewedRail";
 import StatsStrip from "@/components/StatsStrip";
+import SignupCard from "@/components/SignupCard";
 import TrustStrip from "@/components/TrustStrip";
 import {
   getBudgetFinds,
@@ -32,6 +33,7 @@ export default function HomePage() {
     <>
       <DiscoveryHero />
       <TrustStrip compact />
+      <SignupCard location="homepage_intro" variant="intro" />
 
       <DiscoveryRail
         title="🔥 Popular Today"

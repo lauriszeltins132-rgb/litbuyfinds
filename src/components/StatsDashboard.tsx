@@ -17,6 +17,12 @@ type Summary = {
   topBrands: { name: string; clicks: number }[];
   registerCtr: number;
   buyCtr: number;
+  topSignupPlacements?: {
+    location: string;
+    impressions: number;
+    clicks: number;
+    ctr: number;
+  }[];
   updatedAt: string;
 };
 
@@ -93,6 +99,30 @@ export default function StatsDashboard() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
+        <section className="rounded-2xl border border-border bg-surface/40 p-6 lg:col-span-2">
+          <h2 className="text-lg font-black">Signup placement performance</h2>
+          <p className="mt-1 text-sm text-muted">
+            Register impressions and clicks by placement location
+          </p>
+          <ul className="mt-4 space-y-3">
+            {(summary.topSignupPlacements ?? []).length === 0 ? (
+              <li className="text-sm text-muted">No signup events yet.</li>
+            ) : (
+              summary.topSignupPlacements!.map((row) => (
+                <li
+                  key={row.location}
+                  className="flex flex-wrap items-center justify-between gap-3 text-sm"
+                >
+                  <span className="font-medium text-foreground">{row.location}</span>
+                  <span className="text-muted">
+                    {row.impressions} views · {row.clicks} clicks · {row.ctr}% CTR
+                  </span>
+                </li>
+              ))
+            )}
+          </ul>
+        </section>
+
         <section className="rounded-2xl border border-border bg-surface/40 p-6">
           <h2 className="text-lg font-black">Most clicked products</h2>
           <p className="mt-1 text-sm text-muted">Buy + QC clicks combined</p>

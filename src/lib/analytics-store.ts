@@ -8,6 +8,11 @@ type ProductClicks = {
   clicks: number;
 };
 
+type PlacementStats = {
+  impressions: number;
+  clicks: number;
+};
+
 export type AnalyticsStore = {
   pageViews: number;
   productViews: number;
@@ -19,6 +24,7 @@ export type AnalyticsStore = {
   telegramClicks: number;
   products: Record<string, ProductClicks>;
   brands: Record<string, number>;
+  signupPlacements: Record<string, PlacementStats>;
   updatedAt: string;
 };
 
@@ -49,8 +55,23 @@ function emptyStore(): AnalyticsStore {
     telegramClicks: 0,
     products: {},
     brands: {},
+    signupPlacements: {},
     updatedAt: new Date().toISOString(),
   };
+}
+
+function bumpPlacement(
+  store: AnalyticsStore,
+  location: string | undefined,
+  kind: "impressions" | "clicks"
+) {
+  if (!location) return;
+  const existing = store.signupPlacements[location] ?? {
+    impressions: 0,
+    clicks: 0,
+  };
+  existing[kind] += 1;
+  store.signupPlacements[location] = existing;
 }
 
 function readFileStore(): AnalyticsStore | null {
@@ -112,9 +133,11 @@ export function recordEvent(body: EventBody) {
       break;
     case "register_impression":
       store.registerImpressions += 1;
+      bumpPlacement(store, body.location, "impressions");
       break;
     case "register_click":
       store.registerClicks += 1;
+      bumpPlacement(store, body.location, "clicks");
       break;
     case "buy_click":
       store.buyClicks += 1;
@@ -182,6 +205,19 @@ export function getAnalyticsSummary() {
       ? Number(((store.buyClicks / store.productViews) * 100).toFixed(2))
       : 0;
 
+  const topSignupPlacements = Object.entries(store.signupPlacements)
+    .map(([location, value]) => ({
+      location,
+      impressions: value.impressions,
+      clicks: value.clicks,
+      ctr:
+        value.impressions > 0
+          ? Number(((value.clicks / value.impressions) * 100).toFixed(2))
+          : 0,
+    }))
+    .sort((a, b) => b.clicks - a.clicks)
+    .slice(0, 12);
+
   return {
     totals: {
       pageViews: store.pageViews,
@@ -197,6 +233,7 @@ export function getAnalyticsSummary() {
     topBrands,
     registerCtr,
     buyCtr,
+    topSignupPlacements,
     updatedAt: store.updatedAt,
   };
 }

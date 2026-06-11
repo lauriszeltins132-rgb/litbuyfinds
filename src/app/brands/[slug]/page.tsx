@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import CatalogPanel from "@/components/CatalogPanel";
 import RelatedGuides from "@/components/RelatedGuides";
+import SignupCard from "@/components/SignupCard";
 import RelatedSeoLinks from "@/components/RelatedSeoLinks";
 import { getRelatedGuidesForBrand } from "@/lib/related-guides";
 import BrandSeoBlock from "@/components/seo/BrandSeoBlock";
@@ -103,6 +104,7 @@ export default async function BrandLandingPage({ params }: BrandPageProps) {
       />
 
       <RelatedGuides links={getRelatedGuidesForBrand(slug)} />
+      <SignupCard location={`brand_${slug}`} variant="compact" />
       <RelatedSeoLinks />
 
       <Suspense fallback={<div className="py-24 text-center text-muted">Loading...</div>}>

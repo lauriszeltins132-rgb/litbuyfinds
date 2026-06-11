@@ -20,12 +20,6 @@ type ProductImageProps = {
   productHref?: string;
 };
 
-const VARIANT_CAP: Record<ProductImageVariant, number> = {
-  card: 320,
-  featured: 460,
-  hero: 520,
-};
-
 export default function ProductImage({
   src,
   alt,
@@ -38,13 +32,11 @@ export default function ProductImage({
   const { displaySrc, failed, loading, ready } = useProcessedImage(src);
   const [renderFailed, setRenderFailed] = useState(!validation.valid);
   const [visible, setVisible] = useState(false);
-  const [safeMax, setSafeMax] = useState<number | null>(null);
   const loggedRef = useRef(false);
 
   useEffect(() => {
     setRenderFailed(!validation.valid);
     setVisible(false);
-    setSafeMax(null);
     loggedRef.current = false;
   }, [validation.normalized, validation.valid]);
 
@@ -60,22 +52,13 @@ export default function ProductImage({
   const handleLoad = useCallback(
     (event: React.SyntheticEvent<HTMLImageElement>) => {
       const img = event.currentTarget;
-      const natural = Math.max(img.naturalWidth, img.naturalHeight);
-
       if (!hasPlausibleImageDimensions(img.naturalWidth, img.naturalHeight)) {
         markFailed();
         return;
       }
-
       setVisible(true);
-
-      const cap = VARIANT_CAP[variant];
-      if (natural < 380) {
-        const upscale = natural < 220 ? 1.05 : natural < 300 ? 1.12 : 1.18;
-        setSafeMax(Math.min(Math.round(natural * upscale), cap));
-      }
     },
-    [markFailed, variant]
+    [markFailed]
   );
 
   const showPlaceholder = renderFailed || failed || !ready || !displaySrc;
@@ -92,7 +75,7 @@ export default function ProductImage({
   }
 
   const assetClass = displaySrc.startsWith("data:")
-    ? "product-float-asset product-float-asset--fallback"
+    ? "product-float-asset product-float-asset--processed"
     : "product-float-asset";
 
   return (
@@ -109,11 +92,6 @@ export default function ProductImage({
         decoding="async"
         referrerPolicy="no-referrer"
         className={`${assetClass} ${visible ? "" : "product-float-asset--hidden"}`}
-        style={
-          visible && safeMax
-            ? { maxWidth: safeMax, maxHeight: safeMax }
-            : undefined
-        }
         onLoad={handleLoad}
         onError={markFailed}
       />

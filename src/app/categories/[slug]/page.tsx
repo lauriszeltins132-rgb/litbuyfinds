@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import CatalogPanel from "@/components/CatalogPanel";
 import RelatedGuides from "@/components/RelatedGuides";
+import SignupCard from "@/components/SignupCard";
 import RelatedSeoLinks from "@/components/RelatedSeoLinks";
 import { getRelatedGuidesForCategory } from "@/lib/related-guides";
 import CategorySeoBlock from "@/components/seo/CategorySeoBlock";
@@ -105,6 +106,7 @@ export default async function CategoryLandingPage({ params }: CategoryPageProps)
       />
 
       <RelatedGuides links={getRelatedGuidesForCategory(slug)} />
+      <SignupCard location={`category_${slug}`} variant="compact" />
       <RelatedSeoLinks />
 
       <Suspense fallback={<div className="py-24 text-center text-muted">Loading...</div>}>

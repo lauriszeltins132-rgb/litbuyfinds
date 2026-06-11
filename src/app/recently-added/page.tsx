@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import ProductGrid from "@/components/ProductGrid";
+import SignupCard from "@/components/SignupCard";
 import SchemaScript from "@/components/SchemaScript";
 import {
   getNewThisMonth,
@@ -81,6 +82,8 @@ export default function RecentlyAddedPage() {
           </p>
         </div>
       </section>
+
+      <SignupCard location="recently_added" variant="compact" />
 
       {SECTIONS.map((section) => {
         const products = section.getProducts();

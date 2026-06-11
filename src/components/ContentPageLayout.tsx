@@ -4,6 +4,7 @@ import ContentAuthorMeta from "@/components/ContentAuthorMeta";
 import SchemaScript from "@/components/SchemaScript";
 import type { ContentDates } from "@/lib/content-dates";
 import { buildBreadcrumbSchema, buildFaqSchema } from "@/lib/schema";
+import SignupCard from "@/components/SignupCard";
 import type { StaticPageSection } from "@/lib/static-pages";
 
 type ContentPageLayoutProps = {
@@ -17,6 +18,7 @@ type ContentPageLayoutProps = {
   parentCrumb?: { label: string; href: string };
   contentDates?: ContentDates;
   showAuthorMeta?: boolean;
+  showSignupCta?: boolean;
 };
 
 export default function ContentPageLayout({
@@ -30,6 +32,7 @@ export default function ContentPageLayout({
   parentCrumb,
   contentDates,
   showAuthorMeta = false,
+  showSignupCta = false,
 }: ContentPageLayoutProps) {
   const breadcrumbs: BreadcrumbItem[] = parentCrumb
     ? [
@@ -117,6 +120,15 @@ export default function ContentPageLayout({
                 ))}
               </dl>
             </section>
+          ) : null}
+
+          {showSignupCta ? (
+            <div className="mt-10 -mx-4 sm:-mx-6">
+              <SignupCard
+                location={`guide_${path.replace(/^\/guides\//, "")}`}
+                variant="ready"
+              />
+            </div>
           ) : null}
 
           {relatedLinks && relatedLinks.length > 0 ? (

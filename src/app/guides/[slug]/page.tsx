@@ -69,6 +69,7 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
         parentCrumb={{ label: "Guides", href: "/guides" }}
         contentDates={dates}
         showAuthorMeta
+        showSignupCta
       />
     </>
   );

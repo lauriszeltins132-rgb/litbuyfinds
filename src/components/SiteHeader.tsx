@@ -67,7 +67,7 @@ export default function SiteHeader() {
               location="header"
               className="hidden rounded-full bg-accent px-4 py-2 text-sm font-black text-background sm:inline-flex"
             >
-              Register
+              Create Free Account
             </RegisterLink>
           </div>
         </div>

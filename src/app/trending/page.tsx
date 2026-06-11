@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import CatalogPanel from "@/components/CatalogPanel";
+import SignupCard from "@/components/SignupCard";
 import { getBrandsFromProducts } from "@/lib/brands";
 import { getCategories, getTrendingProducts } from "@/lib/products";
 import { buildPageMetadata } from "@/lib/seo";
@@ -37,6 +38,7 @@ export default function TrendingPage() {
           </p>
         </div>
       </section>
+      <SignupCard location="trending" variant="compact" />
       <Suspense fallback={<div className="py-24 text-center text-muted">Loading...</div>}>
         <CatalogPanel
           products={products}
