@@ -106,7 +106,7 @@ export default async function CategoryLandingPage({ params }: CategoryPageProps)
       />
 
       <RelatedGuides links={getRelatedGuidesForCategory(slug)} />
-      <SignupCard location={`category_${slug}`} variant="compact" />
+      <SignupCard location={`category_signup_${slug}`} variant="compact" />
       <RelatedSeoLinks />
 
       <Suspense fallback={<div className="py-24 text-center text-muted">Loading...</div>}>

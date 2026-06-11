@@ -14,22 +14,22 @@ const COPY: Record<
   { eyebrow: string; title: string; body: string; cta: string }
 > = {
   intro: {
-    eyebrow: "New to LitBuy?",
-    title: "Create a free account to start ordering",
-    body: "Access products instantly, save finds for later, build your haul, and order through LitBuy with verified agent checkout.",
-    cta: "Create Free Account",
+    eyebrow: "Get started",
+    title: "New to LitBuy?",
+    body: "Create a free LitBuy account to open product links, check QC, and start building your haul.",
+    cta: "Create Free LitBuy Account",
   },
   ready: {
-    eyebrow: "Ready to start?",
-    title: "Create your free LitBuy account",
-    body: "Start building your haul today — browse finds here, then checkout on LitBuy when you are ready.",
-    cta: "Create Free Account",
+    eyebrow: "Next step",
+    title: "Ready to start browsing?",
+    body: "Create a free LitBuy account and start building your haul.",
+    cta: "Create Free LitBuy Account",
   },
   compact: {
     eyebrow: "Next step",
     title: "Order through LitBuy",
     body: "Create a free account to open product links, review QC, and ship your haul.",
-    cta: "Create Free Account",
+    cta: "Create Free LitBuy Account",
   },
 };
 

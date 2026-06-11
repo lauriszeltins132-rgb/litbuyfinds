@@ -5,8 +5,8 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import SiteHeader from "@/components/SiteHeader";
 import Footer from "@/components/Footer";
 import CouponModal from "@/components/CouponModal";
-import FloatingCouponButton from "@/components/FloatingCouponButton";
 import MobileQuickNav from "@/components/MobileQuickNav";
+import MobileStickySignup from "@/components/MobileStickySignup";
 import PreferencesBar from "@/components/PreferencesBar";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import AnalyticsBoot from "@/components/AnalyticsBoot";
@@ -100,8 +100,8 @@ export default function RootLayout({
                 <main className="flex-1 pb-20 sm:pb-0">{children}</main>
                 <Footer />
                 <CouponModal />
-                <FloatingCouponButton />
                 <MobileSearchBar />
+                <MobileStickySignup />
                 <MobileQuickNav />
                 <Analytics />
                 <SpeedInsights />

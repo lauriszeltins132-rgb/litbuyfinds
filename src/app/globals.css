@@ -156,7 +156,35 @@ body::before {
 }
 
 .product-float-stage--card {
-  padding: 0.2rem;
+  padding: 0.15rem;
+}
+
+.product-float-matte {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  border-radius: 0.75rem;
+}
+
+.product-float-matte--active {
+  isolation: isolate;
+  background: radial-gradient(
+    ellipse 90% 90% at 50% 48%,
+    #1a1a22 0%,
+    #121218 52%,
+    #0a0a0f 100%
+  );
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.product-float-asset--matte {
+  mix-blend-mode: darken;
+  filter: contrast(1.1) saturate(1.05)
+    drop-shadow(0 10px 28px rgba(0, 0, 0, 0.42));
 }
 
 .product-float-stage--featured {

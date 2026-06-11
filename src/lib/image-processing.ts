@@ -7,7 +7,7 @@ import { hasPlausibleImageDimensions, validateImageUrl } from "./image-url";
 
 const MAX_DIMENSION = 1200;
 const MIN_BACKGROUND_RATIO = 0.02;
-const MAX_BACKGROUND_RATIO = 0.78;
+const MAX_BACKGROUND_RATIO = 0.92;
 const TRIM_PADDING_RATIO = 0.04;
 
 function isBackgroundPixel(
@@ -43,7 +43,42 @@ function cornersLookWhite(
     }
   }
 
-  return whiteCorners >= 3;
+  return whiteCorners >= 1;
+}
+
+function borderLooksBright(
+  data: Uint8ClampedArray,
+  width: number,
+  height: number,
+  threshold: number
+): boolean {
+  const samples: number[] = [];
+  const stepX = Math.max(1, Math.floor(width / 24));
+  const stepY = Math.max(1, Math.floor(height / 24));
+
+  for (let x = 0; x < width; x += stepX) {
+    for (const y of [0, height - 1]) {
+      const i = (y * width + x) * 4;
+      samples.push(data[i], data[i + 1], data[i + 2]);
+    }
+  }
+  for (let y = 0; y < height; y += stepY) {
+    for (const x of [0, width - 1]) {
+      const i = (y * width + x) * 4;
+      samples.push(data[i], data[i + 1], data[i + 2]);
+    }
+  }
+
+  if (samples.length === 0) return false;
+
+  let bright = 0;
+  for (let i = 0; i < samples.length; i += 3) {
+    if (isBackgroundPixel(samples[i], samples[i + 1], samples[i + 2], threshold)) {
+      bright++;
+    }
+  }
+
+  return bright / (samples.length / 3) >= 0.55;
 }
 
 function removeEdgeBackground(
@@ -216,7 +251,11 @@ export async function removeWhiteBackground(
   try {
     const imageData = ctx.getImageData(0, 0, width, height);
 
-    if (!cornersLookWhite(imageData.data, width, height, threshold)) {
+    const hasBrightBackground =
+      cornersLookWhite(imageData.data, width, height, threshold) ||
+      borderLooksBright(imageData.data, width, height, threshold);
+
+    if (!hasBrightBackground) {
       setCachedImage(normalized, normalized);
       return normalized;
     }

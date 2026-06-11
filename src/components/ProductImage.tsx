@@ -29,7 +29,8 @@ export default function ProductImage({
   productHref,
 }: ProductImageProps) {
   const validation = validateImageUrl(src);
-  const { displaySrc, failed, loading, ready } = useProcessedImage(src);
+  const { displaySrc, failed, loading, ready, needsDarkMatte, processedToPng } =
+    useProcessedImage(src);
   const [renderFailed, setRenderFailed] = useState(!validation.valid);
   const [visible, setVisible] = useState(false);
   const loggedRef = useRef(false);
@@ -74,27 +75,39 @@ export default function ProductImage({
     );
   }
 
-  const assetClass = displaySrc.startsWith("data:")
-    ? "product-float-asset product-float-asset--processed"
-    : "product-float-asset";
+  const useMatteBlend =
+    needsDarkMatte || (variant === "card" && !processedToPng);
+  const assetClass = useMatteBlend
+    ? "product-float-asset product-float-asset--matte"
+    : processedToPng
+      ? "product-float-asset product-float-asset--processed"
+      : "product-float-asset";
 
   return (
     <div
       className={`product-float-stage product-float-stage--${variant} ${className}`}
     >
       <div className="product-float-glow" aria-hidden />
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={displaySrc}
-        alt={alt}
-        loading={priority ? "eager" : "lazy"}
-        fetchPriority={priority ? "high" : "auto"}
-        decoding="async"
-        referrerPolicy="no-referrer"
-        className={`${assetClass} ${visible ? "" : "product-float-asset--hidden"}`}
-        onLoad={handleLoad}
-        onError={markFailed}
-      />
+      <div
+        className={
+          useMatteBlend || variant === "card"
+            ? "product-float-matte product-float-matte--active"
+            : "product-float-matte"
+        }
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={displaySrc}
+          alt={alt}
+          loading={priority ? "eager" : "lazy"}
+          fetchPriority={priority ? "high" : "auto"}
+          decoding="async"
+          referrerPolicy="no-referrer"
+          className={`${assetClass} ${visible ? "" : "product-float-asset--hidden"}`}
+          onLoad={handleLoad}
+          onError={markFailed}
+        />
+      </div>
       {!visible && (
         <ImageUnavailablePlaceholder
           variant={variant}

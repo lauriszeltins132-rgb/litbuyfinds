@@ -7,17 +7,12 @@ import DiscoveryRail from "@/components/DiscoveryRail";
 import HomepageBrands from "@/components/HomepageBrands";
 import HomepageCategories from "@/components/HomepageCategories";
 import NewToLitBuy from "@/components/NewToLitBuy";
-import RecentlyAddedPreview from "@/components/RecentlyAddedPreview";
 import RecentlyViewedRail from "@/components/RecentlyViewedRail";
-import StatsStrip from "@/components/StatsStrip";
 import SignupCard from "@/components/SignupCard";
+import StatsStrip from "@/components/StatsStrip";
 import TrustStrip from "@/components/TrustStrip";
-import {
-  getBudgetFinds,
-  getNewestFinds,
-  getTrendingThisWeek,
-} from "@/lib/discovery";
-import { getPopularToday } from "@/lib/popular-picks";
+import { getBudgetFinds } from "@/lib/discovery";
+import { getHomepageRails } from "@/lib/homepage-rails";
 import { getBrandsFromProducts } from "@/lib/brands";
 import { getAllProducts, getCategories } from "@/lib/products";
 import { buildHomepageMetadata } from "@/lib/seo";
@@ -28,36 +23,43 @@ export default function HomePage() {
   const products = getAllProducts();
   const categories = getCategories();
   const brands = getBrandsFromProducts(products);
+  const rails = getHomepageRails(12);
 
   return (
     <>
       <DiscoveryHero />
       <TrustStrip compact />
-      <SignupCard location="homepage_intro" variant="intro" />
 
       <DiscoveryRail
         title="🔥 Popular Today"
-        subtitle="Most clicked and viewed finds right now"
+        subtitle="Top clicked and viewed finds — refreshes daily"
         href="/most-popular-finds-now"
-        products={getPopularToday()}
+        products={rails.popularToday}
         showTrendingScore
       />
+
+      <SignupCard location="homepage_signup_card" variant="intro" />
 
       <DiscoveryRail
         title="Trending This Week"
-        subtitle="What people are browsing right now"
+        subtitle="Featured momentum picks from the trending sheet"
         href="/trending"
-        products={getTrendingThisWeek()}
+        products={rails.trending}
         showTrendingScore
       />
 
-      <RecentlyAddedPreview />
+      <DiscoveryRail
+        title="New This Week"
+        subtitle="Fresh arrivals from the latest catalog sync"
+        href="/recently-added#week"
+        products={rails.newThisWeek}
+      />
 
       <DiscoveryRail
-        title="Newest Finds"
-        subtitle="Fresh additions from the latest drops sheet"
-        href="/latest"
-        products={getNewestFinds()}
+        title="New This Month"
+        subtitle="A wider rotation of recent additions"
+        href="/recently-added#month"
+        products={rails.newThisMonth}
       />
 
       <HomepageCategories categories={categories} />

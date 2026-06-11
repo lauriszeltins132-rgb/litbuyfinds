@@ -124,10 +124,7 @@ export default function ContentPageLayout({
 
           {showSignupCta ? (
             <div className="mt-10 -mx-4 sm:-mx-6">
-              <SignupCard
-                location={`guide_${path.replace(/^\/guides\//, "")}`}
-                variant="ready"
-              />
+              <SignupCard location="guide_signup_cta" variant="ready" />
             </div>
           ) : null}
 

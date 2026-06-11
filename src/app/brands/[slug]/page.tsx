@@ -104,7 +104,7 @@ export default async function BrandLandingPage({ params }: BrandPageProps) {
       />
 
       <RelatedGuides links={getRelatedGuidesForBrand(slug)} />
-      <SignupCard location={`brand_${slug}`} variant="compact" />
+      <SignupCard location={`brand_signup_${slug}`} variant="compact" />
       <RelatedSeoLinks />
 
       <Suspense fallback={<div className="py-24 text-center text-muted">Loading...</div>}>
