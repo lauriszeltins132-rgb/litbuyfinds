@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { trackBrokenImage } from "@/lib/analytics-events";
-import { getPreprocessedImageUrl } from "@/lib/processed-images";
+import { getProcessedImageSrc } from "@/lib/processed-images";
 import {
   hasPlausibleImageDimensions,
   validateImageUrl,
@@ -29,13 +29,13 @@ export default function ProductImage({
   productHref,
 }: ProductImageProps) {
   const validation = useMemo(() => validateImageUrl(src), [src]);
-  const preprocessed = useMemo(
-    () =>
-      validation.valid ? getPreprocessedImageUrl(validation.normalized) : null,
-    [validation.normalized, validation.valid]
-  );
-  const displaySrc = preprocessed ?? validation.normalized;
-  const isTransparent = Boolean(preprocessed);
+  const { displaySrc, isCutout } = useMemo(() => {
+    if (!validation.valid) {
+      return { displaySrc: "", isCutout: false };
+    }
+    const resolved = getProcessedImageSrc(validation.normalized);
+    return { displaySrc: resolved.src, isCutout: resolved.isCutout };
+  }, [validation.normalized, validation.valid]);
 
   const [renderFailed, setRenderFailed] = useState(!validation.valid);
   const [visible, setVisible] = useState(false);
@@ -94,7 +94,7 @@ export default function ProductImage({
           decoding="async"
           referrerPolicy="no-referrer"
           className={`product-float-asset ${
-            isTransparent ? "product-float-asset--cutout" : ""
+            isCutout ? "product-float-asset--cutout" : ""
           } ${visible ? "" : "product-float-asset--hidden"}`}
           onLoad={handleLoad}
           onError={markFailed}

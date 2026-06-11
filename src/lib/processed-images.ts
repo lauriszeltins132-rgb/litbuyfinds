@@ -1,12 +1,10 @@
-import mapData from "@/data/processed-image-map.json";
-
-type ProcessedImageMap = {
-  urls: Record<string, string>;
-};
-
-const catalog = mapData as ProcessedImageMap;
-
-/** Local transparent PNG with white background removed at build time. */
-export function getPreprocessedImageUrl(sourceUrl: string): string | null {
-  return catalog.urls[sourceUrl] ?? null;
+/** Every product image goes through the cutout API (cached at CDN after first hit). */
+export function getProcessedImageSrc(sourceUrl: string): {
+  src: string;
+  isCutout: boolean;
+} {
+  return {
+    src: `/api/processed-image?url=${encodeURIComponent(sourceUrl)}`,
+    isCutout: true,
+  };
 }
