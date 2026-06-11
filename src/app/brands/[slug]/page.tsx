@@ -93,6 +93,7 @@ export default async function BrandLandingPage({ params }: BrandPageProps) {
       </section>
 
       <BrandSeoBlock
+        brandSlug={slug}
         brandName={brand.name}
         intro={copy.intro}
         topProducts={products.slice(0, 5)}

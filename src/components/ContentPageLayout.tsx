@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Breadcrumbs, { type BreadcrumbItem } from "@/components/Breadcrumbs";
 import SchemaScript from "@/components/SchemaScript";
-import { buildFaqSchema } from "@/lib/schema";
+import { buildBreadcrumbSchema, buildFaqSchema } from "@/lib/schema";
 import type { StaticPageSection } from "@/lib/static-pages";
 
 type ContentPageLayoutProps = {
@@ -38,6 +38,7 @@ export default function ContentPageLayout({
 
   return (
     <>
+      <SchemaScript data={buildBreadcrumbSchema(breadcrumbs, path)} />
       {faqs && faqs.length > 0 ? (
         <SchemaScript data={buildFaqSchema(faqs)} />
       ) : null}

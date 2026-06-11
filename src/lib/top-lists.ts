@@ -44,8 +44,8 @@ function byMaxPrice(max: number): Product[] {
 }
 
 const CLUSTER_BUYING = [
-  { href: "/guides/how-to-order", label: "How to order" },
-  { href: "/guides/shipping-and-hauls", label: "Shipping guide" },
+  { href: "/guides/how-to-order-from-litbuy", label: "How to order" },
+  { href: "/guides/how-shipping-works-with-agents", label: "Shipping guide" },
   { href: "/guides/what-is-a-shopping-agent", label: "Agent guide" },
   { href: "/guides/how-to-check-qc-photos", label: "QC guide" },
 ];

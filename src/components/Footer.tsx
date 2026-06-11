@@ -15,7 +15,7 @@ import { getCategories, getAllProducts } from "@/lib/products";
 const GUIDE_LINKS = [
   { href: "/guides", label: "All guides" },
   { href: "/guides/beginner-guide-to-litbuy", label: "Beginner guide" },
-  { href: "/guides/how-to-order", label: "How to order" },
+  { href: "/guides/how-to-order-from-litbuy", label: "How to order" },
   { href: "/how-to-buy", label: "How to buy" },
   { href: "/recently-added", label: "Recently added" },
   { href: "/best-rep-sneakers", label: "Best rep sneakers" },

@@ -1,8 +1,15 @@
 import Link from "next/link";
+import SchemaScript from "@/components/SchemaScript";
 import type { BrandInfo } from "@/lib/brands";
+import { buildFaqSchema } from "@/lib/schema";
+import {
+  getCategoryFaqs,
+  getCategoryRelatedGuides,
+} from "@/lib/seo-content";
 import type { CategoryInfo } from "@/lib/types";
 
 type CategorySeoBlockProps = {
+  categorySlug: string;
   categoryName: string;
   intro: string;
   brands: BrandInfo[];
@@ -13,7 +20,27 @@ const BUYING_TIPS: Record<string, string[]> = {
   shoes: [
     "Compare size charts per batch — EU and US sizing varies.",
     "Request QC for pairs over $50; check toe box and midsole shape.",
-    "Stick to trending sellers when you are unsure about quality.",
+    "Stick to listings with clear photos when you are unsure about a seller.",
+  ],
+  "hoodies-and-pants": [
+    "Check print placement and drawstrings on graphic hoodies.",
+    "Compare measurements to a hoodie you already own.",
+    "Bundle hoodies with other items to lower shipping cost per piece.",
+  ],
+  "coats-and-jackets": [
+    "Puffers are bulky — factor volumetric weight into shipping.",
+    "Check badge and zipper photos in QC when available.",
+    "Winter pieces sell fast — compare recently added before you decide.",
+  ],
+  accessories: [
+    "Hardware and logo alignment matter on bags and belts.",
+    "Open QC references on the product page when listed.",
+    "Smaller items are good for filling out a haul.",
+  ],
+  electronics: [
+    "Read listing specs carefully — model numbers vary by batch.",
+    "Check return policy on LitBuy before you buy fragile tech.",
+    "Consider insurance on higher-value electronics shipments.",
   ],
   default: [
     "Open QC photos when available before shipping internationally.",
@@ -23,25 +50,31 @@ const BUYING_TIPS: Record<string, string[]> = {
 };
 
 export default function CategorySeoBlock({
+  categorySlug,
   categoryName,
   intro,
   brands,
   relatedCategories,
 }: CategorySeoBlockProps) {
-  const slug = categoryName.toLowerCase();
-  const tips =
-    BUYING_TIPS[slug.includes("shoe") ? "shoes" : "default"] ??
-    BUYING_TIPS.default;
+  const tipsKey = categorySlug.includes("shoe")
+    ? "shoes"
+    : categorySlug in BUYING_TIPS
+      ? categorySlug
+      : "default";
+  const tips = BUYING_TIPS[tipsKey] ?? BUYING_TIPS.default;
+  const relatedGuides = getCategoryRelatedGuides(categorySlug);
+  const faqs = getCategoryFaqs(categorySlug);
 
   return (
     <section className="px-4 pb-6 sm:px-6">
+      <SchemaScript data={buildFaqSchema(faqs)} />
       <div className="mx-auto max-w-7xl space-y-6">
         <div className="rounded-2xl border border-border bg-surface/40 p-6">
           <h2 className="text-lg font-black">What&apos;s in {categoryName}</h2>
           <p className="mt-2 text-sm leading-relaxed text-muted">{intro}</p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <div className="rounded-2xl border border-border bg-surface/30 p-5">
             <h3 className="text-sm font-bold uppercase tracking-[0.14em] text-muted">
               Popular brands
@@ -91,6 +124,38 @@ export default function CategorySeoBlock({
               ))}
             </ul>
           </div>
+
+          <div className="rounded-2xl border border-border bg-surface/30 p-5">
+            <h3 className="text-sm font-bold uppercase tracking-[0.14em] text-muted">
+              Related guides
+            </h3>
+            <ul className="mt-3 space-y-2 text-sm">
+              {relatedGuides.map((guide) => (
+                <li key={guide.href}>
+                  <Link
+                    href={guide.href}
+                    className="font-semibold text-muted hover:text-accent"
+                  >
+                    {guide.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-border bg-surface/30 p-6">
+          <h2 className="text-lg font-black">Common questions</h2>
+          <dl className="mt-4 space-y-4">
+            {faqs.map((faq) => (
+              <div key={faq.question}>
+                <dt className="font-bold text-foreground">{faq.question}</dt>
+                <dd className="mt-1 text-sm leading-relaxed text-muted">
+                  {faq.answer}
+                </dd>
+              </div>
+            ))}
+          </dl>
         </div>
       </div>
     </section>

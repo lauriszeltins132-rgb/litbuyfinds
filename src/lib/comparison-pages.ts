@@ -53,7 +53,7 @@ export const COMPARISON_PAGES: Record<string, ComparisonConfig> = {
       { href: "/top-rep-sneakers", label: "Top sneakers" },
     ],
     clusterLinks: [
-      { href: "/guides/how-to-find-products", label: "How to find products" },
+      { href: "/guides/how-to-use-litbuy-finds", label: "How to use LitBuy Finds" },
       { href: "/trending", label: "Trending" },
     ],
   },
@@ -117,7 +117,7 @@ export const COMPARISON_PAGES: Record<string, ComparisonConfig> = {
     ],
     clusterLinks: [
       { href: "/guides/litbuy-spreadsheet-guide", label: "Spreadsheet guide" },
-      { href: "/guides/how-to-find-products", label: "Find products" },
+      { href: "/guides/how-to-use-litbuy-finds", label: "How to use LitBuy Finds" },
     ],
   },
 };

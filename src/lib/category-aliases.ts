@@ -40,6 +40,13 @@ export const CATEGORY_ALIASES: Record<string, AliasConfig> = {
     filter: (p) =>
       /bag|backpack|tote|duffle|crossbody|shoulder bag/i.test(p.product_name),
   },
+  pants: {
+    canonicalSlug: "hoodies-and-pants",
+    name: "Pants",
+    filter: (p) =>
+      /pant|jogger|sweatpant|trouser|cargo/i.test(p.product_name) &&
+      !/hoodie|sweatshirt/i.test(p.product_name),
+  },
 };
 
 export const CATEGORY_ALIAS_SLUGS = Object.keys(CATEGORY_ALIASES);

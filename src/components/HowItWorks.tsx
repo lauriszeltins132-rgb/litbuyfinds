@@ -29,13 +29,13 @@ const STEPS = [
     step: "5",
     title: "Add item to cart",
     description: "Confirm size and color, then purchase through LitBuy.",
-    href: "/guides/how-to-order",
+    href: "/guides/how-to-order-from-litbuy",
   },
   {
     step: "6",
     title: "Ship your haul",
     description: "Review warehouse QC and bundle items into one shipment.",
-    href: "/guides/shipping-and-hauls",
+    href: "/guides/how-shipping-works-with-agents",
   },
 ] as const;
 

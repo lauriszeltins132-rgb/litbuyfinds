@@ -95,6 +95,7 @@ export default async function CategoryLandingPage({ params }: CategoryPageProps)
       </section>
 
       <CategorySeoBlock
+        categorySlug={slug}
         categoryName={resolved.name}
         intro={copy.intro}
         brands={brands}
