@@ -22,15 +22,11 @@ import {
   getTrendingThisWeek,
 } from "@/lib/discovery";
 import { getBrandsFromProducts } from "@/lib/brands";
-import { SITE_DESCRIPTION } from "@/lib/constants";
 import { getAllProducts, getCategories } from "@/lib/products";
-import { buildPageMetadata } from "@/lib/seo";
+import { buildHomepageMetadata } from "@/lib/seo";
+import HomepageExploreNav from "@/components/HomepageExploreNav";
 
-export const metadata: Metadata = buildPageMetadata({
-  title: "Premium LitBuy Product Discovery",
-  description: SITE_DESCRIPTION,
-  path: "/",
-});
+export const metadata: Metadata = buildHomepageMetadata();
 
 export default function HomePage() {
   const products = getAllProducts();
@@ -40,6 +36,7 @@ export default function HomePage() {
   return (
     <>
       <DiscoveryHero />
+      <HomepageExploreNav />
       <TrustStrip compact />
       <OfferCallout />
       <StatsStrip />

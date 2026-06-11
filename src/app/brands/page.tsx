@@ -6,8 +6,9 @@ import { getAllProducts } from "@/lib/products";
 import { buildPageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "Shop by Brand",
-  description: "Browse finds organized by brand — Nike, Jordan, Balenciaga and more.",
+  title: "Browse by Brand – Nike, Jordan, Gucci & More",
+  description:
+    "Explore LitBuy finds by brand. Browse Nike, Jordan, Adidas, Louis Vuitton, Gucci, and more with product links and QC references.",
   path: "/brands",
 });
 

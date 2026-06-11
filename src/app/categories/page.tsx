@@ -4,9 +4,9 @@ import { getCategories } from "@/lib/products";
 import { buildPageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "Browse by Category",
+  title: "Browse by Category – Shoes, Streetwear, Bags & More",
   description:
-    "Browse LitBuy finds by category — shoes, streetwear, outerwear, accessories, and more.",
+    "Browse LitBuy finds by category — sneakers, hoodies, jackets, bags, accessories, and electronics with filters and agent links.",
   path: "/categories",
 });
 

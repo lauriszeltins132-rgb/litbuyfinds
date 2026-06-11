@@ -37,9 +37,9 @@ export function getGuidesByCategory(category: GuideCategory): GuidePage[] {
 
 export const GUIDES_HUB = {
   path: "/guides",
-  title: "LitBuy Finds Guides",
+  title: "LitBuy Guides – Agents, QC Photos & How to Order",
   metaDescription:
-    "Premium guides for LitBuy, shopping agents, QC photos, shipping hauls, sneaker finds, and budget browsing on LitBuy Finds.",
+    "LitBuy Finds guides for shopping agents, QC photos, shipping hauls, marketplace buying, and browsing sneaker and fashion finds.",
   h1: "Guides",
   intro:
     "Clear, practical guides for browsing finds and buying through LitBuy. Start with the basics or jump straight to sneakers, fashion, brands, or budget picks.",

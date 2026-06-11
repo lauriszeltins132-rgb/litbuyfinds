@@ -22,8 +22,8 @@ export default function DiscoveryHero() {
           </h1>
 
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">
-            Hand-picked products, verified links, real QC, and daily finds across
-            fashion, sneakers, accessories, and electronics.
+            Curated sneakers, fashion, bags, and accessories with QC references,
+            brand pages, and daily catalog updates.
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
@@ -35,16 +35,16 @@ export default function DiscoveryHero() {
               <span aria-hidden>→</span>
             </Link>
             <Link
+              href="/recently-added"
+              className="inline-flex items-center gap-2 rounded-full border border-border-strong bg-surface/60 px-6 py-3.5 text-sm font-bold text-foreground backdrop-blur transition-colors hover:border-accent/40 hover:text-accent"
+            >
+              Recently Added
+            </Link>
+            <Link
               href="/trending"
               className="inline-flex items-center gap-2 rounded-full border border-border-strong bg-surface/60 px-6 py-3.5 text-sm font-bold text-foreground backdrop-blur transition-colors hover:border-accent/40 hover:text-accent"
             >
-              Trending This Week
-            </Link>
-            <Link
-              href="/guides"
-              className="inline-flex items-center gap-2 rounded-full border border-border-strong bg-surface/60 px-6 py-3.5 text-sm font-bold text-foreground backdrop-blur transition-colors hover:border-accent/40 hover:text-accent"
-            >
-              Guides
+              Trending
             </Link>
           </div>
         </div>

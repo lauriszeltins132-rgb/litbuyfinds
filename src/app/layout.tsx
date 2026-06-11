@@ -16,7 +16,12 @@ import { WishlistProvider } from "@/context/WishlistContext";
 import { PreferencesProvider } from "@/context/PreferencesContext";
 import { CouponProvider } from "@/context/CouponContext";
 import { RecentlyViewedProvider } from "@/context/RecentlyViewedContext";
-import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/constants";
+import {
+  HOMEPAGE_TITLE,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_OG_DESCRIPTION,
+} from "@/lib/constants";
 import "./globals.css";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -27,7 +32,7 @@ const jakarta = Plus_Jakarta_Sans({
 
 export const metadata: Metadata = {
   title: {
-    default: `${SITE_NAME} | Premium LitBuy Product Discovery`,
+    default: HOMEPAGE_TITLE,
     template: `%s | ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
@@ -42,7 +47,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://litbuyfinds.io"),
   openGraph: {
     title: SITE_NAME,
-    description: SITE_DESCRIPTION,
+    description: SITE_OG_DESCRIPTION,
     url: "https://litbuyfinds.io",
     siteName: SITE_NAME,
     locale: "en_US",
@@ -51,7 +56,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: SITE_NAME,
-    description: SITE_DESCRIPTION,
+    description: SITE_OG_DESCRIPTION,
   },
   robots: { index: true, follow: true },
   verification: {

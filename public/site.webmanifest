@@ -1,7 +1,7 @@
 {
   "name": "LitBuy Finds",
   "short_name": "LitBuy Finds",
-  "description": "Premium LitBuy product discovery — verified links, QC references, and daily finds.",
+  "description": "Curated LitBuy finds with QC photos, product links, brands, categories, and daily updates.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0C0C10",

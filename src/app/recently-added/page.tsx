@@ -12,9 +12,9 @@ import { buildCollectionPageSchema } from "@/lib/schema";
 import { buildPageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "Recently Added Finds",
+  title: "Recently Added LitBuy Finds",
   description:
-    "Newest LitBuy finds — added today, this week, and this month. Fresh catalog updates across sneakers, streetwear, and accessories.",
+    "See the newest LitBuy finds added today, this week, and this month. Fresh sneakers, streetwear, and accessories from the latest catalog sync.",
   path: "/recently-added",
 });
 

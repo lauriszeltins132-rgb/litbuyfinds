@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { SITE_NAME } from "@/lib/constants";
+import { SITE_NAME, SITE_TAGLINE } from "@/lib/constants";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
@@ -15,9 +15,11 @@ export default function OpenGraphImage() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          background: "linear-gradient(135deg, #0a0a0b 0%, #141416 50%, #0f1a12 100%)",
+          background:
+            "linear-gradient(135deg, #0a0a0b 0%, #141416 50%, #0f1a12 100%)",
           color: "#f4f4f5",
           fontFamily: "system-ui, sans-serif",
+          padding: 60,
         }}
       >
         <div
@@ -33,11 +35,13 @@ export default function OpenGraphImage() {
         <div
           style={{
             fontSize: 32,
-            color: "#c9a227",
-            fontWeight: 500,
+            color: "#4ade80",
+            fontWeight: 600,
+            textAlign: "center",
+            maxWidth: 900,
           }}
         >
-          Premium LitBuy Product Discovery
+          {SITE_TAGLINE}
         </div>
       </div>
     ),

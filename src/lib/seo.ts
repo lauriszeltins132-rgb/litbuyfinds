@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
-import { SITE_NAME } from "./constants";
+import {
+  HOMEPAGE_TITLE,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_OG_DESCRIPTION,
+} from "./constants";
 import { SITE_URL } from "./site";
 
 const BASE_URL = SITE_URL;
@@ -74,6 +79,32 @@ export function buildPageMetadata({
       card: "summary_large_image",
       title: `${title} | ${SITE_NAME}`,
       description,
+      images: [ogImage],
+    },
+  };
+}
+
+export function buildHomepageMetadata(): Metadata {
+  const url = `${BASE_URL}/`;
+  const ogImage = `${BASE_URL}/opengraph-image`;
+
+  return {
+    title: { absolute: HOMEPAGE_TITLE },
+    description: SITE_DESCRIPTION,
+    alternates: { canonical: url },
+    openGraph: {
+      title: SITE_NAME,
+      description: SITE_OG_DESCRIPTION,
+      url,
+      siteName: SITE_NAME,
+      type: "website",
+      locale: "en_US",
+      images: [{ url: ogImage, width: 1200, height: 630, alt: SITE_NAME }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: SITE_NAME,
+      description: SITE_OG_DESCRIPTION,
       images: [ogImage],
     },
   };

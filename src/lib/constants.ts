@@ -1,7 +1,15 @@
 export const SITE_NAME = "LitBuy Finds";
-export const SITE_TAGLINE = "Premium product discovery";
+
+export const HOMEPAGE_TITLE =
+  "LitBuy Finds – Fashion, Sneakers & Designer Finds";
+
 export const SITE_DESCRIPTION =
-  "LitBuy Finds is a curated discovery platform for hand-picked products, verified links, real QC, and daily finds across fashion, sneakers, accessories, and electronics.";
+  "Browse curated LitBuy finds across sneakers, fashion, bags, accessories, and more. Explore QC photos, product links, brands, categories, and daily updated finds.";
+
+export const SITE_OG_DESCRIPTION =
+  "Curated LitBuy finds with QC photos, product links, brands, categories, and daily updates.";
+
+export const SITE_TAGLINE = "Fashion, sneakers & designer finds";
 
 export const LITBUY_SIGNUP_URL =
   "https://litbuy.com/register?inviteCode=SMKS";
