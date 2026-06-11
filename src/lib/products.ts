@@ -1,6 +1,6 @@
 import type { CategoryInfo, Product } from "./types";
 import productsData from "@/data/products.json";
-import { auditCatalogPrices } from "./pricing";
+import { auditCatalogPrices, hasExactPrice } from "./pricing";
 import { validateImageUrl } from "./image-url";
 
 function normalizeProduct(product: Product): Product {
@@ -44,7 +44,8 @@ export function getLatestProducts(): Product[] {
 export function getDealProducts(maxPrice = 30): Product[] {
   return sortWithImagesFirst(
     products.filter(
-      (product) => product.price !== null && product.price <= maxPrice
+      (product) =>
+        hasExactPrice(product.price) && (product.price as number) <= maxPrice
     )
   );
 }

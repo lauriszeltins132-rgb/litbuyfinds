@@ -1,6 +1,7 @@
 import type { Product } from "@/lib/types";
 import { SITE_NAME } from "@/lib/constants";
 import { extractBrand } from "@/lib/brands";
+import { hasExactPrice } from "@/lib/pricing";
 import { SITE_URL } from "@/lib/site";
 import SchemaScript from "@/components/SchemaScript";
 
@@ -29,7 +30,7 @@ export default function ProductJsonLd({ product, slug }: ProductJsonLdProps) {
           },
         }
       : {}),
-    offers: product.price
+    offers: hasExactPrice(product.price)
       ? {
           "@type": "Offer",
           price: product.price,

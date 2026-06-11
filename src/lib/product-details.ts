@@ -236,7 +236,7 @@ export function getProductHighlights(product: Product): string[] {
 
   if (brand) highlights.push(`${brand} listing`);
   highlights.push(`${product.category}`);
-  if (product.price !== null) {
+  if (hasExactPrice(product.price) && product.price !== null) {
     highlights.push(`About ${formatPrice(product.price, "USD")}`);
   }
   highlights.push(`Seller: ${source.toUpperCase()}`);
@@ -262,7 +262,7 @@ export function getProductSeoDescription(product: Product): string {
   const brand = extractBrand(product.product_name);
   const brandLabel = brand ? `${brand} ` : "";
   const priceBit =
-    product.price !== null
+    hasExactPrice(product.price) && product.price !== null
       ? ` from ${formatPrice(product.price, "USD")}`
       : "";
   const qcBit = product.qc_link ? " with QC photos" : "";

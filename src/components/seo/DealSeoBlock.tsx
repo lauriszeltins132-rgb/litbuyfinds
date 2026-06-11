@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { formatProductPrice, hasExactPrice } from "@/lib/pricing";
 import type { Product } from "@/lib/types";
 import { getProductHref } from "@/lib/slugs";
 
@@ -9,7 +10,7 @@ type DealSeoBlockProps = {
 export default function DealSeoBlock({ products }: DealSeoBlockProps) {
   const withQc = products.filter((p) => p.qc_link).slice(0, 4);
   const bestValue = [...products]
-    .filter((p) => p.price !== null)
+    .filter((p) => hasExactPrice(p.price))
     .sort((a, b) => (a.price ?? 99) - (b.price ?? 99))
     .slice(0, 5);
 
@@ -40,7 +41,7 @@ export default function DealSeoBlock({ products }: DealSeoBlockProps) {
                     {product.product_name}
                   </Link>
                   <span className="shrink-0 font-bold text-accent">
-                    ${product.price}
+                    {formatProductPrice(product.price, "USD")}
                   </span>
                 </li>
               ))}

@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "convert-data": "node scripts/convert-spreadsheet.mjs",
-    "audit:site": "node scripts/site-audit.mjs"
+    "audit:site": "node scripts/site-audit.mjs",
+    "audit:prices": "node scripts/audit-prices.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

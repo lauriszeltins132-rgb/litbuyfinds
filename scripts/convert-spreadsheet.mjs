@@ -68,12 +68,26 @@ function extractLink(cell) {
   return "";
 }
 
-function parsePrice(value) {
+function parsePrice(value, formatted = "") {
   if (value === "" || value === null || value === undefined) return null;
+
+  const display = String(formatted ?? "").trim();
+  const hasCurrency = /[$¥€]/.test(display);
+
   if (typeof value === "number" && !isNaN(value)) {
     return Math.round(value * 100) / 100;
   }
-  const cleaned = String(value).replace(/[^0-9.]/g, "");
+
+  const text = String(value).trim();
+  // Product names like "Jordan 1 High" must not become $1.
+  if (/[a-zA-Z]/i.test(text) && !hasCurrency) {
+    return null;
+  }
+
+  const source = hasCurrency ? display : text;
+  const cleaned = source.replace(/[^0-9.]/g, "");
+  if (!cleaned) return null;
+
   const num = parseFloat(cleaned);
   return isNaN(num) ? null : Math.round(num * 100) / 100;
 }
@@ -109,22 +123,42 @@ function findProductName(rows, row, linkCol) {
   return "";
 }
 
-function findUsdPrice(rows, row, linkCol) {
-  const candidates = [];
-  for (let col = linkCol + 1; col <= linkCol + 5; col++) {
-    const price = parsePrice(rows[row]?.[col]);
-    if (price !== null) candidates.push(price);
+function findUsdPrice(sheet, rows, row, linkCol) {
+  let dollarPrice = null;
+  const numericUsd = [];
+
+  for (let col = linkCol + 1; col <= linkCol + 8; col++) {
+    const cell = getCell(sheet, row, col);
+    const raw = rows[row]?.[col];
+    const formatted = cell?.w ?? "";
+    const formula = cell?.f ?? "";
+
+    if (normalize(raw) === "QC") continue;
+    if (extractImage(cell)) continue;
+    if (extractLink(cell) && normalize(raw) === "LINK") continue;
+
+    const price = parsePrice(raw, formatted);
+    if (price === null) continue;
+
+    if (formatted.includes("$") || formula.includes("/$")) {
+      if (price >= 5 && price <= 350) {
+        dollarPrice =
+          dollarPrice === null ? price : Math.min(dollarPrice, price);
+      }
+      continue;
+    }
+
+    // Large integers near links are usually CNY wholesale, not USD.
+    if (typeof raw === "number" && raw > 350) continue;
+
+    if (price >= 5 && price <= 350) {
+      numericUsd.push(price);
+    }
   }
 
-  if (candidates.length === 0) return null;
-
-  // USD is almost always the smallest value near the link cell.
-  const usdCandidates = candidates.filter((price) => price > 0 && price <= 350);
-  if (usdCandidates.length > 0) {
-    return Math.min(...usdCandidates);
-  }
-
-  return candidates[candidates.length - 1];
+  if (dollarPrice !== null) return dollarPrice;
+  if (numericUsd.length > 0) return Math.min(...numericUsd);
+  return null;
 }
 
 function findImageAndQc(sheet, rows, row, linkCol) {
@@ -171,7 +205,7 @@ function parseSheet(sheet, sheetName) {
       if (seenInSheet.has(dedupeKey)) continue;
       seenInSheet.add(dedupeKey);
 
-      const price = findUsdPrice(rows, row, col);
+      const price = findUsdPrice(sheet, rows, row, col);
       const { image, qc_link } = findImageAndQc(sheet, rows, row, col);
 
       products.push({
