@@ -2,7 +2,9 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useProcessedImage } from "@/hooks/useProcessedImage";
+import type { BrightBgTreatment } from "@/lib/bright-bg";
 import { trackBrokenImage } from "@/lib/analytics-events";
+import { detectBrightFromElement } from "@/lib/image-bright-detect";
 import {
   hasPlausibleImageDimensions,
   validateImageUrl,
@@ -34,17 +36,25 @@ export default function ProductImage({
     failed,
     loading,
     ready,
-    needsDarkMatte,
-    needsVignette,
+    treatment: catalogTreatment,
     processedToPng,
   } = useProcessedImage(src);
   const [renderFailed, setRenderFailed] = useState(!validation.valid);
   const [visible, setVisible] = useState(false);
+  const [liveTreatment, setLiveTreatment] =
+    useState<BrightBgTreatment>("none");
   const loggedRef = useRef(false);
+
+  const treatment =
+    liveTreatment !== "none" ? liveTreatment : catalogTreatment;
+  const needsDarkMatte = !processedToPng && treatment === "matte";
+  const needsVignette = !processedToPng && treatment === "vignette";
+  const needsBrightFrame = needsDarkMatte || needsVignette;
 
   useEffect(() => {
     setRenderFailed(!validation.valid);
     setVisible(false);
+    setLiveTreatment("none");
     loggedRef.current = false;
   }, [validation.normalized, validation.valid]);
 
@@ -64,9 +74,15 @@ export default function ProductImage({
         markFailed();
         return;
       }
+
+      if (!processedToPng && catalogTreatment === "none") {
+        const detected = detectBrightFromElement(img);
+        if (detected) setLiveTreatment(detected);
+      }
+
       setVisible(true);
     },
-    [markFailed]
+    [catalogTreatment, markFailed, processedToPng]
   );
 
   const showPlaceholder = renderFailed || failed || !ready || !displaySrc;
@@ -88,22 +104,25 @@ export default function ProductImage({
       ? "product-float-asset product-float-asset--vignette"
       : processedToPng
         ? "product-float-asset product-float-asset--processed"
-        : "product-float-asset";
+        : "product-float-asset product-float-asset--natural";
 
   const stageClass = needsVignette
     ? `product-float-stage product-float-stage--vignette product-float-stage--${variant}`
     : `product-float-stage product-float-stage--${variant}`;
 
-  const matteClass = needsDarkMatte
-    ? "product-float-matte product-float-matte--active"
-    : needsVignette
+  const matteClass = needsBrightFrame
+    ? needsVignette
       ? "product-float-matte product-float-matte--vignette"
-      : "product-float-matte";
+      : "product-float-matte product-float-matte--active"
+    : "product-float-matte";
 
   return (
     <div className={`${stageClass} ${className}`}>
-      <div className="product-float-glow" aria-hidden />
+      {variant === "card" ? null : <div className="product-float-glow" aria-hidden />}
       <div className={matteClass}>
+        {needsBrightFrame ? (
+          <div className="product-float-matte-solid" aria-hidden />
+        ) : null}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={displaySrc}
@@ -119,6 +138,9 @@ export default function ProductImage({
       </div>
       {needsVignette ? (
         <div className="product-float-vignette-mask" aria-hidden />
+      ) : null}
+      {needsBrightFrame ? (
+        <div className="product-float-edge-mask" aria-hidden />
       ) : null}
       {!visible && (
         <ImageUnavailablePlaceholder

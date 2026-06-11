@@ -5,41 +5,38 @@ import { usePathname } from "next/navigation";
 import GlobalSearch from "./GlobalSearch";
 
 const LINKS = [
-  { href: "/trending", label: "Hot", short: "🔥" },
-  { href: "/categories", label: "Cats", short: "▦" },
-  { href: "/brands", label: "Brands", short: "◎" },
-  { href: "/#browse", label: "All", short: "☰" },
+  { href: "/", label: "Home", icon: "⌂" },
+  { href: "/trending", label: "Trending", icon: "🔥" },
+  { href: "/categories", label: "Categories", icon: "▦" },
+  { href: "/brands", label: "Brands", icon: "◎" },
 ] as const;
 
 export default function MobileDock() {
   const pathname = usePathname();
 
   return (
-    <div className="mobile-dock sm:hidden" role="navigation" aria-label="Mobile">
+    <nav className="mobile-dock sm:hidden" aria-label="Mobile navigation">
       <GlobalSearch variant="dock" />
-      <div className="mobile-dock__divider" aria-hidden />
-      <ul className="mobile-dock__nav">
-        {LINKS.map((link) => {
-          const active =
-            link.href === "/#browse"
-              ? pathname === "/"
-              : pathname === link.href || pathname.startsWith(`${link.href}/`);
+      {LINKS.map((link) => {
+        const active =
+          link.href === "/"
+            ? pathname === "/"
+            : pathname === link.href || pathname.startsWith(`${link.href}/`);
 
-          return (
-            <li key={link.href}>
-              <Link
-                href={link.href}
-                className={`mobile-dock__link ${active ? "mobile-dock__link--active" : ""}`}
-              >
-                <span className="mobile-dock__icon" aria-hidden>
-                  {link.short}
-                </span>
-                <span className="mobile-dock__label">{link.label}</span>
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
-    </div>
+        return (
+          <Link
+            key={link.href}
+            href={link.href}
+            className={`mobile-dock__link ${active ? "mobile-dock__link--active" : ""}`}
+            aria-current={active ? "page" : undefined}
+          >
+            <span className="mobile-dock__icon" aria-hidden>
+              {link.icon}
+            </span>
+            <span className="mobile-dock__label">{link.label}</span>
+          </Link>
+        );
+      })}
+    </nav>
   );
 }

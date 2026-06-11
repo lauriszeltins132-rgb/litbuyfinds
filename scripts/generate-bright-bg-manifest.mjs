@@ -80,11 +80,11 @@ async function classifyImage(url, sharp) {
   }
   const avgCenterLum = center.length ? centerLum / (center.length / 3) : 0;
 
-  if (borderRatio < 0.42) {
+  if (borderRatio < 0.28) {
     return "none";
   }
 
-  if (avgCenterLum >= 198 && borderRatio >= 0.55) {
+  if (avgCenterLum >= 182 && borderRatio >= 0.4) {
     return "vignette";
   }
 

@@ -60,7 +60,7 @@ export default function GlobalSearch({
       >
         <SearchIcon className={variant === "dock" ? "h-4 w-4" : "h-5 w-5"} />
         {variant === "dock" ? (
-          <span className="mobile-dock__label">Search</span>
+          <span className="mobile-dock__label">Find</span>
         ) : null}
       </button>
 
