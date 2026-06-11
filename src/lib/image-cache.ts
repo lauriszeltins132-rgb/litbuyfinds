@@ -1,6 +1,6 @@
 const MEMORY_LIMIT = 400;
 const memory = new Map<string, string>();
-const DB_NAME = "litbuyfinds-image-cache";
+const DB_NAME = "litbuyfinds-image-cache-v2";
 const STORE = "processed";
 const DB_VERSION = 1;
 

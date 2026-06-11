@@ -6,30 +6,86 @@ import {
 import { hasPlausibleImageDimensions, validateImageUrl } from "./image-url";
 
 const MAX_DIMENSION = 900;
+const MIN_BACKGROUND_RATIO = 0.02;
+const MAX_BACKGROUND_RATIO = 0.78;
 
-function processImageData(
-  data: Uint8ClampedArray,
+function isBackgroundPixel(
+  r: number,
+  g: number,
+  b: number,
   threshold: number
-): void {
-  for (let i = 0; i < data.length; i += 4) {
-    const r = data[i];
-    const g = data[i + 1];
-    const b = data[i + 2];
-    const min = Math.min(r, g, b);
-    const max = Math.max(r, g, b);
-    const spread = max - min;
+): boolean {
+  const min = Math.min(r, g, b);
+  const max = Math.max(r, g, b);
+  const spread = max - min;
+  return min >= threshold - 20 && spread <= 40;
+}
 
-    if (min >= threshold && spread <= 28) {
-      const fade = (min - threshold) / (255 - threshold);
-      data[i + 3] = Math.round(data[i + 3] * (1 - fade));
-      continue;
+/**
+ * Remove only edge-connected near-white background pixels.
+ * Interior light fabric (sweaters, vests, etc.) is left untouched.
+ */
+function removeEdgeBackground(
+  data: Uint8ClampedArray,
+  width: number,
+  height: number,
+  threshold: number
+): number {
+  const total = width * height;
+  const visited = new Uint8Array(total);
+  const stack: number[] = [];
+
+  const trySeed = (x: number, y: number) => {
+    const idx = y * width + x;
+    if (visited[idx]) return;
+    const i = idx * 4;
+    if (isBackgroundPixel(data[i], data[i + 1], data[i + 2], threshold)) {
+      visited[idx] = 1;
+      stack.push(idx);
     }
+  };
 
-    if (min >= threshold - 18 && spread <= 42) {
-      const fade = (min - (threshold - 18)) / 18;
-      data[i + 3] = Math.round(data[i + 3] * (1 - fade * 0.9));
+  for (let x = 0; x < width; x++) {
+    trySeed(x, 0);
+    trySeed(x, height - 1);
+  }
+  for (let y = 0; y < height; y++) {
+    trySeed(0, y);
+    trySeed(width - 1, y);
+  }
+
+  while (stack.length > 0) {
+    const idx = stack.pop()!;
+    const x = idx % width;
+    const y = (idx / width) | 0;
+
+    const neighbors: [number, number][] = [
+      [x - 1, y],
+      [x + 1, y],
+      [x, y - 1],
+      [x, y + 1],
+    ];
+
+    for (const [nx, ny] of neighbors) {
+      if (nx < 0 || ny < 0 || nx >= width || ny >= height) continue;
+      const nidx = ny * width + nx;
+      if (visited[nidx]) continue;
+      const i = nidx * 4;
+      if (isBackgroundPixel(data[i], data[i + 1], data[i + 2], threshold)) {
+        visited[nidx] = 1;
+        stack.push(nidx);
+      }
     }
   }
+
+  let removed = 0;
+  for (let idx = 0; idx < total; idx++) {
+    if (!visited[idx]) continue;
+    removed++;
+    data[idx * 4 + 3] = 0;
+  }
+
+  return removed;
 }
 
 function loadImage(url: string): Promise<HTMLImageElement> {
@@ -72,7 +128,7 @@ export function probeImageLoad(url: string): Promise<boolean> {
 
 export async function removeWhiteBackground(
   imageUrl: string,
-  threshold = 238
+  threshold = 245
 ): Promise<string> {
   const { valid, normalized } = validateImageUrl(imageUrl);
   if (!valid) {
@@ -107,7 +163,19 @@ export async function removeWhiteBackground(
 
   try {
     const imageData = ctx.getImageData(0, 0, width, height);
-    processImageData(imageData.data, threshold);
+    const removed = removeEdgeBackground(
+      imageData.data,
+      width,
+      height,
+      threshold
+    );
+    const ratio = removed / (width * height);
+
+    if (ratio < MIN_BACKGROUND_RATIO || ratio > MAX_BACKGROUND_RATIO) {
+      setCachedImage(normalized, normalized);
+      return normalized;
+    }
+
     ctx.putImageData(imageData, 0, 0);
     const dataUrl = canvas.toDataURL("image/png");
     setCachedImage(normalized, dataUrl);
