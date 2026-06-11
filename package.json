@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "node scripts/generate-dataset-meta.mjs && next dev",
-    "build": "node scripts/generate-dataset-meta.mjs && node scripts/audit-prices.mjs --ci && node scripts/generate-seo-list-pages.mjs && node scripts/generate-favicons.mjs && next build",
+    "build": "node scripts/generate-dataset-meta.mjs && node scripts/audit-prices.mjs --ci && node scripts/generate-bright-bg-manifest.mjs && node scripts/process-catalog-images.mjs && node scripts/generate-seo-list-pages.mjs && node scripts/generate-favicons.mjs && next build",
     "generate:favicons": "node scripts/generate-favicons.mjs",
     "start": "next start",
     "lint": "next lint",
@@ -12,7 +12,8 @@
     "audit:site": "node scripts/site-audit.mjs",
     "audit:prices": "node scripts/audit-prices.mjs",
     "audit:images": "node scripts/audit-images.mjs",
-    "generate:bright-bg": "node scripts/generate-bright-bg-manifest.mjs"
+    "generate:bright-bg": "node scripts/generate-bright-bg-manifest.mjs",
+    "process:images": "node scripts/generate-bright-bg-manifest.mjs && node scripts/process-catalog-images.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

@@ -171,13 +171,7 @@ body::before {
 }
 
 .product-image-shell--card::after {
-  background: radial-gradient(
-    ellipse 88% 88% at 50% 48%,
-    transparent 42%,
-    rgba(8, 8, 12, 0.35) 72%,
-    rgba(8, 8, 12, 0.65) 100%
-  );
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
 }
 
 .product-image-shell .product-float-stage {
@@ -242,77 +236,8 @@ body::before {
   border-radius: 0.75rem;
 }
 
-.product-float-matte-solid {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  border-radius: inherit;
-  background: #121218;
-}
-
-.product-float-matte--active {
-  position: relative;
-  isolation: isolate;
-}
-
-.product-float-asset--matte {
-  position: relative;
-  z-index: 1;
-  mix-blend-mode: multiply;
-  filter: contrast(1.14) brightness(1.26) saturate(1.06)
-    drop-shadow(0 10px 28px rgba(0, 0, 0, 0.42));
-}
-
-.product-float-asset--natural {
-  position: relative;
-  z-index: 1;
-  filter: drop-shadow(0 10px 26px rgba(0, 0, 0, 0.45));
-}
-
-.product-float-matte--vignette {
-  position: relative;
-  isolation: isolate;
-  padding: 0.55rem;
-}
-
-.product-float-asset--vignette {
-  position: relative;
-  z-index: 1;
-  max-width: 86%;
-  max-height: 86%;
-  filter: contrast(1.08) saturate(1.04)
-    drop-shadow(0 12px 30px rgba(0, 0, 0, 0.5));
-}
-
-.product-float-edge-mask {
-  position: absolute;
-  inset: 0;
-  z-index: 6;
-  pointer-events: none;
-  background: radial-gradient(
-    ellipse 80% 80% at 50% 48%,
-    transparent 30%,
-    rgba(8, 8, 12, 0.5) 65%,
-    rgba(8, 8, 12, 0.92) 100%
-  );
-}
-
-.product-float-stage--vignette {
-  position: relative;
-}
-
-.product-float-vignette-mask {
-  position: absolute;
-  inset: 0;
-  z-index: 7;
-  pointer-events: none;
-  border-radius: inherit;
-  background: radial-gradient(
-    ellipse 78% 78% at 50% 46%,
-    transparent 22%,
-    rgba(8, 8, 12, 0.55) 58%,
-    rgba(8, 8, 12, 0.96) 100%
-  );
+.product-float-asset--cutout {
+  filter: drop-shadow(0 10px 28px rgba(0, 0, 0, 0.5));
 }
 
 .product-float-stage--featured {
@@ -403,9 +328,6 @@ body::before {
   max-height: 98%;
 }
 
-.product-float-asset--processed {
-  filter: contrast(1.05) saturate(1.05) drop-shadow(0 12px 32px rgba(0, 0, 0, 0.5));
-}
 
 .product-float-asset--loading {
   opacity: 0.85;
