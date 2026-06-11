@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation";
 import ControlButton from "@/components/ui/ControlButton";
 import TextInput from "@/components/ui/TextInput";
 
-function SearchIcon() {
+function SearchIcon({ className = "h-5 w-5" }: { className?: string }) {
   return (
     <svg
-      className="h-5 w-5"
+      className={className}
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
@@ -23,7 +23,15 @@ function SearchIcon() {
   );
 }
 
-export default function GlobalSearch() {
+type GlobalSearchProps = {
+  className?: string;
+  variant?: "header" | "dock";
+};
+
+export default function GlobalSearch({
+  className = "",
+  variant = "header",
+}: GlobalSearchProps) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -37,31 +45,39 @@ export default function GlobalSearch() {
     setQuery("");
   }
 
+  const triggerClass =
+    variant === "dock"
+      ? "mobile-dock__search"
+      : "control-btn control-btn-ghost !min-h-0 !p-2";
+
   return (
     <>
       <button
         type="button"
         onClick={() => setOpen(true)}
         aria-label="Search finds"
-        className="control-btn control-btn-ghost !min-h-0 !p-2"
+        className={`${triggerClass} ${className}`.trim()}
       >
-        <SearchIcon />
+        <SearchIcon className={variant === "dock" ? "h-4 w-4" : "h-5 w-5"} />
+        {variant === "dock" ? (
+          <span className="mobile-dock__label">Search</span>
+        ) : null}
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-[180] flex items-start justify-center p-4 pt-24">
+        <div className="fixed inset-0 z-[180] flex items-start justify-center p-4 pt-[max(1rem,env(safe-area-inset-top))] sm:pt-24">
           <button
             type="button"
             aria-label="Close search"
-            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/75 backdrop-blur-md"
             onClick={() => setOpen(false)}
           />
 
           <form
             onSubmit={handleSubmit}
-            className="modal-enter panel-shell relative w-full max-w-xl rounded-3xl border border-border-strong p-5"
+            className="modal-enter panel-shell relative mt-12 w-full max-w-xl rounded-3xl border border-border-strong p-4 sm:mt-0 sm:p-5"
           >
-            <p className="mb-4 text-sm font-bold text-foreground">Search finds</p>
+            <p className="mb-3 text-sm font-bold text-foreground">Search finds</p>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
               <TextInput
                 id="global-search"

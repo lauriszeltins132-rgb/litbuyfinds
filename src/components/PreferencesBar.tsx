@@ -11,7 +11,7 @@ export default function PreferencesBar() {
     usePreferences();
 
   return (
-    <div className="border-b border-border bg-[#0a0a0d]/90 px-4 py-2.5 backdrop-blur sm:px-6">
+    <div className="hidden border-b border-border bg-[#0a0a0d]/90 px-4 py-2.5 backdrop-blur sm:block sm:px-6">
       <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3">
         <p className="text-xs font-bold uppercase tracking-[0.16em] text-muted">
           Shopping preferences

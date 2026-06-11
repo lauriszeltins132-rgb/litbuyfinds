@@ -5,13 +5,12 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import SiteHeader from "@/components/SiteHeader";
 import Footer from "@/components/Footer";
 import CouponModal from "@/components/CouponModal";
-import MobileQuickNav from "@/components/MobileQuickNav";
+import MobileDock from "@/components/MobileDock";
 import MobileStickySignup from "@/components/MobileStickySignup";
 import PreferencesBar from "@/components/PreferencesBar";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import AnalyticsBoot from "@/components/AnalyticsBoot";
 import JsonLd from "@/components/JsonLd";
-import MobileSearchBar from "@/components/MobileSearchBar";
 import { WishlistProvider } from "@/context/WishlistContext";
 import { PreferencesProvider } from "@/context/PreferencesContext";
 import { CouponProvider } from "@/context/CouponContext";
@@ -97,12 +96,11 @@ export default function RootLayout({
                 <AnalyticsBoot />
                 <PreferencesBar />
                 <SiteHeader />
-                <main className="flex-1 pb-20 sm:pb-0">{children}</main>
+                <main className="site-main flex-1">{children}</main>
                 <Footer />
                 <CouponModal />
-                <MobileSearchBar />
                 <MobileStickySignup />
-                <MobileQuickNav />
+                <MobileDock />
                 <Analytics />
                 <SpeedInsights />
               </RecentlyViewedProvider>

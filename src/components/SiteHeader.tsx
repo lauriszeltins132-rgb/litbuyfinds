@@ -26,10 +26,16 @@ export default function SiteHeader() {
   return (
     <>
       <div className="accent-line" />
-      <header className="sticky top-0 z-50 border-b border-border bg-background/90 px-4 backdrop-blur-xl sm:px-6">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3">
-          <Link href="/" className="flex shrink-0 items-center gap-2.5">
-            <Image src="/logo.svg" alt={SITE_NAME} width={36} height={36} />
+      <header className="site-header sticky top-0 z-50 px-3 sm:px-6">
+        <div className="mx-auto flex h-11 max-w-7xl items-center justify-between gap-2 sm:h-16">
+          <Link href="/" className="flex shrink-0 items-center gap-2">
+            <Image
+              src="/logo.svg"
+              alt={SITE_NAME}
+              width={28}
+              height={28}
+              className="sm:h-9 sm:w-9"
+            />
             <span className="hidden font-black tracking-tight text-foreground sm:inline">
               {SITE_NAME}
             </span>
@@ -60,9 +66,9 @@ export default function SiteHeader() {
             })}
           </nav>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             <CommunityLinks variant="header" location="header" />
-            <GlobalSearch />
+            <GlobalSearch className="hidden sm:inline-flex" />
             <RegisterLink
               location="header"
               className="hidden rounded-full bg-accent px-4 py-2 text-sm font-black text-background sm:inline-flex"

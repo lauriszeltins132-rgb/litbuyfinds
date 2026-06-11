@@ -24,9 +24,9 @@ export default function TrustStrip({ compact = false }: TrustStripProps) {
   };
 
   return (
-    <section className={`px-4 sm:px-6 ${compact ? "py-4" : "py-8"}`}>
+    <section className={`px-3 sm:px-6 ${compact ? "py-2 sm:py-4" : "py-8"}`}>
       <div className="mx-auto max-w-7xl">
-        <div className="grid grid-cols-2 gap-3 rounded-2xl border border-border bg-surface/40 p-4 sm:grid-cols-3 lg:grid-cols-5 lg:gap-4 lg:p-5">
+        <div className="grid grid-cols-2 gap-2 rounded-xl border border-border bg-surface/40 p-3 sm:grid-cols-3 sm:gap-3 sm:rounded-2xl sm:p-4 lg:grid-cols-5 lg:gap-4 lg:p-5">
           {SIGNALS.map((signal) => (
             <div key={signal.key} className="text-center">
               <p className="text-lg font-black text-accent sm:text-xl">

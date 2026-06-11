@@ -61,17 +61,17 @@ export default function ProductCard({
   }
 
   const iconBtn =
-    "flex h-8 w-8 items-center justify-center rounded-full border border-border text-muted transition-colors hover:border-accent/40 hover:text-accent";
+    "flex h-7 w-7 items-center justify-center rounded-full border border-border text-muted transition-colors hover:border-accent/40 hover:text-accent sm:h-8 sm:w-8";
 
   return (
     <article
-      className={`group flex flex-col overflow-hidden rounded-2xl border border-border bg-panel transition-all duration-300 hover:-translate-y-1 hover:border-accent/30 hover:shadow-[0_12px_40px_rgba(212,255,60,0.08)] ${
-        compact ? "text-[13px]" : ""
+      className={`product-card group flex flex-col overflow-hidden rounded-xl border border-border bg-panel transition-all duration-300 active:scale-[0.99] sm:rounded-2xl sm:hover:-translate-y-1 sm:hover:border-accent/30 sm:hover:shadow-[0_12px_40px_rgba(212,255,60,0.08)] ${
+        compact ? "text-[12px] sm:text-[13px]" : ""
       }`}
     >
       <Link
         href={productHref}
-        className="product-image-shell product-image-hover relative block aspect-square overflow-hidden"
+        className="product-image-shell product-image-shell--card product-image-hover relative block aspect-square overflow-hidden"
       >
         <ProductImage
           src={product.image}
@@ -98,7 +98,7 @@ export default function ProductCard({
         </div>
       </Link>
 
-      <div className={`flex flex-1 flex-col gap-2 ${compact ? "p-3" : "p-3.5"}`}>
+      <div className={`flex flex-1 flex-col gap-1.5 ${compact ? "p-2.5 sm:p-3" : "p-3.5"}`}>
         <Link href={productHref} className="text-left">
           <h3
             className={`line-clamp-2 font-bold leading-snug text-foreground ${
@@ -191,7 +191,7 @@ export default function ProductCard({
           </button>
         </div>
 
-        {product.affiliate_link ? (
+        {product.affiliate_link && !compact ? (
           <LitBuyMicroCta location="product_card_litbuy" />
         ) : null}
       </div>

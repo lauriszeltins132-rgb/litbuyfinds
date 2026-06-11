@@ -40,18 +40,22 @@ export default function SignupCard({
   const copy = COPY[variant];
 
   return (
-    <section className="px-4 py-6 sm:px-6">
-      <div className="signup-card mx-auto max-w-7xl overflow-hidden rounded-3xl border border-border bg-surface/45 p-6 sm:p-8">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+    <section className="px-4 py-3 sm:px-6 sm:py-6">
+      <div className="signup-card mx-auto max-w-7xl overflow-hidden rounded-2xl border border-border bg-surface/45 p-4 sm:rounded-3xl sm:p-8">
+        <div className="flex flex-col gap-4 sm:gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="max-w-2xl">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-accent sm:text-xs">
               {copy.eyebrow}
             </p>
-            <h2 className="mt-2 text-2xl font-black sm:text-3xl">{copy.title}</h2>
-            <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
+            <h2 className="mt-1.5 text-lg font-black sm:mt-2 sm:text-3xl">{copy.title}</h2>
+            <p className="mt-2 text-xs leading-relaxed text-muted sm:mt-3 sm:text-base">
               {copy.body}
             </p>
-            {variant !== "compact" ? <SignupTrustProof /> : null}
+            {variant !== "compact" ? (
+              <div className="hidden sm:block">
+                <SignupTrustProof />
+              </div>
+            ) : null}
             {variant === "intro" ? (
               <p className="mt-4 text-sm text-muted">
                 <Link
@@ -66,7 +70,7 @@ export default function SignupCard({
 
           <RegisterLink
             location={location}
-            className="inline-flex shrink-0 items-center justify-center rounded-full bg-accent px-8 py-4 text-sm font-black text-background transition hover:bg-accent-hover"
+            className="inline-flex shrink-0 items-center justify-center rounded-full bg-accent px-5 py-2.5 text-xs font-black text-background transition hover:bg-accent-hover sm:px-8 sm:py-4 sm:text-sm"
           >
             {copy.cta}
           </RegisterLink>

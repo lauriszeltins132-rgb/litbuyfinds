@@ -26,14 +26,18 @@ export default function DiscoveryRail({
   if (products.length === 0) return null;
 
   return (
-    <section className="px-4 py-8 sm:px-6">
+    <section className="px-3 py-4 sm:px-6 sm:py-8">
       <div className="mx-auto max-w-7xl">
         {(title || subtitle) && (
-          <div className="mb-5 flex items-end justify-between gap-4">
-            <div>
-              {title && <h2 className="text-xl font-black sm:text-2xl">{title}</h2>}
+          <div className="mb-2.5 flex items-end justify-between gap-3 sm:mb-5 sm:gap-4">
+            <div className="min-w-0">
+              {title && (
+                <h2 className="text-lg font-black leading-tight sm:text-2xl">{title}</h2>
+              )}
               {subtitle && (
-                <p className="mt-1 text-sm text-muted">{subtitle}</p>
+                <p className="mt-0.5 line-clamp-1 text-xs text-muted sm:mt-1 sm:line-clamp-none sm:text-sm">
+                  {subtitle}
+                </p>
               )}
             </div>
             <Link
@@ -45,9 +49,12 @@ export default function DiscoveryRail({
           </div>
         )}
 
-        <div className="discovery-rail -mx-1 flex gap-4 overflow-x-auto px-1 pb-2">
+        <div className="discovery-rail -mx-0.5 flex gap-2.5 overflow-x-auto px-0.5 pb-1 sm:gap-4">
           {products.map((product) => (
-            <div key={product.id} className="w-[220px] shrink-0 sm:w-[240px]">
+            <div
+              key={product.id}
+              className="w-[calc(50vw-1.25rem)] max-w-[178px] shrink-0 sm:w-[240px] sm:max-w-none"
+            >
               <ProductCard
                 product={product}
                 onOpen={setSelected}
