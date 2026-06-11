@@ -12,11 +12,12 @@ import { getBrandsFromProducts } from "@/lib/brands";
 import { getCategories, getAllProducts } from "@/lib/products";
 
 const GUIDE_LINKS = [
+  { href: "/guides", label: "All guides" },
+  { href: "/guides/beginner-guide-to-litbuy", label: "Beginner guide" },
+  { href: "/guides/how-to-order", label: "How to order" },
   { href: "/how-to-buy", label: "How to buy" },
-  { href: "/new-user-guide", label: "New user guide" },
   { href: "/recently-added", label: "Recently added" },
   { href: "/best-rep-sneakers", label: "Best rep sneakers" },
-  { href: "/best-budget-finds", label: "Best budget finds" },
 ];
 
 const TRUST_LINKS = [

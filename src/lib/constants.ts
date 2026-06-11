@@ -6,9 +6,9 @@ export const SITE_DESCRIPTION =
 export const LITBUY_SIGNUP_URL =
   "https://litbuy.com/register?inviteCode=SMKS";
 
-export const LITBUY_OFFER_HEADLINE = "40% Shipping Discount";
+export const LITBUY_OFFER_HEADLINE = "Get 40% Off Shipping";
 export const LITBUY_OFFER_DESCRIPTION =
-  "New LitBuy users get 40% off shipping. Register once and start buying through verified agent links.";
+  "New users can register through LitBuy and unlock a shipping discount.";
 
 export const SOCIAL_LINKS = {
   tiktok: "https://www.tiktok.com/@smks.reps?_r=1&_t=ZN-974SmdjFxFG",

@@ -401,6 +401,100 @@ body::before {
   padding: 0 2px;
 }
 
+.offer-visual {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 11rem;
+  height: 8.5rem;
+  border-radius: 1.25rem;
+  border: 1px solid rgba(212, 255, 60, 0.14);
+  background: linear-gradient(160deg, #0c0c10 0%, #141418 55%, #0e1210 100%);
+  overflow: hidden;
+}
+
+.offer-visual--compact {
+  width: 9.5rem;
+  height: 7.25rem;
+}
+
+.offer-visual__glow {
+  position: absolute;
+  width: 70%;
+  height: 70%;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(212, 255, 60, 0.22), transparent 70%);
+  filter: blur(16px);
+}
+
+.offer-visual__grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.12;
+  background-image:
+    linear-gradient(rgba(212, 255, 60, 0.35) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(212, 255, 60, 0.35) 1px, transparent 1px);
+  background-size: 14px 14px;
+}
+
+.offer-visual__badge {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.65rem;
+  z-index: 2;
+  border-radius: 9999px;
+  border: 1px solid rgba(212, 255, 60, 0.35);
+  background: rgba(12, 12, 16, 0.85);
+  padding: 0.2rem 0.55rem;
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.offer-visual__box {
+  position: relative;
+  z-index: 1;
+  width: 4.5rem;
+  height: auto;
+  color: rgba(245, 245, 248, 0.75);
+}
+
+.offer-visual--compact .offer-visual__box {
+  width: 3.75rem;
+}
+
+.offer-visual__box-outline {
+  opacity: 0.9;
+}
+
+.offer-visual__box-accent {
+  fill: var(--color-accent);
+  filter: drop-shadow(0 0 8px rgba(212, 255, 60, 0.55));
+}
+
+.offer-visual__silhouette {
+  position: absolute;
+  bottom: 0.5rem;
+  width: 1.25rem;
+  height: 2rem;
+  border-radius: 0.35rem;
+  background: linear-gradient(180deg, rgba(212, 255, 60, 0.12), transparent);
+  opacity: 0.5;
+}
+
+.offer-visual__silhouette--left {
+  left: 1rem;
+  transform: rotate(-8deg);
+}
+
+.offer-visual__silhouette--right {
+  right: 1rem;
+  transform: rotate(8deg);
+}
+
 .product-image-hover .product-float-asset {
   transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }

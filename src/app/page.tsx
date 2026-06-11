@@ -5,6 +5,8 @@ import CatalogPanel from "@/components/CatalogPanel";
 import DailyDrop from "@/components/DailyDrop";
 import DiscoveryHero from "@/components/DiscoveryHero";
 import DiscoveryRail from "@/components/DiscoveryRail";
+import EducationalTips from "@/components/EducationalTips";
+import HowItWorks from "@/components/HowItWorks";
 import OfferCallout from "@/components/OfferCallout";
 import PopularBrands from "@/components/PopularBrands";
 import RecentlyAddedPreview from "@/components/RecentlyAddedPreview";
@@ -42,6 +44,8 @@ export default function HomePage() {
       <DailyDrop />
       <RecentlyViewedRail />
       <RecentlyAddedPreview />
+      <HowItWorks compact />
+      <EducationalTips />
 
       <DiscoveryRail
         title="Trending This Week"

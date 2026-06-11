@@ -128,6 +128,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
           <Link href="/recently-added" className="text-sm font-bold text-muted hover:text-accent">
             Recently added →
           </Link>
+          <Link href="/guides/beginner-guide-to-litbuy" className="text-sm font-bold text-muted hover:text-accent">
+            New to LitBuy? Beginner guide →
+          </Link>
+          <Link href="/guides/how-to-check-qc-photos" className="text-sm font-bold text-muted hover:text-accent">
+            How to check QC →
+          </Link>
           <Link href="/how-to-buy" className="text-sm font-bold text-muted hover:text-accent">
             How to buy →
           </Link>

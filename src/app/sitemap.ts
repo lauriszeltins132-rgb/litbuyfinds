@@ -4,6 +4,7 @@ import { COLLECTION_SLUGS, COLLECTIONS } from "@/lib/collections";
 import { getBrandsFromProducts } from "@/lib/brands";
 import { getCategories, getAllProducts } from "@/lib/products";
 import { getAllProductSlugs } from "@/lib/slugs";
+import { GUIDE_SLUGS, GUIDES_HUB, GUIDE_PAGES } from "@/lib/guides";
 import { STATIC_PAGES } from "@/lib/static-pages";
 import { SITE_URL } from "@/lib/site";
 
@@ -20,7 +21,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/recently-added`, changeFrequency: "daily", priority: 0.92 },
     { url: `${SITE_URL}/brands`, changeFrequency: "weekly", priority: 0.8 },
     { url: `${SITE_URL}/categories`, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${SITE_URL}${GUIDES_HUB.path}`, changeFrequency: "weekly", priority: 0.9 },
   ];
+
+  for (const slug of GUIDE_SLUGS) {
+    const guide = GUIDE_PAGES[slug];
+    routes.push({
+      url: `${SITE_URL}${guide.path}`,
+      changeFrequency: "monthly",
+      priority: 0.86,
+    });
+  }
 
   const highPriorityGuides = new Set([
     "/how-to-buy",

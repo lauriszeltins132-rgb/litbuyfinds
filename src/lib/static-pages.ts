@@ -18,11 +18,11 @@ export type StaticPage = {
 };
 
 const GUIDE_LINKS = [
+  { href: "/guides", label: "All guides" },
+  { href: "/guides/beginner-guide-to-litbuy", label: "Beginner guide" },
+  { href: "/guides/how-litbuy-works", label: "How LitBuy works" },
   { href: "/how-to-buy", label: "How to buy" },
-  { href: "/new-user-guide", label: "New user guide" },
   { href: "/best-rep-sneakers", label: "Best rep sneakers" },
-  { href: "/best-budget-finds", label: "Best budget finds" },
-  { href: "/litbuy-vs-other-agents", label: "LitBuy vs other agents" },
   { href: "/trending", label: "Trending finds" },
   { href: "/categories/shoes", label: "Shoe finds" },
 ];

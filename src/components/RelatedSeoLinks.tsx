@@ -14,11 +14,11 @@ const FEATURED_BRANDS = [
 ];
 
 const GUIDE_LINKS = [
+  { href: "/guides", label: "Guides" },
+  { href: "/guides/beginner-guide-to-litbuy", label: "Beginner guide" },
+  { href: "/guides/how-to-check-qc-photos", label: "QC guide" },
   { href: "/recently-added", label: "Recently added" },
-  { href: "/how-to-buy", label: "How to buy" },
-  { href: "/best-rep-sneakers", label: "Best sneakers" },
-  { href: "/best-budget-finds", label: "Budget finds" },
-  { href: "/new-user-guide", label: "New user guide" },
+  { href: "/trending", label: "Trending" },
 ];
 
 export default function RelatedSeoLinks() {

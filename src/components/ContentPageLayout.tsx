@@ -12,6 +12,7 @@ type ContentPageLayoutProps = {
   sections: StaticPageSection[];
   faqs?: { question: string; answer: string }[];
   relatedLinks?: { href: string; label: string }[];
+  parentCrumb?: { label: string; href: string };
 };
 
 export default function ContentPageLayout({
@@ -22,11 +23,18 @@ export default function ContentPageLayout({
   sections,
   faqs,
   relatedLinks,
+  parentCrumb,
 }: ContentPageLayoutProps) {
-  const breadcrumbs: BreadcrumbItem[] = [
-    { label: "Home", href: "/" },
-    { label: h1 },
-  ];
+  const breadcrumbs: BreadcrumbItem[] = parentCrumb
+    ? [
+        { label: "Home", href: "/" },
+        parentCrumb,
+        { label: h1 },
+      ]
+    : [
+        { label: "Home", href: "/" },
+        { label: h1 },
+      ];
 
   return (
     <>
