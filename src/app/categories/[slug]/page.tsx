@@ -3,7 +3,9 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import CatalogPanel from "@/components/CatalogPanel";
+import RelatedGuides from "@/components/RelatedGuides";
 import RelatedSeoLinks from "@/components/RelatedSeoLinks";
+import { getRelatedGuidesForCategory } from "@/lib/related-guides";
 import CategorySeoBlock from "@/components/seo/CategorySeoBlock";
 import SchemaScript from "@/components/SchemaScript";
 import { buildCollectionPageSchema } from "@/lib/schema";
@@ -102,6 +104,7 @@ export default async function CategoryLandingPage({ params }: CategoryPageProps)
         relatedCategories={relatedCategories}
       />
 
+      <RelatedGuides links={getRelatedGuidesForCategory(slug)} />
       <RelatedSeoLinks />
 
       <Suspense fallback={<div className="py-24 text-center text-muted">Loading...</div>}>

@@ -93,7 +93,7 @@ export function buildHomepageMetadata(): Metadata {
     description: SITE_DESCRIPTION,
     alternates: { canonical: url },
     openGraph: {
-      title: SITE_NAME,
+      title: HOMEPAGE_TITLE,
       description: SITE_OG_DESCRIPTION,
       url,
       siteName: SITE_NAME,
@@ -103,7 +103,7 @@ export function buildHomepageMetadata(): Metadata {
     },
     twitter: {
       card: "summary_large_image",
-      title: SITE_NAME,
+      title: HOMEPAGE_TITLE,
       description: SITE_OG_DESCRIPTION,
       images: [ogImage],
     },

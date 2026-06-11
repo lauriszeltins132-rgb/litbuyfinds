@@ -1,22 +1,25 @@
 export const SITE_NAME = "LitBuy Finds";
 
 export const HOMEPAGE_TITLE =
-  "LitBuy Finds – Fashion, Sneakers & Designer Finds";
+  "LitBuy Finds | Premium Product Discovery, QC Guides & Verified Finds";
 
 export const SITE_DESCRIPTION =
-  "Browse curated LitBuy finds across sneakers, fashion, bags, accessories, and more. Explore QC photos, product links, brands, categories, and daily updated finds.";
+  "Discover trending sneakers, fashion finds, QC-approved products, buying guides, trusted agent resources and daily LitBuy finds.";
 
 export const SITE_OG_DESCRIPTION =
-  "Curated LitBuy finds with QC photos, product links, brands, categories, and daily updates.";
+  "Discover trending sneakers, fashion finds, QC-approved products, buying guides, trusted agent resources and daily LitBuy finds.";
+
+export const HERO_TAGLINE =
+  "Discover the best LitBuy finds, QC-approved products, verified links and trending fashion finds.";
 
 export const SITE_TAGLINE = "Fashion, sneakers & designer finds";
 
 export const LITBUY_SIGNUP_URL =
   "https://litbuy.com/register?inviteCode=SMKS";
 
-export const LITBUY_OFFER_HEADLINE = "Get 40% Off Shipping";
+export const LITBUY_OFFER_HEADLINE = "Verified LitBuy agent links";
 export const LITBUY_OFFER_DESCRIPTION =
-  "New users can register through LitBuy and unlock a shipping discount.";
+  "Register on LitBuy to buy through trusted agent checkout — confirm QC and pricing before you ship.";
 
 export const SOCIAL_LINKS = {
   tiktok: "https://www.tiktok.com/@smks.reps?_r=1&_t=ZN-974SmdjFxFG",

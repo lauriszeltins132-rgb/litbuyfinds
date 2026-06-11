@@ -61,14 +61,47 @@ export const STATIC_PAGES: Record<string, StaticPage> = {
         ],
       },
       {
-        heading: "How products are sourced",
+        heading: "How products are selected",
         paragraphs: [
           "Listings come from public LitBuy spreadsheets and catalog imports — product names, prices, images, categories, and agent links. Our dataset syncs regularly as source sheets update.",
-          "We filter broken images, map brands from titles, and build stable URLs for sharing. Not every spreadsheet row appears here; duplicates and stale entries may be removed during import.",
+          "We prioritize rows with usable photos, verified agent URLs, and plausible pricing. Promo rows, broken images, and obvious placeholder prices are filtered during import.",
+          "Featured rails and top lists rank items by category placement, QC availability, image quality, and engagement signals when available.",
         ],
         links: [
           { href: "/guides/litbuy-spreadsheet-guide", label: "Spreadsheet guide" },
           { href: "/recently-added", label: "Recently added" },
+        ],
+      },
+      {
+        heading: "How QC references work",
+        paragraphs: [
+          "When a spreadsheet row includes a QC link (often Telegram), we surface it on the product card and detail page. These are community or seller reference photos — not a guarantee of what you will receive.",
+          "Always request warehouse QC photos of your exact item on LitBuy before international shipping. Use our QC guides to compare stitching, logos, and materials.",
+        ],
+        links: [
+          { href: "/guides/what-are-qc-photos", label: "What are QC photos?" },
+          { href: "/best-qc-approved-finds", label: "QC-approved finds" },
+        ],
+      },
+      {
+        heading: "Editorial process",
+        paragraphs: [
+          "Guides are written by the LitBuy Finds Team, reviewed for accuracy, and updated when agent workflows or catalog practices change. Top lists and collections are generated from live catalog data — not static copy.",
+          "We do not accept payment for placement in lists. Affiliate commissions may apply when you register or buy through outbound LitBuy links.",
+        ],
+        links: [
+          { href: "/guides", label: "All guides" },
+          { href: "/contact", label: "Request a correction" },
+        ],
+      },
+      {
+        heading: "Why buyers use agents",
+        paragraphs: [
+          "Agents like LitBuy let you buy from Weidian, Taobao, and 1688 in one cart, store items in a warehouse, and combine shipments internationally. LitBuy Finds helps you discover listings before you open the agent checkout flow.",
+        ],
+        links: [
+          { href: "/guides/what-is-a-shopping-agent", label: "What is an agent?" },
+          { href: "/guides/how-to-order-from-litbuy", label: "How to order" },
         ],
       },
       {

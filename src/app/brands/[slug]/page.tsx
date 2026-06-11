@@ -3,7 +3,9 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import CatalogPanel from "@/components/CatalogPanel";
+import RelatedGuides from "@/components/RelatedGuides";
 import RelatedSeoLinks from "@/components/RelatedSeoLinks";
+import { getRelatedGuidesForBrand } from "@/lib/related-guides";
 import BrandSeoBlock from "@/components/seo/BrandSeoBlock";
 import SchemaScript from "@/components/SchemaScript";
 import { buildCollectionPageSchema } from "@/lib/schema";
@@ -100,6 +102,7 @@ export default async function BrandLandingPage({ params }: BrandPageProps) {
         relatedBrands={relatedBrands}
       />
 
+      <RelatedGuides links={getRelatedGuidesForBrand(slug)} />
       <RelatedSeoLinks />
 
       <Suspense fallback={<div className="py-24 text-center text-muted">Loading...</div>}>

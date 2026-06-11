@@ -16,8 +16,10 @@ import { getAllProductSlugs, getProductBySlug, slugify } from "@/lib/slugs";
 import { buildPageMetadata } from "@/lib/seo";
 import FloatingBackButton from "@/components/FloatingBackButton";
 import ProductJsonLd from "@/components/ProductJsonLd";
+import RelatedGuides from "@/components/RelatedGuides";
 import RecordRecentlyViewed from "@/components/RecordRecentlyViewed";
 import TrackProductView from "@/components/TrackProductView";
+import { getRelatedGuidesForProduct } from "@/lib/related-guides";
 
 type ProductPageProps = {
   params: Promise<{ slug: string }>;
@@ -97,6 +99,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </div>
         </section>
       ) : null}
+
+      <RelatedGuides links={getRelatedGuidesForProduct(product)} />
 
       {alsoLike.length > 0 ? (
         <section className="px-4 py-10 sm:px-6">

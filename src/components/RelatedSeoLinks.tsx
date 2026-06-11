@@ -15,10 +15,10 @@ const FEATURED_BRANDS = [
 
 const GUIDE_LINKS = [
   { href: "/guides", label: "Guides" },
-  { href: "/guides/beginner-guide-to-litbuy", label: "Beginner guide" },
-  { href: "/guides/how-to-check-qc-photos", label: "QC guide" },
-  { href: "/recently-added", label: "Recently added" },
-  { href: "/trending", label: "Trending" },
+  { href: "/best-finds-by-category", label: "By category" },
+  { href: "/most-popular-finds-now", label: "Popular now" },
+  { href: "/best-qc-approved-finds", label: "QC approved" },
+  { href: "/best-jordan-finds-2026", label: "Jordan 2026" },
 ];
 
 export default function RelatedSeoLinks() {

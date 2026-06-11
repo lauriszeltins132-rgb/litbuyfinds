@@ -145,6 +145,13 @@ export function recordEvent(body: EventBody) {
   writeFileStore(store);
 }
 
+export function getTopProductIds(limit = 12): string[] {
+  return Object.entries(getStore().products)
+    .sort(([, a], [, b]) => b.clicks - a.clicks)
+    .slice(0, limit)
+    .map(([id]) => id);
+}
+
 export function getAnalyticsSummary() {
   const store = getStore();
 

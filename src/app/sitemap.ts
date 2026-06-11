@@ -22,6 +22,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/recently-added`, changeFrequency: "daily", priority: 0.92 },
     { url: `${SITE_URL}/brands`, changeFrequency: "weekly", priority: 0.8 },
     { url: `${SITE_URL}/categories`, changeFrequency: "weekly", priority: 0.8 },
+    {
+      url: `${SITE_URL}/best-finds-by-category`,
+      changeFrequency: "weekly",
+      priority: 0.85,
+    },
     { url: `${SITE_URL}${GUIDES_HUB.path}`, changeFrequency: "weekly", priority: 0.9 },
   ];
 

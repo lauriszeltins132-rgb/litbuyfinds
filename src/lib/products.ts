@@ -1,5 +1,7 @@
 import type { CategoryInfo, Product } from "./types";
 import productsData from "@/data/products.json";
+import { getBrandsFromProducts } from "./brands";
+import { filterBrowsableProducts } from "./catalog-filters";
 import { auditCatalogPrices, hasExactPrice } from "./pricing";
 import { validateImageUrl } from "./image-url";
 
@@ -11,7 +13,9 @@ function normalizeProduct(product: Product): Product {
   };
 }
 
-const products = (productsData as Product[]).map(normalizeProduct);
+const products = filterBrowsableProducts(
+  (productsData as Product[]).map(normalizeProduct)
+);
 
 export function sortWithImagesFirst(items: Product[]): Product[] {
   return [...items].sort((a, b) => {
@@ -74,6 +78,7 @@ export function getCatalogStats() {
     withImages,
     withQc,
     uniqueUrls,
+    brands: getBrandsFromProducts(products).length,
     categories: getCategories().filter((c) => c.group === "category").length,
     prices: {
       exact: priceAudit.exact,

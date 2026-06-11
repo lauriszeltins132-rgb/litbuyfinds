@@ -1,4 +1,5 @@
 import { extractBrand } from "./brands";
+import { getMonthlyHighlights, getPopularToday } from "./popular-picks";
 import { filterFeaturedEligible } from "./product-media";
 import { hasExactPrice } from "./pricing";
 import { getAllProducts } from "./products";
@@ -274,6 +275,120 @@ export const TOP_LISTS: Record<string, SeoListConfig> = {
       { href: "/top-designer-bags", label: "Designer bags" },
     ],
     clusterLinks: CLUSTER_FASHION,
+  },
+  "best-jordan-finds-2026": {
+    slug: "best-jordan-finds-2026",
+    path: "/best-jordan-finds-2026",
+    title: "Best Jordan Finds 2026",
+    metaDescription:
+      "Best Jordan finds in 2026 on LitBuy — Jordan 1, 4, 11 and more with verified links and QC references.",
+    badge: "Jordan 2026",
+    h1: "Best Jordan finds 2026",
+    intro:
+      "Jordan silhouettes ranked from the LitBuy Finds catalog. Compare batches, check QC links, and confirm live pricing on LitBuy before checkout.",
+    getProducts: () =>
+      sortByQuality(
+        filterFeaturedEligible(
+          priced(
+            getAllProducts().filter((p) => /jordan/i.test(p.product_name))
+          )
+        )
+      ).slice(0, 96),
+    relatedLinks: [
+      { href: "/guides/best-jordan-finds", label: "Jordan guide" },
+      { href: "/brands/jordan", label: "All Jordan" },
+      { href: "/top-nike-finds", label: "Nike finds" },
+    ],
+    clusterLinks: CLUSTER_SNEAKERS,
+  },
+  "best-qc-approved-finds": {
+    slug: "best-qc-approved-finds",
+    path: "/best-qc-approved-finds",
+    title: "Best QC Approved Finds",
+    metaDescription:
+      "QC-approved LitBuy finds with Telegram QC references — sneakers, fashion, and accessories with photo checks.",
+    badge: "QC approved",
+    h1: "Best QC approved finds",
+    intro:
+      "Listings with QC photo links attached. Use these references to compare batches, then request warehouse QC on your order before shipping.",
+    getProducts: () =>
+      sortByQuality(
+        filterFeaturedEligible(
+          priced(getAllProducts().filter((p) => Boolean(p.qc_link)))
+        )
+      ).slice(0, 96),
+    relatedLinks: [
+      { href: "/guides/how-to-check-qc-photos", label: "QC guide" },
+      { href: "/guides/what-are-qc-photos", label: "What is QC?" },
+      { href: "/trending", label: "Trending" },
+    ],
+    clusterLinks: CLUSTER_BUYING,
+  },
+  "top-litbuy-finds-this-month": {
+    slug: "top-litbuy-finds-this-month",
+    path: "/top-litbuy-finds-this-month",
+    title: "Top LitBuy Finds This Month",
+    metaDescription:
+      "Top LitBuy finds this month — trending and newest drops across sneakers, streetwear, and accessories.",
+    badge: "This month",
+    h1: "Top LitBuy finds this month",
+    intro:
+      "A rotating blend of trending sheet picks and newest catalog additions. Updated automatically as the dataset syncs.",
+    getProducts: () => sortByQuality(filterFeaturedEligible(priced(getMonthlyHighlights()))),
+    relatedLinks: [
+      { href: "/trending", label: "Trending" },
+      { href: "/recently-added", label: "Recently added" },
+      { href: "/most-popular-finds-now", label: "Popular now" },
+    ],
+    clusterLinks: CLUSTER_SNEAKERS,
+  },
+  "most-popular-finds-now": {
+    slug: "most-popular-finds-now",
+    path: "/most-popular-finds-now",
+    title: "Most Popular Finds Right Now",
+    metaDescription:
+      "Most popular LitBuy finds right now — top clicked and viewed products across the catalog.",
+    badge: "Popular now",
+    h1: "Most popular finds right now",
+    intro:
+      "Driven by real browse and buy clicks when available, with trending catalog picks as a fallback.",
+    getProducts: () => sortByQuality(filterFeaturedEligible(priced(getPopularToday(96)))),
+    relatedLinks: [
+      { href: "/trending", label: "Trending" },
+      { href: "/hidden-gems", label: "Hidden gems" },
+      { href: "/editors-picks", label: "Editor's picks" },
+    ],
+    clusterLinks: CLUSTER_SNEAKERS,
+  },
+  "best-budget-sneakers-under-50": {
+    slug: "best-budget-sneakers-under-50",
+    path: "/best-budget-sneakers-under-50",
+    title: "Best Budget Sneakers Under $50",
+    metaDescription:
+      "Best budget sneakers under $50 on LitBuy — affordable Jordan, Nike, Adidas and daily drivers.",
+    badge: "Under $50",
+    h1: "Best budget sneakers under $50",
+    intro:
+      "Sneaker-focused picks capped at $50 from catalog data. Always confirm the live price on LitBuy before buying.",
+    getProducts: () =>
+      sortByQuality(
+        filterFeaturedEligible(
+          priced(
+            getAllProducts().filter(
+              (p) =>
+                p.category_slug === "shoes" &&
+                p.price !== null &&
+                p.price <= 50
+            )
+          )
+        )
+      ).slice(0, 96),
+    relatedLinks: [
+      { href: "/top-products-under-50", label: "All under $50" },
+      { href: "/guides/best-sneakers-under-50", label: "Sneaker guide" },
+      { href: "/deals", label: "Deals" },
+    ],
+    clusterLinks: CLUSTER_SNEAKERS,
   },
 };
 

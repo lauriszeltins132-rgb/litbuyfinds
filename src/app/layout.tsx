@@ -4,9 +4,9 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import SiteHeader from "@/components/SiteHeader";
 import Footer from "@/components/Footer";
-import PromoBanner from "@/components/PromoBanner";
 import CouponModal from "@/components/CouponModal";
 import FloatingCouponButton from "@/components/FloatingCouponButton";
+import MobileQuickNav from "@/components/MobileQuickNav";
 import PreferencesBar from "@/components/PreferencesBar";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import AnalyticsBoot from "@/components/AnalyticsBoot";
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
   ],
   metadataBase: new URL("https://litbuyfinds.io"),
   openGraph: {
-    title: SITE_NAME,
+    title: HOMEPAGE_TITLE,
     description: SITE_OG_DESCRIPTION,
     url: "https://litbuyfinds.io",
     siteName: SITE_NAME,
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: SITE_NAME,
+    title: HOMEPAGE_TITLE,
     description: SITE_OG_DESCRIPTION,
   },
   robots: { index: true, follow: true },
@@ -95,7 +95,6 @@ export default function RootLayout({
                 <AnimatedBackground />
                 <JsonLd />
                 <AnalyticsBoot />
-                <PromoBanner />
                 <PreferencesBar />
                 <SiteHeader />
                 <main className="flex-1 pb-20 sm:pb-0">{children}</main>
@@ -103,6 +102,7 @@ export default function RootLayout({
                 <CouponModal />
                 <FloatingCouponButton />
                 <MobileSearchBar />
+                <MobileQuickNav />
                 <Analytics />
                 <SpeedInsights />
               </RecentlyViewedProvider>

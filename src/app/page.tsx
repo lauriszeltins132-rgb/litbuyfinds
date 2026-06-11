@@ -1,30 +1,25 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import BrandSpotlight from "@/components/BrandSpotlight";
 import CatalogPanel from "@/components/CatalogPanel";
-import DailyDrop from "@/components/DailyDrop";
+import DataFreshness from "@/components/DataFreshness";
 import DiscoveryHero from "@/components/DiscoveryHero";
 import DiscoveryRail from "@/components/DiscoveryRail";
+import HomepageBrands from "@/components/HomepageBrands";
+import HomepageCategories from "@/components/HomepageCategories";
 import NewToLitBuy from "@/components/NewToLitBuy";
-import HowItWorks from "@/components/HowItWorks";
-import OfferCallout from "@/components/OfferCallout";
-import PopularBrands from "@/components/PopularBrands";
 import RecentlyAddedPreview from "@/components/RecentlyAddedPreview";
 import RecentlyViewedRail from "@/components/RecentlyViewedRail";
 import StatsStrip from "@/components/StatsStrip";
 import TrustStrip from "@/components/TrustStrip";
 import {
   getBudgetFinds,
-  getEditorsPicks,
-  getHiddenGems,
-  getMostSavedPicks,
   getNewestFinds,
   getTrendingThisWeek,
 } from "@/lib/discovery";
+import { getPopularToday } from "@/lib/popular-picks";
 import { getBrandsFromProducts } from "@/lib/brands";
 import { getAllProducts, getCategories } from "@/lib/products";
 import { buildHomepageMetadata } from "@/lib/seo";
-import HomepageExploreNav from "@/components/HomepageExploreNav";
 
 export const metadata: Metadata = buildHomepageMetadata();
 
@@ -36,14 +31,15 @@ export default function HomePage() {
   return (
     <>
       <DiscoveryHero />
-      <HomepageExploreNav />
       <TrustStrip compact />
-      <OfferCallout />
-      <StatsStrip />
-      <DailyDrop />
-      <RecentlyViewedRail />
-      <RecentlyAddedPreview />
-      <NewToLitBuy />
+
+      <DiscoveryRail
+        title="🔥 Popular Today"
+        subtitle="Most clicked and viewed finds right now"
+        href="/most-popular-finds-now"
+        products={getPopularToday()}
+        showTrendingScore
+      />
 
       <DiscoveryRail
         title="Trending This Week"
@@ -53,6 +49,8 @@ export default function HomePage() {
         showTrendingScore
       />
 
+      <RecentlyAddedPreview />
+
       <DiscoveryRail
         title="Newest Finds"
         subtitle="Fresh additions from the latest drops sheet"
@@ -60,19 +58,8 @@ export default function HomePage() {
         products={getNewestFinds()}
       />
 
-      <DiscoveryRail
-        title="Editor's Picks"
-        subtitle="Hand-selected listings with photos and QC"
-        href="/editors-picks"
-        products={getEditorsPicks()}
-      />
-
-      <DiscoveryRail
-        title="Hidden Gems"
-        subtitle="Strong quality picks outside the main spotlight"
-        href="/hidden-gems"
-        products={getHiddenGems()}
-      />
+      <HomepageCategories categories={categories} />
+      <HomepageBrands />
 
       <DiscoveryRail
         title="Best Under $30"
@@ -81,15 +68,15 @@ export default function HomePage() {
         products={getBudgetFinds()}
       />
 
-      <DiscoveryRail
-        title="Most Saved"
-        subtitle="High-quality picks people bookmark again and again"
-        href="/trending"
-        products={getMostSavedPicks()}
-      />
+      <RecentlyViewedRail />
+      <NewToLitBuy />
 
-      <BrandSpotlight />
-      <PopularBrands />
+      <StatsStrip />
+      <section className="px-4 pb-2 sm:px-6">
+        <div className="mx-auto max-w-7xl text-center">
+          <DataFreshness variant="block" label="Catalog synced" />
+        </div>
+      </section>
 
       <section id="browse" className="scroll-mt-24 px-4 pt-4 sm:px-6">
         <div className="mx-auto max-w-7xl pb-4">
