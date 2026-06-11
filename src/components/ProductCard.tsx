@@ -11,6 +11,7 @@ import { getProductHref } from "@/lib/slugs";
 import { usePreferences } from "@/context/PreferencesContext";
 import { useWishlist } from "@/context/WishlistContext";
 import { trackProductContext } from "@/lib/analytics-events";
+import LitBuyMicroCta from "./LitBuyMicroCta";
 import ProductImage from "./ProductImage";
 
 type ProductCardProps = {
@@ -189,6 +190,10 @@ export default function ProductCard({
             {copied ? "✓" : "⧉"}
           </button>
         </div>
+
+        {product.affiliate_link ? (
+          <LitBuyMicroCta location="product_card_litbuy" />
+        ) : null}
       </div>
     </article>
   );

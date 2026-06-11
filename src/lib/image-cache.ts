@@ -1,6 +1,8 @@
+import type { BrightBgTreatment } from "./bright-bg";
+
 const MEMORY_LIMIT = 400;
 const memory = new Map<string, string>();
-const DB_NAME = "litbuyfinds-image-cache-v6";
+const DB_NAME = "litbuyfinds-image-cache-v7";
 const STORE = "processed";
 const DB_VERSION = 1;
 const CACHE_PREFIX = "p2:";
@@ -9,6 +11,7 @@ export type ProcessedImageEntry = {
   src: string;
   hasBrightBackground: boolean;
   processedToPng: boolean;
+  treatment: BrightBgTreatment;
 };
 
 function trimMemory() {
@@ -56,6 +59,7 @@ export function parseCachedImage(raw: string): ProcessedImageEntry {
     src: raw,
     hasBrightBackground: false,
     processedToPng,
+    treatment: "none",
   };
 }
 

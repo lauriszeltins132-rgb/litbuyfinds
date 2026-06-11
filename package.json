@@ -8,10 +8,11 @@
     "generate:favicons": "node scripts/generate-favicons.mjs",
     "start": "next start",
     "lint": "next lint",
-    "convert-data": "node scripts/convert-spreadsheet.mjs",
+    "convert-data": "node scripts/convert-spreadsheet.mjs && node scripts/generate-bright-bg-manifest.mjs",
     "audit:site": "node scripts/site-audit.mjs",
     "audit:prices": "node scripts/audit-prices.mjs",
-    "audit:images": "node scripts/audit-images.mjs"
+    "audit:images": "node scripts/audit-images.mjs",
+    "generate:bright-bg": "node scripts/generate-bright-bg-manifest.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

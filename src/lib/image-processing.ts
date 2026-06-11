@@ -1,4 +1,8 @@
 import {
+  getCatalogBrightBgTreatment,
+  type BrightBgTreatment,
+} from "./bright-bg";
+import {
   getCachedImage,
   getCachedImageAsync,
   setCachedImage,
@@ -79,7 +83,44 @@ function borderLooksBright(
     }
   }
 
-  return bright / (samples.length / 3) >= 0.72;
+  return bright / (samples.length / 3) >= 0.58;
+}
+
+function centerLooksBright(
+  data: Uint8ClampedArray,
+  width: number,
+  height: number,
+  threshold: number
+): boolean {
+  const x0 = Math.floor(width * 0.28);
+  const x1 = Math.ceil(width * 0.72);
+  const y0 = Math.floor(height * 0.28);
+  const y1 = Math.ceil(height * 0.72);
+  let bright = 0;
+  let total = 0;
+
+  for (let y = y0; y < y1; y++) {
+    for (let x = x0; x < x1; x++) {
+      const i = (y * width + x) * 4;
+      total++;
+      if (isBackgroundPixel(data[i], data[i + 1], data[i + 2], threshold)) {
+        bright++;
+      }
+    }
+  }
+
+  return total > 0 && bright / total >= 0.52;
+}
+
+function resolveTreatment(
+  hasBrightBackground: boolean,
+  lightOnLight: boolean,
+  catalogTreatment: BrightBgTreatment
+): BrightBgTreatment {
+  if (!hasBrightBackground) return "none";
+  if (lightOnLight || catalogTreatment === "vignette") return "vignette";
+  if (catalogTreatment === "matte") return "matte";
+  return "matte";
 }
 
 function removeEdgeBackground(
@@ -218,12 +259,14 @@ function cacheResult(
   normalized: string,
   src: string,
   hasBrightBackground: boolean,
-  processedToPng: boolean
+  processedToPng: boolean,
+  treatment: BrightBgTreatment
 ): ProcessedImageEntry {
   const entry: ProcessedImageEntry = {
     src,
     hasBrightBackground,
     processedToPng,
+    treatment: processedToPng ? "none" : treatment,
   };
   setCachedImage(normalized, entry);
   return entry;
@@ -238,11 +281,27 @@ export async function processProductImage(
     throw new Error("Invalid image URL");
   }
 
+  const catalogTreatment = getCatalogBrightBgTreatment(normalized);
+
   const cached =
     getCachedImage(normalized) ?? (await getCachedImageAsync(normalized));
   if (cached) return cached;
 
-  const img = await loadImage(normalized);
+  let img: HTMLImageElement;
+  try {
+    img = await loadImage(normalized);
+  } catch {
+    if (catalogTreatment !== "none") {
+      return cacheResult(
+        normalized,
+        normalized,
+        true,
+        false,
+        catalogTreatment
+      );
+    }
+    throw new Error("Image load failed");
+  }
 
   let width = img.naturalWidth;
   let height = img.naturalHeight;
@@ -268,11 +327,24 @@ export async function processProductImage(
     const imageData = ctx.getImageData(0, 0, width, height);
 
     const hasBrightBackground =
+      catalogTreatment !== "none" ||
       cornersLookWhite(imageData.data, width, height, threshold) ||
       borderLooksBright(imageData.data, width, height, threshold);
+    const lightOnLight =
+      hasBrightBackground &&
+      centerLooksBright(imageData.data, width, height, threshold);
+    const treatment = resolveTreatment(
+      hasBrightBackground,
+      lightOnLight,
+      catalogTreatment
+    );
 
     if (!hasBrightBackground) {
-      return cacheResult(normalized, normalized, false, false);
+      return cacheResult(normalized, normalized, false, false, "none");
+    }
+
+    if (treatment === "vignette") {
+      return cacheResult(normalized, normalized, true, false, "vignette");
     }
 
     const removed = removeEdgeBackground(
@@ -284,7 +356,7 @@ export async function processProductImage(
     const ratio = removed / (width * height);
 
     if (ratio < MIN_BACKGROUND_RATIO || ratio > MAX_BACKGROUND_RATIO) {
-      return cacheResult(normalized, normalized, true, false);
+      return cacheResult(normalized, normalized, true, false, treatment);
     }
 
     const bounds = getContentBounds(imageData.data, width, height);
@@ -298,8 +370,17 @@ export async function processProductImage(
     }
 
     const dataUrl = canvas.toDataURL("image/png");
-    return cacheResult(normalized, dataUrl, true, true);
+    return cacheResult(normalized, dataUrl, true, true, "none");
   } catch {
+    if (catalogTreatment !== "none") {
+      return cacheResult(
+        normalized,
+        normalized,
+        true,
+        false,
+        catalogTreatment
+      );
+    }
     throw new Error("Canvas tainted");
   }
 }
