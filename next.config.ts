@@ -24,6 +24,11 @@ const nextConfig: NextConfig = {
         destination: "/guides/how-shipping-works-with-agents",
         permanent: true,
       },
+      {
+        source: "/privacy",
+        destination: "/privacy-policy",
+        permanent: true,
+      },
     ];
   },
   images: {

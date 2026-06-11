@@ -39,37 +39,86 @@ export const STATIC_PAGES: Record<string, StaticPage> = {
     path: "/about",
     title: "About LitBuy Finds",
     metaDescription:
-      "LitBuy Finds is a curated discovery catalog for fashion, sneakers, and accessories — verified LitBuy links, QC references, and daily drops.",
+      "What LitBuy Finds is, how we source product listings, how agent links work, and why we built a cleaner way to browse LitBuy finds.",
     badge: "About us",
     h1: "About LitBuy Finds",
     intro:
-      "LitBuy Finds helps shoppers discover products from the LitBuy ecosystem without digging through massive spreadsheets. We organize finds by category, brand, and collection so you can compare options quickly and buy through verified agent links.",
+      "LitBuy Finds is an independent product discovery site for the LitBuy ecosystem. We organize spreadsheet finds into searchable categories, brands, and guides — so you can browse before buying and open the correct agent link when you are ready.",
     sections: [
       {
-        heading: "What we do",
+        heading: "Our mission",
         paragraphs: [
-          "We index products from public LitBuy spreadsheets and turn them into a searchable catalog. Every listing links out to LitBuy for checkout — we do not sell products directly.",
-          "Our goal is simple: make discovery faster. Whether you are looking for trending sneakers, budget streetwear, or a specific brand, you should be able to find it in a few clicks.",
+          "Shopping through agents should not require scrolling a 3,000-row spreadsheet on your phone. We built LitBuy Finds to make discovery faster, clearer, and easier to share.",
+          "We focus on structure: categories, brands, trending collections, QC references where available, and plain-language guides for beginners.",
+        ],
+        links: [{ href: "/guides", label: "Browse all guides" }],
+      },
+      {
+        heading: "What LitBuy Finds is — and is not",
+        paragraphs: [
+          "LitBuy Finds is a discovery catalog. We do not sell products, hold inventory, or process payments. Checkout happens on LitBuy and other agent platforms through outbound links.",
+          "We are not affiliated with or endorsed by LitBuy. We curate and organize public find data to help shoppers navigate the ecosystem.",
         ],
       },
       {
-        heading: "How the catalog works",
+        heading: "How products are sourced",
         paragraphs: [
-          "Products are grouped into categories that match the source spreadsheets — shoes, hoodies and pants, coats, accessories, and more. We also surface editorial collections like Daily Drop, Hidden Gems, and Editor's Picks.",
-          "When QC photos are available in the source data, we link to them so you can review quality before buying.",
+          "Listings come from public LitBuy spreadsheets and catalog imports — product names, prices, images, categories, and agent links. Our dataset syncs regularly as source sheets update.",
+          "We filter broken images, map brands from titles, and build stable URLs for sharing. Not every spreadsheet row appears here; duplicates and stale entries may be removed during import.",
         ],
         links: [
-          { href: "/categories", label: "Browse categories" },
-          { href: "/brands", label: "Browse brands" },
-          { href: "/daily-drop", label: "Daily drop" },
+          { href: "/guides/litbuy-spreadsheet-guide", label: "Spreadsheet guide" },
+          { href: "/recently-added", label: "Recently added" },
+        ],
+      },
+      {
+        heading: "How agent links work",
+        paragraphs: [
+          "Each product page includes an outbound link to LitBuy (or the agent URL from the source row). That link should open the matching listing so you can confirm size, color, and price before paying.",
+          "Agent links may be affiliate links. If you register or buy through them, we may earn a commission at no extra cost to you. This supports the site.",
+        ],
+        links: [
+          { href: "/guides/how-to-use-litbuy-agent-links", label: "Agent links guide" },
+          { href: "/guides/how-to-order-from-litbuy", label: "How to order" },
+        ],
+      },
+      {
+        heading: "The LitBuy Finds Team",
+        paragraphs: [
+          "Content on this site is written and maintained by the LitBuy Finds Team — we curate product discoveries, organize categories and brands, and publish guides that explain agents, QC photos, and ordering.",
+          "We do not claim to be individual fashion experts or agents. Our role is to make the catalog easier to browse and to document the buying workflow honestly.",
+        ],
+        links: [{ href: "/contact", label: "Contact the team" }],
+      },
+      {
+        heading: "Do your own research",
+        paragraphs: [
+          "Prices, batches, and seller quality change. QC references help compare listings, but warehouse photos of your exact item are what matter before you ship internationally.",
+          "Always verify product details on LitBuy, read community feedback, and use your own judgment before ordering. Laws around imports vary by country — that is your responsibility.",
+        ],
+        links: [
+          { href: "/guides/beginner-guide-to-litbuy", label: "Beginner guide" },
+          { href: "/guides/what-are-qc-photos", label: "What are QC photos?" },
         ],
       },
       {
         heading: "Affiliate disclosure",
         paragraphs: [
-          "Some outbound links are affiliate links. If you register or purchase through them, we may earn a commission at no extra cost to you. This supports the site and keeps the catalog free to use.",
+          "Some outbound links are affiliate links. Commissions help maintain LitBuy Finds and keep the catalog free to use.",
         ],
         links: TRUST_LINKS.filter((l) => l.href !== "/about"),
+      },
+    ],
+    faqs: [
+      {
+        question: "Who writes the guides?",
+        answer:
+          "Guides are written by the LitBuy Finds Team and updated when workflows or catalog practices change. We aim for clear, practical explanations — not hype.",
+      },
+      {
+        question: "Can I request a correction?",
+        answer:
+          "Yes. Email hello@litbuyfinds.io with the product or guide URL and what should change. We review listing corrections regularly.",
       },
     ],
     relatedLinks: [...GUIDE_LINKS.slice(0, 4), { href: "/contact", label: "Contact" }],
@@ -79,36 +128,61 @@ export const STATIC_PAGES: Record<string, StaticPage> = {
     path: "/contact",
     title: "Contact LitBuy Finds",
     metaDescription:
-      "Get in touch with LitBuy Finds — questions about the catalog, listings, or partnerships. Email and community links.",
+      "Contact LitBuy Finds by email, Discord, Telegram, or social channels. Listing corrections, guide feedback, and partnership inquiries.",
     badge: "Contact",
     h1: "Contact us",
     intro:
-      "Have a question about a listing, spotted incorrect data, or want to collaborate? Reach out through email or our community channels. We read every message.",
+      "Questions about a listing, a guide, or a partnership idea? Reach out by email or join the community channels below. We read messages regularly and use feedback to improve the catalog.",
     sections: [
       {
-        heading: "Email",
+        heading: "Email support",
         paragraphs: [
-          "For general inquiries, corrections, or partnership ideas, email hello@litbuyfinds.io. Include the product URL if your message is about a specific listing.",
+          "For catalog corrections, guide feedback, privacy questions, or partnerships, email hello@litbuyfinds.io.",
+          "Include the full product or guide URL when reporting a specific issue — that helps us fix it faster.",
         ],
       },
       {
-        heading: "Community",
+        heading: "Discord & Telegram",
         paragraphs: [
-          "For faster help from other buyers, join our Discord or Telegram. Members share QC tips, recent pickups, and agent advice daily.",
+          "For faster help from other buyers, join Discord or Telegram. Members share QC tips, shipping advice, and recent pickups daily.",
+          "These are community spaces — not official LitBuy support — but they are often the quickest place to get a second opinion before you ship a haul.",
         ],
         links: [
-          { href: "https://discord.gg/G3Ryc2JE3Q", label: "Discord" },
-          { href: "https://t.me/RNFinds", label: "Telegram" },
+          { href: "https://discord.gg/G3Ryc2JE3Q", label: "Join Discord" },
+          { href: "https://t.me/RNFinds", label: "Join Telegram @RNFinds" },
         ],
       },
       {
-        heading: "Buying support",
+        heading: "Social",
         paragraphs: [
-          "LitBuy Finds is a discovery site, not a store. For order issues, shipping, or agent account help, contact LitBuy directly or ask in the community channels above.",
+          "Follow along for catalog highlights, browsing tips, and occasional updates on new guides and collections.",
         ],
         links: [
-          { href: "/how-to-buy", label: "How to buy guide" },
-          { href: "/new-user-guide", label: "New user guide" },
+          {
+            href: "https://www.instagram.com/smukasolass?igsh=bmFrMGlubmZpcXVy&utm_source=qr",
+            label: "Instagram",
+          },
+          {
+            href: "https://www.tiktok.com/@smks.reps?_r=1&_t=ZN-974SmdjFxFG",
+            label: "TikTok",
+          },
+        ],
+      },
+      {
+        heading: "Order & agent support",
+        paragraphs: [
+          "LitBuy Finds does not process orders. For payment, warehouse, QC, or shipping issues, contact LitBuy directly or ask in the buyer communities above.",
+        ],
+        links: [
+          { href: "/guides/how-to-order-from-litbuy", label: "How to order guide" },
+          { href: "/guides/beginner-guide-to-litbuy", label: "Beginner guide" },
+        ],
+      },
+      {
+        heading: "What to expect",
+        paragraphs: [
+          "We aim to respond to email within a few business days. Listing corrections are prioritized when you include a URL and a clear description of the issue.",
+          "We cannot guarantee seller quality, shipping times, or customs outcomes — those depend on sellers, agents, and your local regulations.",
         ],
       },
     ],
@@ -122,6 +196,11 @@ export const STATIC_PAGES: Record<string, StaticPage> = {
         question: "Do you sell products?",
         answer:
           "No. We link to LitBuy and other agent platforms. All purchases happen on those sites.",
+      },
+      {
+        question: "Who maintains the guides?",
+        answer:
+          "The LitBuy Finds Team writes and updates guides. If something is outdated, email us with the guide URL.",
       },
     ],
     relatedLinks: TRUST_LINKS.filter((l) => l.href !== "/contact"),

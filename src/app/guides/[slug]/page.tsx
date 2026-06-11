@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ContentPageLayout from "@/components/ContentPageLayout";
 import SchemaScript from "@/components/SchemaScript";
-import { getDatasetSyncedIso } from "@/lib/catalog-meta";
+import { getGuideContentDates } from "@/lib/content-dates";
 import { GUIDE_SLUGS, getGuide } from "@/lib/guides";
 import { buildArticleSchema } from "@/lib/schema";
-import { buildPageMetadata } from "@/lib/seo";
+import { buildArticlePageMetadata } from "@/lib/seo";
 
 type GuidePageProps = {
   params: Promise<{ slug: string }>;
@@ -22,10 +22,14 @@ export async function generateMetadata({
   const guide = getGuide(slug);
   if (!guide) return {};
 
-  return buildPageMetadata({
+  const dates = getGuideContentDates(slug);
+
+  return buildArticlePageMetadata({
     title: guide.title,
     description: guide.metaDescription,
     path: guide.path,
+    publishedTime: dates.publishedIso,
+    modifiedTime: dates.updatedIso,
   });
 }
 
@@ -37,6 +41,8 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
     notFound();
   }
 
+  const dates = getGuideContentDates(slug);
+
   return (
     <>
       <SchemaScript
@@ -44,7 +50,8 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
           title: guide.title,
           description: guide.metaDescription,
           path: guide.path,
-          dateModified: getDatasetSyncedIso(),
+          datePublished: dates.publishedIso,
+          dateModified: dates.updatedIso,
         })}
       />
       <ContentPageLayout
@@ -54,8 +61,14 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
         intro={guide.intro}
         sections={guide.sections}
         faqs={guide.faqs}
-        relatedLinks={guide.relatedLinks}
+        relatedLinks={[
+          ...(guide.relatedLinks ?? []),
+          { href: "/about", label: "About LitBuy Finds" },
+          { href: "/contact", label: "Contact" },
+        ]}
         parentCrumb={{ label: "Guides", href: "/guides" }}
+        contentDates={dates}
+        showAuthorMeta
       />
     </>
   );

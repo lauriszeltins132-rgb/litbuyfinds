@@ -14,5 +14,5 @@ export default async function BrandOgImage({ params }: OgProps) {
   const brand = getBrandBySlug(getAllProducts(), slug);
   const name = brand?.name ?? "Brand";
 
-  return renderOgImage(`${name} Finds`, "Curated on LitBuy Finds");
+  return renderOgImage(`${name} Finds`, "Brand finds · LitBuy Finds");
 }

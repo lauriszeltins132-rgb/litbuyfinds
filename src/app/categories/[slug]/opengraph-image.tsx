@@ -18,5 +18,5 @@ export default async function CategoryOgImage({ params }: OgProps) {
     ? getResolvedCategorySeo(resolved).title
     : "Category Finds";
 
-  return renderOgImage(title, "Browse on LitBuy Finds");
+  return renderOgImage(title, "Category finds · LitBuy Finds");
 }

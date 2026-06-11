@@ -35,8 +35,8 @@ export function renderOgImage(title: string, subtitle: string) {
         <div
           style={{
             fontSize: 28,
-            color: "#c9a227",
-            fontWeight: 500,
+            color: "#4ade80",
+            fontWeight: 600,
             marginTop: 20,
             textAlign: "center",
           }}
@@ -45,12 +45,21 @@ export function renderOgImage(title: string, subtitle: string) {
         </div>
         <div
           style={{
-            fontSize: 22,
-            color: "#8b8b96",
-            marginTop: 32,
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
+            marginTop: 36,
           }}
         >
-          litbuyfinds.io
+          <div
+            style={{
+              width: 10,
+              height: 10,
+              borderRadius: 999,
+              background: "#22c55e",
+            }}
+          />
+          <div style={{ fontSize: 22, color: "#a1a1aa" }}>litbuyfinds.io</div>
         </div>
       </div>
     ),

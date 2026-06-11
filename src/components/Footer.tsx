@@ -8,6 +8,7 @@ import {
 } from "@/lib/constants";
 import RegisterLink from "./RegisterLink";
 import CommunityLinks from "./CommunityLinks";
+import FooterTrustBar from "./FooterTrustBar";
 import TrustStrip from "./TrustStrip";
 import { getBrandsFromProducts } from "@/lib/brands";
 import { getCategories, getAllProducts } from "@/lib/products";
@@ -151,7 +152,9 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col gap-4 border-t border-border/80 pt-8 text-xs leading-relaxed text-muted sm:flex-row sm:items-start sm:justify-between">
+        <FooterTrustBar />
+
+        <div className="mt-8 flex flex-col gap-4 border-t border-border/80 pt-8 text-xs leading-relaxed text-muted sm:flex-row sm:items-start sm:justify-between">
           <p className="max-w-2xl">
             LitBuy Finds is an independent discovery catalog. We do not sell
             products directly. Images and links are sourced from public

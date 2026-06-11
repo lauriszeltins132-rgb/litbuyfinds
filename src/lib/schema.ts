@@ -1,4 +1,10 @@
 import type { BreadcrumbItem } from "@/components/Breadcrumbs";
+import { SITE_NAME } from "./constants";
+import {
+  ORGANIZATION_SCHEMA_ID,
+  WEBSITE_SCHEMA_ID,
+  getContentAuthorSchema,
+} from "./trust";
 import { SITE_URL } from "./site";
 
 export function buildBreadcrumbSchema(
@@ -29,33 +35,40 @@ export function buildArticleSchema({
   title,
   description,
   path,
+  datePublished,
   dateModified,
 }: {
   title: string;
   description: string;
   path: string;
-  dateModified?: string;
+  datePublished: string;
+  dateModified: string;
 }) {
+  const url = `${SITE_URL}${path}`;
+
   return {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: title,
     description,
-    url: `${SITE_URL}${path}`,
-    author: {
-      "@type": "Organization",
-      name: "LitBuy Finds",
-      url: SITE_URL,
+    url,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": url,
     },
+    datePublished,
+    dateModified,
+    author: getContentAuthorSchema(),
     publisher: {
       "@type": "Organization",
-      name: "LitBuy Finds",
+      "@id": ORGANIZATION_SCHEMA_ID,
+      name: SITE_NAME,
       logo: {
         "@type": "ImageObject",
         url: `${SITE_URL}/logo.svg`,
       },
     },
-    ...(dateModified ? { dateModified } : {}),
+    isPartOf: { "@id": WEBSITE_SCHEMA_ID },
   };
 }
 
@@ -94,8 +107,28 @@ export function buildCollectionPageSchema({
     numberOfItems,
     isPartOf: {
       "@type": "WebSite",
-      name: "LitBuy Finds",
+      "@id": WEBSITE_SCHEMA_ID,
+      name: SITE_NAME,
       url: SITE_URL,
     },
+    publisher: { "@id": ORGANIZATION_SCHEMA_ID },
+  };
+}
+
+export function buildAboutPageSchema({
+  description,
+  path,
+}: {
+  description: string;
+  path: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    name: `About ${SITE_NAME}`,
+    description,
+    url: `${SITE_URL}${path}`,
+    publisher: { "@id": ORGANIZATION_SCHEMA_ID },
+    author: getContentAuthorSchema(),
   };
 }

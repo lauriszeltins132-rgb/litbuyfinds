@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Breadcrumbs, { type BreadcrumbItem } from "@/components/Breadcrumbs";
+import ContentAuthorMeta from "@/components/ContentAuthorMeta";
 import SchemaScript from "@/components/SchemaScript";
+import type { ContentDates } from "@/lib/content-dates";
 import { buildBreadcrumbSchema, buildFaqSchema } from "@/lib/schema";
 import type { StaticPageSection } from "@/lib/static-pages";
 
@@ -13,6 +15,8 @@ type ContentPageLayoutProps = {
   faqs?: { question: string; answer: string }[];
   relatedLinks?: { href: string; label: string }[];
   parentCrumb?: { label: string; href: string };
+  contentDates?: ContentDates;
+  showAuthorMeta?: boolean;
 };
 
 export default function ContentPageLayout({
@@ -24,6 +28,8 @@ export default function ContentPageLayout({
   faqs,
   relatedLinks,
   parentCrumb,
+  contentDates,
+  showAuthorMeta = false,
 }: ContentPageLayoutProps) {
   const breadcrumbs: BreadcrumbItem[] = parentCrumb
     ? [
@@ -54,6 +60,10 @@ export default function ContentPageLayout({
             {h1}
           </h1>
           <p className="mt-5 text-base leading-relaxed text-muted">{intro}</p>
+
+          {showAuthorMeta && contentDates ? (
+            <ContentAuthorMeta dates={contentDates} />
+          ) : null}
 
           <div className="mt-10 space-y-10">
             {sections.map((section) => {

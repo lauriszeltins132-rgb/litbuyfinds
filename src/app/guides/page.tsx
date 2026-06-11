@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import GuidesHubGrid from "@/components/guides/GuidesHubGrid";
 import SchemaScript from "@/components/SchemaScript";
@@ -42,6 +43,12 @@ export default function GuidesHubPage() {
           <h1 className="mt-3 text-3xl font-black sm:text-4xl">{GUIDES_HUB.h1}</h1>
           <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted">
             {GUIDES_HUB.intro}
+          </p>
+          <p className="mt-3 text-sm text-muted">
+            Written by the LitBuy Finds Team ·{" "}
+            <Link href="/about" className="font-bold text-accent hover:underline">
+              Our mission
+            </Link>
           </p>
         </div>
       </section>
