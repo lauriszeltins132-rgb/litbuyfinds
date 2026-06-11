@@ -8,6 +8,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const ciMode = process.argv.includes("--ci");
 const products = JSON.parse(
   fs.readFileSync(path.join(__dirname, "../src/data/products.json"), "utf8")
 );
@@ -75,5 +76,16 @@ const jordan = products.filter(
     p.price < MIN_TRUSTED
 );
 printSamples("Sneakers below minimum (spot check)", jordan, 10);
+
+if (ciMode) {
+  const failures = buckets.below_minimum.length + buckets.above_audit_max.length;
+  if (failures > 0) {
+    console.error(
+      `\nPrice audit failed: ${failures} product(s) with untrusted pricing.`
+    );
+    process.exit(1);
+  }
+  console.log("\nPrice audit passed.");
+}
 
 console.log("\nDone.");
