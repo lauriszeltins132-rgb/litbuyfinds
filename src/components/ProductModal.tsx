@@ -68,6 +68,7 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
               <ProductImage
                 src={product.image}
                 alt={product.product_name}
+                productName={product.product_name}
                 variant="card"
                 productHref={getProductHref(product)}
               />

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { trackBrokenImage } from "@/lib/analytics-events";
+import { cutoutLooksDamaged } from "@/lib/cutout-quality";
 import { getProductImagePlan } from "@/lib/processed-images";
 import {
   hasPlausibleImageDimensions,
@@ -14,6 +15,7 @@ type ProductImageVariant = "card" | "featured" | "hero";
 type ProductImageProps = {
   src: string;
   alt: string;
+  productName?: string;
   className?: string;
   priority?: boolean;
   variant?: ProductImageVariant;
@@ -22,9 +24,28 @@ type ProductImageProps = {
 
 type LoadPhase = "primary" | "fallback" | "failed";
 
+const ARTIFACT_SAMPLE = 72;
+
+function detectCutoutArtifacts(img: HTMLImageElement): boolean {
+  try {
+    const canvas = document.createElement("canvas");
+    canvas.width = ARTIFACT_SAMPLE;
+    canvas.height = ARTIFACT_SAMPLE;
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    if (!ctx) return false;
+
+    ctx.drawImage(img, 0, 0, ARTIFACT_SAMPLE, ARTIFACT_SAMPLE);
+    const { data, width, height } = ctx.getImageData(0, 0, ARTIFACT_SAMPLE, ARTIFACT_SAMPLE);
+    return cutoutLooksDamaged(data, width, height);
+  } catch {
+    return false;
+  }
+}
+
 export default function ProductImage({
   src,
   alt,
+  productName,
   className = "",
   priority = false,
   variant = "card",
@@ -33,8 +54,8 @@ export default function ProductImage({
   const validation = useMemo(() => validateImageUrl(src), [src]);
   const plan = useMemo(() => {
     if (!validation.valid) return null;
-    return getProductImagePlan(validation.normalized);
-  }, [validation.normalized, validation.valid]);
+    return getProductImagePlan(validation.normalized, productName);
+  }, [validation.normalized, validation.valid, productName]);
 
   const [phase, setPhase] = useState<LoadPhase>(
     validation.valid && plan ? "primary" : "failed"
@@ -55,25 +76,29 @@ export default function ProductImage({
     return "";
   }, [phase, plan]);
 
-  const markFailed = useCallback(() => {
+  const fallbackToOriginal = useCallback(() => {
     if (!plan) {
       setPhase("failed");
+      setVisible(false);
       return;
     }
-
     if (phase === "primary" && plan.isCutout && plan.originalSrc !== plan.src) {
       setPhase("fallback");
       setVisible(false);
       return;
     }
-
     setPhase("failed");
     setVisible(false);
-    if (!loggedRef.current) {
+  }, [phase, plan]);
+
+  const markFailed = useCallback(() => {
+    const wasPrimary = phase === "primary";
+    fallbackToOriginal();
+    if (!wasPrimary && !loggedRef.current) {
       loggedRef.current = true;
       trackBrokenImage(validation.normalized || src, variant);
     }
-  }, [phase, plan, src, validation.normalized, variant]);
+  }, [fallbackToOriginal, phase, src, validation.normalized, variant]);
 
   const handleLoad = useCallback(
     (event: React.SyntheticEvent<HTMLImageElement>) => {
@@ -82,9 +107,16 @@ export default function ProductImage({
         markFailed();
         return;
       }
+
+      const showingCutout = phase === "primary" && plan?.isCutout;
+      if (showingCutout && detectCutoutArtifacts(img)) {
+        fallbackToOriginal();
+        return;
+      }
+
       setVisible(true);
     },
-    [markFailed]
+    [fallbackToOriginal, markFailed, phase, plan?.isCutout]
   );
 
   if (phase === "failed" || !validation.valid || !plan || !activeSrc) {
@@ -98,7 +130,7 @@ export default function ProductImage({
   }
 
   const isCutout = phase === "primary" && plan.isCutout;
-  const needsMatte = !isCutout && (plan.needsMatte || phase === "fallback");
+  const needsMatte = !isCutout;
 
   return (
     <div

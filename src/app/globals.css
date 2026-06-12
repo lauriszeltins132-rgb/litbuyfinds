@@ -245,12 +245,27 @@ body::before {
 }
 
 .product-float-asset--raw {
-  border-radius: 0.65rem;
-  background: #121218;
+  border-radius: 0.75rem;
+  background: #101014;
+  padding: 0.2rem;
   box-shadow:
-    0 8px 28px rgba(0, 0, 0, 0.45),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
-  filter: contrast(1.04) saturate(1.04) drop-shadow(0 10px 24px rgba(0, 0, 0, 0.55));
+    0 10px 32px rgba(0, 0, 0, 0.5),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  filter: contrast(1.03) saturate(1.03) drop-shadow(0 12px 28px rgba(0, 0, 0, 0.55));
+}
+
+.catalog-product-grid {
+  scroll-margin-top: 6rem;
+}
+
+.catalog-pagination {
+  padding-bottom: calc(0.5rem + env(safe-area-inset-bottom, 0px));
+}
+
+@media (min-width: 640px) {
+  .catalog-pagination {
+    padding-bottom: 0;
+  }
 }
 
 .product-float-asset--cutout {

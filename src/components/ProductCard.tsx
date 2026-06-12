@@ -76,6 +76,7 @@ export default function ProductCard({
         <ProductImage
           src={product.image}
           alt={product.product_name}
+          productName={product.product_name}
           variant="card"
           productHref={productHref}
         />

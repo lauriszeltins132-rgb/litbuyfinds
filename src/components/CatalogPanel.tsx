@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { BrandInfo } from "@/lib/brands";
 import type { CategoryInfo, Product } from "@/lib/types";
@@ -86,6 +86,7 @@ export default function CatalogPanel({
   const maxPrice = searchParams.get("max") ?? "";
   const sort = searchParams.get("sort") ?? "featured";
   const page = Math.max(1, parseInt(searchParams.get("page") ?? "1", 10) || 1);
+  const prevPageRef = useRef(page);
 
   const [query, setQuery] = useState(search);
   const [minInput, setMinInput] = useState(minPrice);
@@ -110,6 +111,18 @@ export default function CatalogPanel({
     (currentPage - 1) * PAGE_SIZE,
     currentPage * PAGE_SIZE
   );
+
+  useEffect(() => {
+    if (prevPageRef.current === currentPage) return;
+    prevPageRef.current = currentPage;
+
+    const grid = document.getElementById("catalog-product-grid");
+    if (!grid) return;
+
+    requestAnimationFrame(() => {
+      grid.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }, [currentPage]);
 
   function handleSearch(event: FormEvent) {
     event.preventDefault();
@@ -235,7 +248,7 @@ export default function CatalogPanel({
           </p>
         </div>
 
-        <div className="mt-6">
+        <div id="catalog-product-grid" className="catalog-product-grid mt-6 scroll-mt-24">
           <ProductGrid products={paginated} />
         </div>
 

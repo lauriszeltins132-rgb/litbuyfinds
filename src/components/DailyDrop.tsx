@@ -47,6 +47,7 @@ export default function DailyDrop() {
               <ProductImage
                 src={product.image}
                 alt={product.product_name}
+                productName={product.product_name}
                 priority
                 variant="hero"
               />

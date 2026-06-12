@@ -57,6 +57,7 @@ export default function ProductDetailView({
           <ProductImage
             src={product.image}
             alt={product.product_name}
+            productName={product.product_name}
             priority
             variant="featured"
             productHref={getProductHref(product)}

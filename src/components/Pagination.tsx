@@ -35,12 +35,16 @@ export default function Pagination({
   return (
     <nav
       aria-label="Pagination"
-      className="mt-8 flex items-center justify-center gap-3"
+      className="catalog-pagination mt-8 flex items-center justify-center gap-3"
     >
       {prevDisabled ? (
         <span className="control-btn pointer-events-none opacity-40">Previous</span>
       ) : (
-        <Link href={buildHref(basePath, searchParams, currentPage - 1)} className="control-btn">
+        <Link
+          href={buildHref(basePath, searchParams, currentPage - 1)}
+          scroll={false}
+          className="control-btn"
+        >
           Previous
         </Link>
       )}
@@ -53,7 +57,11 @@ export default function Pagination({
       {nextDisabled ? (
         <span className="control-btn pointer-events-none opacity-40">Next</span>
       ) : (
-        <Link href={buildHref(basePath, searchParams, currentPage + 1)} className="control-btn">
+        <Link
+          href={buildHref(basePath, searchParams, currentPage + 1)}
+          scroll={false}
+          className="control-btn"
+        >
           Next
         </Link>
       )}

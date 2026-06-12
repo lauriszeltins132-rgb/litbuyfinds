@@ -1,4 +1,5 @@
 import mapData from "@/data/processed-image-map.json";
+import { shouldSkipCutout } from "./cutout-quality";
 
 type ProcessedImageMap = {
   urls: Record<string, string>;
@@ -7,17 +8,30 @@ type ProcessedImageMap = {
 const catalog = mapData as ProcessedImageMap;
 
 export type ProductImagePlan = {
-  /** Primary src to load first */
   src: string;
-  /** Original catalog URL — used when cutout fails */
   originalSrc: string;
   isCutout: boolean;
-  /** Non-cutout images get a dark matte stage to hide white backgrounds */
   needsMatte: boolean;
 };
 
-/** Resolve display plan: pre-built cutout PNG when available, else original with matte. */
-export function getProductImagePlan(sourceUrl: string): ProductImagePlan {
+function framedOriginal(sourceUrl: string): ProductImagePlan {
+  return {
+    src: sourceUrl,
+    originalSrc: sourceUrl,
+    isCutout: false,
+    needsMatte: true,
+  };
+}
+
+/** Pre-built cutout when quality-safe; otherwise original in a dark framed stage. */
+export function getProductImagePlan(
+  sourceUrl: string,
+  productName?: string
+): ProductImagePlan {
+  if (shouldSkipCutout(sourceUrl, productName)) {
+    return framedOriginal(sourceUrl);
+  }
+
   const cutout = catalog.urls[sourceUrl];
   if (cutout) {
     return {
@@ -28,10 +42,5 @@ export function getProductImagePlan(sourceUrl: string): ProductImagePlan {
     };
   }
 
-  return {
-    src: sourceUrl,
-    originalSrc: sourceUrl,
-    isCutout: false,
-    needsMatte: true,
-  };
+  return framedOriginal(sourceUrl);
 }
