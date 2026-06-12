@@ -326,14 +326,14 @@ export const STATIC_PAGES: Record<string, StaticPage> = {
       "Found something on LitBuy Finds? Here is the usual flow from discovery to delivery. Exact steps can vary by seller and shipping line, but this covers what most new buyers need.",
     sections: [
       {
-        heading: "1. Register on LitBuy",
+        heading: "1. Claim your 30% shipping coupon",
         paragraphs: [
           "Create a LitBuy account using a referral link if you want shipping discounts for new users. Registration is free and takes a few minutes.",
         ],
         links: [
           {
             href: "https://litbuy.com/register?inviteCode=SMKS",
-            label: "Register on LitBuy",
+            label: "Claim 30% Coupon",
           },
         ],
       },
@@ -549,7 +549,7 @@ export const STATIC_PAGES: Record<string, StaticPage> = {
         links: [
           {
             href: "https://litbuy.com/register?inviteCode=SMKS",
-            label: "Register on LitBuy",
+            label: "Claim 30% Coupon",
           },
           { href: "/new-user-guide", label: "New user guide" },
         ],

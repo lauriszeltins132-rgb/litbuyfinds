@@ -22,7 +22,7 @@ const COPY: Record<
   ready: {
     eyebrow: "Shipping discount",
     title: "Claim your 30% coupon",
-    body: "Register on LitBuy to save on shipping and track your haul.",
+    body: "Claim your shipping coupon and track your haul on LitBuy.",
   },
   compact: {
     eyebrow: "30% off shipping",
