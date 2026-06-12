@@ -1,16 +1,10 @@
 import mapData from "@/data/processed-image-map.json";
-import skipData from "@/data/skip-cutout-urls.json";
 
 type ProcessedImageMap = {
   urls: Record<string, string>;
 };
 
-type SkipCutoutManifest = {
-  urls: string[];
-};
-
 const catalog = mapData as ProcessedImageMap;
-const skipSet = new Set((skipData as SkipCutoutManifest).urls ?? []);
 
 export type ProductImagePlan = {
   src: string;
@@ -18,22 +12,20 @@ export type ProductImagePlan = {
   isProcessed: boolean;
 };
 
-/** White-bg-removed catalog photo when available; else original. */
+/** Static cutout when built; on-demand API processing for the rest. */
 export function getProductImagePlan(sourceUrl: string): ProductImagePlan {
-  if (!skipSet.has(sourceUrl)) {
-    const processed = catalog.urls[sourceUrl];
-    if (processed) {
-      return {
-        src: processed,
-        originalSrc: sourceUrl,
-        isProcessed: true,
-      };
-    }
+  const processed = catalog.urls[sourceUrl];
+  if (processed) {
+    return {
+      src: processed,
+      originalSrc: sourceUrl,
+      isProcessed: true,
+    };
   }
 
   return {
-    src: sourceUrl,
+    src: `/api/processed-image?url=${encodeURIComponent(sourceUrl)}`,
     originalSrc: sourceUrl,
-    isProcessed: false,
+    isProcessed: true,
   };
 }

@@ -25,11 +25,18 @@ function flattenOntoMatte(data, width, height) {
   const out = Buffer.alloc(width * height * 4);
   for (let i = 0; i < width * height; i++) {
     const si = i * 4;
-    const a = data[si + 3] / 255;
-    out[si] = Math.round(data[si] * a + MATTE.r * (1 - a));
-    out[si + 1] = Math.round(data[si + 1] * a + MATTE.g * (1 - a));
-    out[si + 2] = Math.round(data[si + 2] * a + MATTE.b * (1 - a));
-    out[si + 3] = 255;
+    const a = data[si + 3];
+    if (a >= 80) {
+      out[si] = data[si];
+      out[si + 1] = data[si + 1];
+      out[si + 2] = data[si + 2];
+      out[si + 3] = 255;
+    } else {
+      out[si] = MATTE.r;
+      out[si + 1] = MATTE.g;
+      out[si + 2] = MATTE.b;
+      out[si + 3] = 255;
+    }
   }
   return out;
 }

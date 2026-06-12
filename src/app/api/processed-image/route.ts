@@ -31,10 +31,6 @@ export async function GET(request: NextRequest) {
     const input = Buffer.from(await upstream.arrayBuffer());
     const cutout = await removeWhiteBackgroundFromBuffer(input);
 
-    if (!cutout) {
-      return NextResponse.redirect(normalized, 302);
-    }
-
     return new NextResponse(new Uint8Array(cutout), {
       status: 200,
       headers: {
@@ -45,6 +41,6 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch {
-    return NextResponse.redirect(normalized, 302);
+    return NextResponse.json({ error: "Image processing failed" }, { status: 502 });
   }
 }

@@ -16,7 +16,8 @@
     "audit:cutouts": "node scripts/audit-cutout-quality.mjs",
     "generate:bright-bg": "node scripts/generate-bright-bg-manifest.mjs",
     "process:images": "node scripts/generate-bright-bg-manifest.mjs && node scripts/process-catalog-images.mjs",
-    "flatten:images": "node scripts/flatten-processed-images.mjs"
+    "flatten:images": "node scripts/flatten-processed-images.mjs",
+    "process:remaining": "node scripts/process-remaining-images.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

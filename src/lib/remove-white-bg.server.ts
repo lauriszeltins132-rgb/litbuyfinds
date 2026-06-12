@@ -1,72 +1,65 @@
 const MAX_DIMENSION = 900;
-const THRESHOLD = 242;
-const MIN_REMOVED = 0.02;
-const MAX_REMOVED = 0.94;
-const TRIM_PAD = 0.03;
+const MATTE = { r: 20, g: 20, b: 24 };
 
-function isBackgroundPixel(r: number, g: number, b: number): boolean {
+function isBgPixel(r: number, g: number, b: number, threshold: number): boolean {
   const min = Math.min(r, g, b);
   const max = Math.max(r, g, b);
-  return min >= THRESHOLD - 22 && max - min <= 44;
+  return min >= threshold - 28 && max - min <= 52;
 }
 
-function borderLooksBright(data: Uint8Array, width: number, height: number): boolean {
-  let bright = 0;
-  let total = 0;
-  const stepX = Math.max(1, Math.floor(width / 20));
-  const stepY = Math.max(1, Math.floor(height / 20));
-
-  for (let x = 0; x < width; x += stepX) {
-    for (const y of [0, height - 1]) {
-      const i = (y * width + x) * 4;
-      total++;
-      if (isBackgroundPixel(data[i], data[i + 1], data[i + 2])) bright++;
+function flattenOntoMatte(data: Uint8Array, width: number, height: number): Buffer {
+  const out = Buffer.alloc(width * height * 4);
+  for (let i = 0; i < width * height; i++) {
+    const si = i * 4;
+    const a = data[si + 3];
+    if (a >= 80) {
+      out[si] = data[si];
+      out[si + 1] = data[si + 1];
+      out[si + 2] = data[si + 2];
+      out[si + 3] = 255;
+    } else {
+      out[si] = MATTE.r;
+      out[si + 1] = MATTE.g;
+      out[si + 2] = MATTE.b;
+      out[si + 3] = 255;
     }
   }
-  for (let y = 0; y < height; y += stepY) {
-    for (const x of [0, width - 1]) {
-      const i = (y * width + x) * 4;
-      total++;
-      if (isBackgroundPixel(data[i], data[i + 1], data[i + 2])) bright++;
-    }
-  }
-
-  return total > 0 && bright / total >= 0.22;
+  return out;
 }
 
-function removeEdgeBackground(
+function removeEdgeBg(
   data: Uint8Array,
   width: number,
-  height: number
+  height: number,
+  threshold: number
 ): number {
   const total = width * height;
   const visited = new Uint8Array(total);
   const stack: number[] = [];
 
-  const trySeed = (x: number, y: number) => {
+  const seed = (x: number, y: number) => {
     const idx = y * width + x;
     if (visited[idx]) return;
     const i = idx * 4;
-    if (isBackgroundPixel(data[i], data[i + 1], data[i + 2])) {
+    if (isBgPixel(data[i], data[i + 1], data[i + 2], threshold)) {
       visited[idx] = 1;
       stack.push(idx);
     }
   };
 
   for (let x = 0; x < width; x++) {
-    trySeed(x, 0);
-    trySeed(x, height - 1);
+    seed(x, 0);
+    seed(x, height - 1);
   }
   for (let y = 0; y < height; y++) {
-    trySeed(0, y);
-    trySeed(width - 1, y);
+    seed(0, y);
+    seed(width - 1, y);
   }
 
-  while (stack.length > 0) {
+  while (stack.length) {
     const idx = stack.pop()!;
     const x = idx % width;
     const y = (idx / width) | 0;
-
     for (const [nx, ny] of [
       [x - 1, y],
       [x + 1, y],
@@ -77,7 +70,7 @@ function removeEdgeBackground(
       const nidx = ny * width + nx;
       if (visited[nidx]) continue;
       const i = nidx * 4;
-      if (isBackgroundPixel(data[i], data[i + 1], data[i + 2])) {
+      if (isBgPixel(data[i], data[i + 1], data[i + 2], threshold)) {
         visited[nidx] = 1;
         stack.push(nidx);
       }
@@ -90,52 +83,78 @@ function removeEdgeBackground(
     removed++;
     data[idx * 4 + 3] = 0;
   }
-
   return removed;
 }
 
-function getContentBounds(data: Uint8Array, width: number, height: number) {
-  let minX = width;
-  let minY = height;
-  let maxX = 0;
-  let maxY = 0;
+function contentRatio(data: Uint8Array, width: number, height: number): number {
+  let opaque = 0;
+  for (let i = 0; i < width * height; i++) {
+    if (data[i * 4 + 3] > 40) opaque++;
+  }
+  return opaque / (width * height);
+}
 
+function getBounds(data: Uint8Array, width: number, height: number) {
+  let minX = width,
+    minY = height,
+    maxX = 0,
+    maxY = 0;
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
-      const alpha = data[(y * width + x) * 4 + 3];
-      if (alpha < 12) continue;
+      if (data[(y * width + x) * 4 + 3] < 40) continue;
       minX = Math.min(minX, x);
       minY = Math.min(minY, y);
       maxX = Math.max(maxX, x);
       maxY = Math.max(maxY, y);
     }
   }
-
-  if (maxX <= minX || maxY <= minY) return null;
-
-  const padX = Math.round((maxX - minX) * TRIM_PAD);
-  const padY = Math.round((maxY - minY) * TRIM_PAD);
-
+  if (maxX <= minX) return null;
+  const pad = Math.round(Math.max(maxX - minX, maxY - minY) * 0.03);
   return {
-    left: Math.max(0, minX - padX),
-    top: Math.max(0, minY - padY),
-    width: Math.min(width, maxX - minX + 1 + padX * 2),
-    height: Math.min(height, maxY - minY + 1 + padY * 2),
+    left: Math.max(0, minX - pad),
+    top: Math.max(0, minY - pad),
+    width: Math.min(width, maxX - minX + 1 + pad * 2),
+    height: Math.min(height, maxY - minY + 1 + pad * 2),
   };
 }
 
-/** Remove edge-connected white background. Returns PNG buffer or null if skipped. */
+async function toFlatPng(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  sharp: any,
+  pixels: Uint8Array,
+  width: number,
+  height: number
+): Promise<Buffer> {
+  const bounds = getBounds(pixels, width, height);
+  let pipeline = sharp(Buffer.from(pixels), {
+    raw: { width, height, channels: 4 },
+  });
+  if (
+    bounds &&
+    bounds.width > 2 &&
+    bounds.height > 2 &&
+    bounds.left + bounds.width <= width &&
+    bounds.top + bounds.height <= height
+  ) {
+    pipeline = pipeline.extract(bounds);
+  }
+  const flat = await pipeline.ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  const out = flattenOntoMatte(flat.data, flat.info.width, flat.info.height);
+  return sharp(out, {
+    raw: { width: flat.info.width, height: flat.info.height, channels: 4 },
+  })
+    .png({ compressionLevel: 9 })
+    .toBuffer();
+}
+
+/** Remove white bg, flatten onto opaque matte. Always returns an opaque PNG. */
 export async function removeWhiteBackgroundFromBuffer(
   input: Buffer
-): Promise<Buffer | null> {
+): Promise<Buffer> {
   const sharp = (await import("sharp")).default;
-  const base = sharp(input).rotate().resize(MAX_DIMENSION, MAX_DIMENSION, {
-    fit: "inside",
-    withoutEnlargement: true,
-  });
-
-  const { data, info } = await base
-    .clone()
+  const { data, info } = await sharp(input)
+    .rotate()
+    .resize(MAX_DIMENSION, MAX_DIMENSION, { fit: "inside", withoutEnlargement: true })
     .ensureAlpha()
     .raw()
     .toBuffer({ resolveWithObject: true });
@@ -143,31 +162,24 @@ export async function removeWhiteBackgroundFromBuffer(
   const { width, height } = info;
   const pixels = new Uint8Array(data.buffer, data.byteOffset, data.byteLength);
 
-  if (!borderLooksBright(pixels, width, height)) {
-    return null;
+  const attempts = [242, 228, 215];
+  for (const threshold of attempts) {
+    const copy = new Uint8Array(pixels);
+    const removed = removeEdgeBg(copy, width, height, threshold);
+    const ratio = removed / (width * height);
+    if (ratio < 0.005 || ratio > 0.97) continue;
+    if (contentRatio(copy, width, height) < 0.04) continue;
+    return toFlatPng(sharp, copy, width, height);
   }
 
-  const removed = removeEdgeBackground(pixels, width, height);
-  const ratio = removed / (width * height);
-
-  if (ratio < MIN_REMOVED || ratio > MAX_REMOVED) {
-    return null;
-  }
-
-  const bounds = getContentBounds(pixels, width, height);
-  let pipeline = sharp(Buffer.from(pixels), {
-    raw: { width, height, channels: 4 },
-  });
-
-  if (
-    bounds &&
-    bounds.width > 1 &&
-    bounds.height > 1 &&
-    bounds.left + bounds.width <= width &&
-    bounds.top + bounds.height <= height
-  ) {
-    pipeline = pipeline.extract(bounds);
-  }
-
-  return pipeline.png({ compressionLevel: 9 }).toBuffer();
+  return sharp(input)
+    .rotate()
+    .resize(MAX_DIMENSION, MAX_DIMENSION, {
+      fit: "inside",
+      withoutEnlargement: true,
+      background: MATTE,
+    })
+    .flatten({ background: MATTE })
+    .png({ compressionLevel: 9 })
+    .toBuffer();
 }
