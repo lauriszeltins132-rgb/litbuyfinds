@@ -16,7 +16,7 @@ function flattenPixels(data, width, height) {
   for (let i = 0; i < width * height; i++) {
     const si = i * 4;
     const a = data[si + 3];
-    if (a >= 80) {
+    if (a >= 24) {
       out[si] = data[si];
       out[si + 1] = data[si + 1];
       out[si + 2] = data[si + 2];

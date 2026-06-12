@@ -25,8 +25,8 @@ function flattenOntoMatte(data, width, height) {
   const out = Buffer.alloc(width * height * 4);
   for (let i = 0; i < width * height; i++) {
     const si = i * 4;
-    const a = data[si + 3] / 255;
-    if (a >= 0.32) {
+    const a = data[si + 3];
+    if (a >= 24) {
       out[si] = data[si];
       out[si + 1] = data[si + 1];
       out[si + 2] = data[si + 2];
@@ -161,6 +161,64 @@ function removeEdgeBg(data, width, height, threshold) {
   return removed;
 }
 
+function replaceEdgeBgWithMatte(data, width, height, threshold) {
+  const total = width * height;
+  const visited = new Uint8Array(total);
+  const stack = [];
+
+  const seed = (x, y) => {
+    const idx = y * width + x;
+    if (visited[idx]) return;
+    const i = idx * 4;
+    if (isBgPixel(data[i], data[i + 1], data[i + 2], threshold)) {
+      visited[idx] = 1;
+      stack.push(idx);
+    }
+  };
+
+  for (let x = 0; x < width; x++) {
+    seed(x, 0);
+    seed(x, height - 1);
+  }
+  for (let y = 0; y < height; y++) {
+    seed(0, y);
+    seed(width - 1, y);
+  }
+
+  while (stack.length) {
+    const idx = stack.pop();
+    const x = idx % width;
+    const y = (idx / width) | 0;
+    for (const [nx, ny] of [
+      [x - 1, y],
+      [x + 1, y],
+      [x, y - 1],
+      [x, y + 1],
+    ]) {
+      if (nx < 0 || ny < 0 || nx >= width || ny >= height) continue;
+      const nidx = ny * width + nx;
+      if (visited[nidx]) continue;
+      const i = nidx * 4;
+      if (isBgPixel(data[i], data[i + 1], data[i + 2], threshold)) {
+        visited[nidx] = 1;
+        stack.push(nidx);
+      }
+    }
+  }
+
+  let replaced = 0;
+  for (let idx = 0; idx < total; idx++) {
+    if (!visited[idx]) continue;
+    replaced++;
+    const i = idx * 4;
+    data[i] = MATTE.r;
+    data[i + 1] = MATTE.g;
+    data[i + 2] = MATTE.b;
+    data[i + 3] = 255;
+  }
+  return replaced;
+}
+
 function chromaFromCorners(data, width, height) {
   const bg = cornerAvg(data, width, height);
   const tol = 42;
@@ -244,11 +302,15 @@ function getBounds(data, width, height) {
   }
   if (maxX <= minX) return null;
   const pad = Math.round(Math.max(maxX - minX, maxY - minY) * 0.03);
+  const left = Math.max(0, minX - pad);
+  const top = Math.max(0, minY - pad);
+  const cropW = maxX - minX + 1 + pad * 2;
+  const cropH = maxY - minY + 1 + pad * 2;
   return {
-    left: Math.max(0, minX - pad),
-    top: Math.max(0, minY - pad),
-    width: Math.min(width, maxX - minX + 1 + pad * 2),
-    height: Math.min(height, maxY - minY + 1 + pad * 2),
+    left,
+    top,
+    width: Math.min(width - left, cropW),
+    height: Math.min(height - top, cropH),
   };
 }
 
@@ -257,7 +319,13 @@ async function writeProcessed(sharp, pixels, width, height, outFile) {
   let pipeline = sharp(Buffer.from(pixels), {
     raw: { width, height, channels: 4 },
   });
-  if (bounds && bounds.width > 2 && bounds.height > 2) {
+  if (
+    bounds &&
+    bounds.width > 2 &&
+    bounds.height > 2 &&
+    bounds.left + bounds.width <= width &&
+    bounds.top + bounds.height <= height
+  ) {
     pipeline = pipeline.extract(bounds);
   }
   const flat = await pipeline.ensureAlpha().raw().toBuffer({ resolveWithObject: true });
@@ -275,7 +343,7 @@ async function processOne(url, sharp) {
   if (fs.existsSync(outFile)) return null;
 
   const res = await fetch(url, {
-    headers: { "User-Agent": "LitBuyFinds-ImageProcessor/2.0" },
+    headers: { "User-Agent": "LitBuyFinds-ImageProcessor/3.0" },
     signal: AbortSignal.timeout(20_000),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -291,11 +359,7 @@ async function processOne(url, sharp) {
   const { width, height } = info;
   const pixels = new Uint8ClampedArray(data);
 
-  if (!hasRemovableBackground(pixels, width, height)) {
-    return null;
-  }
-
-  const attempts = [
+  const cutoutAttempts = [
     () => {
       const copy = new Uint8ClampedArray(pixels);
       const removed = removeEdgeBg(copy, width, height, 242);
@@ -328,7 +392,7 @@ async function processOne(url, sharp) {
     },
   ];
 
-  for (const attempt of attempts) {
+  for (const attempt of cutoutAttempts) {
     const result = attempt();
     if (result) {
       await writeProcessed(sharp, result, width, height, outFile);
@@ -336,7 +400,18 @@ async function processOne(url, sharp) {
     }
   }
 
-  return null;
+  const matteAttempts = [248, 242, 235, 228];
+  for (const threshold of matteAttempts) {
+    const copy = new Uint8ClampedArray(pixels);
+    const replaced = replaceEdgeBgWithMatte(copy, width, height, threshold);
+    const ratio = replaced / (width * height);
+    if (ratio < 0.008 || ratio > 0.98) continue;
+    await writeProcessed(sharp, copy, width, height, outFile);
+    return `/processed/${id}.png`;
+  }
+
+  await writeProcessed(sharp, new Uint8ClampedArray(pixels), width, height, outFile);
+  return `/processed/${id}.png`;
 }
 
 async function mapPool(items, limit, fn) {

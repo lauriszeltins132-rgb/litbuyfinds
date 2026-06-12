@@ -12,7 +12,7 @@ function flattenOntoMatte(data: Uint8Array, width: number, height: number): Buff
   for (let i = 0; i < width * height; i++) {
     const si = i * 4;
     const a = data[si + 3];
-    if (a >= 80) {
+    if (a >= 24) {
       out[si] = data[si];
       out[si + 1] = data[si + 1];
       out[si + 2] = data[si + 2];
@@ -84,6 +84,70 @@ function removeEdgeBg(
     data[idx * 4 + 3] = 0;
   }
   return removed;
+}
+
+/** Paint edge-connected background pixels onto matte (fully opaque, no transparency). */
+function replaceEdgeBgWithMatte(
+  data: Uint8Array,
+  width: number,
+  height: number,
+  threshold: number
+): number {
+  const total = width * height;
+  const visited = new Uint8Array(total);
+  const stack: number[] = [];
+
+  const seed = (x: number, y: number) => {
+    const idx = y * width + x;
+    if (visited[idx]) return;
+    const i = idx * 4;
+    if (isBgPixel(data[i], data[i + 1], data[i + 2], threshold)) {
+      visited[idx] = 1;
+      stack.push(idx);
+    }
+  };
+
+  for (let x = 0; x < width; x++) {
+    seed(x, 0);
+    seed(x, height - 1);
+  }
+  for (let y = 0; y < height; y++) {
+    seed(0, y);
+    seed(width - 1, y);
+  }
+
+  while (stack.length) {
+    const idx = stack.pop()!;
+    const x = idx % width;
+    const y = (idx / width) | 0;
+    for (const [nx, ny] of [
+      [x - 1, y],
+      [x + 1, y],
+      [x, y - 1],
+      [x, y + 1],
+    ]) {
+      if (nx < 0 || ny < 0 || nx >= width || ny >= height) continue;
+      const nidx = ny * width + nx;
+      if (visited[nidx]) continue;
+      const i = nidx * 4;
+      if (isBgPixel(data[i], data[i + 1], data[i + 2], threshold)) {
+        visited[nidx] = 1;
+        stack.push(nidx);
+      }
+    }
+  }
+
+  let replaced = 0;
+  for (let idx = 0; idx < total; idx++) {
+    if (!visited[idx]) continue;
+    replaced++;
+    const i = idx * 4;
+    data[i] = MATTE.r;
+    data[i + 1] = MATTE.g;
+    data[i + 2] = MATTE.b;
+    data[i + 3] = 255;
+  }
+  return replaced;
 }
 
 function contentRatio(data: Uint8Array, width: number, height: number): number {
@@ -162,8 +226,8 @@ export async function removeWhiteBackgroundFromBuffer(
   const { width, height } = info;
   const pixels = new Uint8Array(data.buffer, data.byteOffset, data.byteLength);
 
-  const attempts = [242, 228, 215];
-  for (const threshold of attempts) {
+  const cutoutAttempts = [242, 228, 215];
+  for (const threshold of cutoutAttempts) {
     const copy = new Uint8Array(pixels);
     const removed = removeEdgeBg(copy, width, height, threshold);
     const ratio = removed / (width * height);
@@ -172,14 +236,15 @@ export async function removeWhiteBackgroundFromBuffer(
     return toFlatPng(sharp, copy, width, height);
   }
 
-  return sharp(input)
-    .rotate()
-    .resize(MAX_DIMENSION, MAX_DIMENSION, {
-      fit: "inside",
-      withoutEnlargement: true,
-      background: MATTE,
-    })
-    .flatten({ background: MATTE })
-    .png({ compressionLevel: 9 })
-    .toBuffer();
+  const matteAttempts = [248, 242, 235, 228];
+  for (const threshold of matteAttempts) {
+    const copy = new Uint8Array(pixels);
+    const replaced = replaceEdgeBgWithMatte(copy, width, height, threshold);
+    const ratio = replaced / (width * height);
+    if (ratio < 0.008 || ratio > 0.98) continue;
+    return toFlatPng(sharp, copy, width, height);
+  }
+
+  const opaque = new Uint8Array(pixels);
+  return toFlatPng(sharp, opaque, width, height);
 }
