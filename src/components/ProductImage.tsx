@@ -35,14 +35,24 @@ export default function ProductImage({
     return getProductImagePlan(validation.normalized);
   }, [validation.normalized, validation.valid]);
 
+  const [srcIndex, setSrcIndex] = useState(0);
   const [failed, setFailed] = useState(!validation.valid || !plan);
   const [visible, setVisible] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
   const loggedRef = useRef(false);
 
-  const displaySrc = plan?.src ?? "";
+  const candidates = useMemo(() => {
+    if (!plan) return [];
+    if (plan.isProcessed && plan.src !== plan.originalSrc) {
+      return [plan.src, plan.originalSrc];
+    }
+    return [plan.src];
+  }, [plan]);
+
+  const displaySrc = candidates[srcIndex] ?? "";
 
   useEffect(() => {
+    setSrcIndex(0);
     setFailed(!validation.valid || !plan);
     setVisible(false);
     loggedRef.current = false;
@@ -51,6 +61,11 @@ export default function ProductImage({
   const confirmLoaded = useCallback(
     (img: HTMLImageElement) => {
       if (!hasPlausibleImageDimensions(img.naturalWidth, img.naturalHeight)) {
+        if (srcIndex + 1 < candidates.length) {
+          setSrcIndex((i) => i + 1);
+          setVisible(false);
+          return;
+        }
         setFailed(true);
         setVisible(false);
         if (!loggedRef.current) {
@@ -61,7 +76,7 @@ export default function ProductImage({
       }
       setVisible(true);
     },
-    [src, validation.normalized, variant]
+    [candidates.length, src, srcIndex, validation.normalized, variant]
   );
 
   const handleLoad = useCallback(
@@ -72,15 +87,19 @@ export default function ProductImage({
   );
 
   const handleError = useCallback(() => {
+    if (srcIndex + 1 < candidates.length) {
+      setSrcIndex((i) => i + 1);
+      setVisible(false);
+      return;
+    }
     setFailed(true);
     setVisible(false);
     if (!loggedRef.current) {
       loggedRef.current = true;
       trackBrokenImage(validation.normalized || src, variant);
     }
-  }, [src, validation.normalized, variant]);
+  }, [candidates.length, src, srcIndex, validation.normalized, variant]);
 
-  // Cached images often skip onLoad — check after mount/src change
   useEffect(() => {
     const img = imgRef.current;
     if (!img || failed || !displaySrc) return;
@@ -104,7 +123,7 @@ export default function ProductImage({
       className={`product-float-stage product-float-stage--${variant} ${className}`}
     >
       {variant !== "card" ? <div className="product-float-glow" aria-hidden /> : null}
-      <div className="product-float-matte product-float-matte--bright">
+      <div className="product-float-matte">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           ref={imgRef}
@@ -115,7 +134,7 @@ export default function ProductImage({
           fetchPriority={priority ? "high" : "auto"}
           decoding="async"
           referrerPolicy="no-referrer"
-          className={`product-float-asset product-float-asset--raw ${
+          className={`product-float-asset ${
             visible ? "" : "product-float-asset--hidden"
           }`}
           onLoad={handleLoad}

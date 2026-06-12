@@ -19,6 +19,20 @@ const THRESHOLD = 242;
 const MIN_REMOVED = 0.02;
 const MAX_REMOVED = 0.94;
 const TRIM_PAD = 0.03;
+const MATTE = { r: 20, g: 20, b: 24 };
+
+function flattenOntoMatte(data, width, height) {
+  const out = Buffer.alloc(width * height * 4);
+  for (let i = 0; i < width * height; i++) {
+    const si = i * 4;
+    const a = data[si + 3] / 255;
+    out[si] = Math.round(data[si] * a + MATTE.r * (1 - a));
+    out[si + 1] = Math.round(data[si + 1] * a + MATTE.g * (1 - a));
+    out[si + 2] = Math.round(data[si + 2] * a + MATTE.b * (1 - a));
+    out[si + 3] = 255;
+  }
+  return out;
+}
 
 function isBackgroundPixel(r, g, b, threshold = THRESHOLD) {
   const min = Math.min(r, g, b);
@@ -196,7 +210,26 @@ async function processOne(url, sharp) {
     pipeline = pipeline.extract(bounds);
   }
 
-  await pipeline.png({ compressionLevel: 9, effort: 7 }).toFile(outFile);
+  const flattened = await pipeline
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+
+  const flat = flattenOntoMatte(
+    flattened.data,
+    flattened.info.width,
+    flattened.info.height
+  );
+
+  await sharp(flat, {
+    raw: {
+      width: flattened.info.width,
+      height: flattened.info.height,
+      channels: 4,
+    },
+  })
+    .png({ compressionLevel: 9, effort: 7 })
+    .toFile(outFile);
   return { url, path: publicPath };
 }
 
