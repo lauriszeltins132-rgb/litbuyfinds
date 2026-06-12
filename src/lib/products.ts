@@ -3,13 +3,18 @@ import productsData from "@/data/products.json";
 import { getBrandsFromProducts } from "./brands";
 import { filterBrowsableProducts } from "./catalog-filters";
 import { auditCatalogPrices, hasExactPrice } from "./pricing";
+import { isDeadImageUrl } from "./dead-images";
 import { validateImageUrl } from "./image-url";
 
 function normalizeProduct(product: Product): Product {
   const validation = validateImageUrl(product.image);
+  const normalized = validation.valid ? validation.normalized : "";
+  if (normalized && isDeadImageUrl(normalized)) {
+    return { ...product, image: "" };
+  }
   return {
     ...product,
-    image: validation.valid ? validation.normalized : "",
+    image: normalized,
   };
 }
 

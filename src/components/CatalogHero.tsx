@@ -1,4 +1,4 @@
-import { SITE_NAME, SITE_TAGLINE } from "@/lib/constants";
+import { REGISTER_CTA_LABEL, SITE_NAME, SITE_TAGLINE } from "@/lib/constants";
 import RegisterLink from "./RegisterLink";
 
 type CatalogHeroProps = {
@@ -37,7 +37,7 @@ export default function CatalogHero({
           location="catalog_hero"
           className="mt-8 inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-black text-background transition-transform hover:scale-[1.03] hover:bg-accent-hover"
         >
-          Register on LitBuy
+          {REGISTER_CTA_LABEL}
           <span aria-hidden>→</span>
         </RegisterLink>
       </div>

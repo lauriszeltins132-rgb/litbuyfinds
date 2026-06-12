@@ -7,6 +7,7 @@ import DiscoveryRail from "@/components/DiscoveryRail";
 import HomepageBrands from "@/components/HomepageBrands";
 import HomepageCategories from "@/components/HomepageCategories";
 import NewToLitBuy from "@/components/NewToLitBuy";
+import RecentlyAddedPreview from "@/components/RecentlyAddedPreview";
 import RecentlyViewedRail from "@/components/RecentlyViewedRail";
 import SignupCard from "@/components/SignupCard";
 import StatsStrip from "@/components/StatsStrip";
@@ -48,19 +49,7 @@ export default function HomePage() {
         showTrendingScore
       />
 
-      <DiscoveryRail
-        title="New This Week"
-        subtitle="Fresh arrivals from the latest catalog sync"
-        href="/recently-added#week"
-        products={rails.newThisWeek}
-      />
-
-      <DiscoveryRail
-        title="New This Month"
-        subtitle="A wider rotation of recent additions"
-        href="/recently-added#month"
-        products={rails.newThisMonth}
-      />
+      <RecentlyAddedPreview />
 
       <HomepageCategories categories={categories} />
       <HomepageBrands />

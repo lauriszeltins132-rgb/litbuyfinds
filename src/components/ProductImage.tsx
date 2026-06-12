@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { trackBrokenImage } from "@/lib/analytics-events";
-import { getProcessedImageSrc } from "@/lib/processed-images";
+import { getProductImagePlan } from "@/lib/processed-images";
 import {
   hasPlausibleImageDimensions,
   validateImageUrl,
@@ -20,6 +20,8 @@ type ProductImageProps = {
   productHref?: string;
 };
 
+type LoadPhase = "primary" | "fallback" | "failed";
+
 export default function ProductImage({
   src,
   alt,
@@ -29,32 +31,49 @@ export default function ProductImage({
   productHref,
 }: ProductImageProps) {
   const validation = useMemo(() => validateImageUrl(src), [src]);
-  const { displaySrc, isCutout } = useMemo(() => {
-    if (!validation.valid) {
-      return { displaySrc: "", isCutout: false };
-    }
-    const resolved = getProcessedImageSrc(validation.normalized);
-    return { displaySrc: resolved.src, isCutout: resolved.isCutout };
+  const plan = useMemo(() => {
+    if (!validation.valid) return null;
+    return getProductImagePlan(validation.normalized);
   }, [validation.normalized, validation.valid]);
 
-  const [renderFailed, setRenderFailed] = useState(!validation.valid);
+  const [phase, setPhase] = useState<LoadPhase>(
+    validation.valid && plan ? "primary" : "failed"
+  );
   const [visible, setVisible] = useState(false);
   const loggedRef = useRef(false);
 
   useEffect(() => {
-    setRenderFailed(!validation.valid);
+    setPhase(validation.valid && plan ? "primary" : "failed");
     setVisible(false);
     loggedRef.current = false;
-  }, [validation.normalized, validation.valid]);
+  }, [validation.normalized, validation.valid, plan]);
+
+  const activeSrc = useMemo(() => {
+    if (!plan) return "";
+    if (phase === "primary") return plan.src;
+    if (phase === "fallback") return plan.originalSrc;
+    return "";
+  }, [phase, plan]);
 
   const markFailed = useCallback(() => {
-    setRenderFailed(true);
+    if (!plan) {
+      setPhase("failed");
+      return;
+    }
+
+    if (phase === "primary" && plan.isCutout && plan.originalSrc !== plan.src) {
+      setPhase("fallback");
+      setVisible(false);
+      return;
+    }
+
+    setPhase("failed");
     setVisible(false);
     if (!loggedRef.current) {
       loggedRef.current = true;
       trackBrokenImage(validation.normalized || src, variant);
     }
-  }, [src, validation.normalized, variant]);
+  }, [phase, plan, src, validation.normalized, variant]);
 
   const handleLoad = useCallback(
     (event: React.SyntheticEvent<HTMLImageElement>) => {
@@ -68,33 +87,40 @@ export default function ProductImage({
     [markFailed]
   );
 
-  if (renderFailed || !validation.valid || !displaySrc) {
+  if (phase === "failed" || !validation.valid || !plan || !activeSrc) {
     return (
       <ImageUnavailablePlaceholder
         className={className}
         variant={variant}
-        loading={false}
         productHref={productHref}
       />
     );
   }
+
+  const isCutout = phase === "primary" && plan.isCutout;
+  const needsMatte = !isCutout && (plan.needsMatte || phase === "fallback");
 
   return (
     <div
       className={`product-float-stage product-float-stage--${variant} ${className}`}
     >
       {variant !== "card" ? <div className="product-float-glow" aria-hidden /> : null}
-      <div className="product-float-matte">
+      <div
+        className={`product-float-matte ${
+          needsMatte ? "product-float-matte--bright" : ""
+        }`}
+      >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={displaySrc}
+          key={activeSrc}
+          src={activeSrc}
           alt={alt}
           loading={priority ? "eager" : "lazy"}
           fetchPriority={priority ? "high" : "auto"}
           decoding="async"
           referrerPolicy="no-referrer"
           className={`product-float-asset ${
-            isCutout ? "product-float-asset--cutout" : ""
+            isCutout ? "product-float-asset--cutout" : "product-float-asset--raw"
           } ${visible ? "" : "product-float-asset--hidden"}`}
           onLoad={handleLoad}
           onError={markFailed}

@@ -17,13 +17,13 @@ export default function ImageUnavailablePlaceholder({
   loading = false,
   productHref,
 }: ImageUnavailablePlaceholderProps) {
-  const logoSize = variant === "card" ? 28 : variant === "featured" ? 36 : 40;
+  const logoSize = variant === "card" ? 32 : variant === "featured" ? 40 : 44;
 
   return (
     <div
       className={`image-unavailable image-unavailable--${variant} ${loading ? "image-unavailable--loading" : ""} ${className}`}
       role="img"
-      aria-label="Image unavailable"
+      aria-label={loading ? "Loading product image" : "Product image unavailable"}
     >
       <div className="image-unavailable__glow" aria-hidden />
       <div className="image-unavailable__content">
@@ -36,12 +36,13 @@ export default function ImageUnavailablePlaceholder({
             aria-hidden
           />
         </div>
-        <p className="image-unavailable__brand">{SITE_NAME}</p>
-        <p className="image-unavailable__label">Image unavailable</p>
-        {productHref ? (
+        {!loading && productHref ? (
           <Link href={productHref} className="image-unavailable__cta">
-            View product details
+            View details
           </Link>
+        ) : null}
+        {!loading && !productHref ? (
+          <p className="image-unavailable__brand">{SITE_NAME}</p>
         ) : null}
       </div>
     </div>

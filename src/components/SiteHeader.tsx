@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useWishlist } from "@/context/WishlistContext";
-import { SITE_NAME } from "@/lib/constants";
+import { REGISTER_CTA_LABEL, SITE_NAME } from "@/lib/constants";
 import CommunityLinks from "./CommunityLinks";
 import RegisterLink from "./RegisterLink";
 import GlobalSearch from "./GlobalSearch";
@@ -73,7 +73,7 @@ export default function SiteHeader() {
               location="header"
               className="hidden rounded-full bg-accent px-4 py-2 text-sm font-black text-background sm:inline-flex"
             >
-              Create Free LitBuy Account
+              {REGISTER_CTA_LABEL}
             </RegisterLink>
           </div>
         </div>

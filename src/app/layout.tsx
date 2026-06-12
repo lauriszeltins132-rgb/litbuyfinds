@@ -4,6 +4,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import SiteHeader from "@/components/SiteHeader";
 import Footer from "@/components/Footer";
+import CouponAutoOpen from "@/components/CouponAutoOpen";
 import CouponModal from "@/components/CouponModal";
 import MobileDock from "@/components/MobileDock";
 import MobileStickySignup from "@/components/MobileStickySignup";
@@ -99,6 +100,7 @@ export default function RootLayout({
                 <main className="site-main flex-1">{children}</main>
                 <Footer />
                 <CouponModal />
+                <CouponAutoOpen />
                 <MobileStickySignup />
                 <MobileDock />
                 <Analytics />

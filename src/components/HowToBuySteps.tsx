@@ -1,4 +1,5 @@
 import RegisterLink from "@/components/RegisterLink";
+import { REGISTER_CTA_LABEL } from "@/lib/constants";
 
 const STEPS = [
   {
@@ -40,7 +41,7 @@ export default function HowToBuySteps() {
         location="product_signup_block"
         className="mt-6 inline-flex items-center justify-center rounded-full bg-accent px-6 py-3 text-sm font-black text-background transition hover:bg-accent-hover"
       >
-        Create Free LitBuy Account
+        {REGISTER_CTA_LABEL}
       </RegisterLink>
     </section>
   );

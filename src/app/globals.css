@@ -236,6 +236,23 @@ body::before {
   border-radius: 0.75rem;
 }
 
+/* Dark stage for originals that still have white/light backgrounds */
+.product-float-matte--bright {
+  background:
+    radial-gradient(circle at 50% 38%, rgba(212, 255, 60, 0.06), transparent 52%),
+    radial-gradient(circle at 50% 50%, #1a1a22 0%, #101016 55%, #0a0a0e 100%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.product-float-asset--raw {
+  border-radius: 0.65rem;
+  background: #121218;
+  box-shadow:
+    0 8px 28px rgba(0, 0, 0, 0.45),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  filter: contrast(1.04) saturate(1.04) drop-shadow(0 10px 24px rgba(0, 0, 0, 0.55));
+}
+
 .product-float-asset--cutout {
   filter: drop-shadow(0 10px 28px rgba(0, 0, 0, 0.5));
 }

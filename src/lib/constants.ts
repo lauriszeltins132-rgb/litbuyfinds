@@ -17,9 +17,12 @@ export const SITE_TAGLINE = "Fashion, sneakers & designer finds";
 export const LITBUY_SIGNUP_URL =
   "https://litbuy.com/register?inviteCode=SMKS";
 
-export const LITBUY_OFFER_HEADLINE = "Verified LitBuy agent links";
+/** Primary register CTA — use on every signup button site-wide */
+export const REGISTER_CTA_LABEL = "Claim 30% Coupon";
+
+export const LITBUY_OFFER_HEADLINE = "Get 30% Off Shipping";
 export const LITBUY_OFFER_DESCRIPTION =
-  "Register on LitBuy to buy through trusted agent checkout — confirm QC and pricing before you ship.";
+  "New LitBuy users can claim an exclusive shipping discount.";
 
 export const SOCIAL_LINKS = {
   tiktok: "https://www.tiktok.com/@smks.reps?_r=1&_t=ZN-974SmdjFxFG",

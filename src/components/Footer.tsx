@@ -3,7 +3,7 @@
 import Link from "next/link";
 import {
   CONTACT_EMAIL,
-  LITBUY_OFFER_HEADLINE,
+  REGISTER_CTA_LABEL,
   SITE_NAME,
 } from "@/lib/constants";
 import RegisterLink from "./RegisterLink";
@@ -145,7 +145,7 @@ export default function Footer() {
                   location="footer"
                   className="font-bold text-accent hover:underline"
                 >
-                  {LITBUY_OFFER_HEADLINE}
+                  {REGISTER_CTA_LABEL}
                 </RegisterLink>
               </li>
             </ul>

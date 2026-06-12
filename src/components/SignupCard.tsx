@@ -1,5 +1,6 @@
 import Link from "next/link";
 import RegisterLink from "@/components/RegisterLink";
+import { REGISTER_CTA_LABEL } from "@/lib/constants";
 import SignupTrustProof from "@/components/SignupTrustProof";
 
 type SignupCardVariant = "intro" | "ready" | "compact";
@@ -11,25 +12,22 @@ type SignupCardProps = {
 
 const COPY: Record<
   SignupCardVariant,
-  { eyebrow: string; title: string; body: string; cta: string }
+  { eyebrow: string; title: string; body: string }
 > = {
   intro: {
-    eyebrow: "Get started",
-    title: "New to LitBuy?",
-    body: "Create a free LitBuy account to open product links, check QC, and start building your haul.",
-    cta: "Create Free LitBuy Account",
+    eyebrow: "New user offer",
+    title: "Get 30% Off Shipping",
+    body: "Create a free LitBuy account to claim your shipping coupon and unlock QC photos.",
   },
   ready: {
-    eyebrow: "Next step",
-    title: "Ready to start browsing?",
-    body: "Create a free LitBuy account and start building your haul.",
-    cta: "Create Free LitBuy Account",
+    eyebrow: "Shipping discount",
+    title: "Claim your 30% coupon",
+    body: "Register on LitBuy to save on shipping and track your haul.",
   },
   compact: {
-    eyebrow: "Next step",
-    title: "Order through LitBuy",
-    body: "Create a free account to open product links, review QC, and ship your haul.",
-    cta: "Create Free LitBuy Account",
+    eyebrow: "30% off shipping",
+    title: "New to LitBuy?",
+    body: "Claim your exclusive shipping discount when you register.",
   },
 };
 
@@ -62,7 +60,7 @@ export default function SignupCard({
                   href="/guides/how-to-order-from-litbuy"
                   className="font-bold text-accent hover:underline"
                 >
-                  Learn how ordering works →
+                  How ordering works →
                 </Link>
               </p>
             ) : null}
@@ -72,7 +70,7 @@ export default function SignupCard({
             location={location}
             className="inline-flex shrink-0 items-center justify-center rounded-full bg-accent px-5 py-2.5 text-xs font-black text-background transition hover:bg-accent-hover sm:px-8 sm:py-4 sm:text-sm"
           >
-            {copy.cta}
+            {REGISTER_CTA_LABEL}
           </RegisterLink>
         </div>
       </div>

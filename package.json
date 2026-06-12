@@ -12,6 +12,7 @@
     "audit:site": "node scripts/site-audit.mjs",
     "audit:prices": "node scripts/audit-prices.mjs",
     "audit:images": "node scripts/audit-images.mjs",
+    "generate:dead-images": "node scripts/generate-dead-image-manifest.mjs",
     "generate:bright-bg": "node scripts/generate-bright-bg-manifest.mjs",
     "process:images": "node scripts/generate-bright-bg-manifest.mjs && node scripts/process-catalog-images.mjs"
   },
