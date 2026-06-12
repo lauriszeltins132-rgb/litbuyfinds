@@ -1,30 +1,62 @@
-"use client";
+import Image from "next/image";
+import {
+  PROMO_BANNER_ALT,
+  PROMO_BANNER_MODAL,
+  PROMO_BANNER_PROMO,
+} from "@/lib/constants";
 
-import { LITBUY_OFFER_HEADLINE } from "@/lib/constants";
-import RegisterLink from "./RegisterLink";
+type PromoBannerVariant = "hero" | "card" | "modal";
 
-const text = `REGISTER ON LITBUY — ${LITBUY_OFFER_HEADLINE.toUpperCase()}`;
+type PromoBannerProps = {
+  variant?: PromoBannerVariant;
+  className?: string;
+  priority?: boolean;
+};
 
-export default function PromoBanner() {
-  const items = Array.from({ length: 6 }, () => text);
+const VARIANTS: Record<
+  PromoBannerVariant,
+  { src: string; width: number; height: number; sizes: string }
+> = {
+  hero: {
+    src: PROMO_BANNER_PROMO,
+    width: 1600,
+    height: 1066,
+    sizes: "(max-width: 1024px) 100vw, 50vw",
+  },
+  card: {
+    src: PROMO_BANNER_PROMO,
+    width: 1600,
+    height: 1066,
+    sizes: "(max-width: 1024px) 100vw, 420px",
+  },
+  modal: {
+    src: PROMO_BANNER_MODAL,
+    width: 800,
+    height: 533,
+    sizes: "(max-width: 640px) 100vw, 400px",
+  },
+};
+
+export default function PromoBanner({
+  variant = "card",
+  className = "",
+  priority = false,
+}: PromoBannerProps) {
+  const config = VARIANTS[variant];
 
   return (
-    <div className="sticky top-0 z-[60] overflow-hidden border-b border-border bg-surface/95 py-2 backdrop-blur">
-      <div className="flex animate-marquee whitespace-nowrap">
-        {[...items, ...items].map((item, i) => (
-          <div key={i} className="flex items-center gap-4 px-8">
-            <span className="text-xs font-bold uppercase tracking-[0.16em] text-accent">
-              {item}
-            </span>
-            <RegisterLink
-              location="promo_banner"
-              className="text-xs font-bold text-foreground underline"
-            >
-              Register →
-            </RegisterLink>
-          </div>
-        ))}
-      </div>
+    <div
+      className={`relative overflow-hidden rounded-2xl border border-border/60 bg-[#0a0a0b] ${className}`}
+    >
+      <Image
+        src={config.src}
+        alt={PROMO_BANNER_ALT}
+        width={config.width}
+        height={config.height}
+        sizes={config.sizes}
+        priority={priority}
+        className="h-auto w-full object-contain"
+      />
     </div>
   );
 }

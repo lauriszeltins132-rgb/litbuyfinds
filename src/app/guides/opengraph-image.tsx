@@ -1,8 +1,13 @@
-import { OG_SIZE, renderOgImage } from "@/components/seo/OgImageTemplate";
+import {
+  getStaticOgImageResponse,
+  OG_IMAGE_ALT,
+  OG_IMAGE_SIZE,
+} from "@/lib/static-og-image.server";
 
-export const size = OG_SIZE;
-export const contentType = "image/png";
+export const size = OG_IMAGE_SIZE;
+export const contentType = "image/jpeg";
+export const alt = OG_IMAGE_ALT;
 
-export default function GuidesHubOgImage() {
-  return renderOgImage("LitBuy Finds Guides", "Learn agents, QC, and ordering");
+export default async function GuidesOgImage() {
+  return getStaticOgImageResponse();
 }

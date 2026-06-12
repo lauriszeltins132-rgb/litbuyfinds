@@ -18,6 +18,8 @@ import { CouponProvider } from "@/context/CouponContext";
 import { RecentlyViewedProvider } from "@/context/RecentlyViewedContext";
 import {
   HOMEPAGE_TITLE,
+  PROMO_BANNER_ALT,
+  PROMO_OG_IMAGE_URL,
   SITE_DESCRIPTION,
   SITE_NAME,
   SITE_OG_DESCRIPTION,
@@ -52,11 +54,21 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     locale: "en_US",
     type: "website",
+    images: [
+      {
+        url: PROMO_OG_IMAGE_URL,
+        width: 1200,
+        height: 630,
+        alt: PROMO_BANNER_ALT,
+        type: "image/jpeg",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: HOMEPAGE_TITLE,
     description: SITE_OG_DESCRIPTION,
+    images: [PROMO_OG_IMAGE_URL],
   },
   robots: { index: true, follow: true },
   verification: {

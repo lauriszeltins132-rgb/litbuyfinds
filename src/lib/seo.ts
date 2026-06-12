@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import {
   HOMEPAGE_TITLE,
+  PROMO_BANNER_ALT,
+  PROMO_OG_IMAGE_URL,
   SITE_DESCRIPTION,
   SITE_NAME,
   SITE_OG_DESCRIPTION,
@@ -9,16 +11,16 @@ import { SITE_URL } from "./site";
 
 const BASE_URL = SITE_URL;
 
-function resolveOgImage(path: string, image?: string): string {
-  if (image) return image;
-  if (
-    path.startsWith("/guides/") ||
-    path.startsWith("/categories/") ||
-    path.startsWith("/brands/")
-  ) {
-    return `${BASE_URL}${path}/opengraph-image`;
-  }
-  return `${BASE_URL}/opengraph-image`;
+const DEFAULT_OG_IMAGE = {
+  url: PROMO_OG_IMAGE_URL,
+  width: 1200,
+  height: 630,
+  alt: PROMO_BANNER_ALT,
+  type: "image/jpeg",
+};
+
+function resolveOgImage(image?: string): string {
+  return image ?? PROMO_OG_IMAGE_URL;
 }
 
 type PageMetadataOptions = {
@@ -43,7 +45,7 @@ export function buildPageMetadata({
   authors,
 }: PageMetadataOptions): Metadata {
   const url = `${BASE_URL}${path}`;
-  const ogImage = resolveOgImage(path, image);
+  const ogImage = resolveOgImage(image);
 
   return {
     title,
@@ -66,14 +68,7 @@ export function buildPageMetadata({
       siteName: SITE_NAME,
       type,
       locale: "en_US",
-      images: [{ url: ogImage, width: 1200, height: 630, alt: title }],
-      ...(type === "article" && publishedTime
-        ? {
-            publishedTime,
-            modifiedTime: modifiedTime ?? publishedTime,
-            authors: authors ?? ["LitBuy Finds Team"],
-          }
-        : {}),
+      images: [{ ...DEFAULT_OG_IMAGE, url: ogImage, alt: title }],
     },
     twitter: {
       card: "summary_large_image",
@@ -86,7 +81,6 @@ export function buildPageMetadata({
 
 export function buildHomepageMetadata(): Metadata {
   const url = `${BASE_URL}/`;
-  const ogImage = `${BASE_URL}/opengraph-image`;
 
   return {
     title: { absolute: HOMEPAGE_TITLE },
@@ -99,13 +93,13 @@ export function buildHomepageMetadata(): Metadata {
       siteName: SITE_NAME,
       type: "website",
       locale: "en_US",
-      images: [{ url: ogImage, width: 1200, height: 630, alt: SITE_NAME }],
+      images: [DEFAULT_OG_IMAGE],
     },
     twitter: {
       card: "summary_large_image",
       title: HOMEPAGE_TITLE,
       description: SITE_OG_DESCRIPTION,
-      images: [ogImage],
+      images: [PROMO_OG_IMAGE_URL],
     },
   };
 }

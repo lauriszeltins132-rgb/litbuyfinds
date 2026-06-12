@@ -1,22 +1,13 @@
 import {
-  getResolvedCategorySeo,
-  resolveCategorySlug,
-} from "@/lib/category-aliases";
-import { OG_SIZE, renderOgImage } from "@/components/seo/OgImageTemplate";
+  getStaticOgImageResponse,
+  OG_IMAGE_ALT,
+  OG_IMAGE_SIZE,
+} from "@/lib/static-og-image.server";
 
-export const size = OG_SIZE;
-export const contentType = "image/png";
+export const size = OG_IMAGE_SIZE;
+export const contentType = "image/jpeg";
+export const alt = OG_IMAGE_ALT;
 
-type OgProps = {
-  params: Promise<{ slug: string }>;
-};
-
-export default async function CategoryOgImage({ params }: OgProps) {
-  const { slug } = await params;
-  const resolved = resolveCategorySlug(slug);
-  const title = resolved
-    ? getResolvedCategorySeo(resolved).title
-    : "Category Finds";
-
-  return renderOgImage(title, "Category finds · LitBuy Finds");
+export default async function CategoryOgImage() {
+  return getStaticOgImageResponse();
 }

@@ -1,18 +1,13 @@
-import { getBrandBySlug } from "@/lib/brands";
-import { getAllProducts } from "@/lib/products";
-import { OG_SIZE, renderOgImage } from "@/components/seo/OgImageTemplate";
+import {
+  getStaticOgImageResponse,
+  OG_IMAGE_ALT,
+  OG_IMAGE_SIZE,
+} from "@/lib/static-og-image.server";
 
-export const size = OG_SIZE;
-export const contentType = "image/png";
+export const size = OG_IMAGE_SIZE;
+export const contentType = "image/jpeg";
+export const alt = OG_IMAGE_ALT;
 
-type OgProps = {
-  params: Promise<{ slug: string }>;
-};
-
-export default async function BrandOgImage({ params }: OgProps) {
-  const { slug } = await params;
-  const brand = getBrandBySlug(getAllProducts(), slug);
-  const name = brand?.name ?? "Brand";
-
-  return renderOgImage(`${name} Finds`, "Brand finds · LitBuy Finds");
+export default async function BrandOgImage() {
+  return getStaticOgImageResponse();
 }

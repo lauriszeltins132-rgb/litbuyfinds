@@ -1,17 +1,13 @@
-import { OG_SIZE, renderOgImage } from "@/components/seo/OgImageTemplate";
-import { getGuide } from "@/lib/guides";
+import {
+  getStaticOgImageResponse,
+  OG_IMAGE_ALT,
+  OG_IMAGE_SIZE,
+} from "@/lib/static-og-image.server";
 
-export const size = OG_SIZE;
-export const contentType = "image/png";
+export const size = OG_IMAGE_SIZE;
+export const contentType = "image/jpeg";
+export const alt = OG_IMAGE_ALT;
 
-type OgProps = {
-  params: Promise<{ slug: string }>;
-};
-
-export default async function GuideOgImage({ params }: OgProps) {
-  const { slug } = await params;
-  const guide = getGuide(slug);
-  const title = guide?.h1 ?? "LitBuy Finds Guide";
-
-  return renderOgImage(title, "Guides · LitBuy Finds");
+export default async function GuideOgImage() {
+  return getStaticOgImageResponse();
 }

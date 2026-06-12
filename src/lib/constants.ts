@@ -14,11 +14,22 @@ export const HERO_TAGLINE =
 
 export const SITE_TAGLINE = "Fashion, sneakers & designer finds";
 
+/** Universal promotional banner — homepage, modal, and social previews */
+export const PROMO_BANNER_PROMO = "/banners/litbuy-finds-promo.webp";
+export const PROMO_BANNER_MODAL = "/banners/litbuy-finds-modal.webp";
+export const PROMO_BANNER_OG = "/banners/litbuy-finds-og.jpg";
+export const PROMO_BANNER_ALT =
+  "LitBuy Finds — Real finds. Real quality. Curated fashion, verified quality, updated daily.";
+
+export const PROMO_OG_IMAGE_URL = `https://litbuyfinds.io${PROMO_BANNER_OG}`;
+
 export const LITBUY_SIGNUP_URL =
   "https://litbuy.com/register?inviteCode=SMKS";
 
 /** Primary register CTA — use on every signup button site-wide */
 export const REGISTER_CTA_LABEL = "Claim 30% Coupon";
+export const REGISTER_MODAL_CTA_LABEL = "Register on LitBuy";
+export const BROWSE_FINDS_CTA_LABEL = "Browse Finds";
 
 export const LITBUY_OFFER_HEADLINE = "Get 30% Off Shipping";
 export const LITBUY_OFFER_DESCRIPTION =

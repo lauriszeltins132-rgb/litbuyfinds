@@ -1,4 +1,5 @@
 import Link from "next/link";
+import PromoBanner from "@/components/PromoBanner";
 import { HERO_TAGLINE } from "@/lib/constants";
 
 export default function DiscoveryHero() {
@@ -8,21 +9,21 @@ export default function DiscoveryHero() {
       <div className="pointer-events-none absolute -left-20 top-24 h-64 w-64 rounded-full bg-accent/[0.07] blur-3xl animate-float" />
       <div className="pointer-events-none absolute -right-16 top-40 h-56 w-56 rounded-full bg-accent/[0.05] blur-3xl animate-float" />
 
-      <div className="relative mx-auto max-w-7xl">
-        <div className="max-w-3xl">
+      <div className="relative mx-auto grid max-w-7xl gap-8 lg:grid-cols-2 lg:items-center lg:gap-12">
+        <div className="max-w-xl">
           <p className="mb-3 hidden items-center gap-2 rounded-full border border-accent/25 bg-accent/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-accent sm:mb-5 sm:inline-flex">
             <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />
             Curated daily
           </p>
 
-          <h1 className="text-[1.65rem] font-black leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">
+          <h1 className="text-[1.65rem] font-black leading-[1.08] tracking-tight sm:text-5xl lg:text-[3.25rem]">
             Discover the Best{" "}
             <span className="bg-gradient-to-r from-accent via-foreground to-accent bg-clip-text text-transparent">
               LitBuy Finds
             </span>
           </h1>
 
-          <p className="mt-2.5 max-w-2xl text-sm leading-relaxed text-muted sm:mt-5 sm:text-lg">
+          <p className="mt-2.5 max-w-xl text-sm leading-relaxed text-muted sm:mt-5 sm:text-lg">
             {HERO_TAGLINE}
           </p>
 
@@ -42,6 +43,8 @@ export default function DiscoveryHero() {
             </Link>
           </div>
         </div>
+
+        <PromoBanner variant="hero" priority className="mx-auto w-full max-w-xl lg:max-w-none" />
       </div>
     </section>
   );
