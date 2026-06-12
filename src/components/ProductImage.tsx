@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { trackBrokenImage } from "@/lib/analytics-events";
-import { cutoutLooksDamaged } from "@/lib/cutout-quality";
 import { getProductImagePlan } from "@/lib/processed-images";
 import {
   hasPlausibleImageDimensions,
@@ -22,30 +21,9 @@ type ProductImageProps = {
   productHref?: string;
 };
 
-type LoadPhase = "primary" | "fallback" | "failed";
-
-const ARTIFACT_SAMPLE = 72;
-
-function detectCutoutArtifacts(img: HTMLImageElement): boolean {
-  try {
-    const canvas = document.createElement("canvas");
-    canvas.width = ARTIFACT_SAMPLE;
-    canvas.height = ARTIFACT_SAMPLE;
-    const ctx = canvas.getContext("2d", { willReadFrequently: true });
-    if (!ctx) return false;
-
-    ctx.drawImage(img, 0, 0, ARTIFACT_SAMPLE, ARTIFACT_SAMPLE);
-    const { data, width, height } = ctx.getImageData(0, 0, ARTIFACT_SAMPLE, ARTIFACT_SAMPLE);
-    return cutoutLooksDamaged(data, width, height);
-  } catch {
-    return false;
-  }
-}
-
 export default function ProductImage({
   src,
   alt,
-  productName,
   className = "",
   priority = false,
   variant = "card",
@@ -54,72 +32,64 @@ export default function ProductImage({
   const validation = useMemo(() => validateImageUrl(src), [src]);
   const plan = useMemo(() => {
     if (!validation.valid) return null;
-    return getProductImagePlan(validation.normalized, productName);
-  }, [validation.normalized, validation.valid, productName]);
+    return getProductImagePlan(validation.normalized);
+  }, [validation.normalized, validation.valid]);
 
-  const [phase, setPhase] = useState<LoadPhase>(
-    validation.valid && plan ? "primary" : "failed"
-  );
+  const [failed, setFailed] = useState(!validation.valid || !plan);
   const [visible, setVisible] = useState(false);
+  const imgRef = useRef<HTMLImageElement>(null);
   const loggedRef = useRef(false);
 
+  const displaySrc = plan?.src ?? "";
+
   useEffect(() => {
-    setPhase(validation.valid && plan ? "primary" : "failed");
+    setFailed(!validation.valid || !plan);
     setVisible(false);
     loggedRef.current = false;
-  }, [validation.normalized, validation.valid, plan]);
+  }, [validation.valid, plan, validation.normalized]);
 
-  const activeSrc = useMemo(() => {
-    if (!plan) return "";
-    if (phase === "primary") return plan.src;
-    if (phase === "fallback") return plan.originalSrc;
-    return "";
-  }, [phase, plan]);
-
-  const fallbackToOriginal = useCallback(() => {
-    if (!plan) {
-      setPhase("failed");
-      setVisible(false);
-      return;
-    }
-    if (phase === "primary" && plan.isCutout && plan.originalSrc !== plan.src) {
-      setPhase("fallback");
-      setVisible(false);
-      return;
-    }
-    setPhase("failed");
-    setVisible(false);
-  }, [phase, plan]);
-
-  const markFailed = useCallback(() => {
-    const wasPrimary = phase === "primary";
-    fallbackToOriginal();
-    if (!wasPrimary && !loggedRef.current) {
-      loggedRef.current = true;
-      trackBrokenImage(validation.normalized || src, variant);
-    }
-  }, [fallbackToOriginal, phase, src, validation.normalized, variant]);
+  const confirmLoaded = useCallback(
+    (img: HTMLImageElement) => {
+      if (!hasPlausibleImageDimensions(img.naturalWidth, img.naturalHeight)) {
+        setFailed(true);
+        setVisible(false);
+        if (!loggedRef.current) {
+          loggedRef.current = true;
+          trackBrokenImage(validation.normalized || src, variant);
+        }
+        return;
+      }
+      setVisible(true);
+    },
+    [src, validation.normalized, variant]
+  );
 
   const handleLoad = useCallback(
     (event: React.SyntheticEvent<HTMLImageElement>) => {
-      const img = event.currentTarget;
-      if (!hasPlausibleImageDimensions(img.naturalWidth, img.naturalHeight)) {
-        markFailed();
-        return;
-      }
-
-      const showingCutout = phase === "primary" && plan?.isCutout;
-      if (showingCutout && detectCutoutArtifacts(img)) {
-        fallbackToOriginal();
-        return;
-      }
-
-      setVisible(true);
+      confirmLoaded(event.currentTarget);
     },
-    [fallbackToOriginal, markFailed, phase, plan?.isCutout]
+    [confirmLoaded]
   );
 
-  if (phase === "failed" || !validation.valid || !plan || !activeSrc) {
+  const handleError = useCallback(() => {
+    setFailed(true);
+    setVisible(false);
+    if (!loggedRef.current) {
+      loggedRef.current = true;
+      trackBrokenImage(validation.normalized || src, variant);
+    }
+  }, [src, validation.normalized, variant]);
+
+  // Cached images often skip onLoad — check after mount/src change
+  useEffect(() => {
+    const img = imgRef.current;
+    if (!img || failed || !displaySrc) return;
+    if (img.complete && img.naturalWidth > 0) {
+      confirmLoaded(img);
+    }
+  }, [confirmLoaded, displaySrc, failed]);
+
+  if (failed || !plan || !displaySrc) {
     return (
       <ImageUnavailablePlaceholder
         className={className}
@@ -129,33 +99,27 @@ export default function ProductImage({
     );
   }
 
-  const isCutout = phase === "primary" && plan.isCutout;
-  const needsMatte = !isCutout;
-
   return (
     <div
       className={`product-float-stage product-float-stage--${variant} ${className}`}
     >
       {variant !== "card" ? <div className="product-float-glow" aria-hidden /> : null}
-      <div
-        className={`product-float-matte ${
-          needsMatte ? "product-float-matte--bright" : ""
-        }`}
-      >
+      <div className="product-float-matte product-float-matte--bright">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          key={activeSrc}
-          src={activeSrc}
+          ref={imgRef}
+          key={displaySrc}
+          src={displaySrc}
           alt={alt}
           loading={priority ? "eager" : "lazy"}
           fetchPriority={priority ? "high" : "auto"}
           decoding="async"
           referrerPolicy="no-referrer"
-          className={`product-float-asset ${
-            isCutout ? "product-float-asset--cutout" : "product-float-asset--raw"
-          } ${visible ? "" : "product-float-asset--hidden"}`}
+          className={`product-float-asset product-float-asset--raw ${
+            visible ? "" : "product-float-asset--hidden"
+          }`}
           onLoad={handleLoad}
-          onError={markFailed}
+          onError={handleError}
         />
       </div>
       {!visible && (

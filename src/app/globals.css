@@ -236,22 +236,30 @@ body::before {
   border-radius: 0.75rem;
 }
 
-/* Dark stage for originals that still have white/light backgrounds */
+/* Dark framed stage — white catalog photos blend into the card */
 .product-float-matte--bright {
-  background:
-    radial-gradient(circle at 50% 38%, rgba(212, 255, 60, 0.06), transparent 52%),
-    radial-gradient(circle at 50% 50%, #1a1a22 0%, #101016 55%, #0a0a0e 100%);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  background: radial-gradient(
+    circle at 50% 42%,
+    #1c1c24 0%,
+    #101016 55%,
+    #08080c 100%
+  );
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  padding: 0.45rem;
 }
 
 .product-float-asset--raw {
-  border-radius: 0.75rem;
-  background: #101014;
-  padding: 0.2rem;
-  box-shadow:
-    0 10px 32px rgba(0, 0, 0, 0.5),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.06);
-  filter: contrast(1.03) saturate(1.03) drop-shadow(0 12px 28px rgba(0, 0, 0, 0.55));
+  display: block;
+  max-width: 92%;
+  max-height: 92%;
+  margin: auto;
+  border-radius: 0.65rem;
+  background-color: #101014;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.55);
+  object-fit: contain;
+  /* White backgrounds in source photos visually merge with the dark frame */
+  mix-blend-mode: multiply;
+  filter: contrast(1.04) saturate(1.05);
 }
 
 .catalog-product-grid {
