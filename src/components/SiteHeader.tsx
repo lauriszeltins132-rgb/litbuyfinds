@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useWishlist } from "@/context/WishlistContext";
-import { REGISTER_CTA_LABEL, SITE_NAME } from "@/lib/constants";
+import { REGISTER_HEADER_CTA_LABEL, SITE_NAME } from "@/lib/constants";
 import CommunityLinks from "./CommunityLinks";
 import RegisterLink from "./RegisterLink";
 import GlobalSearch from "./GlobalSearch";
@@ -71,9 +71,9 @@ export default function SiteHeader() {
             <GlobalSearch className="hidden sm:inline-flex" />
             <RegisterLink
               location="header"
-              className="hidden rounded-full bg-accent px-4 py-2 text-sm font-black text-background sm:inline-flex"
+              className="inline-flex rounded-full bg-accent px-3 py-1.5 text-[11px] font-black text-background sm:px-4 sm:py-2 sm:text-sm"
             >
-              {REGISTER_CTA_LABEL}
+              {REGISTER_HEADER_CTA_LABEL}
             </RegisterLink>
           </div>
         </div>

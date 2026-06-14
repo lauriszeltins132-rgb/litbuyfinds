@@ -5,6 +5,7 @@ import SchemaScript from "@/components/SchemaScript";
 import type { ContentDates } from "@/lib/content-dates";
 import { buildBreadcrumbSchema, buildFaqSchema } from "@/lib/schema";
 import SignupCard from "@/components/SignupCard";
+import GuideSignupCallout from "@/components/conversion/GuideSignupCallout";
 import type { StaticPageSection } from "@/lib/static-pages";
 
 type ContentPageLayoutProps = {
@@ -68,6 +69,12 @@ export default function ContentPageLayout({
             <ContentAuthorMeta dates={contentDates} />
           ) : null}
 
+          {showSignupCta ? (
+            <div className="mt-8">
+              <GuideSignupCallout variant="inline" />
+            </div>
+          ) : null}
+
           <div className="mt-10 space-y-10">
             {sections.map((section) => {
               const Heading = section.level === 3 ? "h3" : "h2";
@@ -123,8 +130,11 @@ export default function ContentPageLayout({
           ) : null}
 
           {showSignupCta ? (
-            <div className="mt-10 -mx-4 sm:-mx-6">
-              <SignupCard location="guide_signup_cta" variant="ready" />
+            <div className="mt-10 space-y-6">
+              <GuideSignupCallout variant="panel" />
+              <div className="-mx-4 sm:-mx-6">
+                <SignupCard location="guide_signup_cta" variant="ready" />
+              </div>
             </div>
           ) : null}
 

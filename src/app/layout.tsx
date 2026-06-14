@@ -4,14 +4,16 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import SiteHeader from "@/components/SiteHeader";
 import Footer from "@/components/Footer";
+import FooterSignupStrip from "@/components/conversion/FooterSignupStrip";
+import ConversionLayer from "@/components/conversion/ConversionLayer";
 import CouponAutoOpen from "@/components/CouponAutoOpen";
 import CouponModal from "@/components/CouponModal";
 import MobileDock from "@/components/MobileDock";
-import MobileStickySignup from "@/components/MobileStickySignup";
 import PreferencesBar from "@/components/PreferencesBar";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import AnalyticsBoot from "@/components/AnalyticsBoot";
 import JsonLd from "@/components/JsonLd";
+import { ConversionProvider } from "@/context/ConversionContext";
 import { WishlistProvider } from "@/context/WishlistContext";
 import { PreferencesProvider } from "@/context/PreferencesContext";
 import { CouponProvider } from "@/context/CouponContext";
@@ -104,19 +106,22 @@ export default function RootLayout({
           <CouponProvider>
             <WishlistProvider>
               <RecentlyViewedProvider>
-                <AnimatedBackground />
-                <JsonLd />
-                <AnalyticsBoot />
-                <PreferencesBar />
-                <SiteHeader />
-                <main className="site-main flex-1">{children}</main>
-                <Footer />
-                <CouponModal />
-                <CouponAutoOpen />
-                <MobileStickySignup />
-                <MobileDock />
-                <Analytics />
-                <SpeedInsights />
+                <ConversionProvider>
+                  <AnimatedBackground />
+                  <JsonLd />
+                  <AnalyticsBoot />
+                  <PreferencesBar />
+                  <SiteHeader />
+                  <main className="site-main flex-1">{children}</main>
+                  <FooterSignupStrip />
+                  <Footer />
+                  <CouponModal />
+                  <CouponAutoOpen />
+                  <ConversionLayer />
+                  <MobileDock />
+                  <Analytics />
+                  <SpeedInsights />
+                </ConversionProvider>
               </RecentlyViewedProvider>
             </WishlistProvider>
           </CouponProvider>

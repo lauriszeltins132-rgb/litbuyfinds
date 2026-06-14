@@ -15,6 +15,9 @@ export function StaticPageView({ slug }: { slug: string }) {
   const page = getStaticPage(slug);
   if (!page) return null;
 
+  const showSignupCta =
+    slug === "how-to-buy" || slug === "litbuy-vs-other-agents";
+
   return (
     <ContentPageLayout
       path={page.path}
@@ -24,6 +27,7 @@ export function StaticPageView({ slug }: { slug: string }) {
       sections={page.sections}
       faqs={page.faqs}
       relatedLinks={page.relatedLinks}
+      showSignupCta={showSignupCta}
     />
   );
 }

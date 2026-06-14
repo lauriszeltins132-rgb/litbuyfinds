@@ -12,6 +12,7 @@ import {
   getProductHighlights,
 } from "@/lib/product-details";
 import { usePreferences } from "@/context/PreferencesContext";
+import { useConversion } from "@/context/ConversionContext";
 import { trackProductContext } from "@/lib/analytics-events";
 import ProductImage from "./ProductImage";
 
@@ -22,9 +23,11 @@ type ProductModalProps = {
 
 export default function ProductModal({ product, onClose }: ProductModalProps) {
   const { currency } = usePreferences();
+  const { recordProductView } = useConversion();
 
   useEffect(() => {
     if (!product) return;
+    recordProductView(product.id);
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     document.body.style.overflow = "hidden";
     window.addEventListener("keydown", onKey);
@@ -32,7 +35,7 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
       document.body.style.overflow = "";
       window.removeEventListener("keydown", onKey);
     };
-  }, [product, onClose]);
+  }, [product, onClose, recordProductView]);
 
   if (!product) return null;
 

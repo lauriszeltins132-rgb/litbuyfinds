@@ -28,6 +28,7 @@ export const LITBUY_SIGNUP_URL =
 
 /** Primary register CTA — use on every signup button site-wide */
 export const REGISTER_CTA_LABEL = "Claim 30% Coupon";
+export const REGISTER_HEADER_CTA_LABEL = "Free account";
 export const REGISTER_MODAL_CTA_LABEL = "Register on LitBuy";
 export const BROWSE_FINDS_CTA_LABEL = "Browse Finds";
 
