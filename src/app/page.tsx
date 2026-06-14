@@ -9,7 +9,7 @@ import HomepageCategories from "@/components/HomepageCategories";
 import NewToLitBuy from "@/components/NewToLitBuy";
 import RecentlyAddedPreview from "@/components/RecentlyAddedPreview";
 import RecentlyViewedRail from "@/components/RecentlyViewedRail";
-import LitBuyMemberBenefits from "@/components/conversion/LitBuyMemberBenefits";
+import MemberBenefitsStrip from "@/components/conversion/MemberBenefitsStrip";
 import SignupCard from "@/components/SignupCard";
 import StatsStrip from "@/components/StatsStrip";
 import TrustStrip from "@/components/TrustStrip";
@@ -67,15 +67,7 @@ export default function HomePage() {
 
       <section className="px-3 py-2.5 sm:px-6 sm:py-8">
         <div className="signup-card mx-auto max-w-7xl rounded-2xl border border-border p-5 sm:rounded-3xl sm:p-8">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
-            Why LitBuy members buy smarter
-          </p>
-          <h2 className="mt-2 text-2xl font-black sm:text-3xl">
-            Trust, QC, and verified links in one account
-          </h2>
-          <div className="mt-6">
-            <LitBuyMemberBenefits location="homepage_member_benefits" />
-          </div>
+          <MemberBenefitsStrip location="homepage_member_benefits" />
         </div>
       </section>
 

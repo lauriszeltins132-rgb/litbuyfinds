@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "node scripts/generate-dataset-meta.mjs && next dev",
-    "build": "node scripts/generate-dataset-meta.mjs && node scripts/audit-prices.mjs --ci && node scripts/generate-seo-list-pages.mjs && node scripts/generate-favicons.mjs && next build",
+    "build": "node scripts/generate-dataset-meta.mjs && node scripts/audit-prices.mjs --ci && node scripts/generate-seo-list-pages.mjs && node scripts/generate-favicons.mjs && node scripts/generate-image-quality-manifest.mjs && next build",
     "generate:favicons": "node scripts/generate-favicons.mjs",
     "start": "next start",
     "lint": "next lint",
@@ -19,6 +19,7 @@
     "flatten:images": "node scripts/flatten-processed-images.mjs",
     "process:remaining": "node scripts/process-remaining-images.mjs",
     "generate:banner": "node scripts/generate-promo-banner.mjs",
+    "generate:image-quality": "node scripts/generate-image-quality-manifest.mjs",
     "audit:og": "node scripts/audit-og-images.mjs"
   },
   "dependencies": {

@@ -4,8 +4,9 @@ import ContentAuthorMeta from "@/components/ContentAuthorMeta";
 import SchemaScript from "@/components/SchemaScript";
 import type { ContentDates } from "@/lib/content-dates";
 import { buildBreadcrumbSchema, buildFaqSchema } from "@/lib/schema";
-import SignupCard from "@/components/SignupCard";
+import MemberBenefitsStrip from "@/components/conversion/MemberBenefitsStrip";
 import GuideSignupCallout from "@/components/conversion/GuideSignupCallout";
+import SignupCard from "@/components/SignupCard";
 import type { StaticPageSection } from "@/lib/static-pages";
 
 type ContentPageLayoutProps = {
@@ -132,6 +133,7 @@ export default function ContentPageLayout({
           {showSignupCta ? (
             <div className="mt-10 space-y-6">
               <GuideSignupCallout variant="panel" />
+              <MemberBenefitsStrip location="guide_member_benefits" compact />
               <div className="-mx-4 sm:-mx-6">
                 <SignupCard location="guide_signup_cta" variant="ready" />
               </div>

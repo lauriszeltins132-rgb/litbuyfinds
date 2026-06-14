@@ -1,5 +1,7 @@
 import { getTopProductIds } from "./analytics-store";
-import { isFeaturedEligible } from "./product-media";
+import { getPremiumBrandBoost } from "./curation";
+import { isHomepageFeaturedEligible } from "./product-media";
+import { validateProduct } from "./product-validation";
 import {
   getAllProducts,
   getLatestProducts,
@@ -30,11 +32,24 @@ function pickRotated(
   salt: string
 ): Product[] {
   return pool
-    .filter((product) => isFeaturedEligible(product) && !used.has(product.id))
+    .filter(
+      (product) => isHomepageFeaturedEligible(product) && !used.has(product.id)
+    )
     .sort(
       (a, b) => dayHash(b.id, salt, day) - dayHash(a.id, salt, day)
     )
     .slice(0, limit);
+}
+
+function homepageScore(product: Product, analyticsRank: number): number {
+  let score = 0;
+  const validation = validateProduct(product);
+  score += validation.confidence * 40;
+  score += getPremiumBrandBoost(product.product_name);
+  if (product.qc_link) score += 12;
+  if (analyticsRank >= 0) score += Math.max(0, 30 - analyticsRank);
+  if (product.category_slug === "trending-now") score += 8;
+  return score;
 }
 
 function pickPopularToday(
@@ -43,22 +58,38 @@ function pickPopularToday(
   day: number
 ): Product[] {
   const byId = new Map(getAllProducts().map((product) => [product.id, product]));
-  const fromAnalytics = getTopProductIds(limit * 4)
-    .map((id) => byId.get(id))
+  const topIds = getTopProductIds(limit * 6);
+
+  const fromAnalytics = topIds
+    .map((id, index) => ({ product: byId.get(id), index }))
     .filter(
-      (product): product is Product =>
-        !!product && isFeaturedEligible(product) && !used.has(product.id)
-    );
+      (entry): entry is { product: Product; index: number } =>
+        !!entry.product &&
+        isHomepageFeaturedEligible(entry.product) &&
+        !used.has(entry.product.id)
+    )
+    .sort(
+      (a, b) =>
+        homepageScore(b.product, b.index) - homepageScore(a.product, a.index)
+    )
+    .map((entry) => entry.product);
 
   const picked = [...fromAnalytics];
   const block = new Set([...used, ...picked.map((product) => product.id)]);
 
   if (picked.length < limit) {
-    const pool = getAllProducts().filter(
-      (product) =>
-        isFeaturedEligible(product) &&
-        (product.qc_link || product.category_slug === "trending-now")
-    );
+    const pool = getAllProducts()
+      .filter(
+        (product) =>
+          isHomepageFeaturedEligible(product) &&
+          (product.qc_link || product.category_slug === "trending-now")
+      )
+      .sort(
+        (a, b) =>
+          homepageScore(b, 99) +
+          dayHash(b.id, "popular-today", day) * 0.001 -
+          (homepageScore(a, 99) + dayHash(a.id, "popular-today", day) * 0.001)
+      );
     picked.push(
       ...pickRotated(pool, limit - picked.length, block, day, "popular-today")
     );
@@ -72,7 +103,7 @@ function pickTrending(
   used: Set<string>,
   day: number
 ): Product[] {
-  const trending = getTrendingProducts().filter(isFeaturedEligible);
+  const trending = getTrendingProducts().filter(isHomepageFeaturedEligible);
   const stride = Math.max(1, Math.floor(trending.length / 6));
   const offset = (day % 6) * stride;
   const rotated = [...trending.slice(offset), ...trending.slice(0, offset)];
@@ -84,13 +115,13 @@ function pickNewThisWeek(
   used: Set<string>,
   day: number
 ): Product[] {
-  const latest = getLatestProducts().filter(isFeaturedEligible);
+  const latest = getLatestProducts().filter(isHomepageFeaturedEligible);
   const recentCatalog = getAllProducts()
     .filter(
       (product) =>
         product.group === "category" && Number(product.id) >= 2550
     )
-    .filter(isFeaturedEligible)
+    .filter(isHomepageFeaturedEligible)
     .sort((a, b) => Number(b.id) - Number(a.id));
 
   const merged: Product[] = [];
@@ -114,7 +145,7 @@ function pickNewThisMonth(
   used: Set<string>,
   day: number
 ): Product[] {
-  const pool = getRecencyPool().filter(isFeaturedEligible);
+  const pool = getRecencyPool().filter(isHomepageFeaturedEligible);
   const window = 96;
   const maxOffset = Math.max(1, pool.length - window);
   const offset = (day * 11) % maxOffset;

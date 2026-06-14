@@ -8,6 +8,7 @@ import { extractBrand } from "@/lib/brands";
 import { getRelatedProducts, getYouMayAlsoLike } from "@/lib/discovery";
 import {
   getProductDescription,
+  getProductFacts,
   getProductHighlights,
   getProductSeoDescription,
   getProductSeoTitle,
@@ -61,6 +62,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         ? "/trending"
         : "/latest"
       : `/categories/${product.category_slug}`;
+  const facts = getProductFacts(product, categoryHref);
 
   return (
     <>
@@ -72,13 +74,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
         items={[
           { label: "Home", href: "/" },
           { label: product.category, href: categoryHref },
-          { label: product.product_name },
+          { label: facts.displayName },
         ]}
         currentPath={`/find/${slug}`}
       />
 
       <ProductDetailView
         product={product}
+        facts={facts}
         description={getProductDescription(product)}
         highlights={getProductHighlights(product)}
         brand={brand}

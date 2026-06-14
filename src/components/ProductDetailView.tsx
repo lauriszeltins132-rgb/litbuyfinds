@@ -3,7 +3,10 @@
 import Link from "next/link";
 import { useState } from "react";
 import type { Product } from "@/lib/types";
+import type { ProductFacts } from "@/lib/product-details";
 import DataFreshness from "@/components/DataFreshness";
+import MemberBenefitsStrip from "@/components/conversion/MemberBenefitsStrip";
+import ProductTrustPanel from "@/components/ProductTrustPanel";
 import { formatProductPrice, getPriceStatus } from "@/lib/pricing";
 import { getProductSource } from "@/lib/filters";
 import { getProductHref, slugify } from "@/lib/slugs";
@@ -15,6 +18,7 @@ import ProductImage from "./ProductImage";
 
 type ProductDetailViewProps = {
   product: Product;
+  facts: ProductFacts;
   description: string;
   highlights: string[];
   brand: string | null;
@@ -23,6 +27,7 @@ type ProductDetailViewProps = {
 
 export default function ProductDetailView({
   product,
+  facts,
   description,
   highlights,
   brand,
@@ -44,7 +49,7 @@ export default function ProductDetailView({
   async function shareProduct() {
     const url = `${window.location.origin}${getProductHref(product)}`;
     if (navigator.share) {
-      await navigator.share({ title: product.product_name, url });
+      await navigator.share({ title: facts.displayName, url });
       return;
     }
     await copyLink();
@@ -56,8 +61,8 @@ export default function ProductDetailView({
         <div className="product-image-shell product-image-shell--featured product-image-hover overflow-hidden rounded-3xl border border-border">
           <ProductImage
             src={product.image}
-            alt={product.product_name}
-            productName={product.product_name}
+            alt={facts.displayName}
+            productName={facts.displayName}
             priority
             variant="featured"
             productHref={getProductHref(product)}
@@ -66,7 +71,7 @@ export default function ProductDetailView({
 
         <div className="flex flex-col">
           <div className="flex flex-wrap items-center gap-2">
-            {product.qc_link && (
+            {facts.qcStatus === "available" && (
               <span className="rounded-full border border-accent/35 bg-accent/12 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-accent">
                 QC available
               </span>
@@ -77,10 +82,13 @@ export default function ProductDetailView({
             >
               {product.category}
             </Link>
+            <span className="rounded-full border border-border px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-muted">
+              {facts.imageCount} image
+            </span>
           </div>
 
           <h1 className="mt-4 text-3xl font-black leading-[1.1] tracking-tight sm:text-4xl lg:text-[2.6rem]">
-            {product.product_name}
+            {facts.displayName}
           </h1>
 
           <div className="mt-4 flex flex-wrap gap-2">
@@ -110,26 +118,18 @@ export default function ProductDetailView({
                 {formatProductPrice(product.price, currency)}
               </span>
             </div>
-            {getPriceStatus(product.price) !== "exact" ? (
-              <p className="text-xs text-muted">
-                Confirm the live price on LitBuy before checkout.
-              </p>
-            ) : (
-              <p className="text-xs text-muted">
-                From catalog data — confirm latest price on LitBuy before buying.
-              </p>
-            )}
+            <p className="text-xs text-muted">
+              Confirm live price on LitBuy before checkout.
+            </p>
           </div>
 
-          <div className="mt-3">
-            <DataFreshness variant="block" label="Catalog synced" />
+          <div className="mt-4">
+            <ProductTrustPanel facts={facts} />
           </div>
 
-          <p className="mt-6 text-base leading-relaxed text-foreground/90">
-            {description}
-          </p>
+          <p className="mt-5 text-sm leading-relaxed text-muted">{description}</p>
 
-          <ul className="mt-5 flex flex-wrap gap-2">
+          <ul className="mt-4 flex flex-wrap gap-2">
             {highlights.map((item) => (
               <li
                 key={item}
@@ -165,6 +165,10 @@ export default function ProductDetailView({
             ) : null}
           </div>
 
+          <div className="mt-8">
+            <MemberBenefitsStrip location="product_page_benefits" compact />
+          </div>
+
           <HowToBuySteps />
 
           <div className="mt-6 flex flex-wrap gap-2">
@@ -193,6 +197,10 @@ export default function ProductDetailView({
             >
               {copied ? "Copied" : "Copy link"}
             </button>
+          </div>
+
+          <div className="mt-4">
+            <DataFreshness variant="block" label="Catalog synced" />
           </div>
         </div>
       </div>

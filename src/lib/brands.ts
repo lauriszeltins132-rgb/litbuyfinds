@@ -103,6 +103,29 @@ export function extractBrand(productName: string): string | null {
   return null;
 }
 
+/** All distinct brands mentioned in text (longest match first). */
+export function extractAllBrands(text: string): string[] {
+  const upper = text.toUpperCase();
+  const found: string[] = [];
+  const used = new Set<string>();
+
+  const sorted = [...KNOWN_BRANDS].sort((a, b) => b.length - a.length);
+  for (const brand of sorted) {
+    if (!upper.includes(brand.toUpperCase())) continue;
+    const key = brand.toLowerCase();
+    if (used.has(key)) continue;
+    const overlaps = found.some(
+      (existing) =>
+        existing.toLowerCase().includes(key) || key.includes(existing.toLowerCase())
+    );
+    if (overlaps && found.length > 0) continue;
+    found.push(brand);
+    used.add(key);
+  }
+
+  return found;
+}
+
 export function getBrandsFromProducts(products: Product[]): BrandInfo[] {
   const counts = new Map<string, number>();
 

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import type { Product } from "@/lib/types";
 import { extractBrand } from "@/lib/brands";
+import { getDisplayProductName } from "@/lib/product-validation";
 import { formatProductPrice, getPriceStatus } from "@/lib/pricing";
 import { getTrendingScore } from "@/lib/discovery";
 import { getProductSource } from "@/lib/filters";
@@ -44,7 +45,8 @@ export default function ProductCard({
   const { isInWishlist, toggleWishlist } = useWishlist();
   const [copied, setCopied] = useState(false);
   const saved = isInWishlist(product.id);
-  const brand = extractBrand(product.product_name);
+  const displayName = getDisplayProductName(product);
+  const brand = extractBrand(displayName);
   const source = getProductSource(product.affiliate_link);
   const productHref = getProductHref(product);
   const heatScore = getTrendingScore(product);
@@ -75,8 +77,8 @@ export default function ProductCard({
       >
         <ProductImage
           src={product.image}
-          alt={product.product_name}
-          productName={product.product_name}
+          alt={displayName}
+          productName={displayName}
           variant="card"
           productHref={productHref}
         />
@@ -106,7 +108,7 @@ export default function ProductCard({
               compact ? "text-xs" : "text-sm"
             }`}
           >
-            {product.product_name}
+            {displayName}
           </h3>
         </Link>
 

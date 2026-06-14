@@ -1,5 +1,5 @@
 import { extractBrand, getBrandsFromProducts } from "./brands";
-import { isFeaturedEligible } from "./product-media";
+import { isFeaturedEligible, isHomepageFeaturedEligible } from "./product-media";
 import { hasExactPrice } from "./pricing";
 import { getRecentlyAddedPreview } from "./recency";
 import {
@@ -35,7 +35,7 @@ export function getEditorsPicks(limit = 12): Product[] {
   const seen = new Set<string>();
 
   return pool
-    .filter((product) => isFeaturedEligible(product) && product.qc_link)
+    .filter((product) => isHomepageFeaturedEligible(product) && product.qc_link)
     .filter((product) => {
       if (seen.has(product.id)) return false;
       seen.add(product.id);
