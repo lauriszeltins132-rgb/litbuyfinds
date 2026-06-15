@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect } from "react";
 import type { Product } from "@/lib/types";
 import { getProductHref } from "@/lib/slugs";
-import { extractBrand } from "@/lib/brands";
+import { getDisplayBrand, getDisplayProductName } from "@/lib/product-validation";
 import { formatProductPrice } from "@/lib/pricing";
 import { getProductSource } from "@/lib/filters";
 import {
@@ -39,7 +39,8 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
 
   if (!product) return null;
 
-  const brand = extractBrand(product.product_name);
+  const displayName = getDisplayProductName(product);
+  const brand = getDisplayBrand(product);
   const source = getProductSource(product.affiliate_link);
 
   return (
@@ -70,8 +71,8 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
             <div className="product-image-shell product-image-hover relative aspect-square overflow-hidden rounded-2xl">
               <ProductImage
                 src={product.image}
-                alt={product.product_name}
-                productName={product.product_name}
+                alt={displayName}
+                productName={displayName}
                 variant="card"
                 productHref={getProductHref(product)}
               />
@@ -90,7 +91,7 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
           </div>
 
           <div className="flex flex-col p-5">
-            <h2 className="text-2xl font-black">{product.product_name}</h2>
+            <h2 className="text-2xl font-black">{displayName}</h2>
             <div className="mt-3 flex flex-wrap gap-2">
               {brand && (
                 <span className="rounded-full border border-border px-3 py-1 text-xs font-bold">

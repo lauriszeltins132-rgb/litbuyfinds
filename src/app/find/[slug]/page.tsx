@@ -4,8 +4,13 @@ import { notFound } from "next/navigation";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import ProductDetailView from "@/components/ProductDetailView";
 import ProductGrid from "@/components/ProductGrid";
-import { extractBrand } from "@/lib/brands";
-import { getRelatedProducts, getYouMayAlsoLike } from "@/lib/discovery";
+import { getDisplayBrand } from "@/lib/product-validation";
+import {
+  getMoreFromBrand,
+  getPopularInCategory,
+  getRelatedProducts,
+  getYouMayAlsoLike,
+} from "@/lib/discovery";
 import {
   getProductDescription,
   getProductFacts,
@@ -19,6 +24,7 @@ import FloatingBackButton from "@/components/FloatingBackButton";
 import ProductJsonLd from "@/components/ProductJsonLd";
 import RelatedGuides from "@/components/RelatedGuides";
 import RecordRecentlyViewed from "@/components/RecordRecentlyViewed";
+import RecentlyViewedRail from "@/components/RecentlyViewedRail";
 import TrackProductView from "@/components/TrackProductView";
 import { getRelatedGuidesForProduct } from "@/lib/related-guides";
 
@@ -53,9 +59,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
     notFound();
   }
 
-  const brand = extractBrand(product.product_name);
+  const brand = getDisplayBrand(product);
   const related = getRelatedProducts(product);
   const alsoLike = getYouMayAlsoLike(product);
+  const moreFromBrand = brand ? getMoreFromBrand(product, brand) : [];
+  const popularInCategory = getPopularInCategory(product);
   const categoryHref =
     product.group === "featured"
       ? product.category_slug === "trending-now"
@@ -103,12 +111,40 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </section>
       ) : null}
 
+      {moreFromBrand.length > 0 ? (
+        <section className="px-4 pt-4 sm:px-6">
+          <div className="mx-auto max-w-7xl">
+            <h2 className="text-xl font-black">More from {brand}</h2>
+            <p className="mt-1 text-sm text-muted">
+              Popular {brand} finds in the catalog.
+            </p>
+            <div className="mt-6">
+              <ProductGrid products={moreFromBrand} />
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      {popularInCategory.length > 0 ? (
+        <section className="px-4 pt-4 sm:px-6">
+          <div className="mx-auto max-w-7xl">
+            <h2 className="text-xl font-black">Popular in {product.category}</h2>
+            <p className="mt-1 text-sm text-muted">
+              Trending picks from this category.
+            </p>
+            <div className="mt-6">
+              <ProductGrid products={popularInCategory} />
+            </div>
+          </div>
+        </section>
+      ) : null}
+
       <RelatedGuides links={getRelatedGuidesForProduct(product)} />
 
       {alsoLike.length > 0 ? (
         <section className="px-4 py-10 sm:px-6">
           <div className="mx-auto max-w-7xl">
-            <h2 className="text-xl font-black">You may also like</h2>
+            <h2 className="text-xl font-black">People also viewed</h2>
             <p className="mt-1 text-sm text-muted">
               Other picks in a similar price range and style.
             </p>
@@ -118,6 +154,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </div>
         </section>
       ) : null}
+
+      <RecentlyViewedRail excludeProductId={product.id} title="Your recently viewed" />
 
       <section className="px-4 pb-16 pt-4 sm:px-6">
         <div className="mx-auto flex max-w-7xl flex-wrap justify-center gap-4 text-center">

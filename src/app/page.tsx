@@ -7,14 +7,12 @@ import DiscoveryRail from "@/components/DiscoveryRail";
 import HomepageBrands from "@/components/HomepageBrands";
 import HomepageCategories from "@/components/HomepageCategories";
 import HomepageWhyLitBuy from "@/components/HomepageWhyLitBuy";
-import RecentlyAddedPreview from "@/components/RecentlyAddedPreview";
 import RecentlyViewedRail from "@/components/RecentlyViewedRail";
-import StatsStrip from "@/components/StatsStrip";
 import TrustStrip from "@/components/TrustStrip";
-import { getBudgetFinds } from "@/lib/discovery";
 import { getHomepageRails } from "@/lib/homepage-rails";
 import { getBrandsFromProducts } from "@/lib/brands";
 import { getAllProducts, getCategories } from "@/lib/products";
+import { slugify } from "@/lib/slugs";
 import { buildHomepageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildHomepageMetadata();
@@ -30,38 +28,67 @@ export default function HomePage() {
       <DiscoveryHero />
 
       <DiscoveryRail
-        title="🔥 Popular Today"
-        subtitle="Most viewed and clicked finds — premium brands weighted"
+        title="Popular Today"
+        subtitle="Most viewed and clicked in the last 24 hours"
         href="/most-popular-finds-now"
         products={rails.popularToday}
         showTrendingScore
       />
 
       <DiscoveryRail
-        title="Trending This Week"
-        subtitle="Hot picks from the trending sheet"
+        title="Popular This Week"
+        subtitle="Trending sneakers, jackets and streetwear from the last 7 days"
         href="/trending"
-        products={rails.trending}
+        products={rails.popularWeek}
         showTrendingScore
+      />
+
+      <DiscoveryRail
+        title="Recently Added"
+        subtitle="Fresh Weidian, Taobao and LitBuy listings"
+        href="/recently-added"
+        products={rails.recentlyAdded}
       />
 
       <TrustStrip compact />
 
-      <RecentlyAddedPreview />
+      <DiscoveryRail
+        title="Top QC Finds"
+        subtitle="QC-approved products with warehouse photo references"
+        href="/best-qc-approved-finds"
+        products={rails.topQcFinds}
+      />
+
       <HomepageCategories categories={categories} />
-      <HomepageBrands />
+
+      {rails.trendingBrand ? (
+        <DiscoveryRail
+          title={`Trending: ${rails.trendingBrand.brand}`}
+          subtitle="Popular finds from this brand right now"
+          href={`/brands/${slugify(rails.trendingBrand.brand)}`}
+          products={rails.trendingBrand.products}
+        />
+      ) : null}
+
+      <HomepageBrands hideSpotlight />
+
+      <DiscoveryRail
+        title="Budget Finds Under $30"
+        subtitle="Affordable picks that still look premium"
+        href="/deals"
+        products={rails.budgetFinds}
+      />
+
+      <DiscoveryRail
+        title="Popular This Month"
+        subtitle="Standout finds from the last 30 days"
+        href="/top-litbuy-finds-this-month"
+        products={rails.popularMonth}
+      />
 
       <HomepageWhyLitBuy />
 
-      <DiscoveryRail
-        title="Best Under $30"
-        subtitle="Budget-friendly finds that still look premium"
-        href="/deals"
-        products={getBudgetFinds()}
-      />
-
       <RecentlyViewedRail />
-      <StatsStrip />
 
       <section className="px-4 pb-2 sm:px-6">
         <div className="mx-auto max-w-7xl text-center">

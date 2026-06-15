@@ -52,6 +52,12 @@ const INCOMPATIBLE_TYPES: [string, string][] = [
   ["watch", "jacket"],
 ];
 
+const COLLECTION_PATTERN =
+  /\b(collection|assorted|multi|various|mix|set|pack|combo|lot|bundle|styles?)\b/i;
+
+const SINGULAR_HEADWEAR =
+  /\b(hat|cap|beanie|beret)\b/i;
+
 function detectTypes(text: string): Set<string> {
   const found = new Set<string>();
   for (const [type, pattern] of Object.entries(PRODUCT_TYPES)) {
@@ -79,12 +85,24 @@ function singularCategory(product: Product): string {
   return map[product.category_slug] ?? product.category;
 }
 
+function looksLikeMultiItemListing(title: string, imageUrl: string): boolean {
+  const combined = `${title} ${imageUrl}`;
+  if (COLLECTION_PATTERN.test(combined)) return true;
+  if (/\b\d+\s*(pc|pcs|piece|color|style)/i.test(combined)) return true;
+  if (SINGULAR_HEADWEAR.test(title) && !COLLECTION_PATTERN.test(title)) {
+    if (/\b(multi|assort|various|styles|colors)\b/i.test(imageUrl)) return true;
+  }
+  return false;
+}
+
 function pickDisplayType(
   titleTypes: Set<string>,
   categorySlug: string,
   title: string
 ): string | null {
   if (/\bbackpack\b/i.test(title)) return "Backpack";
+  if (/\bbeanie\b/i.test(title)) return "Beanie";
+  if (/\b(hat|cap)\b/i.test(title)) return "Hat";
   const expected = CATEGORY_TYPES[categorySlug] ?? [];
   for (const type of expected) {
     if (titleTypes.has(type)) return TYPE_LABELS[type] ?? type;
@@ -97,7 +115,8 @@ function buildGenericTitle(
   product: Product,
   brand: string | null,
   titleTypes: Set<string>,
-  useBrand: boolean
+  useBrand: boolean,
+  multiItem: boolean
 ): string {
   const typeLabel = pickDisplayType(
     titleTypes,
@@ -107,19 +126,34 @@ function buildGenericTitle(
   const fashionLabel = typeLabel
     ? `${typeLabel.charAt(0).toUpperCase()}${typeLabel.slice(1)}`
     : singularCategory(product);
+  const suffix = multiItem ? " Collection" : "";
 
-  if (useBrand && brand && typeLabel) return `${brand} ${fashionLabel}`;
+  if (useBrand && brand && typeLabel) return `${brand} ${fashionLabel}${suffix}`;
   if (useBrand && brand) return `${brand} find`;
-  if (typeLabel) return `Fashion ${fashionLabel}`;
+  if (typeLabel) return `Fashion ${fashionLabel}${suffix}`;
   return `${singularCategory(product)} find`;
+}
+
+function resolveTrustedBrand(
+  title: string,
+  titleBrands: string[],
+  urlBrands: string[],
+  brandConflict: boolean
+): string | null {
+  if (brandConflict) return null;
+  if (titleBrands.length === 1) return titleBrands[0];
+  if (titleBrands.length === 0 && urlBrands.length === 1) return urlBrands[0];
+  return extractBrand(title);
 }
 
 export function validateProduct(product: Product): ProductValidation {
   const title = product.product_name.trim();
   const titleBrands = extractAllBrands(title);
   const titleTypes = detectTypes(title);
-  const urlBrands = product.image ? extractAllBrands(product.image) : [];
+  const imageUrl = product.image ?? "";
+  const urlBrands = imageUrl ? extractAllBrands(imageUrl) : [];
   const expectedTypes = CATEGORY_TYPES[product.category_slug] ?? [];
+  const multiItem = looksLikeMultiItemListing(title, imageUrl);
 
   let confidence = 1;
   const issues: string[] = [];
@@ -144,14 +178,26 @@ export function validateProduct(product: Product): ProductValidation {
     }
   }
 
-  if (titleBrands.length === 1 && urlBrands.length === 1) {
-    if (
-      titleBrands[0].toLowerCase() !== urlBrands[0].toLowerCase() &&
-      !title.toLowerCase().includes(urlBrands[0].toLowerCase())
-    ) {
-      confidence -= 0.3;
+  if (titleBrands.length === 1 && urlBrands.length >= 1) {
+    const titleBrand = titleBrands[0].toLowerCase();
+    const urlHasConflict = urlBrands.some(
+      (brand) =>
+        brand.toLowerCase() !== titleBrand &&
+        !title.toLowerCase().includes(brand.toLowerCase())
+    );
+    if (urlHasConflict) {
+      confidence -= 0.35;
       issues.push("image_url_brand_mismatch");
     }
+  }
+
+  if (titleBrands.length === 0 && urlBrands.length === 1) {
+    confidence += 0.05;
+  }
+
+  if (multiItem && !COLLECTION_PATTERN.test(title)) {
+    confidence -= 0.25;
+    issues.push("likely_multi_item_listing");
   }
 
   if (title.split(/\s+/).filter(Boolean).length < 2) {
@@ -165,30 +211,59 @@ export function validateProduct(product: Product): ProductValidation {
   }
 
   const normalized = Math.max(0, Math.min(1, confidence));
-  const isTitleTrusted = normalized >= 0.6;
-  const primaryBrand =
-    titleBrands.length === 1 ? titleBrands[0] : extractBrand(title);
   const brandConflict =
     issues.includes("multiple_brands_in_title") ||
     issues.includes("image_url_brand_mismatch") ||
     issues.includes("category_type_mismatch");
-  const trustBrand = brandConflict ? null : primaryBrand;
+  const trustBrand = resolveTrustedBrand(
+    title,
+    titleBrands,
+    urlBrands,
+    brandConflict
+  );
+  const isTitleTrusted =
+    normalized >= 0.6 && !issues.includes("likely_multi_item_listing");
+
+  let displayName = isTitleTrusted ? product.product_name : "";
+  if (!isTitleTrusted) {
+    displayName = buildGenericTitle(
+      product,
+      trustBrand,
+      titleTypes,
+      !brandConflict,
+      multiItem
+    );
+  } else if (
+    multiItem &&
+    issues.includes("likely_multi_item_listing") &&
+    !/\bcollection\b/i.test(title)
+  ) {
+    displayName = `${product.product_name} Collection`;
+  }
 
   return {
     confidence: normalized,
     issues,
     isTitleTrusted,
-    displayName: isTitleTrusted
-      ? product.product_name
-      : buildGenericTitle(product, trustBrand, titleTypes, !brandConflict),
+    displayName,
     displayBrand: trustBrand,
   };
 }
 
+const validationCache = new WeakMap<Product, ProductValidation>();
+
+export function validateProductCached(product: Product): ProductValidation {
+  const cached = validationCache.get(product);
+  if (cached) return cached;
+  const result = validateProduct(product);
+  validationCache.set(product, result);
+  return result;
+}
+
 export function getDisplayProductName(product: Product): string {
-  return validateProduct(product).displayName;
+  return validateProductCached(product).displayName;
 }
 
 export function getDisplayBrand(product: Product): string | null {
-  return validateProduct(product).displayBrand;
+  return validateProductCached(product).displayBrand;
 }

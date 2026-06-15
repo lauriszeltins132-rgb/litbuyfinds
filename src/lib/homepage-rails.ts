@@ -1,12 +1,9 @@
 import { getTopProductIds, getProductEngagementScore } from "./analytics-store";
+import { extractBrand, getBrandsFromProducts } from "./brands";
 import { getPremiumBrandBoost } from "./curation";
+import { getDealProducts, getAllProducts, getLatestProducts, getTrendingProducts } from "./products";
 import { isHomepageFeaturedEligible } from "./product-media";
 import { validateProduct } from "./product-validation";
-import {
-  getAllProducts,
-  getLatestProducts,
-  getTrendingProducts,
-} from "./products";
 import { getRecencyPool } from "./recency";
 import type { Product } from "./types";
 
@@ -27,8 +24,19 @@ function dayHash(id: string, salt: string, day: number): number {
 const LOW_PRIORITY_PATTERN =
   /\b(hat|cap|beanie|beret|scarf|belt|glove|sock)\b/i;
 
-function isPopularTodayCandidate(product: Product): boolean {
+const PREMIUM_BRANDS = [
+  "Nike",
+  "Jordan",
+  "Adidas",
+  "Moncler",
+  "Stone Island",
+  "Arc'teryx",
+  "Canada Goose",
+];
+
+function isRailCandidate(product: Product): boolean {
   if (!isHomepageFeaturedEligible(product)) return false;
+  if (validateProduct(product).confidence < 0.45) return false;
 
   const boost = getPremiumBrandBoost(product.product_name);
   const engagement = getProductEngagementScore(product.id);
@@ -46,13 +54,8 @@ function pickRotated(
   salt: string
 ): Product[] {
   return pool
-    .filter(
-      (product) =>
-        isPopularTodayCandidate(product) && !used.has(product.id)
-    )
-    .sort(
-      (a, b) => dayHash(b.id, salt, day) - dayHash(a.id, salt, day)
-    )
+    .filter((product) => isRailCandidate(product) && !used.has(product.id))
+    .sort((a, b) => dayHash(b.id, salt, day) - dayHash(a.id, salt, day))
     .slice(0, limit);
 }
 
@@ -79,14 +82,14 @@ function pickPopularToday(
   day: number
 ): Product[] {
   const byId = new Map(getAllProducts().map((product) => [product.id, product]));
-  const topIds = getTopProductIds(limit * 8);
+  const topIds = getTopProductIds(limit * 10);
 
   const fromAnalytics = topIds
     .map((id, index) => ({ product: byId.get(id), index }))
     .filter(
       (entry): entry is { product: Product; index: number } =>
         !!entry.product &&
-        isPopularTodayCandidate(entry.product) &&
+        isRailCandidate(entry.product) &&
         !used.has(entry.product.id)
     )
     .sort(
@@ -102,7 +105,7 @@ function pickPopularToday(
     const pool = getAllProducts()
       .filter(
         (product) =>
-          isPopularTodayCandidate(product) &&
+          isRailCandidate(product) &&
           (getPremiumBrandBoost(product.product_name) >= 80 ||
             product.qc_link ||
             product.category_slug === "trending-now" ||
@@ -123,30 +126,30 @@ function pickPopularToday(
   return picked.slice(0, limit);
 }
 
-function pickTrending(
+function pickPopularWeek(
   limit: number,
   used: Set<string>,
   day: number
 ): Product[] {
-  const trending = getTrendingProducts().filter(isPopularTodayCandidate);
-  const stride = Math.max(1, Math.floor(trending.length / 6));
-  const offset = (day % 6) * stride;
+  const trending = getTrendingProducts().filter(isRailCandidate);
+  const stride = Math.max(1, Math.floor(trending.length / 7));
+  const offset = (day % 7) * stride;
   const rotated = [...trending.slice(offset), ...trending.slice(0, offset)];
-  return pickRotated(rotated, limit, used, day, "trending-week");
+  return pickRotated(rotated, limit, used, day, "popular-week");
 }
 
-function pickNewThisWeek(
+function pickRecentlyAdded(
   limit: number,
   used: Set<string>,
   day: number
 ): Product[] {
-  const latest = getLatestProducts().filter(isHomepageFeaturedEligible);
+  const latest = getLatestProducts().filter(isRailCandidate);
   const recentCatalog = getAllProducts()
     .filter(
       (product) =>
         product.group === "category" && Number(product.id) >= 2550
     )
-    .filter(isHomepageFeaturedEligible)
+    .filter(isRailCandidate)
     .sort((a, b) => Number(b.id) - Number(a.id));
 
   const merged: Product[] = [];
@@ -157,37 +160,104 @@ function pickNewThisWeek(
     merged.push(product);
   }
 
-  const window = 48;
+  const window = 56;
   const maxOffset = Math.max(1, merged.length - window);
-  const offset = (day * 7) % maxOffset;
+  const offset = (day * 5) % maxOffset;
   const slice = merged.slice(offset, offset + window);
 
-  return pickRotated(slice, limit, used, day, "new-week");
+  return pickRotated(slice, limit, used, day, "recently-added");
 }
 
-function pickNewThisMonth(
+function pickTopQcFinds(
   limit: number,
   used: Set<string>,
   day: number
 ): Product[] {
-  const pool = getRecencyPool().filter(isHomepageFeaturedEligible);
-  const window = 96;
+  const pool = getAllProducts()
+    .filter(
+      (product) =>
+        product.qc_link && isRailCandidate(product) && !used.has(product.id)
+    )
+    .sort(
+      (a, b) =>
+        popularityScore(b, 50) +
+        dayHash(b.id, "top-qc", day) * 0.001 -
+        (popularityScore(a, 50) + dayHash(a.id, "top-qc", day) * 0.001)
+    );
+
+  return pickRotated(pool, limit, used, day, "top-qc");
+}
+
+function pickPopularMonth(
+  limit: number,
+  used: Set<string>,
+  day: number
+): Product[] {
+  const pool = getRecencyPool().filter(isRailCandidate);
+  const window = 120;
   const maxOffset = Math.max(1, pool.length - window);
-  const offset = (day * 11) % maxOffset;
+  const offset = (day * 13) % maxOffset;
   const slice = pool.slice(offset, offset + window);
 
-  return pickRotated(slice, limit, used, day + 3, "new-month");
+  return pickRotated(slice, limit, used, day + 3, "popular-month");
+}
+
+function pickBudgetFinds(
+  limit: number,
+  used: Set<string>,
+  day: number
+): Product[] {
+  const pool = getDealProducts(30).filter(
+    (product) => isRailCandidate(product) && !used.has(product.id)
+  );
+  return pickRotated(pool, limit, used, day, "budget-finds");
+}
+
+function pickTrendingBrand(
+  used: Set<string>,
+  day: number
+): { brand: string; products: Product[] } | null {
+  const brands = getBrandsFromProducts(getAllProducts()).filter((brand) =>
+    PREMIUM_BRANDS.some(
+      (name) => name.toLowerCase() === brand.name.toLowerCase()
+    )
+  );
+
+  if (brands.length === 0) return null;
+
+  const brand = brands[day % brands.length];
+  const products = getAllProducts()
+    .filter(
+      (product) =>
+        extractBrand(product.product_name) === brand.name &&
+        isRailCandidate(product) &&
+        !used.has(product.id)
+    )
+    .sort(
+      (a, b) =>
+        popularityScore(b, 80) +
+        dayHash(b.id, `brand-${brand.slug}`, day) * 0.001 -
+        (popularityScore(a, 80) +
+          dayHash(a.id, `brand-${brand.slug}`, day) * 0.001)
+    )
+    .slice(0, 8);
+
+  if (products.length === 0) return null;
+  return { brand: brand.name, products };
 }
 
 export type HomepageRails = {
   popularToday: Product[];
-  trending: Product[];
-  newThisWeek: Product[];
-  newThisMonth: Product[];
+  popularWeek: Product[];
+  recentlyAdded: Product[];
+  topQcFinds: Product[];
+  popularMonth: Product[];
+  budgetFinds: Product[];
+  trendingBrand: { brand: string; products: Product[] } | null;
   dayIndex: number;
 };
 
-/** Deduplicated homepage rails with daily deterministic rotation. */
+/** Deduplicated homepage rails — each section uses separate logic. */
 export function getHomepageRails(limit = 12): HomepageRails {
   const day = getUtcDayIndex();
   const used = new Set<string>();
@@ -195,19 +265,37 @@ export function getHomepageRails(limit = 12): HomepageRails {
   const popularToday = pickPopularToday(limit, used, day);
   popularToday.forEach((product) => used.add(product.id));
 
-  const trending = pickTrending(limit, used, day);
-  trending.forEach((product) => used.add(product.id));
+  const popularWeek = pickPopularWeek(limit, used, day);
+  popularWeek.forEach((product) => used.add(product.id));
 
-  const newThisWeek = pickNewThisWeek(limit, used, day);
-  newThisWeek.forEach((product) => used.add(product.id));
+  const recentlyAdded = pickRecentlyAdded(limit, used, day);
+  recentlyAdded.forEach((product) => used.add(product.id));
 
-  const newThisMonth = pickNewThisMonth(limit, used, day);
+  const topQcFinds = pickTopQcFinds(limit, used, day);
+  topQcFinds.forEach((product) => used.add(product.id));
+
+  const budgetFinds = pickBudgetFinds(limit, used, day);
+  budgetFinds.forEach((product) => used.add(product.id));
+
+  const popularMonth = pickPopularMonth(limit, used, day);
+  popularMonth.forEach((product) => used.add(product.id));
+
+  const trendingBrand = pickTrendingBrand(used, day);
+  trendingBrand?.products.forEach((product) => used.add(product.id));
 
   return {
     popularToday,
-    trending,
-    newThisWeek,
-    newThisMonth,
+    popularWeek,
+    recentlyAdded,
+    topQcFinds,
+    popularMonth,
+    budgetFinds,
+    trendingBrand,
     dayIndex: day,
   };
+}
+
+/** @deprecated use popularWeek */
+export function getLegacyTrendingRail(limit = 12) {
+  return getHomepageRails(limit).popularWeek;
 }

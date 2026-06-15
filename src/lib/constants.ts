@@ -1,22 +1,26 @@
+import { formatCatalogCountForSeo } from "./catalog-count";
+
 export const SITE_NAME = "LitBuy Finds";
 
-export const HOMEPAGE_TITLE =
-  "LitBuy Finds | Premium Product Discovery, QC Guides & Verified Finds";
+const CATALOG_COUNT = formatCatalogCountForSeo();
 
-export const SITE_DESCRIPTION =
-  "Discover trending sneakers, fashion finds, QC-approved products, buying guides, trusted agent resources and daily LitBuy finds.";
+export const HOMEPAGE_TITLE = `LitBuy Finds – ${CATALOG_COUNT} QC Approved Weidian, Taobao & LitBuy Finds`;
+
+export const SITE_DESCRIPTION = `Browse ${CATALOG_COUNT} curated LitBuy finds including sneakers, clothing, jackets, bags, accessories and trending fashion products. QC-approved items, verified links, trusted sellers and daily updates.`;
+
+export const SITE_OG_TITLE = `LitBuy Finds – ${CATALOG_COUNT} QC Approved Finds`;
 
 export const SITE_OG_DESCRIPTION =
-  "Discover trending sneakers, fashion finds, QC-approved products, buying guides, trusted agent resources and daily LitBuy finds.";
+  "Discover trending sneakers, clothing, jackets, bags and accessories from trusted sellers. Updated daily with verified QC finds.";
 
 export const HERO_HEADLINE = "Discover the Best LitBuy Finds";
 
 export const HERO_SUBHEADLINE =
-  "Curated fashion finds, verified links, QC photos, and daily updates.";
+  "Curated Weidian, Taobao & LitBuy fashion finds with QC photos, verified links, and daily updates.";
 
 export const HERO_TAGLINE = HERO_SUBHEADLINE;
 
-export const SITE_TAGLINE = "Fashion, sneakers & designer finds";
+export const SITE_TAGLINE = "QC-approved fashion, sneakers & designer finds";
 
 export const POPULAR_SEARCHES = [
   "Nike",
@@ -40,10 +44,13 @@ export const LITBUY_SIGNUP_URL =
   "https://litbuy.com/register?inviteCode=SMKS";
 
 /** Benefit-driven CTAs site-wide */
-export const REGISTER_CTA_LABEL = "Get 30% Shipping Discount";
-export const REGISTER_HEADER_CTA_LABEL = "Unlock QC Photos";
-export const REGISTER_MODAL_CTA_LABEL = "Get Your LitBuy Account";
+export const REGISTER_CTA_LABEL = "Register & Get Shipping Discount";
+export const REGISTER_HEADER_CTA_LABEL = "Register & Unlock QC Photos";
+export const REGISTER_MODAL_CTA_LABEL = "Get Member Access";
 export const REGISTER_STICKY_CTA_LABEL = "Unlock Access";
+export const REGISTER_SAVE_CTA_LABEL = "Register & Save Finds";
+export const REGISTER_QC_CTA_LABEL = "Register & Unlock QC Photos";
+export const REGISTER_EXIT_CTA_LABEL = "Create Free LitBuy Account";
 export const BROWSE_FINDS_CTA_LABEL = "Browse Finds";
 
 export const LITBUY_ACCOUNT_BENEFITS = [

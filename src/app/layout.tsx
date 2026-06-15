@@ -25,6 +25,7 @@ import {
   SITE_DESCRIPTION,
   SITE_NAME,
   SITE_OG_DESCRIPTION,
+  SITE_OG_TITLE,
 } from "@/lib/constants";
 import "./globals.css";
 
@@ -42,15 +43,16 @@ export const metadata: Metadata = {
   description: SITE_DESCRIPTION,
   keywords: [
     "litbuy finds",
+    "weidian finds",
+    "taobao finds",
+    "qc approved finds",
     "litbuy spreadsheet",
     "sneaker finds",
     "fashion finds",
-    "weidian finds",
-    "product discovery",
   ],
   metadataBase: new URL("https://litbuyfinds.io"),
   openGraph: {
-    title: HOMEPAGE_TITLE,
+    title: SITE_OG_TITLE,
     description: SITE_OG_DESCRIPTION,
     url: "https://litbuyfinds.io",
     siteName: SITE_NAME,
@@ -68,7 +70,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: HOMEPAGE_TITLE,
+    title: SITE_OG_TITLE,
     description: SITE_OG_DESCRIPTION,
     images: [PROMO_OG_IMAGE_URL],
   },

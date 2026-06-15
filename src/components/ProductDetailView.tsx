@@ -7,6 +7,7 @@ import type { ProductFacts } from "@/lib/product-details";
 import DataFreshness from "@/components/DataFreshness";
 import MemberBenefitsStrip from "@/components/conversion/MemberBenefitsStrip";
 import ProductTrustPanel from "@/components/ProductTrustPanel";
+import QcAccessGate from "@/components/conversion/QcAccessGate";
 import { formatProductPrice, getPriceStatus } from "@/lib/pricing";
 import { getProductSource } from "@/lib/filters";
 import { getProductHref, slugify } from "@/lib/slugs";
@@ -153,15 +154,13 @@ export default function ProductDetailView({
               </a>
             )}
             {product.qc_link ? (
-              <a
-                href={product.qc_link}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => trackProductContext("qc_click", product, "product_page")}
-                className="inline-flex items-center justify-center rounded-full border border-accent/30 bg-accent/10 px-6 py-3.5 text-sm font-bold text-accent"
-              >
-                View QC
-              </a>
+              <QcAccessGate
+                qcLink={product.qc_link}
+                productName={facts.displayName}
+                onTrackQc={() =>
+                  trackProductContext("qc_click", product, "product_page")
+                }
+              />
             ) : null}
           </div>
 

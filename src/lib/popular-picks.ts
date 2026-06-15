@@ -6,5 +6,5 @@ export function getPopularToday(limit = 12) {
 }
 
 export function getMonthlyHighlights(limit = 96) {
-  return getHomepageRails(Math.min(limit, 12)).newThisMonth;
+  return getHomepageRails(Math.min(limit, 12)).popularMonth;
 }

@@ -7,7 +7,11 @@ export const CONVERSION_DISMISS_KEYS = {
   unlockVerified: "litbuy-dismiss-unlock-verified",
   browseNudge: "litbuy-dismiss-browse-nudge",
   stickyBenefit: "litbuy-dismiss-sticky-benefit",
+  exitIntent: "litbuy-dismiss-exit-intent",
+  qcPrompt: "litbuy-dismiss-qc-prompt",
 } as const;
+
+export const SAVE_FINDS_PROMPT_THRESHOLD = 2;
 
 export const GUEST_VS_MEMBER_ROWS = [
   {

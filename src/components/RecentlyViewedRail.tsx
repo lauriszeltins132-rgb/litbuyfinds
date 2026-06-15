@@ -3,17 +3,28 @@
 import DiscoveryRail from "./DiscoveryRail";
 import { useRecentlyViewed } from "@/context/RecentlyViewedContext";
 
-export default function RecentlyViewedRail() {
-  const { items } = useRecentlyViewed();
+type RecentlyViewedRailProps = {
+  excludeProductId?: string;
+  title?: string;
+};
 
-  if (items.length === 0) return null;
+export default function RecentlyViewedRail({
+  excludeProductId,
+  title = "Recently Viewed",
+}: RecentlyViewedRailProps) {
+  const { items } = useRecentlyViewed();
+  const products = items
+    .filter((product) => product.id !== excludeProductId)
+    .slice(0, 12);
+
+  if (products.length === 0) return null;
 
   return (
     <DiscoveryRail
-      title="Recently Viewed"
-      subtitle="Pick up where you left off"
+      title={title}
+      subtitle="People also viewed these finds"
       href="/"
-      products={items.slice(0, 12)}
+      products={products}
     />
   );
 }

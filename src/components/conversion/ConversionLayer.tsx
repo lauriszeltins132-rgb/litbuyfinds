@@ -1,6 +1,7 @@
 "use client";
 
 import BrowsingBenefitCard from "./BrowsingBenefitCard";
+import ExitIntentSignup from "./ExitIntentSignup";
 import ProductBrowseSignupNudge from "./ProductBrowseSignupNudge";
 import UnlockVerifiedLinksPrompt from "./UnlockVerifiedLinksPrompt";
 
@@ -11,6 +12,7 @@ export default function ConversionLayer() {
       <UnlockVerifiedLinksPrompt />
       <ProductBrowseSignupNudge />
       <BrowsingBenefitCard />
+      <ExitIntentSignup />
     </>
   );
 }

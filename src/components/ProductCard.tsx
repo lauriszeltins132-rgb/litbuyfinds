@@ -21,11 +21,11 @@ type ProductCardProps = {
   showTrendingScore?: boolean;
 };
 
-async function shareProduct(product: Product) {
+async function shareProduct(product: Product, title: string) {
   const url = `${window.location.origin}${getProductHref(product)}`;
   if (navigator.share) {
     await navigator.share({
-      title: product.product_name,
+      title,
       text: `Check out this find on LitBuy Finds`,
       url,
     });
@@ -176,7 +176,7 @@ export default function ProductCard({
 
           <button
             type="button"
-            onClick={() => shareProduct(product)}
+            onClick={() => shareProduct(product, displayName)}
             aria-label="Share product"
             className={iconBtn}
           >

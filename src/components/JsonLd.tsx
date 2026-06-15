@@ -26,7 +26,9 @@ export default function JsonLd() {
       url: SITE_URL,
       logo: {
         "@type": "ImageObject",
-        url: `${SITE_URL}/logo.svg`,
+        url: `${SITE_URL}/apple-touch-icon.png`,
+        width: 180,
+        height: 180,
       },
       description: SITE_DESCRIPTION,
       email: CONTACT_EMAIL,

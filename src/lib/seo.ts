@@ -6,6 +6,7 @@ import {
   SITE_DESCRIPTION,
   SITE_NAME,
   SITE_OG_DESCRIPTION,
+  SITE_OG_TITLE,
 } from "./constants";
 import { SITE_URL } from "./site";
 
@@ -87,7 +88,7 @@ export function buildHomepageMetadata(): Metadata {
     description: SITE_DESCRIPTION,
     alternates: { canonical: url },
     openGraph: {
-      title: HOMEPAGE_TITLE,
+      title: SITE_OG_TITLE,
       description: SITE_OG_DESCRIPTION,
       url,
       siteName: SITE_NAME,
@@ -97,7 +98,7 @@ export function buildHomepageMetadata(): Metadata {
     },
     twitter: {
       card: "summary_large_image",
-      title: HOMEPAGE_TITLE,
+      title: SITE_OG_TITLE,
       description: SITE_OG_DESCRIPTION,
       images: [PROMO_OG_IMAGE_URL],
     },

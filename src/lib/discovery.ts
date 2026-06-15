@@ -1,6 +1,7 @@
 import { extractBrand, getBrandsFromProducts } from "./brands";
 import { isFeaturedEligible, isHomepageFeaturedEligible } from "./product-media";
 import { hasExactPrice } from "./pricing";
+import { getDisplayBrand, validateProduct } from "./product-validation";
 import { getRecentlyAddedPreview } from "./recency";
 import {
   getAllProducts,
@@ -106,12 +107,19 @@ export function getBrandSpotlight() {
   return { brand, products: brandProducts };
 }
 
+function isBrowsableRelated(product: Product): boolean {
+  if (!product.image) return false;
+  return validateProduct(product).confidence >= 0.4;
+}
+
 function relatedScore(base: Product, candidate: Product, brand: string | null): number {
   let score = 0;
   if (candidate.category_slug === base.category_slug) score += 40;
-  if (brand && extractBrand(candidate.product_name) === brand) score += 35;
+  const candidateBrand = getDisplayBrand(candidate);
+  if (brand && candidateBrand === brand) score += 35;
   if (candidate.qc_link) score += 10;
   if (candidate.image) score += 15;
+  score += validateProduct(candidate).confidence * 20;
   if (
     base.price !== null &&
     candidate.price !== null &&
@@ -123,36 +131,68 @@ function relatedScore(base: Product, candidate: Product, brand: string | null): 
 }
 
 export function getRelatedProducts(product: Product, limit = 6): Product[] {
-  const brand = extractBrand(product.product_name);
+  const brand = getDisplayBrand(product);
 
   return getAllProducts()
     .filter((item) => item.id !== product.id)
     .filter(
       (item) =>
         item.category_slug === product.category_slug ||
-        (brand && extractBrand(item.product_name) === brand)
+        (brand && getDisplayBrand(item) === brand)
     )
-    .filter((item) => item.image)
+    .filter(isBrowsableRelated)
     .sort((a, b) => relatedScore(product, b, brand) - relatedScore(product, a, brand))
     .slice(0, limit);
 }
 
 /** Broader recommendations — price band, different brand, same category family. */
 export function getYouMayAlsoLike(product: Product, limit = 6): Product[] {
-  const brand = extractBrand(product.product_name);
+  const brand = getDisplayBrand(product);
   const relatedIds = new Set(getRelatedProducts(product, limit).map((p) => p.id));
 
   return getAllProducts()
     .filter((item) => item.id !== product.id && !relatedIds.has(item.id))
-    .filter((item) => item.image)
+    .filter(isBrowsableRelated)
     .map((item) => ({
       item,
       score: relatedScore(product, item, null) +
-        (brand && extractBrand(item.product_name) !== brand ? 8 : 0) +
+        (brand && getDisplayBrand(item) !== brand ? 8 : 0) +
         (item.category_slug === product.category_slug ? 20 : 0),
     }))
     .sort((a, b) => b.score - a.score)
     .map(({ item }) => item)
+    .slice(0, limit);
+}
+
+export function getMoreFromBrand(
+  product: Product,
+  brand: string,
+  limit = 6
+): Product[] {
+  const blocked = new Set([
+    product.id,
+    ...getRelatedProducts(product, limit).map((item) => item.id),
+  ]);
+
+  return getAllProducts()
+    .filter((item) => !blocked.has(item.id))
+    .filter((item) => getDisplayBrand(item) === brand)
+    .filter(isBrowsableRelated)
+    .sort((a, b) => relatedScore(product, b, brand) - relatedScore(product, a, brand))
+    .slice(0, limit);
+}
+
+export function getPopularInCategory(product: Product, limit = 6): Product[] {
+  const blocked = new Set([
+    product.id,
+    ...getRelatedProducts(product, limit).map((item) => item.id),
+  ]);
+
+  return getAllProducts()
+    .filter((item) => !blocked.has(item.id))
+    .filter((item) => item.category_slug === product.category_slug)
+    .filter(isBrowsableRelated)
+    .sort((a, b) => relatedScore(product, b, null) - relatedScore(product, a, null))
     .slice(0, limit);
 }
 

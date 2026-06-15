@@ -4,7 +4,11 @@ import { getBrandsFromProducts } from "@/lib/brands";
 import { getAllProducts } from "@/lib/products";
 import DiscoveryRail from "./DiscoveryRail";
 
-export default function HomepageBrands() {
+type HomepageBrandsProps = {
+  hideSpotlight?: boolean;
+};
+
+export default function HomepageBrands({ hideSpotlight = false }: HomepageBrandsProps) {
   const { brand, products } = getBrandSpotlight();
   const brands = getBrandsFromProducts(getAllProducts()).slice(0, 12);
 
@@ -13,9 +17,9 @@ export default function HomepageBrands() {
       <div className="mx-auto max-w-7xl">
         <div className="mb-5 flex items-end justify-between gap-4">
           <div>
-            <h2 className="text-xl font-black sm:text-2xl">Popular Brands</h2>
+            <h2 className="text-xl font-black sm:text-2xl">Trending Brands</h2>
             <p className="mt-1 text-sm text-muted">
-              Nike, Jordan, Stone Island, and more — browse by label.
+              Nike, Jordan, Moncler, Stone Island, Arc&apos;teryx and more.
             </p>
           </div>
           <Link href="/brands" className="text-sm font-bold text-accent hover:underline">
@@ -23,7 +27,7 @@ export default function HomepageBrands() {
           </Link>
         </div>
 
-        {brand && products.length > 0 ? (
+        {!hideSpotlight && brand && products.length > 0 ? (
           <div className="mb-6 rounded-3xl border border-border bg-surface/40 p-5">
             <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
               <div>

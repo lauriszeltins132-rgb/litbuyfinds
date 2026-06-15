@@ -5,15 +5,15 @@ import { useWishlist } from "@/context/WishlistContext";
 import { useConversion } from "@/context/ConversionContext";
 import {
   CONVERSION_DISMISS_KEYS,
-  WISHLIST_UNLOCK_THRESHOLD,
+  SAVE_FINDS_PROMPT_THRESHOLD,
 } from "@/lib/conversion";
-import { REGISTER_MODAL_CTA_LABEL } from "@/lib/constants";
+import { REGISTER_SAVE_CTA_LABEL } from "@/lib/constants";
 
 export default function UnlockVerifiedLinksPrompt() {
   const { wishlist } = useWishlist();
   const { isNudgeDismissed, dismissNudge } = useConversion();
 
-  if (wishlist.length < WISHLIST_UNLOCK_THRESHOLD) return null;
+  if (wishlist.length < SAVE_FINDS_PROMPT_THRESHOLD) return null;
   if (isNudgeDismissed(CONVERSION_DISMISS_KEYS.unlockVerified)) return null;
 
   return (
@@ -24,8 +24,8 @@ export default function UnlockVerifiedLinksPrompt() {
             You&apos;ve saved {wishlist.length} finds
           </p>
           <p className="mt-0.5 text-[11px] leading-relaxed text-muted sm:text-xs">
-            Unlock verified buy links, QC photos, and order tracking when you
-            create your LitBuy account.
+            Create a LitBuy account to save your collection, sync across devices,
+            and unlock verified buy links.
           </p>
         </div>
         <div className="flex shrink-0 items-center gap-2">
@@ -33,7 +33,7 @@ export default function UnlockVerifiedLinksPrompt() {
             location="unlock_verified_links"
             className="inline-flex rounded-full bg-accent px-3 py-2 text-[11px] font-black text-background hover:bg-accent-hover sm:px-4 sm:text-xs"
           >
-            {REGISTER_MODAL_CTA_LABEL}
+            {REGISTER_SAVE_CTA_LABEL}
           </RegisterLink>
           <button
             type="button"
