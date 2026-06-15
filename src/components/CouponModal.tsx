@@ -2,8 +2,11 @@
 
 import Link from "next/link";
 import { useCoupon } from "@/context/CouponContext";
-import { BROWSE_FINDS_CTA_LABEL, REGISTER_MODAL_CTA_LABEL } from "@/lib/constants";
-import PromoBanner from "./PromoBanner";
+import {
+  BROWSE_FINDS_CTA_LABEL,
+  LITBUY_ACCOUNT_BENEFITS,
+  REGISTER_MODAL_CTA_LABEL,
+} from "@/lib/constants";
 import RegisterLink from "./RegisterLink";
 
 export default function CouponModal() {
@@ -20,19 +23,37 @@ export default function CouponModal() {
         onClick={closeCoupon}
       />
 
-      <div className="coupon-enter panel-shell relative w-full max-w-md overflow-hidden rounded-3xl border border-border/80 bg-surface">
+      <div className="coupon-enter panel-shell relative w-full max-w-md overflow-hidden rounded-3xl border border-border/80 bg-surface p-5 sm:p-6">
         <button
           type="button"
           onClick={closeCoupon}
           aria-label="Close"
-          className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-border/80 bg-background/80 text-sm text-muted backdrop-blur transition hover:border-accent/40 hover:text-foreground"
+          className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-border/80 bg-background/80 text-sm text-muted backdrop-blur hover:text-foreground"
         >
           ×
         </button>
 
-        <PromoBanner variant="modal" priority className="rounded-none border-0" />
+        <p className="text-xs font-bold uppercase tracking-[0.18em] text-accent">
+          LitBuy account
+        </p>
+        <h2 className="mt-2 text-xl font-black text-foreground">
+          Get 30% Off Shipping
+        </h2>
+        <ul className="mt-4 space-y-2">
+          {LITBUY_ACCOUNT_BENEFITS.map((benefit) => (
+            <li
+              key={benefit}
+              className="flex items-start gap-2 text-sm text-foreground/90"
+            >
+              <span className="text-accent" aria-hidden>
+                ✓
+              </span>
+              {benefit}
+            </li>
+          ))}
+        </ul>
 
-        <div className="space-y-3 p-5 sm:p-6">
+        <div className="mt-5 space-y-3">
           <RegisterLink
             location="coupon_modal"
             onClick={closeCoupon}

@@ -168,6 +168,19 @@ export function recordEvent(body: EventBody) {
   writeFileStore(store);
 }
 
+export function getProductEngagementScore(productId: string): number {
+  const entry = getStore().products[productId];
+  return entry?.clicks ?? 0;
+}
+
+export function getProductEngagementMap(): Record<string, number> {
+  const map: Record<string, number> = {};
+  for (const [id, value] of Object.entries(getStore().products)) {
+    map[id] = value.clicks;
+  }
+  return map;
+}
+
 export function getTopProductIds(limit = 12): string[] {
   return Object.entries(getStore().products)
     .sort(([, a], [, b]) => b.clicks - a.clicks)

@@ -1,6 +1,7 @@
 import {
   LITBUY_OFFER_DESCRIPTION,
   LITBUY_OFFER_HEADLINE,
+  REGISTER_MODAL_CTA_LABEL,
 } from "@/lib/constants";
 import OfferVisual from "./OfferVisual";
 import RegisterLink from "./RegisterLink";
@@ -26,7 +27,7 @@ export default function OfferCallout() {
             location="offer_callout"
             className="inline-flex shrink-0 items-center justify-center rounded-full bg-accent px-8 py-4 text-sm font-black text-background transition-transform hover:scale-[1.02] hover:bg-accent-hover"
           >
-            Register on LitBuy
+            {REGISTER_MODAL_CTA_LABEL}
           </RegisterLink>
         </div>
       </div>

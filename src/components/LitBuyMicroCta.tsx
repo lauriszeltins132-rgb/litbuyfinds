@@ -14,7 +14,7 @@ export default function LitBuyMicroCta({ location }: LitBuyMicroCtaProps) {
       >
         LitBuy
       </RegisterLink>
-      <span className="text-muted/55"> · free account to buy</span>
+      <span className="text-muted/55"> · QC &amp; tracking included</span>
     </p>
   );
 }

@@ -6,11 +6,9 @@ import DiscoveryHero from "@/components/DiscoveryHero";
 import DiscoveryRail from "@/components/DiscoveryRail";
 import HomepageBrands from "@/components/HomepageBrands";
 import HomepageCategories from "@/components/HomepageCategories";
-import NewToLitBuy from "@/components/NewToLitBuy";
+import HomepageWhyLitBuy from "@/components/HomepageWhyLitBuy";
 import RecentlyAddedPreview from "@/components/RecentlyAddedPreview";
 import RecentlyViewedRail from "@/components/RecentlyViewedRail";
-import MemberBenefitsStrip from "@/components/conversion/MemberBenefitsStrip";
-import SignupCard from "@/components/SignupCard";
 import StatsStrip from "@/components/StatsStrip";
 import TrustStrip from "@/components/TrustStrip";
 import { getBudgetFinds } from "@/lib/discovery";
@@ -30,30 +28,30 @@ export default function HomePage() {
   return (
     <>
       <DiscoveryHero />
-      <TrustStrip compact />
 
       <DiscoveryRail
         title="🔥 Popular Today"
-        subtitle="Top clicked and viewed finds — refreshes daily"
+        subtitle="Most viewed and clicked finds — premium brands weighted"
         href="/most-popular-finds-now"
         products={rails.popularToday}
         showTrendingScore
       />
 
-      <SignupCard location="homepage_signup_card" variant="intro" />
-
       <DiscoveryRail
         title="Trending This Week"
-        subtitle="Featured momentum picks from the trending sheet"
+        subtitle="Hot picks from the trending sheet"
         href="/trending"
         products={rails.trending}
         showTrendingScore
       />
 
-      <RecentlyAddedPreview />
+      <TrustStrip compact />
 
+      <RecentlyAddedPreview />
       <HomepageCategories categories={categories} />
       <HomepageBrands />
+
+      <HomepageWhyLitBuy />
 
       <DiscoveryRail
         title="Best Under $30"
@@ -63,15 +61,8 @@ export default function HomePage() {
       />
 
       <RecentlyViewedRail />
-      <NewToLitBuy />
-
-      <section className="px-3 py-2.5 sm:px-6 sm:py-8">
-        <div className="signup-card mx-auto max-w-7xl rounded-2xl border border-border p-5 sm:rounded-3xl sm:p-8">
-          <MemberBenefitsStrip location="homepage_member_benefits" />
-        </div>
-      </section>
-
       <StatsStrip />
+
       <section className="px-4 pb-2 sm:px-6">
         <div className="mx-auto max-w-7xl text-center">
           <DataFreshness variant="block" label="Catalog synced" />
@@ -82,7 +73,7 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl pb-4">
           <h2 className="text-2xl font-black">Browse All Finds</h2>
           <p className="mt-1 text-sm text-muted">
-            Search, filter, and explore the full LitBuy Finds catalog.
+            Search, filter, and explore the full catalog.
           </p>
         </div>
       </section>

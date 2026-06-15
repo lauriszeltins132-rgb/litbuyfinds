@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
-import TextInput from "@/components/ui/TextInput";
+import { POPULAR_SEARCHES } from "@/lib/constants";
 
 function SearchIcon({ className = "h-5 w-5" }: { className?: string }) {
   return (
@@ -36,25 +36,48 @@ export default function HeroSearch() {
     router.push(`/?q=${encodeURIComponent(trimmed)}#browse`);
   }
 
+  function searchBrand(brand: string) {
+    router.push(`/?q=${encodeURIComponent(brand)}#browse`);
+  }
+
   return (
-    <form onSubmit={handleSubmit} className="hero-search mx-auto w-full max-w-[700px]">
-      <div className="hero-search__inner">
-        <TextInput
-          id="hero-search"
-          value={query}
-          onChange={setQuery}
-          placeholder="Search Nike, Moncler, Jordan, bags, jackets..."
-          type="search"
-          icon={<SearchIcon className="h-5 w-5 text-muted" />}
-          className="hero-search__input"
-        />
-        <button type="submit" className="hero-search__submit">
-          Search finds
-        </button>
+    <div className="mx-auto w-full max-w-[700px]">
+      <form onSubmit={handleSubmit} className="hero-search">
+        <div className="hero-search__row">
+          <div className="hero-search__input-wrap">
+            <SearchIcon className="hero-search__icon" />
+            <input
+              id="hero-search"
+              type="search"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Search Nike, Moncler, Jordan, jackets, sneakers..."
+              className="hero-search__input"
+            />
+          </div>
+          <button type="submit" className="hero-search__submit">
+            Search
+          </button>
+        </div>
+      </form>
+
+      <div className="mt-4">
+        <p className="text-center text-[11px] font-bold uppercase tracking-[0.14em] text-muted">
+          Popular searches
+        </p>
+        <div className="mt-2 flex flex-wrap justify-center gap-2">
+          {POPULAR_SEARCHES.map((brand) => (
+            <button
+              key={brand}
+              type="button"
+              onClick={() => searchBrand(brand)}
+              className="rounded-full border border-border bg-surface/50 px-3 py-1.5 text-xs font-bold text-foreground transition hover:border-accent/40 hover:text-accent"
+            >
+              {brand}
+            </button>
+          ))}
+        </div>
       </div>
-      <p className="mt-2 text-center text-[11px] text-muted sm:text-xs">
-        Verified links · QC references · Updated daily
-      </p>
-    </form>
+    </div>
   );
 }

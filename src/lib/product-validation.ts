@@ -81,8 +81,10 @@ function singularCategory(product: Product): string {
 
 function pickDisplayType(
   titleTypes: Set<string>,
-  categorySlug: string
+  categorySlug: string,
+  title: string
 ): string | null {
+  if (/\bbackpack\b/i.test(title)) return "Backpack";
   const expected = CATEGORY_TYPES[categorySlug] ?? [];
   for (const type of expected) {
     if (titleTypes.has(type)) return TYPE_LABELS[type] ?? type;
@@ -94,12 +96,21 @@ function pickDisplayType(
 function buildGenericTitle(
   product: Product,
   brand: string | null,
-  titleTypes: Set<string>
+  titleTypes: Set<string>,
+  useBrand: boolean
 ): string {
-  const typeLabel = pickDisplayType(titleTypes, product.category_slug);
-  if (brand && typeLabel) return `${brand} ${typeLabel}`;
-  if (brand) return `${brand} find`;
-  if (typeLabel) return `${typeLabel.charAt(0).toUpperCase()}${typeLabel.slice(1)} find`;
+  const typeLabel = pickDisplayType(
+    titleTypes,
+    product.category_slug,
+    product.product_name
+  );
+  const fashionLabel = typeLabel
+    ? `${typeLabel.charAt(0).toUpperCase()}${typeLabel.slice(1)}`
+    : singularCategory(product);
+
+  if (useBrand && brand && typeLabel) return `${brand} ${fashionLabel}`;
+  if (useBrand && brand) return `${brand} find`;
+  if (typeLabel) return `Fashion ${fashionLabel}`;
   return `${singularCategory(product)} find`;
 }
 
@@ -154,9 +165,14 @@ export function validateProduct(product: Product): ProductValidation {
   }
 
   const normalized = Math.max(0, Math.min(1, confidence));
-  const isTitleTrusted = normalized >= 0.55;
+  const isTitleTrusted = normalized >= 0.6;
   const primaryBrand =
     titleBrands.length === 1 ? titleBrands[0] : extractBrand(title);
+  const brandConflict =
+    issues.includes("multiple_brands_in_title") ||
+    issues.includes("image_url_brand_mismatch") ||
+    issues.includes("category_type_mismatch");
+  const trustBrand = brandConflict ? null : primaryBrand;
 
   return {
     confidence: normalized,
@@ -164,8 +180,8 @@ export function validateProduct(product: Product): ProductValidation {
     isTitleTrusted,
     displayName: isTitleTrusted
       ? product.product_name
-      : buildGenericTitle(product, primaryBrand, titleTypes),
-    displayBrand: primaryBrand,
+      : buildGenericTitle(product, trustBrand, titleTypes, !brandConflict),
+    displayBrand: trustBrand,
   };
 }
 

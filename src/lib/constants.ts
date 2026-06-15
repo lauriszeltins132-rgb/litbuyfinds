@@ -9,12 +9,25 @@ export const SITE_DESCRIPTION =
 export const SITE_OG_DESCRIPTION =
   "Discover trending sneakers, fashion finds, QC-approved products, buying guides, trusted agent resources and daily LitBuy finds.";
 
-export const HERO_TAGLINE =
-  "Discover the best LitBuy finds, QC-approved products, verified links and trending fashion finds.";
+export const HERO_HEADLINE = "Discover the Best LitBuy Finds";
+
+export const HERO_SUBHEADLINE =
+  "Curated fashion finds, verified links, QC photos, and daily updates.";
+
+export const HERO_TAGLINE = HERO_SUBHEADLINE;
 
 export const SITE_TAGLINE = "Fashion, sneakers & designer finds";
 
-/** Universal promotional banner — homepage, modal, and social previews */
+export const POPULAR_SEARCHES = [
+  "Nike",
+  "Jordan",
+  "Moncler",
+  "Stone Island",
+  "Arc'teryx",
+  "Canada Goose",
+] as const;
+
+/** Universal promotional banner — OG/social only (not homepage hero) */
 export const PROMO_BANNER_PROMO = "/banners/litbuy-finds-promo.webp";
 export const PROMO_BANNER_MODAL = "/banners/litbuy-finds-modal.webp";
 export const PROMO_BANNER_OG = "/banners/litbuy-finds-og.jpg";
@@ -26,11 +39,29 @@ export const PROMO_OG_IMAGE_URL = `https://litbuyfinds.io${PROMO_BANNER_OG}`;
 export const LITBUY_SIGNUP_URL =
   "https://litbuy.com/register?inviteCode=SMKS";
 
-/** Primary register CTA — use on every signup button site-wide */
-export const REGISTER_CTA_LABEL = "Claim 30% Coupon";
-export const REGISTER_HEADER_CTA_LABEL = "Free account";
-export const REGISTER_MODAL_CTA_LABEL = "Register on LitBuy";
+/** Benefit-driven CTAs site-wide */
+export const REGISTER_CTA_LABEL = "Get 30% Shipping Discount";
+export const REGISTER_HEADER_CTA_LABEL = "Unlock QC Photos";
+export const REGISTER_MODAL_CTA_LABEL = "Get Your LitBuy Account";
+export const REGISTER_STICKY_CTA_LABEL = "Unlock Access";
 export const BROWSE_FINDS_CTA_LABEL = "Browse Finds";
+
+export const LITBUY_ACCOUNT_BENEFITS = [
+  "Access QC photos",
+  "Track warehouse orders",
+  "Save favorite finds",
+  "Compare sellers",
+  "Get shipping discounts",
+  "Faster checkout process",
+] as const;
+
+export const LITBUY_STICKY_BENEFITS = [
+  "QC Photos",
+  "Verified Links",
+  "Order Tracking",
+  "Shipping Discounts",
+  "Save Favorites",
+] as const;
 
 export const LITBUY_OFFER_HEADLINE = "Get 30% Off Shipping";
 export const LITBUY_OFFER_DESCRIPTION =

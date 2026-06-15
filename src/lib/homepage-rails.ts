@@ -1,4 +1,4 @@
-import { getTopProductIds } from "./analytics-store";
+import { getTopProductIds, getProductEngagementScore } from "./analytics-store";
 import { getPremiumBrandBoost } from "./curation";
 import { isHomepageFeaturedEligible } from "./product-media";
 import { validateProduct } from "./product-validation";
@@ -24,6 +24,20 @@ function dayHash(id: string, salt: string, day: number): number {
   return h >>> 0;
 }
 
+const LOW_PRIORITY_PATTERN =
+  /\b(hat|cap|beanie|beret|scarf|belt|glove|sock)\b/i;
+
+function isPopularTodayCandidate(product: Product): boolean {
+  if (!isHomepageFeaturedEligible(product)) return false;
+
+  const boost = getPremiumBrandBoost(product.product_name);
+  const engagement = getProductEngagementScore(product.id);
+  const isLowPriority = LOW_PRIORITY_PATTERN.test(product.product_name);
+
+  if (isLowPriority && boost < 85 && engagement < 2) return false;
+  return true;
+}
+
 function pickRotated(
   pool: Product[],
   limit: number,
@@ -33,7 +47,8 @@ function pickRotated(
 ): Product[] {
   return pool
     .filter(
-      (product) => isHomepageFeaturedEligible(product) && !used.has(product.id)
+      (product) =>
+        isPopularTodayCandidate(product) && !used.has(product.id)
     )
     .sort(
       (a, b) => dayHash(b.id, salt, day) - dayHash(a.id, salt, day)
@@ -41,14 +56,20 @@ function pickRotated(
     .slice(0, limit);
 }
 
-function homepageScore(product: Product, analyticsRank: number): number {
-  let score = 0;
+function popularityScore(product: Product, analyticsRank: number): number {
   const validation = validateProduct(product);
-  score += validation.confidence * 40;
+  const engagement = getProductEngagementScore(product.id);
+  let score = 0;
+
+  score += engagement * 12;
   score += getPremiumBrandBoost(product.product_name);
-  if (product.qc_link) score += 12;
-  if (analyticsRank >= 0) score += Math.max(0, 30 - analyticsRank);
-  if (product.category_slug === "trending-now") score += 8;
+  score += validation.confidence * 30;
+  if (product.qc_link) score += 10;
+  if (analyticsRank >= 0) score += Math.max(0, 40 - analyticsRank * 2);
+  if (product.category_slug === "shoes") score += 15;
+  if (product.category_slug === "coats-and-jackets") score += 12;
+  if (LOW_PRIORITY_PATTERN.test(product.product_name)) score -= 25;
+
   return score;
 }
 
@@ -58,19 +79,19 @@ function pickPopularToday(
   day: number
 ): Product[] {
   const byId = new Map(getAllProducts().map((product) => [product.id, product]));
-  const topIds = getTopProductIds(limit * 6);
+  const topIds = getTopProductIds(limit * 8);
 
   const fromAnalytics = topIds
     .map((id, index) => ({ product: byId.get(id), index }))
     .filter(
       (entry): entry is { product: Product; index: number } =>
         !!entry.product &&
-        isHomepageFeaturedEligible(entry.product) &&
+        isPopularTodayCandidate(entry.product) &&
         !used.has(entry.product.id)
     )
     .sort(
       (a, b) =>
-        homepageScore(b.product, b.index) - homepageScore(a.product, a.index)
+        popularityScore(b.product, b.index) - popularityScore(a.product, a.index)
     )
     .map((entry) => entry.product);
 
@@ -81,14 +102,18 @@ function pickPopularToday(
     const pool = getAllProducts()
       .filter(
         (product) =>
-          isHomepageFeaturedEligible(product) &&
-          (product.qc_link || product.category_slug === "trending-now")
+          isPopularTodayCandidate(product) &&
+          (getPremiumBrandBoost(product.product_name) >= 80 ||
+            product.qc_link ||
+            product.category_slug === "trending-now" ||
+            product.category_slug === "shoes")
       )
       .sort(
         (a, b) =>
-          homepageScore(b, 99) +
+          popularityScore(b, 99) +
           dayHash(b.id, "popular-today", day) * 0.001 -
-          (homepageScore(a, 99) + dayHash(a.id, "popular-today", day) * 0.001)
+          (popularityScore(a, 99) +
+            dayHash(a.id, "popular-today", day) * 0.001)
       );
     picked.push(
       ...pickRotated(pool, limit - picked.length, block, day, "popular-today")
@@ -103,7 +128,7 @@ function pickTrending(
   used: Set<string>,
   day: number
 ): Product[] {
-  const trending = getTrendingProducts().filter(isHomepageFeaturedEligible);
+  const trending = getTrendingProducts().filter(isPopularTodayCandidate);
   const stride = Math.max(1, Math.floor(trending.length / 6));
   const offset = (day % 6) * stride;
   const rotated = [...trending.slice(offset), ...trending.slice(0, offset)];

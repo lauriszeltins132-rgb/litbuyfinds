@@ -3,8 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import type { Product } from "@/lib/types";
-import { extractBrand } from "@/lib/brands";
-import { getDisplayProductName } from "@/lib/product-validation";
+import { getDisplayProductName, getDisplayBrand } from "@/lib/product-validation";
 import { formatProductPrice, getPriceStatus } from "@/lib/pricing";
 import { getTrendingScore } from "@/lib/discovery";
 import { getProductSource } from "@/lib/filters";
@@ -46,7 +45,7 @@ export default function ProductCard({
   const [copied, setCopied] = useState(false);
   const saved = isInWishlist(product.id);
   const displayName = getDisplayProductName(product);
-  const brand = extractBrand(displayName);
+  const brand = getDisplayBrand(product);
   const source = getProductSource(product.affiliate_link);
   const productHref = getProductHref(product);
   const heatScore = getTrendingScore(product);

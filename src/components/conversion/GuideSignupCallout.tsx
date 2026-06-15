@@ -9,9 +9,9 @@ export default function GuideSignupCallout({ variant = "panel" }: GuideSignupCal
   if (variant === "inline") {
     return (
       <p className="rounded-xl border border-accent/20 bg-accent/5 px-4 py-3 text-sm leading-relaxed text-muted">
-        <span className="font-bold text-foreground">Tip:</span> Register a free
-        LitBuy account before you buy — you&apos;ll get verified links, QC
-        photos, and order tracking.{" "}
+        <span className="font-bold text-foreground">Tip:</span> Create a LitBuy
+        account before you buy — unlock verified links, QC photos, and order
+        tracking.{" "}
         <RegisterLink
           location="guide_inline_callout"
           className="font-bold text-accent hover:underline"
@@ -28,11 +28,11 @@ export default function GuideSignupCallout({ variant = "panel" }: GuideSignupCal
         Before you buy
       </p>
       <h3 className="mt-2 text-lg font-black text-foreground">
-        Create your free LitBuy account
+        Get your LitBuy account
       </h3>
       <p className="mt-2 text-sm leading-relaxed text-muted">
-        Guides help you research. A LitBuy account is where you place orders,
-        review QC photos, and track shipping — all from one dashboard.
+        Guides help you research. A LitBuy account unlocks QC photos, verified
+        buy links, order tracking, and shipping discounts.
       </p>
       <RegisterLink
         location="guide_panel_callout"

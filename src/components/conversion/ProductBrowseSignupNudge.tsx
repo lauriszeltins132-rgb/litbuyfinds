@@ -30,12 +30,12 @@ export default function ProductBrowseSignupNudge() {
           Ready to buy?
         </p>
         <p className="mt-1 text-sm font-black text-foreground">
-          You&apos;ve explored {uniqueProductViews} finds — register to unlock
-          verified links &amp; QC
+          You&apos;ve explored {uniqueProductViews} finds — unlock verified links
+          &amp; QC photos
         </p>
         <p className="mt-1.5 text-xs leading-relaxed text-muted">
-          Free LitBuy accounts get warehouse QC, order tracking, and member
-          shipping offers.
+          LitBuy accounts get warehouse QC, order tracking, shipping discounts,
+          and saved favorites.
         </p>
         <div className="mt-3 flex flex-wrap gap-2">
           <RegisterLink

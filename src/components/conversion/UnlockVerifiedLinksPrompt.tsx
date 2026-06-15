@@ -24,8 +24,8 @@ export default function UnlockVerifiedLinksPrompt() {
             You&apos;ve saved {wishlist.length} finds
           </p>
           <p className="mt-0.5 text-[11px] leading-relaxed text-muted sm:text-xs">
-            Create a free LitBuy account to unlock verified buy links and keep
-            your saved items when you&apos;re ready to order.
+            Unlock verified buy links, QC photos, and order tracking when you
+            create your LitBuy account.
           </p>
         </div>
         <div className="flex shrink-0 items-center gap-2">

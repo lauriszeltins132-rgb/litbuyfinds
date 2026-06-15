@@ -28,7 +28,7 @@ export default function MemberBenefitsStrip({
             LitBuy member benefits
           </p>
           <h3 className="mt-1 text-lg font-black text-foreground sm:text-xl">
-            Buy smarter with a free account
+            Unlock QC photos, verified links &amp; order tracking
           </h3>
         </div>
         <RegisterLink
