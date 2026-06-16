@@ -52,6 +52,23 @@ export const REGISTER_CTA_LABEL = "Register & Get Shipping Discount";
 export const REGISTER_HEADER_CTA_LABEL = "Register & Unlock QC Photos";
 export const REGISTER_MODAL_CTA_LABEL = "Start Your LitBuy Haul";
 export const REGISTER_STICKY_CTA_LABEL = "Unlock Verified Links";
+export const MOBILE_POPUP_CTA_A = "Register & Save 30%";
+export const MOBILE_POPUP_CTA_B = "Unlock Verified Links";
+export const MOBILE_POPUP_BADGE = "Save up to 30% on shipping";
+export const MOBILE_POPUP_HEADLINE = "Unlock Your LitBuy Account";
+export const MOBILE_POPUP_SUBTEXT =
+  "Get cheaper shipping, QC photos, verified links and order tracking.";
+
+export const MOBILE_POPUP_BENEFITS = [
+  "Save up to 30% on shipping",
+  "Unlock QC photos",
+  "Open verified product links",
+  "Track all orders",
+  "Save favorite finds",
+] as const;
+
+export const MOBILE_POPUP_URGENCY =
+  "Most LitBuy users save money on shipping with a free account.";
 export const REGISTER_SAVE_CTA_LABEL = "Register & Save Finds";
 export const REGISTER_QC_CTA_LABEL = "Register & Unlock QC Photos";
 export const REGISTER_EXIT_CTA_LABEL = "Create Free LitBuy Account";

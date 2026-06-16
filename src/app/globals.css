@@ -1208,41 +1208,227 @@ body::before {
   max-width: 15rem;
 }
 
-@media (min-width: 640px) {
-  .conversion-sticky-benefit {
-    bottom: 1.25rem;
-    max-width: 17rem;
-  }
+/* Mobile conversion popup — bottom sheet on small screens, card on desktop */
+.conversion-mobile-popup {
+  pointer-events: none;
+  position: fixed;
+  z-index: 82;
 }
 
-.conversion-sticky-benefit__card {
+.conversion-mobile-popup--sheet {
+  left: 0;
+  right: 0;
+  bottom: calc(3.35rem + env(safe-area-inset-bottom, 0px));
+  padding: 0 0.5rem;
+  animation: conversion-sheet-up 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.conversion-mobile-popup--card {
+  right: 1rem;
+  bottom: 1.25rem;
+  left: auto;
+  max-width: 20rem;
+  width: 20rem;
+  animation: conversion-card-in 0.3s ease-out;
+}
+
+.conversion-mobile-popup__panel {
   pointer-events: auto;
   position: relative;
-  border-radius: 1rem;
-  border: 1px solid rgba(212, 255, 60, 0.18);
-  background: rgba(10, 10, 12, 0.92);
-  padding: 0.75rem 0.85rem 0.85rem;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.38);
+  display: flex;
+  max-height: 70vh;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 1.25rem;
+  border: 1px solid rgba(212, 255, 60, 0.22);
+  background: linear-gradient(
+    165deg,
+    rgba(14, 14, 18, 0.98) 0%,
+    rgba(10, 12, 10, 0.98) 100%
+  );
+  box-shadow:
+    0 -8px 40px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 }
 
-.conversion-sticky-benefit__close {
+.conversion-mobile-popup--sheet .conversion-mobile-popup__panel {
+  width: 100%;
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+}
+
+.conversion-mobile-popup__scroll {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 1.1rem 1rem 0.75rem;
+  padding-right: 2.75rem;
+}
+
+.conversion-mobile-popup__close {
   position: absolute;
-  right: 0.35rem;
-  top: 0.25rem;
+  right: 0.5rem;
+  top: 0.5rem;
+  z-index: 2;
   display: flex;
-  height: 1.5rem;
-  width: 1.5rem;
+  height: 2.75rem;
+  width: 2.75rem;
   align-items: center;
   justify-content: center;
   border-radius: 9999px;
-  font-size: 0.95rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 1.35rem;
+  line-height: 1;
   color: var(--color-muted);
 }
 
-.conversion-sticky-benefit__close:hover {
+.conversion-mobile-popup__close:hover,
+.conversion-mobile-popup__close:active {
   color: var(--color-foreground);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.conversion-mobile-popup__badge {
+  display: block;
+  border-radius: 0.85rem;
+  border: 1px solid rgba(212, 255, 60, 0.45);
+  background: linear-gradient(
+    135deg,
+    rgba(212, 255, 60, 0.22) 0%,
+    rgba(212, 255, 60, 0.08) 100%
+  );
+  padding: 0.7rem 0.85rem;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  line-height: 1.25;
+  color: var(--color-accent);
+  text-shadow: 0 0 24px rgba(212, 255, 60, 0.35);
+  box-shadow: 0 0 28px rgba(212, 255, 60, 0.12);
+}
+
+.conversion-mobile-popup__headline {
+  margin-top: 0.9rem;
+  font-size: 1.2rem;
+  font-weight: 900;
+  line-height: 1.15;
+  color: var(--color-foreground);
+}
+
+.conversion-mobile-popup__subtext {
+  margin-top: 0.55rem;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--color-muted);
+}
+
+.conversion-mobile-popup__benefits {
+  margin-top: 0.85rem;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.conversion-mobile-popup__benefits li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  font-size: 0.88rem;
+  line-height: 1.35;
+  color: var(--color-foreground);
+}
+
+.conversion-mobile-popup__check {
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+  font-weight: 800;
+  color: var(--color-accent);
+}
+
+.conversion-mobile-popup__urgency {
+  margin-top: 0.85rem;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: var(--color-muted);
+}
+
+.conversion-mobile-popup__actions {
+  flex-shrink: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0.85rem 1rem calc(0.9rem + env(safe-area-inset-bottom, 0px));
+  background: rgba(8, 8, 10, 0.55);
+}
+
+.conversion-mobile-popup__cta {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: var(--color-accent);
+  padding: 0.95rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 900;
+  color: var(--color-background);
+  box-shadow:
+    0 0 0 1px rgba(212, 255, 60, 0.35),
+    0 8px 28px rgba(212, 255, 60, 0.28);
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.conversion-mobile-popup__cta:hover {
+  background: var(--color-accent-hover);
+}
+
+.conversion-mobile-popup__cta:active {
+  transform: scale(0.98);
+}
+
+.conversion-mobile-popup__footnote {
+  margin-top: 0.55rem;
+  text-align: center;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+@keyframes conversion-sheet-up {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes conversion-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (min-width: 640px) {
+  .conversion-mobile-popup--card {
+    bottom: 1.25rem;
+  }
+
+  .conversion-mobile-popup--card .conversion-mobile-popup__badge {
+    font-size: 0.72rem;
+    padding: 0.6rem 0.75rem;
+  }
+
+  .conversion-mobile-popup--card .conversion-mobile-popup__headline {
+    font-size: 1.05rem;
+  }
 }
 
 .conversion-unlock-prompt {
@@ -1260,6 +1446,13 @@ body::before {
     top: auto;
     bottom: 5.5rem;
     max-width: 22rem;
+  }
+
+  .conversion-browse-nudge {
+    left: 1rem;
+    right: auto;
+    bottom: 1.25rem;
+    max-width: 20rem;
   }
 }
 
@@ -1292,8 +1485,8 @@ body::before {
     max-width: 20rem;
   }
 
-  .conversion-sticky-benefit {
-    bottom: 9.5rem;
+  .conversion-mobile-popup--card {
+    bottom: 11rem;
   }
 }
 

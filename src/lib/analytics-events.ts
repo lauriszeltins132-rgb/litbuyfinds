@@ -17,7 +17,9 @@ export type ConversionEvent =
   | "save_click"
   | "category_click"
   | "brand_click"
-  | "collection_click";
+  | "collection_click"
+  | "popup_impression"
+  | "popup_close";
 
 export type ConversionPayload = {
   location?: string;
@@ -27,6 +29,7 @@ export type ConversionPayload = {
   category?: string;
   query?: string;
   href?: string;
+  variant?: string;
 };
 
 function cleanPayload(payload: ConversionPayload) {
@@ -107,6 +110,26 @@ export function trackBrandClick(href: string, location: string) {
 
 export function trackCollectionClick(href: string, location: string) {
   trackConversion("collection_click", { location, href });
+}
+
+export function trackPopupImpression(location: string, variant: string) {
+  const key = `popup-imp-${location}-${variant}`;
+  if (typeof sessionStorage !== "undefined" && sessionStorage.getItem(key)) return;
+  sessionStorage?.setItem(key, "1");
+  trackConversion("popup_impression", { location, variant });
+}
+
+export function trackPopupClose(location: string, variant: string) {
+  trackConversion("popup_close", { location, variant });
+}
+
+export function getMobilePopupCtaVariant(): "a" | "b" {
+  if (typeof sessionStorage === "undefined") return "a";
+  const stored = sessionStorage.getItem("litbuy-mobile-popup-cta");
+  if (stored === "a" || stored === "b") return stored;
+  const variant = Math.random() < 0.5 ? "a" : "b";
+  sessionStorage.setItem("litbuy-mobile-popup-cta", variant);
+  return variant;
 }
 
 export function trackDiscordClick(location: string) {

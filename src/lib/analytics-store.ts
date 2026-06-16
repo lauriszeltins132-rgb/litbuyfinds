@@ -159,6 +159,12 @@ export function recordEvent(body: EventBody) {
     case "telegram_click":
       store.telegramClicks += 1;
       break;
+    case "popup_impression":
+      bumpPlacement(store, body.location, "impressions");
+      break;
+    case "popup_close":
+      bumpPlacement(store, `${body.location}_close`, "clicks");
+      break;
     default:
       break;
   }
