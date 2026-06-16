@@ -1,4 +1,5 @@
 import type { Product } from "./types";
+import { getEffectiveProductTitle } from "./product-title-quality";
 import { products } from "./products";
 
 export function slugify(text: string): string {
@@ -9,7 +10,7 @@ export function slugify(text: string): string {
 }
 
 export function getProductSlug(product: Product): string {
-  const base = slugify(product.product_name).slice(0, 55);
+  const base = slugify(getEffectiveProductTitle(product)).slice(0, 55);
   return `${base}-${product.id}`;
 }
 
@@ -22,7 +23,7 @@ export function getProductBySlug(slug: string): Product | undefined {
   if (!id) return undefined;
 
   const byId = products.find((product) => product.id === id);
-  if (byId && getProductSlug(byId) === slug) return byId;
+  if (byId) return byId;
 
   return products.find((product) => getProductSlug(product) === slug);
 }

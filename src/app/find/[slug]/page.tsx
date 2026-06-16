@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import ProductDetailView from "@/components/ProductDetailView";
 import ProductGrid from "@/components/ProductGrid";
@@ -18,7 +18,7 @@ import {
   getProductSeoDescription,
   getProductSeoTitle,
 } from "@/lib/product-details";
-import { getAllProductSlugs, getProductBySlug, slugify } from "@/lib/slugs";
+import { getAllProductSlugs, getProductBySlug, getProductSlug, slugify } from "@/lib/slugs";
 import { buildPageMetadata } from "@/lib/seo";
 import FloatingBackButton from "@/components/FloatingBackButton";
 import ProductJsonLd from "@/components/ProductJsonLd";
@@ -47,7 +47,7 @@ export async function generateMetadata({
   return buildPageMetadata({
     title: getProductSeoTitle(product),
     description: getProductSeoDescription(product),
-    path: `/find/${slug}`,
+    path: `/find/${getProductSlug(product)}`,
     image: product.image || undefined,
   });
 }
@@ -58,6 +58,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   if (!product) {
     notFound();
+  }
+
+  const canonicalSlug = getProductSlug(product);
+  if (slug !== canonicalSlug) {
+    redirect(`/find/${canonicalSlug}`);
   }
 
   const brand = getDisplayBrand(product);
