@@ -176,7 +176,6 @@ function buildIndex(): SearchSuggestion[] {
   const trendingIds = new Set(getTopProductIds(20));
   for (const product of products) {
     if (!trendingIds.has(product.id)) continue;
-    const brand = product.product_name.split(" ")[0];
     items.push({
       label: product.product_name.slice(0, 48),
       href: getProductHref(product),

@@ -1,5 +1,6 @@
 import { extractBrand, getBrandsFromProducts } from "./brands";
-import { getEditorsPicks, getMostSavedPicks } from "./discovery";
+import { getEditorsPicks } from "./discovery";
+import { getEngagementPicks } from "./engagement-picks";
 import { getMonthlyHighlights } from "./popular-picks";
 import { filterFeaturedEligible } from "./product-media";
 import { hasExactPrice } from "./pricing";
@@ -433,7 +434,7 @@ export function getBestOfSupplementaryRails(config: BestOfPageConfig) {
     .filter((p) => !used.has(p.id))
     .slice(0, 12);
 
-  const mostSaved = getMostSavedPicks(12).filter((p) => !used.has(p.id));
+  const mostSaved = getEngagementPicks(12).filter((p) => !used.has(p.id));
 
   return { recentlyAdded, popularWeek, mostSaved };
 }
