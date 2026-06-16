@@ -7,7 +7,9 @@ import RelatedGuides from "@/components/RelatedGuides";
 import SignupCard from "@/components/SignupCard";
 import RelatedSeoLinks from "@/components/RelatedSeoLinks";
 import { getRelatedGuidesForBrand } from "@/lib/related-guides";
+import BrandAuthoritySections from "@/components/brand/BrandAuthoritySections";
 import BrandSeoBlock from "@/components/seo/BrandSeoBlock";
+import BestOfLinks from "@/components/BestOfLinks";
 import SchemaScript from "@/components/SchemaScript";
 import { buildCollectionPageSchema } from "@/lib/schema";
 import {
@@ -16,6 +18,7 @@ import {
   getProductsByBrandSlug,
 } from "@/lib/brands";
 import { getAllProducts, getCategories } from "@/lib/products";
+import { getBrandPageRails } from "@/lib/brand-page-rails";
 import { getBrandSeo } from "@/lib/seo-content";
 import { buildPageMetadata } from "@/lib/seo";
 
@@ -59,6 +62,7 @@ export default async function BrandLandingPage({ params }: BrandPageProps) {
     .filter((item) => item.slug !== slug)
     .slice(0, 8);
   const pagePath = `/brands/${slug}`;
+  const rails = getBrandPageRails(slug, brand.name, products);
 
   return (
     <>
@@ -99,11 +103,14 @@ export default async function BrandLandingPage({ params }: BrandPageProps) {
         brandSlug={slug}
         brandName={brand.name}
         intro={copy.intro}
-        topProducts={products.slice(0, 5)}
+        topProducts={rails.topProducts.slice(0, 5)}
         relatedBrands={relatedBrands}
       />
 
+      <BrandAuthoritySections brandSlug={slug} brandName={brand.name} rails={rails} />
+
       <RelatedGuides links={getRelatedGuidesForBrand(slug)} />
+      <BestOfLinks brandSlug={slug} />
       <SignupCard location={`brand_signup_${slug}`} variant="compact" />
       <RelatedSeoLinks />
 

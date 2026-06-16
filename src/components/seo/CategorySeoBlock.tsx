@@ -127,6 +127,29 @@ export default function CategorySeoBlock({
 
           <div className="rounded-2xl border border-border bg-surface/30 p-5">
             <h3 className="text-sm font-bold uppercase tracking-[0.14em] text-muted">
+              Best-of pages
+            </h3>
+            <ul className="mt-3 flex flex-wrap gap-2">
+              <li>
+                <Link href="/best-finds" className="rounded-full border border-border px-3 py-1 text-xs font-bold hover:border-accent/40 hover:text-accent">
+                  Best finds
+                </Link>
+              </li>
+              <li>
+                <Link href={`/best-${categorySlug === "shoes" ? "sneakers" : categorySlug === "coats-and-jackets" ? "jackets" : categorySlug === "hoodies-and-pants" ? "hoodies" : "accessories"}`} className="rounded-full border border-border px-3 py-1 text-xs font-bold hover:border-accent/40 hover:text-accent">
+                  Best in category
+                </Link>
+              </li>
+              <li>
+                <Link href="/best-under-50" className="rounded-full border border-border px-3 py-1 text-xs font-bold hover:border-accent/40 hover:text-accent">
+                  Under $50
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div className="rounded-2xl border border-border bg-surface/30 p-5">
+            <h3 className="text-sm font-bold uppercase tracking-[0.14em] text-muted">
               Related guides
             </h3>
             <ul className="mt-3 space-y-2 text-sm">

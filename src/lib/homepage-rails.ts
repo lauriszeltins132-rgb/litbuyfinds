@@ -1,4 +1,4 @@
-import { getTopProductIds, getProductEngagementScore } from "./analytics-store";
+import { getProductEngagementScore, getTopProductIds } from "./analytics-store";
 import { extractBrand, getBrandsFromProducts } from "./brands";
 import { getPremiumBrandBoost } from "./curation";
 import { getDealProducts, getAllProducts, getLatestProducts, getTrendingProducts } from "./products";
@@ -213,6 +213,69 @@ function pickBudgetFinds(
   return pickRotated(pool, limit, used, day, "budget-finds");
 }
 
+function pickMostSavedWeek(
+  limit: number,
+  used: Set<string>,
+  day: number
+): Product[] {
+  const byId = new Map(getAllProducts().map((p) => [p.id, p]));
+  const fromAnalytics = getTopProductIds(limit * 4)
+    .map((id) => byId.get(id))
+    .filter(
+      (p): p is Product => !!p && isRailCandidate(p) && !used.has(p.id)
+    );
+
+  if (fromAnalytics.length >= limit) {
+    return fromAnalytics.slice(0, limit);
+  }
+
+  const block = new Set([...used, ...fromAnalytics.map((p) => p.id)]);
+  const pool = getAllProducts().filter(
+    (p) => isRailCandidate(p) && !block.has(p.id) && getProductEngagementScore(p.id) > 0
+  );
+  const extra = pickRotated(pool, limit - fromAnalytics.length, block, day, "most-saved");
+  return [...fromAnalytics, ...extra].slice(0, limit);
+}
+
+function pickHighestQcRated(
+  limit: number,
+  used: Set<string>,
+  day: number
+): Product[] {
+  const pool = getAllProducts()
+    .filter(
+      (p) =>
+        p.qc_link &&
+        isRailCandidate(p) &&
+        !used.has(p.id)
+    )
+    .sort(
+      (a, b) =>
+        getProductEngagementScore(b.id) * 20 +
+        popularityScore(b, 50) -
+        (getProductEngagementScore(a.id) * 20 + popularityScore(a, 50))
+    );
+
+  return pickRotated(pool, limit, used, day, "highest-qc");
+}
+
+function pickRisingWeek(
+  limit: number,
+  used: Set<string>,
+  day: number
+): Product[] {
+  const pool = getTrendingProducts()
+    .filter((p) => isRailCandidate(p) && !used.has(p.id))
+    .sort(
+      (a, b) =>
+        getProductEngagementScore(b.id) +
+        dayHash(b.id, "rising", day) * 0.001 -
+        (getProductEngagementScore(a.id) + dayHash(a.id, "rising", day) * 0.001)
+    );
+
+  return pickRotated(pool, limit, used, day + 1, "rising-week");
+}
+
 function pickTrendingBrand(
   used: Set<string>,
   day: number
@@ -253,6 +316,9 @@ export type HomepageRails = {
   topQcFinds: Product[];
   popularMonth: Product[];
   budgetFinds: Product[];
+  mostSavedWeek: Product[];
+  highestQcRated: Product[];
+  risingWeek: Product[];
   trendingBrand: { brand: string; products: Product[] } | null;
   dayIndex: number;
 };
@@ -277,6 +343,15 @@ export function getHomepageRails(limit = 12): HomepageRails {
   const budgetFinds = pickBudgetFinds(limit, used, day);
   budgetFinds.forEach((product) => used.add(product.id));
 
+  const mostSavedWeek = pickMostSavedWeek(limit, used, day);
+  mostSavedWeek.forEach((product) => used.add(product.id));
+
+  const highestQcRated = pickHighestQcRated(limit, used, day);
+  highestQcRated.forEach((product) => used.add(product.id));
+
+  const risingWeek = pickRisingWeek(limit, used, day);
+  risingWeek.forEach((product) => used.add(product.id));
+
   const popularMonth = pickPopularMonth(limit, used, day);
   popularMonth.forEach((product) => used.add(product.id));
 
@@ -290,6 +365,9 @@ export function getHomepageRails(limit = 12): HomepageRails {
     topQcFinds,
     popularMonth,
     budgetFinds,
+    mostSavedWeek,
+    highestQcRated,
+    risingWeek,
     trendingBrand,
     dayIndex: day,
   };

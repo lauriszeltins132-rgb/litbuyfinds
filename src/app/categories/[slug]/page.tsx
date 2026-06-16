@@ -5,6 +5,7 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import CatalogPanel from "@/components/CatalogPanel";
 import RelatedGuides from "@/components/RelatedGuides";
 import SignupCard from "@/components/SignupCard";
+import BestOfLinks from "@/components/BestOfLinks";
 import RelatedSeoLinks from "@/components/RelatedSeoLinks";
 import { getRelatedGuidesForCategory } from "@/lib/related-guides";
 import CategorySeoBlock from "@/components/seo/CategorySeoBlock";
@@ -106,6 +107,7 @@ export default async function CategoryLandingPage({ params }: CategoryPageProps)
       />
 
       <RelatedGuides links={getRelatedGuidesForCategory(slug)} />
+      <BestOfLinks categorySlug={resolved.slug} />
       <SignupCard location={`category_signup_${slug}`} variant="compact" />
       <RelatedSeoLinks />
 

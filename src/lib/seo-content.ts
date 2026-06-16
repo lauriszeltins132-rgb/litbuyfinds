@@ -298,6 +298,18 @@ const CATEGORY_FAQS: Record<string, { question: string; answer: string }[]> = {
   ],
 };
 
+const BRAND_CATEGORY_LINES: Record<string, string> = {
+  nike: "sneakers, hoodies, tech fleece and jackets",
+  jordan: "sneakers, retros and QC-approved pairs",
+  adidas: "Campus, Samba, sneakers and streetwear",
+  moncler: "jackets, vests and outerwear",
+  stussy: "hoodies, tees and streetwear",
+  "ralph-lauren": "polos, knits and classic pieces",
+  supreme: "hoodies, tees and accessories",
+  gucci: "bags, belts and apparel",
+  "louis-vuitton": "bags and accessories",
+};
+
 const BRAND_FAQS: Record<string, { question: string; answer: string }[]> = {
   default: [
     {
@@ -326,11 +338,21 @@ export function getCategorySeo(slug: string, name: string, count: number): Landi
 
 export function getBrandSeo(slug: string, name: string, count: number): LandingCopy {
   const copy = BRAND_COPY[slug];
-  if (copy) return copy;
+  const categoryLine = BRAND_CATEGORY_LINES[slug] ?? "sneakers, hoodies, jackets and accessories";
+  const title = `${name} LitBuy Finds`;
+  const description = `Browse the best ${name} LitBuy finds including ${categoryLine} and QC-approved products. ${count.toLocaleString()} listings indexed.`;
+
+  if (copy) {
+    return {
+      title,
+      description,
+      intro: copy.intro,
+    };
+  }
 
   return {
-    title: `${name} Finds`,
-    description: `Discover ${count.toLocaleString()} ${name} finds on LitBuy — curated products with verified buy links and QC where available.`,
+    title,
+    description,
     intro: `A focused view of ${name} products from the LitBuy Finds catalog. Save favorites, compare prices, and buy through verified LitBuy links.`,
   };
 }
@@ -352,6 +374,22 @@ export function getCategoryFaqs(slug: string) {
   return CATEGORY_FAQS[slug] ?? CATEGORY_FAQS.default;
 }
 
-export function getBrandFaqs(_slug: string) {
-  return BRAND_FAQS.default;
+export function getBrandFaqs(slug: string, name = "this brand") {
+  const custom = BRAND_FAQS[slug];
+  if (custom) return custom;
+
+  return [
+    {
+      question: `What are the best ${name} LitBuy finds?`,
+      answer: `Check the trending and top product rails on this page — they rotate daily based on engagement, QC availability, and catalog quality.`,
+    },
+    {
+      question: `Are ${name} finds QC approved?`,
+      answer: `Many ${name} listings include QC reference links. Request warehouse QC on LitBuy after purchase before international shipping.`,
+    },
+    {
+      question: `What ${name} products are most popular?`,
+      answer: `Sneakers and outerwear tend to lead clicks. Use filters on this page to narrow by category and price.`,
+    },
+  ];
 }

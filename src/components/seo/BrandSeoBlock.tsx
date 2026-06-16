@@ -35,7 +35,7 @@ export default function BrandSeoBlock({
 }: BrandSeoBlockProps) {
   const tip = BRAND_TIPS[brandSlug] ?? BRAND_TIPS.default;
   const relatedGuides = getBrandRelatedGuides(brandSlug);
-  const faqs = getBrandFaqs(brandSlug);
+  const faqs = getBrandFaqs(brandSlug, brandName);
 
   return (
     <section className="px-4 pb-6 sm:px-6">

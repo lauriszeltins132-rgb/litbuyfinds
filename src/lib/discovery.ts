@@ -1,3 +1,4 @@
+import { getProductEngagementScore, getTopProductIds } from "./analytics-store";
 import { extractBrand, getBrandsFromProducts } from "./brands";
 import { isFeaturedEligible, isHomepageFeaturedEligible } from "./product-media";
 import { hasExactPrice } from "./pricing";
@@ -62,10 +63,26 @@ export function getHiddenGems(limit = 12): Product[] {
 }
 
 export function getMostSavedPicks(limit = 12): Product[] {
-  return getAllProducts()
-    .filter((product) => isFeaturedEligible(product))
-    .sort((a, b) => qualityScore(b) - qualityScore(a))
-    .slice(0, limit);
+  const byId = new Map(getAllProducts().map((p) => [p.id, p]));
+  const fromAnalytics = getTopProductIds(limit * 3)
+    .map((id) => byId.get(id))
+    .filter((p): p is Product => !!p && isFeaturedEligible(p));
+
+  if (fromAnalytics.length >= limit) {
+    return fromAnalytics.slice(0, limit);
+  }
+
+  const seen = new Set(fromAnalytics.map((p) => p.id));
+  const fallback = getAllProducts()
+    .filter((product) => isFeaturedEligible(product) && !seen.has(product.id))
+    .sort(
+      (a, b) =>
+        getProductEngagementScore(b.id) - getProductEngagementScore(a.id) ||
+        qualityScore(b) - qualityScore(a)
+    )
+    .slice(0, limit - fromAnalytics.length);
+
+  return [...fromAnalytics, ...fallback].slice(0, limit);
 }
 
 /** UTC day number — stable for the entire calendar day worldwide. */

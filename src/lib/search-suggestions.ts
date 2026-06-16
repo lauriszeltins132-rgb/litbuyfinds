@@ -1,0 +1,269 @@
+import { getStore, getTopProductIds } from "./analytics-store";
+import { getBrandsFromProducts } from "./brands";
+import { getCategories, getAllProducts } from "./products";
+import { BEST_OF_PAGES, BEST_OF_SLUGS } from "./best-of-pages";
+import { GUIDE_PAGES } from "./guides";
+import { SEO_LANDING_SLUGS, SEO_LANDING_PAGES } from "./seo-landing-pages";
+import { POPULAR_SEARCHES } from "./constants";
+import { getProductHref } from "./slugs";
+
+export type SearchSuggestionType =
+  | "brand"
+  | "category"
+  | "guide"
+  | "best-of"
+  | "landing"
+  | "query"
+  | "product-type";
+
+export type SearchSuggestion = {
+  label: string;
+  href: string;
+  type: SearchSuggestionType;
+  keywords: string;
+  priority: number;
+};
+
+const BRAND_SUB_TYPES: Record<string, { label: string; query: string; priority: number }[]> = {
+  nike: [
+    { label: "Nike Shoes", query: "nike shoe", priority: 95 },
+    { label: "Nike Hoodies", query: "nike hoodie", priority: 90 },
+    { label: "Nike Tech Fleece", query: "nike tech", priority: 88 },
+    { label: "Nike Jackets", query: "nike jacket", priority: 85 },
+  ],
+  jordan: [
+    { label: "Jordan Sneakers", query: "jordan", priority: 95 },
+    { label: "Jordan 1", query: "jordan 1", priority: 92 },
+    { label: "Jordan 4", query: "jordan 4", priority: 90 },
+  ],
+  moncler: [
+    { label: "Moncler Jackets", query: "moncler jacket", priority: 95 },
+    { label: "Moncler Vests", query: "moncler vest", priority: 88 },
+    { label: "Moncler Hoodies", query: "moncler hoodie", priority: 85 },
+  ],
+  adidas: [
+    { label: "Adidas Campus", query: "adidas campus", priority: 90 },
+    { label: "Adidas Samba", query: "adidas samba", priority: 88 },
+    { label: "Adidas Sneakers", query: "adidas", priority: 85 },
+  ],
+  gucci: [
+    { label: "Gucci Bags", query: "gucci bag", priority: 92 },
+    { label: "Gucci Belts", query: "gucci belt", priority: 88 },
+  ],
+  "louis-vuitton": [
+    { label: "LV Bags", query: "louis vuitton bag", priority: 92 },
+    { label: "LV Accessories", query: "louis vuitton", priority: 85 },
+  ],
+  stussy: [
+    { label: "Stussy Hoodies", query: "stussy hoodie", priority: 90 },
+    { label: "Stussy Tees", query: "stussy tee", priority: 85 },
+  ],
+  "ralph-lauren": [
+    { label: "Ralph Lauren Polos", query: "ralph lauren polo", priority: 90 },
+    { label: "Ralph Lauren Knits", query: "ralph lauren", priority: 85 },
+  ],
+};
+
+const GENERIC_BAG_SUGGESTIONS: {
+  label: string;
+  query: string;
+  href?: string;
+  priority: number;
+}[] = [
+  { label: "Designer Bags", query: "designer bag", priority: 90 },
+  { label: "Crossbody Bags", query: "crossbody", priority: 88 },
+  { label: "Travel Bags", query: "travel bag", priority: 85 },
+  { label: "Popular Bags", query: "bag", href: "/best-bags", priority: 92 },
+];
+
+function buildIndex(): SearchSuggestion[] {
+  const items: SearchSuggestion[] = [];
+  const products = getAllProducts();
+  const brands = getBrandsFromProducts(products);
+  const topBrandNames = new Set(
+    Object.entries(getStore().brands)
+      .sort(([, a], [, b]) => b - a)
+      .slice(0, 12)
+      .map(([name]) => name.toLowerCase())
+  );
+
+  for (const brand of POPULAR_SEARCHES) {
+    items.push({
+      label: brand,
+      href: `/?q=${encodeURIComponent(brand)}#browse`,
+      type: "query",
+      keywords: brand.toLowerCase(),
+      priority: 100,
+    });
+  }
+
+  for (const brand of brands) {
+    const boost = topBrandNames.has(brand.name.toLowerCase()) ? 20 : 0;
+    items.push({
+      label: brand.name,
+      href: `/brands/${brand.slug}`,
+      type: "brand",
+      keywords: `${brand.name} ${brand.slug}`.toLowerCase(),
+      priority: 70 + Math.min(brand.count, 30) + boost,
+    });
+
+    const subs = BRAND_SUB_TYPES[brand.slug];
+    if (subs) {
+      for (const sub of subs) {
+        items.push({
+          label: sub.label,
+          href: `/brands/${brand.slug}?q=${encodeURIComponent(sub.query.split(" ").slice(1).join(" ") || sub.query)}`,
+          type: "brand",
+          keywords: sub.query.toLowerCase(),
+          priority: sub.priority + boost,
+        });
+      }
+    }
+  }
+
+  for (const cat of getCategories().filter((c) => c.group === "category")) {
+    items.push({
+      label: cat.name,
+      href: cat.href,
+      type: "category",
+      keywords: `${cat.name} ${cat.slug}`.toLowerCase(),
+      priority: 60 + Math.min(cat.count ?? 0, 20),
+    });
+  }
+
+  for (const slug of BEST_OF_SLUGS) {
+    const page = BEST_OF_PAGES[slug];
+    items.push({
+      label: page.h1,
+      href: page.path,
+      type: "best-of",
+      keywords: `${page.h1} ${page.slug} best finds litbuy`.toLowerCase(),
+      priority: slug.includes("best-finds") ? 85 : 75,
+    });
+  }
+
+  for (const slug of SEO_LANDING_SLUGS) {
+    const page = SEO_LANDING_PAGES[slug];
+    items.push({
+      label: page.title,
+      href: page.path,
+      type: "landing",
+      keywords: `${page.title} ${page.slug} litbuy`.toLowerCase(),
+      priority: 72,
+    });
+  }
+
+  for (const guide of Object.values(GUIDE_PAGES)) {
+    items.push({
+      label: guide.title,
+      href: guide.path,
+      type: "guide",
+      keywords: `${guide.title} ${guide.h1} guide litbuy`.toLowerCase(),
+      priority: 55,
+    });
+  }
+
+  for (const bag of GENERIC_BAG_SUGGESTIONS) {
+    items.push({
+      label: bag.label,
+      href: bag.href ?? `/?q=${encodeURIComponent(bag.query)}#browse`,
+      type: "product-type",
+      keywords: bag.query.toLowerCase(),
+      priority: bag.priority,
+    });
+  }
+
+  const trendingIds = new Set(getTopProductIds(20));
+  for (const product of products) {
+    if (!trendingIds.has(product.id)) continue;
+    const brand = product.product_name.split(" ")[0];
+    items.push({
+      label: product.product_name.slice(0, 48),
+      href: getProductHref(product),
+      type: "query",
+      keywords: product.product_name.toLowerCase(),
+      priority: 65,
+    });
+  }
+
+  return items;
+}
+
+let cachedIndex: SearchSuggestion[] | null = null;
+
+export function getSearchIndex(): SearchSuggestion[] {
+  if (!cachedIndex) {
+    cachedIndex = buildIndex();
+  }
+  return cachedIndex;
+}
+
+export type SearchSuggestionGroup = {
+  id: string;
+  label: string;
+  icon: string;
+  items: SearchSuggestion[];
+};
+
+export function getSearchSuggestions(query: string, limit = 12): SearchSuggestionGroup[] {
+  const q = query.trim().toLowerCase();
+  if (!q) {
+    return getDefaultSuggestionGroups();
+  }
+
+  const matches = getSearchIndex()
+    .filter((item) => item.keywords.includes(q) || item.label.toLowerCase().includes(q))
+    .sort((a, b) => b.priority - a.priority)
+    .slice(0, limit * 2);
+
+  const groups: Record<string, SearchSuggestion[]> = {
+    brands: [],
+    categories: [],
+    "best-of": [],
+    guides: [],
+    trending: [],
+  };
+
+  for (const item of matches) {
+    if (item.type === "brand" && groups.brands.length < 5) groups.brands.push(item);
+    else if (item.type === "category" && groups.categories.length < 4) groups.categories.push(item);
+    else if (item.type === "best-of" && groups["best-of"].length < 4) groups["best-of"].push(item);
+    else if ((item.type === "guide" || item.type === "landing") && groups.guides.length < 4)
+      groups.guides.push(item);
+    else if (groups.trending.length < 4) groups.trending.push(item);
+  }
+
+  const result: SearchSuggestionGroup[] = [];
+  if (groups.brands.length)
+    result.push({ id: "brands", label: "Brands", icon: "🏷", items: groups.brands });
+  if (groups.categories.length)
+    result.push({ id: "categories", label: "Categories", icon: "📂", items: groups.categories });
+  if (groups["best-of"].length)
+    result.push({ id: "best-of", label: "Best of", icon: "⭐", items: groups["best-of"] });
+  if (groups.guides.length)
+    result.push({ id: "guides", label: "Guides", icon: "📖", items: groups.guides });
+  if (groups.trending.length)
+    result.push({ id: "trending", label: "Trending", icon: "🔥", items: groups.trending });
+
+  return result.slice(0, 5);
+}
+
+function getDefaultSuggestionGroups(): SearchSuggestionGroup[] {
+  const index = getSearchIndex();
+  const popular = index
+    .filter((i) => i.priority >= 95)
+    .slice(0, 6);
+  const trending = index
+    .filter((i) => i.type === "best-of" || i.type === "brand")
+    .sort((a, b) => b.priority - a.priority)
+    .slice(0, 6);
+  const brands = index.filter((i) => i.type === "brand" && !i.label.includes(" ")).slice(0, 8);
+  const categories = index.filter((i) => i.type === "category").slice(0, 6);
+
+  return [
+    { id: "popular", label: "Popular searches", icon: "🔥", items: popular },
+    { id: "trending", label: "Trending searches", icon: "⭐", items: trending },
+    { id: "brands", label: "Brands", icon: "🏷", items: brands },
+    { id: "categories", label: "Categories", icon: "📂", items: categories },
+  ].filter((g) => g.items.length > 0);
+}

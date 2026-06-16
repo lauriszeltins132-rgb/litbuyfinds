@@ -13,6 +13,13 @@ const FEATURED_BRANDS = [
   "ralph-lauren",
 ];
 
+import { BEST_OF_SLUGS, BEST_OF_PAGES } from "@/lib/best-of-pages";
+
+const BEST_OF_LINKS = BEST_OF_SLUGS.slice(0, 8).map((slug) => {
+  const page = BEST_OF_PAGES[slug];
+  return { href: page.path, label: page.title };
+});
+
 const GUIDE_LINKS = [
   { href: "/guides", label: "Guides" },
   { href: "/best-finds-by-category", label: "By category" },
@@ -58,6 +65,15 @@ export default function RelatedSeoLinks() {
               className="rounded-full border border-border px-3 py-1.5 text-xs font-bold text-muted hover:border-accent/40 hover:text-accent"
             >
               {slug.replace(/-/g, " ")}
+            </Link>
+          ))}
+          {BEST_OF_LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="rounded-full border border-border px-3 py-1.5 text-xs font-bold text-muted hover:border-accent/40 hover:text-accent"
+            >
+              {link.label}
             </Link>
           ))}
           {GUIDE_LINKS.map((link) => (

@@ -1,7 +1,16 @@
 import HeroSearch from "@/components/HeroSearch";
 import { HERO_HEADLINE, HERO_SUBHEADLINE, PUBLIC_CATALOG_COUNT } from "@/lib/constants";
+import { getSearchIndex } from "@/lib/search-suggestions";
 
 export default function DiscoveryHero() {
+  const searchIndex = getSearchIndex().map(({ label, href, type, keywords, priority }) => ({
+    label,
+    href,
+    type,
+    keywords,
+    priority,
+  }));
+
   return (
     <section className="border-b border-border/50 px-4 pb-6 pt-5 sm:px-6 sm:pb-8 sm:pt-10">
       <div className="mx-auto max-w-3xl text-center">
@@ -17,7 +26,7 @@ export default function DiscoveryHero() {
         </p>
 
         <div className="mx-auto mt-6 max-w-[700px] sm:mt-7">
-          <HeroSearch />
+          <HeroSearch searchIndex={searchIndex} />
         </div>
       </div>
     </section>

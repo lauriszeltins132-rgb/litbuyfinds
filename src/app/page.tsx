@@ -63,6 +63,34 @@ export default function HomePage() {
         products={rails.topQcFinds}
       />
 
+      <DiscoveryRail
+        title="Most Saved This Week"
+        subtitle="Products with the most clicks and saves"
+        href="/most-popular-finds-now"
+        products={rails.mostSavedWeek}
+      />
+
+      <DiscoveryRail
+        title="Highest QC Rated"
+        subtitle="QC-linked finds with strong engagement"
+        href="/best-qc-items"
+        products={rails.highestQcRated}
+      />
+
+      <DiscoveryRail
+        title="Best Under $30"
+        subtitle="Affordable picks that still look premium"
+        href="/best-under-30"
+        products={rails.budgetFinds}
+      />
+
+      <DiscoveryRail
+        title="Rising This Week"
+        subtitle="Gaining momentum across the catalog"
+        href="/best-finds-this-week"
+        products={rails.risingWeek}
+      />
+
       <HomepageCategories categories={categories} />
 
       <HomepageLitBuyResources />
@@ -77,13 +105,6 @@ export default function HomePage() {
       ) : null}
 
       <HomepageBrands hideSpotlight />
-
-      <DiscoveryRail
-        title="Budget Finds Under $30"
-        subtitle="Affordable picks that still look premium"
-        href="/deals"
-        products={rails.budgetFinds}
-      />
 
       <DiscoveryRail
         title="Popular This Month"

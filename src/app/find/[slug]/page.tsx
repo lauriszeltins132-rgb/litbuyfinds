@@ -22,6 +22,7 @@ import { getAllProductSlugs, getProductBySlug, slugify } from "@/lib/slugs";
 import { buildPageMetadata } from "@/lib/seo";
 import FloatingBackButton from "@/components/FloatingBackButton";
 import ProductJsonLd from "@/components/ProductJsonLd";
+import BestOfLinks from "@/components/BestOfLinks";
 import RelatedGuides from "@/components/RelatedGuides";
 import RecordRecentlyViewed from "@/components/RecordRecentlyViewed";
 import RecentlyViewedRail from "@/components/RecentlyViewedRail";
@@ -154,6 +155,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
       ) : null}
 
       <RelatedGuides links={getRelatedGuidesForProduct(product)} />
+
+      <BestOfLinks
+        categorySlug={product.category_slug}
+        brandSlug={brand ? slugify(brand) : undefined}
+        maxPrice={product.price ?? undefined}
+      />
 
       <RecentlyViewedRail excludeProductId={product.id} title="Your recently viewed" />
 
