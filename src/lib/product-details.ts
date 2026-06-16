@@ -1,5 +1,4 @@
 import type { Product } from "./types";
-import { extractBrand } from "./brands";
 import { formatPrice } from "./currency";
 import { getProductSource } from "./filters";
 import { getDatasetSyncedIso } from "./catalog-meta";
@@ -62,13 +61,13 @@ export function getProductFacts(
 
 /** Short factual copy — no generated marketing fluff. */
 export function getProductDescription(product: Product): string {
-  const brand = extractBrand(product.product_name);
+  const brand = getDisplayBrand(product);
   const source = getProductSource(product.affiliate_link);
   const validation = validateProduct(product);
 
   const parts = [
     `Catalog listing in ${product.category}.`,
-    brand ? `Labelled as ${brand}.` : null,
+    brand ? `Listed brand: ${brand}.` : "Brand not verified in catalog metadata.",
     product.qc_link
       ? "QC reference is linked for this find."
       : "No QC reference attached to this listing.",

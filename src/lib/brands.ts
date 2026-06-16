@@ -1,4 +1,5 @@
 import type { Product } from "./types";
+import { getDisplayBrand } from "./product-validation";
 
 const KNOWN_BRANDS = [
   "Chrome Hearts",
@@ -130,7 +131,7 @@ export function getBrandsFromProducts(products: Product[]): BrandInfo[] {
   const counts = new Map<string, number>();
 
   for (const product of products) {
-    const brand = extractBrand(product.product_name);
+    const brand = getDisplayBrand(product);
     if (!brand) continue;
     counts.set(brand, (counts.get(brand) || 0) + 1);
   }
@@ -141,7 +142,7 @@ export function getBrandsFromProducts(products: Product[]): BrandInfo[] {
 }
 
 export function productMatchesBrand(product: Product, brandSlug: string): boolean {
-  const brand = extractBrand(product.product_name);
+  const brand = getDisplayBrand(product);
   return brand ? slugify(brand) === brandSlug : false;
 }
 

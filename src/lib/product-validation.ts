@@ -1,5 +1,10 @@
 import type { Product } from "./types";
 import { extractBrand, extractAllBrands } from "./brands";
+import {
+  getEffectiveProductTitle,
+  getProductNameOverride,
+  isBatchMislabelTitle,
+} from "./product-title-quality";
 
 export type ProductValidation = {
   confidence: number;
@@ -147,16 +152,24 @@ function resolveTrustedBrand(
 }
 
 export function validateProduct(product: Product): ProductValidation {
-  const title = product.product_name.trim();
+  const title = getEffectiveProductTitle(product);
   const titleBrands = extractAllBrands(title);
   const titleTypes = detectTypes(title);
   const imageUrl = product.image ?? "";
   const urlBrands = imageUrl ? extractAllBrands(imageUrl) : [];
   const expectedTypes = CATEGORY_TYPES[product.category_slug] ?? [];
   const multiItem = looksLikeMultiItemListing(title, imageUrl);
+  const hasOverride = getProductNameOverride(product) !== null;
+  const batchMislabel =
+    !hasOverride && isBatchMislabelTitle(product.product_name);
 
   let confidence = 1;
   const issues: string[] = [];
+
+  if (batchMislabel) {
+    confidence -= 0.55;
+    issues.push("batch_generic_mislabel");
+  }
 
   if (titleBrands.length > 1) {
     confidence -= 0.5;
@@ -214,7 +227,8 @@ export function validateProduct(product: Product): ProductValidation {
   const brandConflict =
     issues.includes("multiple_brands_in_title") ||
     issues.includes("image_url_brand_mismatch") ||
-    issues.includes("category_type_mismatch");
+    issues.includes("category_type_mismatch") ||
+    issues.includes("batch_generic_mislabel");
   const trustBrand = resolveTrustedBrand(
     title,
     titleBrands,
@@ -222,15 +236,17 @@ export function validateProduct(product: Product): ProductValidation {
     brandConflict
   );
   const isTitleTrusted =
-    normalized >= 0.6 && !issues.includes("likely_multi_item_listing");
+    normalized >= 0.6 &&
+    !issues.includes("likely_multi_item_listing") &&
+    !issues.includes("batch_generic_mislabel");
 
-  let displayName = isTitleTrusted ? product.product_name : "";
+  let displayName = isTitleTrusted ? title : "";
   if (!isTitleTrusted) {
     displayName = buildGenericTitle(
-      product,
+      { ...product, product_name: title },
       trustBrand,
       titleTypes,
-      !brandConflict,
+      !brandConflict && !batchMislabel,
       multiItem
     );
   } else if (
@@ -238,7 +254,7 @@ export function validateProduct(product: Product): ProductValidation {
     issues.includes("likely_multi_item_listing") &&
     !/\bcollection\b/i.test(title)
   ) {
-    displayName = `${product.product_name} Collection`;
+    displayName = `${title} Collection`;
   }
 
   return {
