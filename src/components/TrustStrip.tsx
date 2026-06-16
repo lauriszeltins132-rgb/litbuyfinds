@@ -1,4 +1,5 @@
 import { getCatalogStats } from "@/lib/products";
+import { PUBLIC_CATALOG_COUNT } from "@/lib/constants";
 
 const SIGNALS = [
   { key: "finds", label: "QC-curated finds" },
@@ -16,7 +17,7 @@ export default function TrustStrip({ compact = false }: TrustStripProps) {
   const stats = getCatalogStats();
 
   const values: Record<string, string> = {
-    finds: `${stats.total.toLocaleString()}+`,
+    finds: PUBLIC_CATALOG_COUNT,
     qc: `${stats.withQc.toLocaleString()}+`,
     updates: "Daily",
     community: "Active",

@@ -1,15 +1,12 @@
 import HeroSearch from "@/components/HeroSearch";
-import { HERO_HEADLINE, HERO_SUBHEADLINE } from "@/lib/constants";
-import { getCatalogStats } from "@/lib/products";
+import { HERO_HEADLINE, HERO_SUBHEADLINE, PUBLIC_CATALOG_COUNT } from "@/lib/constants";
 
 export default function DiscoveryHero() {
-  const stats = getCatalogStats();
-
   return (
     <section className="border-b border-border/50 px-4 pb-6 pt-5 sm:px-6 sm:pb-8 sm:pt-10">
       <div className="mx-auto max-w-3xl text-center">
         <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-accent">
-          {stats.total.toLocaleString()}+ curated finds · QC approved · Updated daily
+          {PUBLIC_CATALOG_COUNT} curated finds · QC approved · Updated daily
         </p>
         <h1 className="mt-3 text-[1.75rem] font-black leading-[1.08] tracking-tight sm:text-4xl lg:text-[2.75rem]">
           {HERO_HEADLINE}

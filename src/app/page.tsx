@@ -35,6 +35,8 @@ export default function HomePage() {
         showTrendingScore
       />
 
+      <HomepageWhyLitBuy location="homepage_after_popular" />
+
       <DiscoveryRail
         title="Popular This Week"
         subtitle="Trending sneakers, jackets and streetwear from the last 7 days"
@@ -85,8 +87,6 @@ export default function HomePage() {
         href="/top-litbuy-finds-this-month"
         products={rails.popularMonth}
       />
-
-      <HomepageWhyLitBuy />
 
       <RecentlyViewedRail />
 

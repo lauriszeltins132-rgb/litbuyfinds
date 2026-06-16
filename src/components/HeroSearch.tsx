@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { POPULAR_SEARCHES } from "@/lib/constants";
+import { trackSearchChipClick, trackSearchSubmit } from "@/lib/analytics-events";
 
 function SearchIcon({ className = "h-5 w-5" }: { className?: string }) {
   return (
@@ -33,10 +34,12 @@ export default function HeroSearch() {
       router.push("/#browse");
       return;
     }
+    trackSearchSubmit(trimmed, "hero_search");
     router.push(`/?q=${encodeURIComponent(trimmed)}#browse`);
   }
 
   function searchBrand(brand: string) {
+    trackSearchChipClick(brand, "hero_search");
     router.push(`/?q=${encodeURIComponent(brand)}#browse`);
   }
 
@@ -51,7 +54,7 @@ export default function HeroSearch() {
               type="search"
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search Nike, Moncler, Jordan, jackets, sneakers..."
+              placeholder="Search Nike, Moncler, Jordan, bags, jackets..."
               className="hero-search__input"
             />
           </div>
@@ -65,7 +68,7 @@ export default function HeroSearch() {
         <p className="text-center text-[11px] font-bold uppercase tracking-[0.14em] text-muted">
           Popular searches
         </p>
-        <div className="mt-2 flex flex-wrap justify-center gap-2">
+        <div className="mt-2 flex flex-wrap justify-center gap-2 px-1">
           {POPULAR_SEARCHES.map((brand) => (
             <button
               key={brand}

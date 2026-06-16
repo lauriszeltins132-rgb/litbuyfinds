@@ -11,6 +11,7 @@ import { getProductHref } from "@/lib/slugs";
 import { usePreferences } from "@/context/PreferencesContext";
 import { useWishlist } from "@/context/WishlistContext";
 import { trackProductContext } from "@/lib/analytics-events";
+import { trackSaveClick } from "@/lib/analytics-events";
 import LitBuyMicroCta from "./LitBuyMicroCta";
 import ProductImage from "./ProductImage";
 
@@ -165,7 +166,10 @@ export default function ProductCard({
 
           <button
             type="button"
-            onClick={() => toggleWishlist(product.id)}
+            onClick={() => {
+              if (!saved) trackSaveClick(product.id, "product_card");
+              toggleWishlist(product.id);
+            }}
             aria-label={saved ? "Remove from saved" : "Save item"}
             className={`${iconBtn} ${
               saved ? "border-accent bg-accent text-background" : ""

@@ -11,7 +11,13 @@ export type ConversionEvent =
   | "qc_click"
   | "discord_click"
   | "telegram_click"
-  | "broken_image";
+  | "broken_image"
+  | "search_submit"
+  | "search_chip_click"
+  | "save_click"
+  | "category_click"
+  | "brand_click"
+  | "collection_click";
 
 export type ConversionPayload = {
   location?: string;
@@ -19,6 +25,8 @@ export type ConversionPayload = {
   productName?: string;
   brand?: string;
   category?: string;
+  query?: string;
+  href?: string;
 };
 
 function cleanPayload(payload: ConversionPayload) {
@@ -75,6 +83,30 @@ export function trackRegisterImpression(location: string) {
   if (typeof sessionStorage !== "undefined" && sessionStorage.getItem(key)) return;
   sessionStorage?.setItem(key, "1");
   trackConversion("register_impression", { location });
+}
+
+export function trackSearchSubmit(query: string, location: string) {
+  trackConversion("search_submit", { location, query });
+}
+
+export function trackSearchChipClick(query: string, location: string) {
+  trackConversion("search_chip_click", { location, query });
+}
+
+export function trackSaveClick(productId: string, location: string) {
+  trackConversion("save_click", { location, productId });
+}
+
+export function trackCategoryClick(href: string, location: string) {
+  trackConversion("category_click", { location, href });
+}
+
+export function trackBrandClick(href: string, location: string) {
+  trackConversion("brand_click", { location, href });
+}
+
+export function trackCollectionClick(href: string, location: string) {
+  trackConversion("collection_click", { location, href });
 }
 
 export function trackDiscordClick(location: string) {

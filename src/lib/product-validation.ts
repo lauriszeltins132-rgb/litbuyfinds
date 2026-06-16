@@ -101,8 +101,8 @@ function pickDisplayType(
   title: string
 ): string | null {
   if (/\bbackpack\b/i.test(title)) return "Backpack";
-  if (/\bbeanie\b/i.test(title)) return "Beanie";
-  if (/\b(hat|cap)\b/i.test(title)) return "Hat";
+  if (/\b(beanie|knit|knitted)\b/i.test(title)) return "Beanie Set";
+  if (/\b(hat|cap)\b/i.test(title)) return "Hat Set";
   const expected = CATEGORY_TYPES[categorySlug] ?? [];
   for (const type of expected) {
     if (titleTypes.has(type)) return TYPE_LABELS[type] ?? type;
@@ -126,7 +126,7 @@ function buildGenericTitle(
   const fashionLabel = typeLabel
     ? `${typeLabel.charAt(0).toUpperCase()}${typeLabel.slice(1)}`
     : singularCategory(product);
-  const suffix = multiItem ? " Collection" : "";
+  const suffix = multiItem ? " Set" : "";
 
   if (useBrand && brand && typeLabel) return `${brand} ${fashionLabel}${suffix}`;
   if (useBrand && brand) return `${brand} find`;

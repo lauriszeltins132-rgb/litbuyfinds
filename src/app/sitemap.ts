@@ -7,6 +7,7 @@ import { getAllProductSlugs } from "@/lib/slugs";
 import { GUIDE_SLUGS, GUIDES_HUB, GUIDE_PAGES } from "@/lib/guides";
 import { SEO_LIST_SLUGS, SEO_LIST_ROUTES } from "@/lib/seo-list-routes";
 import { STATIC_PAGES } from "@/lib/static-pages";
+import { SHARE_COLLECTION_SLUGS, SHARE_COLLECTIONS } from "@/lib/share-collections";
 import { SITE_URL } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -98,6 +99,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${SITE_URL}/brands/${brand.slug}`,
       changeFrequency: "weekly",
       priority: 0.75,
+    });
+  }
+
+  for (const slug of SHARE_COLLECTION_SLUGS) {
+    const collection = SHARE_COLLECTIONS[slug];
+    routes.push({
+      url: `${SITE_URL}${collection.path}`,
+      changeFrequency: "weekly",
+      priority: 0.87,
     });
   }
 

@@ -1,9 +1,13 @@
 import productsData from "@/data/products.json";
 
-export function formatCatalogCountForSeo(
-  total = (productsData as unknown[]).length
-): string {
-  if (total >= 10_000) return `${Math.floor(total / 1000) * 1000}+`;
-  if (total >= 1000) return `${Math.floor(total / 100) * 100}+`;
-  return `${total}+`;
+/** Public-facing catalog count for SEO, hero, and trust messaging */
+export const PUBLIC_CATALOG_COUNT = "10,000+";
+
+/** Actual indexed product count from dataset (internal stats) */
+export function getActualCatalogCount(): number {
+  return (productsData as unknown[]).length;
+}
+
+export function formatCatalogCountForSeo(): string {
+  return PUBLIC_CATALOG_COUNT;
 }

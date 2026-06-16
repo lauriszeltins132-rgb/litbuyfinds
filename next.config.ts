@@ -25,6 +25,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/guides/litbuy-spreadsheet-guide",
+        destination: "/guides/litbuy-spreadsheet",
+        permanent: true,
+      },
+      {
         source: "/privacy",
         destination: "/privacy-policy",
         permanent: true,

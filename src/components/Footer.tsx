@@ -15,11 +15,19 @@ import { getCategories, getAllProducts } from "@/lib/products";
 
 const GUIDE_LINKS = [
   { href: "/guides", label: "All guides" },
+  { href: "/guides/litbuy-finds", label: "LitBuy finds" },
+  { href: "/guides/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+  { href: "/guides/litbuy-qc-photos", label: "LitBuy QC photos" },
   { href: "/guides/beginner-guide-to-litbuy", label: "Beginner guide" },
-  { href: "/guides/how-to-order-from-litbuy", label: "How to order" },
   { href: "/how-to-buy", label: "How to buy" },
-  { href: "/recently-added", label: "Recently added" },
-  { href: "/best-rep-sneakers", label: "Best rep sneakers" },
+];
+
+const COLLECTION_LINKS = [
+  { href: "/collections/best-litbuy-finds-2026", label: "Best finds 2026" },
+  { href: "/collections/best-nike-finds", label: "Best Nike finds" },
+  { href: "/collections/best-qc-approved-finds", label: "QC finds" },
+  { href: "/collections/best-budget-finds", label: "Budget finds" },
+  { href: "/collections/litbuy-spreadsheet-alternative", label: "Sheet alternative" },
 ];
 
 const TRUST_LINKS = [
@@ -122,6 +130,13 @@ export default function Footer() {
             </p>
             <ul className="mt-4 space-y-2.5 text-sm">
               {GUIDE_LINKS.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="text-foreground/75 transition hover:text-accent">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+              {COLLECTION_LINKS.map((link) => (
                 <li key={link.href}>
                   <Link href={link.href} className="text-foreground/75 transition hover:text-accent">
                     {link.label}
