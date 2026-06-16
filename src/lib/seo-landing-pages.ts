@@ -729,6 +729,12 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
           "Moncler puffers, Canada Goose parkas, and Arc'teryx shells lead searches. Check the grid below for current picks.",
       },
     ],
+    relatedLinks: [{ href: "/categories/coats-and-jackets", label: "Jackets" }],
+    getProducts: () => filterFeaturedEligible(byCategory("coats-and-jackets")).slice(0, 72),
+    productSectionTitle: "Best jackets 2026",
+  },
+
+  "best-litbuy-bags-2026": {
     slug: "best-litbuy-bags-2026",
     path: "/best-litbuy-bags-2026",
     title: "Best LitBuy Bags 2026",
@@ -757,6 +763,12 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
           "Louis Vuitton, Gucci, and Goyard styles have the most QC references. Always request warehouse photos before shipping.",
       },
     ],
+    relatedLinks: [{ href: "/litbuy-products", label: "All products" }],
+    getProducts: TOP_LISTS["top-designer-bags"].getProducts,
+    productSectionTitle: "Best bags 2026",
+  },
+
+  "best-litbuy-accessories-2026": {
     slug: "best-litbuy-accessories-2026",
     path: "/best-litbuy-accessories-2026",
     title: "Best LitBuy Accessories 2026",
@@ -782,6 +794,12 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
           "Yes — hats, belts, and small items add variety without heavy shipping cost.",
       },
     ],
+    relatedLinks: [{ href: "/litbuy-finds", label: "LitBuy finds" }],
+    getProducts: () => filterFeaturedEligible(byCategory("accessories")).slice(0, 72),
+    productSectionTitle: "Best accessories 2026",
+  },
+
+  "best-litbuy-finds-under-50": {
     slug: "best-litbuy-finds-under-50",
     path: "/best-litbuy-finds-under-50",
     title: "Best LitBuy Finds Under $50",
@@ -810,6 +828,9 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
           "List prices sync from the catalog. Confirm the live LitBuy price at checkout before paying.",
       },
     ],
+    relatedLinks: [{ href: "/best-litbuy-finds", label: "Best finds" }],
+    getProducts: TOP_LISTS["top-products-under-50"].getProducts,
+    productSectionTitle: "Finds under $50",
   },
 };
 
