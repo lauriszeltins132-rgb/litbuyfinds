@@ -99,7 +99,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       {related.length > 0 ? (
         <section className="px-4 pt-4 sm:px-6">
           <div className="mx-auto max-w-7xl">
-            <h2 className="text-xl font-black">Similar finds</h2>
+            <h2 className="text-xl font-black">Related LitBuy Finds</h2>
             <p className="mt-1 text-sm text-muted">
               More in {product.category}
               {brand ? ` and ${brand}` : ""}.
@@ -111,10 +111,24 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </section>
       ) : null}
 
+      {alsoLike.length > 0 ? (
+        <section className="px-4 pt-4 sm:px-6">
+          <div className="mx-auto max-w-7xl">
+            <h2 className="text-xl font-black">Related Products</h2>
+            <p className="mt-1 text-sm text-muted">
+              Other picks in a similar price range and style.
+            </p>
+            <div className="mt-6">
+              <ProductGrid products={alsoLike} />
+            </div>
+          </div>
+        </section>
+      ) : null}
+
       {moreFromBrand.length > 0 ? (
         <section className="px-4 pt-4 sm:px-6">
           <div className="mx-auto max-w-7xl">
-            <h2 className="text-xl font-black">More from {brand}</h2>
+            <h2 className="text-xl font-black">More From This Brand</h2>
             <p className="mt-1 text-sm text-muted">
               Popular {brand} finds in the catalog.
             </p>
@@ -140,20 +154,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
       ) : null}
 
       <RelatedGuides links={getRelatedGuidesForProduct(product)} />
-
-      {alsoLike.length > 0 ? (
-        <section className="px-4 py-10 sm:px-6">
-          <div className="mx-auto max-w-7xl">
-            <h2 className="text-xl font-black">People also viewed</h2>
-            <p className="mt-1 text-sm text-muted">
-              Other picks in a similar price range and style.
-            </p>
-            <div className="mt-6">
-              <ProductGrid products={alsoLike} />
-            </div>
-          </div>
-        </section>
-      ) : null}
 
       <RecentlyViewedRail excludeProductId={product.id} title="Your recently viewed" />
 

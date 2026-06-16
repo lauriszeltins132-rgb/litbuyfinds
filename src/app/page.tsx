@@ -6,6 +6,8 @@ import DiscoveryHero from "@/components/DiscoveryHero";
 import DiscoveryRail from "@/components/DiscoveryRail";
 import HomepageBrands from "@/components/HomepageBrands";
 import HomepageCategories from "@/components/HomepageCategories";
+import HomepageFaq from "@/components/HomepageFaq";
+import HomepageLitBuyResources from "@/components/HomepageLitBuyResources";
 import HomepageWhyLitBuy from "@/components/HomepageWhyLitBuy";
 import RecentlyViewedRail from "@/components/RecentlyViewedRail";
 import TrustStrip from "@/components/TrustStrip";
@@ -63,6 +65,8 @@ export default function HomePage() {
 
       <HomepageCategories categories={categories} />
 
+      <HomepageLitBuyResources />
+
       {rails.trendingBrand ? (
         <DiscoveryRail
           title={`Trending: ${rails.trendingBrand.brand}`}
@@ -89,6 +93,8 @@ export default function HomePage() {
       />
 
       <RecentlyViewedRail />
+
+      <HomepageFaq />
 
       <section className="px-4 pb-2 sm:px-6">
         <div className="mx-auto max-w-7xl text-center">

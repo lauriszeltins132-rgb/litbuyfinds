@@ -8,6 +8,7 @@ import { GUIDE_SLUGS, GUIDES_HUB, GUIDE_PAGES } from "@/lib/guides";
 import { SEO_LIST_SLUGS, SEO_LIST_ROUTES } from "@/lib/seo-list-routes";
 import { STATIC_PAGES } from "@/lib/static-pages";
 import { SHARE_COLLECTION_SLUGS, SHARE_COLLECTIONS } from "@/lib/share-collections";
+import { SEO_LANDING_PAGES, SEO_LANDING_SLUGS } from "@/lib/seo-landing-pages";
 import { SITE_URL } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -46,6 +47,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${SITE_URL}${list.path}`,
       changeFrequency: "weekly",
       priority: 0.84,
+    });
+  }
+
+  for (const slug of SEO_LANDING_SLUGS) {
+    const page = SEO_LANDING_PAGES[slug];
+    routes.push({
+      url: `${SITE_URL}${page.path}`,
+      changeFrequency: "weekly",
+      priority: 0.88,
     });
   }
 

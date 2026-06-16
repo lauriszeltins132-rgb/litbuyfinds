@@ -18,7 +18,7 @@ export const SITE_OG_DESCRIPTION =
 export const HERO_HEADLINE = "Discover the Best LitBuy Finds";
 
 export const HERO_SUBHEADLINE =
-  "Curated Weidian, Taobao & LitBuy fashion finds with QC photos, verified links, and daily updates.";
+  "LitBuy Finds turns spreadsheet-style catalogs into searchable pages — QC approved products from Weidian and Taobao with verified LitBuy links and daily updates.";
 
 export const HERO_TAGLINE = HERO_SUBHEADLINE;
 
