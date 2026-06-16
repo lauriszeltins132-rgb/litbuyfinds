@@ -10,8 +10,7 @@ import { getProductSource } from "@/lib/filters";
 import { getProductHref } from "@/lib/slugs";
 import { usePreferences } from "@/context/PreferencesContext";
 import { useWishlist } from "@/context/WishlistContext";
-import { trackProductContext } from "@/lib/analytics-events";
-import { trackSaveClick } from "@/lib/analytics-events";
+import { trackProductContext, trackSaveClick } from "@/lib/analytics-events";
 import LitBuyMicroCta from "./LitBuyMicroCta";
 import ProductImage from "./ProductImage";
 
