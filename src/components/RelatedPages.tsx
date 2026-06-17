@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getAllGuides } from "@/lib/guides";
 import { getCategories, getAllProducts } from "@/lib/products";
 import { getBrandsFromProducts } from "@/lib/brands";
+import { SHARE_COLLECTION_SLUGS, SHARE_COLLECTIONS } from "@/lib/share-collections";
 
 const FEATURED_BRAND_SLUGS = [
   "nike",
@@ -41,6 +42,19 @@ const FEATURED_GUIDE_PATHS = [
   "/guides/how-to-check-qc-photos",
   "/guides/how-to-buy-from-weidian",
   "/guides/how-shipping-works-with-agents",
+];
+
+const FEATURED_COLLECTION_SLUGS = [
+  "best-nike-finds",
+  "best-jordan-finds",
+  "best-moncler-finds",
+  "best-sneakers",
+  "best-jackets",
+  "best-hoodies",
+  "best-qc-approved-finds",
+  "trending-this-week",
+  "most-saved-finds",
+  "best-under-50",
 ];
 
 type RelatedPagesProps = {
@@ -91,13 +105,17 @@ export default function RelatedPages({
     })
     .slice(0, 5);
 
+  const collections = FEATURED_COLLECTION_SLUGS.map((slug) => SHARE_COLLECTIONS[slug])
+    .filter((c) => c.path !== currentPath)
+    .slice(0, 5);
+
   return (
     <section className="px-4 pb-6 sm:px-6">
       <div className="mx-auto max-w-7xl rounded-2xl border border-border bg-surface/30 p-5">
         <h2 className="text-sm font-bold uppercase tracking-[0.16em] text-muted">
           Related pages
         </h2>
-        <div className="mt-4 grid gap-6 md:grid-cols-3">
+        <div className="mt-4 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.14em] text-muted">Brands</p>
             <ul className="mt-2 flex flex-wrap gap-2">
@@ -125,6 +143,23 @@ export default function RelatedPages({
                     className="rounded-full border border-border px-3 py-1 text-xs font-bold hover:border-accent/40 hover:text-accent"
                   >
                     {cat.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.14em] text-muted">
+              Collections
+            </p>
+            <ul className="mt-2 flex flex-wrap gap-2">
+              {collections.map((col) => (
+                <li key={col.slug}>
+                  <Link
+                    href={col.path}
+                    className="rounded-full border border-border px-3 py-1 text-xs font-bold hover:border-accent/40 hover:text-accent"
+                  >
+                    {col.h1}
                   </Link>
                 </li>
               ))}

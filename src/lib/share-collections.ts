@@ -1,10 +1,12 @@
 import type { SeoListConfig } from "./top-lists";
 import { TOP_LISTS } from "./top-lists";
 import { getEditorsPicks } from "./discovery";
+import { getEngagementPicks } from "./engagement-picks";
 import { extractBrand } from "./brands";
+import { getCollectionFaqs } from "./collection-faqs";
 import { filterFeaturedEligible } from "./product-media";
 import { hasExactPrice } from "./pricing";
-import { getAllProducts } from "./products";
+import { getAllProducts, getTrendingProducts } from "./products";
 
 function priced(items: ReturnType<typeof getAllProducts>) {
   return items.filter((p) => hasExactPrice(p.price));
@@ -26,14 +28,21 @@ function byKeyword(pattern: RegExp) {
   return priced(getAllProducts().filter((p) => pattern.test(p.product_name)));
 }
 
+function byMaxPrice(max: number) {
+  return priced(getAllProducts().filter((p) => p.price !== null && p.price <= max));
+}
+
 function wrap(
   slug: string,
-  config: Omit<SeoListConfig, "slug" | "path">
+  config: Omit<SeoListConfig, "slug" | "path" | "faqs"> & {
+    faqs?: SeoListConfig["faqs"];
+  }
 ): SeoListConfig {
   return {
     slug,
     path: `/collections/${slug}`,
     ...config,
+    faqs: config.faqs ?? getCollectionFaqs(slug, config.h1),
   };
 }
 
@@ -215,6 +224,197 @@ export const SHARE_COLLECTIONS: Record<string, SeoListConfig> = {
     ],
     clusterLinks: [
       { href: "/collections/best-litbuy-finds-2026", label: "Best finds 2026" },
+    ],
+  }),
+
+  "best-stussy-finds": wrap("best-stussy-finds", {
+    title: "Best Stussy LitBuy Finds",
+    metaDescription:
+      "Best Stussy finds on LitBuy — hoodies, tees, and streetwear staples with verified links and QC references.",
+    badge: "Collection",
+    h1: "Best Stussy LitBuy finds",
+    intro:
+      "Stüssy picks from the catalog — logo hoodies, graphic tees, and streetwear layers ranked for photos and QC.",
+    getProducts: () => filterFeaturedEligible(byBrand("Stussy")).slice(0, 72),
+    relatedLinks: [
+      { href: "/brands/stussy", label: "All Stussy" },
+      { href: "/collections/best-hoodies", label: "Best hoodies" },
+    ],
+    clusterLinks: [
+      { href: "/collections/best-corteiz-finds", label: "Corteiz finds" },
+    ],
+  }),
+
+  "best-corteiz-finds": wrap("best-corteiz-finds", {
+    title: "Best Corteiz LitBuy Finds",
+    metaDescription:
+      "Best Corteiz finds on LitBuy — Alcatraz hoodies, cargos, and UK streetwear with verified agent links.",
+    badge: "Collection",
+    h1: "Best Corteiz LitBuy finds",
+    intro:
+      "Corteiz-heavy collection for haul planning and social shares — hoodies, cargos, and graphic pieces.",
+    getProducts: () => filterFeaturedEligible(byBrand("Corteiz")).slice(0, 72),
+    relatedLinks: [
+      { href: "/brands/corteiz", label: "All Corteiz" },
+      { href: "/collections/best-hoodies", label: "Best hoodies" },
+    ],
+    clusterLinks: [
+      { href: "/collections/best-stussy-finds", label: "Stussy finds" },
+    ],
+  }),
+
+  "best-hoodies": wrap("best-hoodies", {
+    title: "Best Hoodie Finds on LitBuy",
+    metaDescription:
+      "Best hoodie finds on LitBuy — Stussy, Corteiz, Nike tech fleece, Supreme, and streetwear layers.",
+    badge: "Collection",
+    h1: "Best hoodie finds",
+    intro:
+      "Hoodie and sweatshirt picks from across the catalog — filter by brand on product pages before you buy.",
+    getProducts: () =>
+      filterFeaturedEligible(
+        byCategory("hoodies-and-pants").filter((p) =>
+          /hoodie|sweatshirt|crewneck/i.test(p.product_name)
+        )
+      ).slice(0, 72),
+    relatedLinks: [
+      { href: "/categories/hoodies", label: "Hoodies category" },
+      { href: "/best-hoodies", label: "Best hoodies list" },
+    ],
+    clusterLinks: [
+      { href: "/collections/best-stussy-finds", label: "Stussy" },
+      { href: "/collections/best-corteiz-finds", label: "Corteiz" },
+    ],
+  }),
+
+  "best-accessories": wrap("best-accessories", {
+    title: "Best Accessory Finds on LitBuy",
+    metaDescription:
+      "Best accessory finds — hats, belts, jewelry, eyewear, and streetwear add-ons with LitBuy links.",
+    badge: "Collection",
+    h1: "Best accessory finds",
+    intro:
+      "Small details that complete a fit — accessories ranked for photos, QC, and verified buy links.",
+    getProducts: () => filterFeaturedEligible(byCategory("accessories")).slice(0, 72),
+    relatedLinks: [
+      { href: "/categories/accessories", label: "Accessories category" },
+      { href: "/best-accessories", label: "Best accessories list" },
+    ],
+    clusterLinks: [{ href: "/collections/best-bags", label: "Best bags" }],
+  }),
+
+  "best-under-20": wrap("best-under-20", {
+    title: "Best LitBuy Finds Under $20",
+    metaDescription:
+      "Best LitBuy finds under $20 — budget tees, accessories, and low-risk haul fillers.",
+    badge: "Collection",
+    h1: "Best finds under $20",
+    intro: "Lowest-risk picks under $20 — ideal for first hauls or filling shipping weight.",
+    getProducts: TOP_LISTS["top-products-under-20"].getProducts,
+    relatedLinks: [
+      { href: "/best-under-20", label: "Under $20 list" },
+      { href: "/collections/best-under-30", label: "Under $30" },
+    ],
+    clusterLinks: [{ href: "/collections/best-budget-finds", label: "Budget finds" }],
+  }),
+
+  "best-under-30": wrap("best-under-30", {
+    title: "Best LitBuy Finds Under $30",
+    metaDescription:
+      "Best LitBuy finds under $30 — affordable sneakers, tees, and accessories worth sharing.",
+    badge: "Collection",
+    h1: "Best finds under $30",
+    intro: "Budget-friendly rotation pieces under $30 with verified LitBuy links.",
+    getProducts: TOP_LISTS["top-budget-finds"].getProducts,
+    relatedLinks: [
+      { href: "/best-under-30", label: "Under $30 list" },
+      { href: "/collections/best-under-50", label: "Under $50" },
+    ],
+    clusterLinks: [{ href: "/collections/best-under-20", label: "Under $20" }],
+  }),
+
+  "best-under-50": wrap("best-under-50", {
+    title: "Best LitBuy Finds Under $50",
+    metaDescription:
+      "Best LitBuy finds under $50 — sneakers, hoodies, and streetwear with QC references.",
+    badge: "Collection",
+    h1: "Best finds under $50",
+    intro: "Mid-budget picks under $50 — strong value for haul building and first-time buyers.",
+    getProducts: TOP_LISTS["top-products-under-50"].getProducts,
+    relatedLinks: [
+      { href: "/best-under-50", label: "Under $50 list" },
+      { href: "/collections/best-under-100", label: "Under $100" },
+    ],
+    clusterLinks: [{ href: "/collections/best-sneakers", label: "Best sneakers" }],
+  }),
+
+  "best-under-100": wrap("best-under-100", {
+    title: "Best LitBuy Finds Under $100",
+    metaDescription:
+      "Best LitBuy finds under $100 — sneakers, jackets, bags, and designer picks.",
+    badge: "Collection",
+    h1: "Best finds under $100",
+    intro: "Mid-range haul picks under $100 with photos, QC links, and verified agent checkout.",
+    getProducts: TOP_LISTS["top-products-under-100"].getProducts,
+    relatedLinks: [
+      { href: "/best-under-100", label: "Under $100 list" },
+      { href: "/collections/best-under-50", label: "Under $50" },
+    ],
+    clusterLinks: [{ href: "/collections/best-jackets", label: "Best jackets" }],
+  }),
+
+  "top-qc-finds": wrap("top-qc-finds", {
+    title: "Top QC Finds on LitBuy",
+    metaDescription:
+      "Top QC finds on LitBuy — products with quality control reference photos for sneakers, jackets, and bags.",
+    badge: "Collection",
+    h1: "Top QC finds",
+    intro:
+      "The strongest QC-documented listings in the catalog — compare batches before you order.",
+    getProducts: TOP_LISTS["best-qc-approved-finds"].getProducts,
+    relatedLinks: [
+      { href: "/top-qc-finds", label: "Top QC page" },
+      { href: "/guides/how-to-check-qc-photos", label: "QC guide" },
+    ],
+    clusterLinks: [
+      { href: "/collections/best-qc-approved-finds", label: "QC approved" },
+      { href: "/collections/best-sneakers", label: "Sneakers" },
+    ],
+  }),
+
+  "trending-this-week": wrap("trending-this-week", {
+    title: "Trending LitBuy Finds This Week",
+    metaDescription:
+      "Trending LitBuy finds this week — hottest sneakers, jackets, and streetwear with verified links.",
+    badge: "Collection",
+    h1: "Trending this week",
+    intro:
+      "What is gaining momentum right now — ranked from trending imports and engagement signals.",
+    getProducts: () => filterFeaturedEligible(priced(getTrendingProducts())).slice(0, 72),
+    relatedLinks: [
+      { href: "/trending", label: "Trending page" },
+      { href: "/best-finds-this-week", label: "Best this week" },
+    ],
+    clusterLinks: [
+      { href: "/collections/best-litbuy-finds-2026", label: "Best 2026" },
+    ],
+  }),
+
+  "most-saved-finds": wrap("most-saved-finds", {
+    title: "Most Saved LitBuy Finds",
+    metaDescription:
+      "Most saved and clicked LitBuy finds — community favorites with verified buy links.",
+    badge: "Collection",
+    h1: "Most saved finds",
+    intro:
+      "High-engagement picks from visitor clicks and saves — useful when you want what others are bookmarking.",
+    getProducts: () => getEngagementPicks(72),
+    relatedLinks: [
+      { href: "/most-popular-finds-now", label: "Popular today" },
+      { href: "/collections/trending-this-week", label: "Trending week" },
+    ],
+    clusterLinks: [
+      { href: "/collections/best-nike-finds", label: "Nike finds" },
     ],
   }),
 };

@@ -6,6 +6,7 @@ import DiscoveryHero from "@/components/DiscoveryHero";
 import DiscoveryRail from "@/components/DiscoveryRail";
 import HomepageBrands from "@/components/HomepageBrands";
 import HomepageCategories from "@/components/HomepageCategories";
+import HomepageCollections from "@/components/HomepageCollections";
 import HomepageFaq from "@/components/HomepageFaq";
 import HomepageLitBuyResources from "@/components/HomepageLitBuyResources";
 import HomepageWhyLitBuy from "@/components/HomepageWhyLitBuy";
@@ -45,6 +46,13 @@ export default function HomePage() {
         href="/trending"
         products={rails.popularWeek}
         showTrendingScore
+      />
+
+      <DiscoveryRail
+        title="Added Today"
+        subtitle="Newest listings from the latest catalog sync"
+        href="/recently-added"
+        products={rails.addedToday}
       />
 
       <DiscoveryRail
@@ -94,6 +102,8 @@ export default function HomePage() {
       <HomepageCategories categories={categories} />
 
       <HomepageLitBuyResources />
+
+      <HomepageCollections />
 
       {rails.trendingBrand ? (
         <DiscoveryRail

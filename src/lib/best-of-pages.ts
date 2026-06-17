@@ -446,29 +446,51 @@ export function getContextualBestOfLinks(context: {
 }): { href: string; label: string }[] {
   const links: { href: string; label: string }[] = [
     { href: "/best-finds", label: "Best Finds" },
+    { href: "/collections", label: "Collections" },
   ];
 
+  const brandCollections: Record<string, string> = {
+    nike: "/collections/best-nike-finds",
+    jordan: "/collections/best-jordan-finds",
+    moncler: "/collections/best-moncler-finds",
+    stussy: "/collections/best-stussy-finds",
+    corteiz: "/collections/best-corteiz-finds",
+  };
+
+  if (context.brandSlug && brandCollections[context.brandSlug]) {
+    links.push({
+      href: brandCollections[context.brandSlug],
+      label: `Best ${context.brandSlug.replace(/-/g, " ")} collection`,
+    });
+  }
+
   if (context.categorySlug === "shoes" || context.brandSlug === "nike" || context.brandSlug === "jordan") {
-    links.push({ href: "/best-sneakers", label: "Best Sneakers" });
+    links.push({ href: "/collections/best-sneakers", label: "Best Sneakers" });
+    links.push({ href: "/best-sneakers", label: "Sneakers list" });
   }
   if (context.categorySlug === "coats-and-jackets" || context.brandSlug === "moncler") {
-    links.push({ href: "/best-jackets", label: "Best Jackets" });
+    links.push({ href: "/collections/best-jackets", label: "Best Jackets" });
+    links.push({ href: "/best-jackets", label: "Jackets list" });
   }
   if (context.categorySlug === "hoodies-and-pants") {
-    links.push({ href: "/best-hoodies", label: "Best Hoodies" });
+    links.push({ href: "/collections/best-hoodies", label: "Best Hoodies" });
+    links.push({ href: "/best-hoodies", label: "Hoodies list" });
   }
   if (context.categorySlug === "accessories") {
-    links.push({ href: "/best-bags", label: "Best Bags" });
+    links.push({ href: "/collections/best-bags", label: "Best Bags" });
+    links.push({ href: "/best-bags", label: "Bags list" });
   }
 
-  if (context.maxPrice !== undefined && context.maxPrice <= 50) {
-    links.push({ href: "/best-under-50", label: "Best Under $50" });
+  if (context.maxPrice !== undefined && context.maxPrice <= 30) {
+    links.push({ href: "/collections/best-under-30", label: "Under $30" });
+  } else if (context.maxPrice !== undefined && context.maxPrice <= 50) {
+    links.push({ href: "/collections/best-under-50", label: "Under $50" });
   } else {
-    links.push({ href: "/best-under-50", label: "Best Under $50" });
+    links.push({ href: "/collections/best-under-50", label: "Under $50" });
   }
 
-  links.push({ href: "/best-qc-items", label: "Best QC Items" });
-  links.push({ href: "/best-finds-this-week", label: "Best This Week" });
+  links.push({ href: "/collections/top-qc-finds", label: "Top QC Finds" });
+  links.push({ href: "/collections/trending-this-week", label: "Trending Week" });
 
   const seen = new Set<string>();
   return links.filter((link) => {

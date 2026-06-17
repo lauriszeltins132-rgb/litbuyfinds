@@ -3,11 +3,12 @@ import { Suspense } from "react";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import CatalogPanel from "@/components/CatalogPanel";
 import ProductGrid from "@/components/ProductGrid";
+import RelatedPages from "@/components/RelatedPages";
 import SchemaScript from "@/components/SchemaScript";
 import { formatDatasetAge } from "@/lib/catalog-meta";
 import { getBrandsFromProducts } from "@/lib/brands";
 import { getCategories } from "@/lib/products";
-import { buildCollectionPageSchema } from "@/lib/schema";
+import { buildCollectionPageSchema, buildFaqSchema } from "@/lib/schema";
 import { isComparisonPage, type SeoRouteConfig } from "@/lib/seo-list-routes";
 
 type SeoListLandingProps = {
@@ -20,6 +21,8 @@ export default function SeoListLanding({ config }: SeoListLandingProps) {
     ? (config.compareGroups?.flatMap((g) => g.products) ?? [])
     : config.getProducts();
   const brands = getBrandsFromProducts(products);
+  const faqs = "faqs" in config && config.faqs?.length ? config.faqs : undefined;
+  const featured = products.slice(0, 12);
 
   return (
     <>
@@ -31,10 +34,12 @@ export default function SeoListLanding({ config }: SeoListLandingProps) {
           numberOfItems: products.length,
         })}
       />
+      {faqs ? <SchemaScript data={buildFaqSchema(faqs)} /> : null}
 
       <Breadcrumbs
         items={[
           { label: "Home", href: "/" },
+          { label: "Collections", href: "/collections" },
           { label: config.h1 },
         ]}
         currentPath={config.path}
@@ -55,6 +60,18 @@ export default function SeoListLanding({ config }: SeoListLandingProps) {
           </p>
         </div>
       </section>
+
+      {!isComparison && featured.length > 0 ? (
+        <section className="px-4 pb-6 sm:px-6">
+          <div className="mx-auto max-w-7xl">
+            <h2 className="text-xl font-black">Featured picks</h2>
+            <p className="mt-1 text-sm text-muted">Top listings from this collection</p>
+            <div className="mt-6">
+              <ProductGrid products={featured} />
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       {isComparison && config.compareGroups ? (
         <div className="space-y-12 px-4 pb-8 sm:px-6">
@@ -89,7 +106,7 @@ export default function SeoListLanding({ config }: SeoListLandingProps) {
         <section className="px-4 py-8 sm:px-6">
           <div className="mx-auto max-w-7xl rounded-2xl border border-border bg-surface/35 p-5">
             <p className="text-xs font-bold uppercase tracking-[0.16em] text-muted">
-              Related topics
+              Related collections
             </p>
             <ul className="mt-3 flex flex-wrap gap-2">
               {config.clusterLinks.map((link) => (
@@ -108,10 +125,10 @@ export default function SeoListLanding({ config }: SeoListLandingProps) {
       ) : null}
 
       {config.relatedLinks.length > 0 ? (
-        <section className="px-4 pb-10 sm:px-6">
-          <div className="mx-auto max-w-7xl">
+        <section className="px-4 pb-6 sm:px-6">
+          <div className="mx-auto max-w-7xl rounded-2xl border border-border bg-surface/35 p-5">
             <p className="text-xs font-bold uppercase tracking-[0.16em] text-muted">
-              Keep exploring
+              Related pages
             </p>
             <ul className="mt-3 flex flex-wrap gap-2">
               {config.relatedLinks.map((link) => (
@@ -128,6 +145,26 @@ export default function SeoListLanding({ config }: SeoListLandingProps) {
           </div>
         </section>
       ) : null}
+
+      {faqs ? (
+        <section className="px-4 pb-8 sm:px-6">
+          <div className="mx-auto max-w-3xl rounded-2xl border border-border bg-surface/40 p-6">
+            <h2 className="text-xl font-black">Frequently asked questions</h2>
+            <dl className="mt-5 space-y-5">
+              {faqs.map((faq) => (
+                <div key={faq.question}>
+                  <dt className="font-bold text-foreground">{faq.question}</dt>
+                  <dd className="mt-1 text-sm leading-relaxed text-muted">
+                    {faq.answer}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </section>
+      ) : null}
+
+      <RelatedPages currentPath={config.path} />
     </>
   );
 }

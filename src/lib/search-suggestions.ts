@@ -1,8 +1,9 @@
 import { getStore, getTopProductIds } from "./analytics-store";
-import { getBrandsFromProducts } from "./brands";
+import { getBrandsFromProducts, extractBrand } from "./brands";
 import { getCategories, getAllProducts } from "./products";
 import { BEST_OF_PAGES, BEST_OF_SLUGS } from "./best-of-pages";
 import { GUIDE_PAGES } from "./guides";
+import { SHARE_COLLECTION_SLUGS, SHARE_COLLECTIONS } from "./share-collections";
 import { SEO_LANDING_SLUGS, SEO_LANDING_PAGES } from "./seo-landing-pages";
 import { POPULAR_SEARCHES } from "./constants";
 import { getProductHref } from "./slugs";
@@ -13,6 +14,7 @@ export type SearchSuggestionType =
   | "guide"
   | "best-of"
   | "landing"
+  | "collection"
   | "query"
   | "product-type";
 
@@ -58,6 +60,22 @@ const BRAND_SUB_TYPES: Record<string, { label: string; query: string; priority: 
     { label: "Stussy Hoodies", query: "stussy hoodie", priority: 90 },
     { label: "Stussy Tees", query: "stussy tee", priority: 85 },
   ],
+  corteiz: [
+    { label: "Corteiz Hoodies", query: "corteiz hoodie", priority: 92 },
+    { label: "Corteiz Cargos", query: "corteiz cargo", priority: 88 },
+  ],
+  "stone-island": [
+    { label: "Stone Island Jackets", query: "stone island jacket", priority: 92 },
+    { label: "Stone Island Sweaters", query: "stone island", priority: 85 },
+  ],
+  prada: [
+    { label: "Prada Bags", query: "prada bag", priority: 90 },
+    { label: "Prada Accessories", query: "prada", priority: 85 },
+  ],
+  bape: [
+    { label: "Bape Hoodies", query: "bape hoodie", priority: 92 },
+    { label: "Bape Tees", query: "bape tee", priority: 86 },
+  ],
   "ralph-lauren": [
     { label: "Ralph Lauren Polos", query: "ralph lauren polo", priority: 90 },
     { label: "Ralph Lauren Knits", query: "ralph lauren", priority: 85 },
@@ -75,6 +93,16 @@ const GENERIC_BAG_SUGGESTIONS: {
   { label: "Travel Bags", query: "travel bag", priority: 85 },
   { label: "Popular Bags", query: "bag", href: "/best-bags", priority: 92 },
 ];
+
+function countBrandMatches(brandName: string, query: string): number {
+  const tail = query.toLowerCase().replace(brandName.toLowerCase(), "").trim();
+  const pattern = tail ? new RegExp(tail.split(/\s+/).filter(Boolean).join("|"), "i") : null;
+  return getAllProducts().filter((p) => {
+    const brand = extractBrand(p.product_name);
+    if (brand?.toLowerCase() !== brandName.toLowerCase()) return false;
+    return pattern ? pattern.test(p.product_name) : true;
+  }).length;
+}
 
 function buildIndex(): SearchSuggestion[] {
   const items: SearchSuggestion[] = [];
@@ -110,12 +138,39 @@ function buildIndex(): SearchSuggestion[] {
     const subs = BRAND_SUB_TYPES[brand.slug];
     if (subs) {
       for (const sub of subs) {
+        const count = countBrandMatches(brand.name, sub.query);
+        const countLabel = count > 0 ? ` (${count} finds)` : "";
         items.push({
-          label: sub.label,
+          label: `${sub.label}${countLabel}`,
           href: `/brands/${brand.slug}?q=${encodeURIComponent(sub.query.split(" ").slice(1).join(" ") || sub.query)}`,
           type: "brand",
-          keywords: sub.query.toLowerCase(),
+          keywords: `${sub.query} ${sub.label}`.toLowerCase(),
           priority: sub.priority + boost,
+        });
+      }
+      const collectionSlug = {
+        nike: "best-nike-finds",
+        jordan: "best-jordan-finds",
+        moncler: "best-moncler-finds",
+        stussy: "best-stussy-finds",
+        corteiz: "best-corteiz-finds",
+      }[brand.slug];
+      if (collectionSlug) {
+        items.push({
+          label: `Best ${brand.name} Finds`,
+          href: `/collections/${collectionSlug}`,
+          type: "collection",
+          keywords: `best ${brand.name} finds litbuy`.toLowerCase(),
+          priority: 94 + boost,
+        });
+      }
+      if (brand.slug === "nike") {
+        items.push({
+          label: "Nike Under $50",
+          href: "/collections/best-under-50",
+          type: "collection",
+          keywords: "nike under 50 budget",
+          priority: 86,
         });
       }
     }
@@ -128,6 +183,17 @@ function buildIndex(): SearchSuggestion[] {
       type: "category",
       keywords: `${cat.name} ${cat.slug}`.toLowerCase(),
       priority: 60 + Math.min(cat.count ?? 0, 20),
+    });
+  }
+
+  for (const slug of SHARE_COLLECTION_SLUGS) {
+    const page = SHARE_COLLECTIONS[slug];
+    items.push({
+      label: page.h1,
+      href: page.path,
+      type: "collection",
+      keywords: `${page.h1} ${page.slug} collection litbuy finds`.toLowerCase(),
+      priority: slug.includes("best-nike") || slug.includes("best-moncler") ? 88 : 78,
     });
   }
 
@@ -218,6 +284,7 @@ export function getSearchSuggestions(query: string, limit = 12): SearchSuggestio
   const groups: Record<string, SearchSuggestion[]> = {
     brands: [],
     categories: [],
+    collections: [],
     "best-of": [],
     guides: [],
     trending: [],
@@ -226,6 +293,8 @@ export function getSearchSuggestions(query: string, limit = 12): SearchSuggestio
   for (const item of matches) {
     if (item.type === "brand" && groups.brands.length < 5) groups.brands.push(item);
     else if (item.type === "category" && groups.categories.length < 4) groups.categories.push(item);
+    else if (item.type === "collection" && groups.collections.length < 4)
+      groups.collections.push(item);
     else if (item.type === "best-of" && groups["best-of"].length < 4) groups["best-of"].push(item);
     else if ((item.type === "guide" || item.type === "landing") && groups.guides.length < 4)
       groups.guides.push(item);
@@ -237,6 +306,8 @@ export function getSearchSuggestions(query: string, limit = 12): SearchSuggestio
     result.push({ id: "brands", label: "Brands", icon: "🏷", items: groups.brands });
   if (groups.categories.length)
     result.push({ id: "categories", label: "Categories", icon: "📂", items: groups.categories });
+  if (groups.collections.length)
+    result.push({ id: "collections", label: "Collections", icon: "📁", items: groups.collections });
   if (groups["best-of"].length)
     result.push({ id: "best-of", label: "Best of", icon: "⭐", items: groups["best-of"] });
   if (groups.guides.length)

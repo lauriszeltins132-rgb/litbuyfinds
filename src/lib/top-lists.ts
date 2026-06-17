@@ -16,6 +16,7 @@ export type SeoListConfig = {
   getProducts: () => Product[];
   relatedLinks: { href: string; label: string }[];
   clusterLinks?: { href: string; label: string }[];
+  faqs?: { question: string; answer: string }[];
 };
 
 function sortByQuality(items: Product[]): Product[] {

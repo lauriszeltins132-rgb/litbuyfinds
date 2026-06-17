@@ -4,7 +4,7 @@ import { getPremiumBrandBoost } from "./curation";
 import { getDealProducts, getAllProducts, getLatestProducts, getTrendingProducts } from "./products";
 import { isHomepageFeaturedEligible } from "./product-media";
 import { validateProduct } from "./product-validation";
-import { getRecencyPool } from "./recency";
+import { getNewToday, getRecencyPool } from "./recency";
 import type { Product } from "./types";
 
 export function getUtcDayIndex(): number {
@@ -57,6 +57,17 @@ function pickRotated(
     .filter((product) => isRailCandidate(product) && !used.has(product.id))
     .sort((a, b) => dayHash(b.id, salt, day) - dayHash(a.id, salt, day))
     .slice(0, limit);
+}
+
+function pickAddedToday(
+  limit: number,
+  used: Set<string>,
+  day: number
+): Product[] {
+  const pool = getNewToday(limit * 3).filter(
+    (product) => isRailCandidate(product) && !used.has(product.id)
+  );
+  return pickRotated(pool, limit, used, day, "added-today");
 }
 
 function popularityScore(product: Product, analyticsRank: number): number {
@@ -319,6 +330,7 @@ export type HomepageRails = {
   mostSavedWeek: Product[];
   highestQcRated: Product[];
   risingWeek: Product[];
+  addedToday: Product[];
   trendingBrand: { brand: string; products: Product[] } | null;
   dayIndex: number;
 };
@@ -352,6 +364,9 @@ export function getHomepageRails(limit = 12): HomepageRails {
   const risingWeek = pickRisingWeek(limit, used, day);
   risingWeek.forEach((product) => used.add(product.id));
 
+  const addedToday = pickAddedToday(limit, used, day);
+  addedToday.forEach((product) => used.add(product.id));
+
   const popularMonth = pickPopularMonth(limit, used, day);
   popularMonth.forEach((product) => used.add(product.id));
 
@@ -368,6 +383,7 @@ export function getHomepageRails(limit = 12): HomepageRails {
     mostSavedWeek,
     highestQcRated,
     risingWeek,
+    addedToday,
     trendingBrand,
     dayIndex: day,
   };

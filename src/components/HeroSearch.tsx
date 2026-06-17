@@ -55,6 +55,7 @@ function filterSuggestions(index: SearchSuggestion[], query: string) {
   const groups: Record<string, SearchSuggestion[]> = {
     brands: [],
     categories: [],
+    collections: [],
     "best-of": [],
     guides: [],
     trending: [],
@@ -64,6 +65,8 @@ function filterSuggestions(index: SearchSuggestion[], query: string) {
     if (item.type === "brand" && groups.brands.length < 5) groups.brands.push(item);
     else if (item.type === "category" && groups.categories.length < 4)
       groups.categories.push(item);
+    else if (item.type === "collection" && groups.collections.length < 4)
+      groups.collections.push(item);
     else if (item.type === "best-of" && groups["best-of"].length < 4)
       groups["best-of"].push(item);
     else if (
@@ -79,6 +82,8 @@ function filterSuggestions(index: SearchSuggestion[], query: string) {
     result.push({ id: "brands", label: "Brands", icon: "🏷", items: groups.brands });
   if (groups.categories.length)
     result.push({ id: "categories", label: "Categories", icon: "📂", items: groups.categories });
+  if (groups.collections.length)
+    result.push({ id: "collections", label: "Collections", icon: "📁", items: groups.collections });
   if (groups["best-of"].length)
     result.push({ id: "best-of", label: "Best of", icon: "⭐", items: groups["best-of"] });
   if (groups.guides.length)

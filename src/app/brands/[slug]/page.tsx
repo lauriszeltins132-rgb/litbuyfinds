@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -7,8 +8,9 @@ import RelatedGuides from "@/components/RelatedGuides";
 import SignupCard from "@/components/SignupCard";
 import RelatedSeoLinks from "@/components/RelatedSeoLinks";
 import { getRelatedGuidesForBrand } from "@/lib/related-guides";
-import BrandAuthoritySections from "@/components/brand/BrandAuthoritySections";
-import BrandSeoBlock from "@/components/seo/BrandSeoBlock";
+import BrandProductRails from "@/components/brand/BrandProductRails";
+import BrandSeoCollapsible from "@/components/brand/BrandSeoCollapsible";
+import BrandStats from "@/components/brand/BrandStats";
 import BestOfLinks from "@/components/BestOfLinks";
 import RelatedPages from "@/components/RelatedPages";
 import SchemaScript from "@/components/SchemaScript";
@@ -21,6 +23,7 @@ import {
 import { getAllProducts, getCategories } from "@/lib/products";
 import { getBrandPageRails } from "@/lib/brand-page-rails";
 import { getBrandSeo } from "@/lib/seo-content";
+import { getBrandCollectionHref } from "@/lib/brand-collections";
 import { buildPageMetadata } from "@/lib/seo";
 
 type BrandPageProps = {
@@ -59,9 +62,7 @@ export default async function BrandLandingPage({ params }: BrandPageProps) {
 
   const products = getProductsByBrandSlug(allProducts, slug);
   const copy = getBrandSeo(slug, brand.name, brand.count);
-  const relatedBrands = getBrandsFromProducts(allProducts)
-    .filter((item) => item.slug !== slug)
-    .slice(0, 8);
+  const collectionHref = getBrandCollectionHref(slug);
   const pagePath = `/brands/${slug}`;
   const rails = getBrandPageRails(slug, brand.name, products);
 
@@ -84,37 +85,40 @@ export default async function BrandLandingPage({ params }: BrandPageProps) {
         currentPath={pagePath}
       />
 
-      <section className="px-4 pb-6 pt-4 sm:px-6">
+      <section className="px-4 pb-2 pt-4 sm:px-6">
         <div className="mx-auto max-w-7xl">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
-            Brand
+            Brand finds
           </p>
           <h1 className="mt-3 text-3xl font-black sm:text-4xl">{copy.title}</h1>
-          <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted">
-            {copy.intro}
+          <p className="mt-3 max-w-2xl text-sm text-muted">
+            Browse {brand.name} finds with photos, QC references, and verified LitBuy links.
           </p>
-          <p className="mt-3 text-sm text-muted">
-            {brand.count.toLocaleString()} {brand.name} finds indexed
-          </p>
-
+          {collectionHref ? (
+            <p className="mt-3">
+              <Link
+                href={collectionHref}
+                className="text-sm font-bold text-accent hover:underline"
+              >
+                View {brand.name} collection →
+              </Link>
+            </p>
+          ) : null}
         </div>
       </section>
 
-      <BrandSeoBlock
-        brandSlug={slug}
-        brandName={brand.name}
-        intro={copy.intro}
-        topProducts={rails.topProducts.slice(0, 5)}
-        relatedBrands={relatedBrands}
-      />
+      <BrandStats brandName={brand.name} rails={rails} />
 
-      <BrandAuthoritySections brandSlug={slug} brandName={brand.name} rails={rails} />
+      <BrandProductRails brandSlug={slug} brandName={brand.name} rails={rails} />
 
-      <RelatedGuides links={getRelatedGuidesForBrand(slug)} />
-      <BestOfLinks brandSlug={slug} />
-      <SignupCard location={`brand_signup_${slug}`} variant="compact" />
-      <RelatedSeoLinks />
-      <RelatedPages currentPath={pagePath} brandSlug={slug} />
+      <section className="px-4 pb-2 sm:px-6">
+        <div className="mx-auto max-w-7xl">
+          <h2 className="text-xl font-black">Browse all {brand.name} finds</h2>
+          <p className="mt-1 text-sm text-muted">
+            Filter by category and price in the full catalog below.
+          </p>
+        </div>
+      </section>
 
       <Suspense fallback={<div className="py-24 text-center text-muted">Loading...</div>}>
         <CatalogPanel
@@ -124,6 +128,14 @@ export default async function BrandLandingPage({ params }: BrandPageProps) {
           basePath={pagePath}
         />
       </Suspense>
+
+      <BrandSeoCollapsible brandSlug={slug} brandName={brand.name} intro={copy.intro} />
+
+      <RelatedGuides links={getRelatedGuidesForBrand(slug)} />
+      <BestOfLinks brandSlug={slug} />
+      <SignupCard location={`brand_signup_${slug}`} variant="compact" />
+      <RelatedSeoLinks />
+      <RelatedPages currentPath={pagePath} brandSlug={slug} />
     </>
   );
 }
