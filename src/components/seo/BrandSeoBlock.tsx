@@ -1,6 +1,7 @@
 import Link from "next/link";
 import SchemaScript from "@/components/SchemaScript";
 import type { BrandInfo } from "@/lib/brands";
+import { getBrandAuthority } from "@/lib/brand-authority-content";
 import { buildFaqSchema } from "@/lib/schema";
 import { getBrandFaqs, getBrandRelatedGuides } from "@/lib/seo-content";
 import type { Product } from "@/lib/types";
@@ -33,9 +34,14 @@ export default function BrandSeoBlock({
   topProducts,
   relatedBrands,
 }: BrandSeoBlockProps) {
-  const tip = BRAND_TIPS[brandSlug] ?? BRAND_TIPS.default;
+  const authority = getBrandAuthority(brandSlug);
+  const tip =
+    authority?.buyingTips[0] ?? BRAND_TIPS[brandSlug] ?? BRAND_TIPS.default;
   const relatedGuides = getBrandRelatedGuides(brandSlug);
-  const faqs = getBrandFaqs(brandSlug, brandName);
+  const baseFaqs = getBrandFaqs(brandSlug, brandName);
+  const faqs = authority
+    ? [...authority.faqs, ...baseFaqs.filter((f) => !authority.faqs.some((a) => a.question === f.question))]
+    : baseFaqs;
 
   return (
     <section className="px-4 pb-6 sm:px-6">
@@ -44,7 +50,51 @@ export default function BrandSeoBlock({
         <div className="rounded-2xl border border-border bg-surface/40 p-6">
           <h2 className="text-lg font-black">{brandName} overview</h2>
           <p className="mt-2 text-sm leading-relaxed text-muted">{intro}</p>
+          {authority?.whyPopular.map((paragraph) => (
+            <p key={paragraph} className="mt-3 text-sm leading-relaxed text-muted">
+              {paragraph}
+            </p>
+          ))}
         </div>
+
+        {authority?.sections.map((section) => {
+          const Heading = section.level === 3 ? "h3" : "h2";
+          return (
+            <div
+              key={section.heading}
+              className="rounded-2xl border border-border bg-surface/30 p-6"
+            >
+              <Heading
+                className={
+                  section.level === 3
+                    ? "text-base font-bold text-foreground"
+                    : "text-lg font-black"
+                }
+              >
+                {section.heading}
+              </Heading>
+              <div className="mt-3 space-y-3 text-sm leading-relaxed text-muted">
+                {section.paragraphs.map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
+                ))}
+              </div>
+              {section.links && section.links.length > 0 ? (
+                <ul className="mt-4 flex flex-wrap gap-2">
+                  {section.links.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        href={link.href}
+                        className="rounded-full border border-border px-3 py-1 text-xs font-bold hover:border-accent/40 hover:text-accent"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </div>
+          );
+        })}
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <div className="rounded-2xl border border-border bg-surface/30 p-5">
@@ -69,7 +119,14 @@ export default function BrandSeoBlock({
             <h3 className="text-sm font-bold uppercase tracking-[0.14em] text-muted">
               Buying tips
             </h3>
-            <p className="mt-3 text-sm leading-relaxed text-muted">{tip}</p>
+            <ul className="mt-3 space-y-2 text-sm text-muted">
+              {(authority?.buyingTips ?? [tip]).map((item) => (
+                <li key={item} className="flex gap-2">
+                  <span className="text-accent">•</span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
             <Link
               href="/guides/how-to-order-from-litbuy"
               className="mt-4 inline-block text-xs font-bold text-accent hover:underline"

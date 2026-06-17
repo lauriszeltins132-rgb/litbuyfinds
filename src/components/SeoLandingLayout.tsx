@@ -3,6 +3,7 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import ProductGrid from "@/components/ProductGrid";
 import SchemaScript from "@/components/SchemaScript";
 import type { SeoLandingConfig } from "@/lib/seo-landing-pages";
+import RelatedPages from "@/components/RelatedPages";
 import { buildCollectionPageSchema, buildFaqSchema } from "@/lib/schema";
 
 type SeoLandingLayoutProps = {
@@ -132,6 +133,8 @@ export default function SeoLandingLayout({ config }: SeoLandingLayoutProps) {
           </div>
         </section>
       ) : null}
+
+      <RelatedPages currentPath={config.path} />
     </>
   );
 }

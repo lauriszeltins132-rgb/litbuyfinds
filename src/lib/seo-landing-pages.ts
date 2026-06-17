@@ -2,7 +2,7 @@ import type { StaticPageSection } from "./static-pages";
 import { getEditorsPicks } from "./discovery";
 import { filterFeaturedEligible } from "./product-media";
 import { hasExactPrice } from "./pricing";
-import { getAllProducts } from "./products";
+import { getAllProducts, getTrendingProducts } from "./products";
 import { TOP_LISTS } from "./top-lists";
 import type { Product } from "./types";
 
@@ -831,6 +831,261 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
     relatedLinks: [{ href: "/best-litbuy-finds", label: "Best finds" }],
     getProducts: TOP_LISTS["top-products-under-50"].getProducts,
     productSectionTitle: "Finds under $50",
+  },
+
+  "best-litbuy-hoodies": {
+    slug: "best-litbuy-hoodies",
+    path: "/best-litbuy-hoodies",
+    title: "Best LitBuy Hoodies",
+    metaDescription:
+      "Best LitBuy hoodies — Stussy, Corteiz, Nike tech fleece, Supreme, and streetwear layers with verified links and QC references.",
+    badge: "Hoodies",
+    h1: "Best LitBuy hoodies",
+    intro:
+      "The strongest hoodie picks from the LitBuy Finds catalog — graphic streetwear, designer layers, and everyday rotation pieces with verified buy links.",
+    sections: [
+      {
+        heading: "Popular hoodie brands on LitBuy",
+        paragraphs: [
+          "Stussy, Corteiz, Nike tech fleece, Supreme, and Ami heart-logo knits lead hoodie searches. Filter by brand on each product page or browse brand authority pages for focused lanes.",
+          "Hoodies are ideal haul fillers — lighter than puffers but higher engagement than basic tees. Compare print placement and drawstrings in QC before shipping.",
+        ],
+        links: [
+          { href: "/categories/hoodies", label: "Hoodie category" },
+          { href: "/brands/stussy", label: "Stussy finds" },
+          { href: "/best-hoodies", label: "Best hoodies list" },
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: "What are the best LitBuy hoodies?",
+        answer:
+          "Community favorites rotate daily — check Popular Today and this page's grid for current picks with QC references.",
+      },
+    ],
+    relatedLinks: [
+      { href: "/best-litbuy-finds", label: "Best finds" },
+      { href: "/litbuy-finds", label: "All finds" },
+    ],
+    getProducts: () =>
+      filterFeaturedEligible(
+        priced(
+          getAllProducts().filter(
+            (p) =>
+              p.category_slug === "hoodies-and-pants" &&
+              /hoodie|sweatshirt|crewneck/i.test(p.product_name)
+          )
+        )
+      ).slice(0, 72),
+    productSectionTitle: "Top hoodie finds",
+  },
+
+  "best-weidian-finds": {
+    slug: "best-weidian-finds",
+    path: "/best-weidian-finds",
+    title: "Best Weidian Finds on LitBuy",
+    metaDescription:
+      "Best Weidian finds on LitBuy — curated sneakers, streetwear, and accessories from Weidian sellers with verified agent links.",
+    badge: "Weidian",
+    h1: "Best Weidian finds",
+    intro:
+      "Weidian is a major source for streetwear and sneaker finds. LitBuy Finds indexes Weidian-linked products with photos, pricing, and verified LitBuy buy links.",
+    sections: [
+      {
+        heading: "How to buy Weidian finds",
+        paragraphs: [
+          "Open a product page, click the LitBuy buy link, and confirm size and price on LitBuy. The agent places the Weidian order and stores your parcel for QC and shipping.",
+          "Many of the best Weidian finds include QC reference links from previous buyers — compare before you order.",
+        ],
+        links: [
+          { href: "/litbuy-weidian", label: "Weidian guide" },
+          { href: "/guides/how-to-buy-from-weidian", label: "How to buy from Weidian" },
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: "What are Weidian finds?",
+        answer:
+          "Products listed on Weidian, a Chinese marketplace. LitBuy acts as your buying agent for international checkout and shipping.",
+      },
+    ],
+    relatedLinks: [
+      { href: "/litbuy-finds", label: "LitBuy finds" },
+      { href: "/best-litbuy-finds", label: "Best finds" },
+    ],
+    getProducts: () =>
+      filterFeaturedEligible(
+        priced(getAllProducts().filter((p) => /weidian/i.test(p.affiliate_link)))
+      ).slice(0, 72),
+    productSectionTitle: "Top Weidian finds",
+  },
+
+  "best-litbuy-under-20": {
+    slug: "best-litbuy-under-20",
+    path: "/best-litbuy-under-20",
+    title: "Best LitBuy Finds Under $20",
+    metaDescription:
+      "Best LitBuy finds under $20 — budget tees, accessories, and low-risk haul fillers with verified links.",
+    badge: "Under $20",
+    h1: "Best LitBuy finds under $20",
+    intro:
+      "Lowest-risk picks under $20 from the LitBuy catalog — ideal for first hauls, testing an agent, or filling shipping weight.",
+    sections: [
+      {
+        heading: "Budget buying tips",
+        paragraphs: [
+          "Under-$20 items are great for testing LitBuy workflow before bigger purchases. Bundle several budget pieces to spread shipping cost.",
+        ],
+        links: [
+          { href: "/best-under-20", label: "Under $20 list" },
+          { href: "/deals", label: "Deals" },
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: "Are under-$20 finds worth shipping?",
+        answer:
+          "Best as part of a multi-item haul. Solo shipping on a single $15 tee rarely makes financial sense.",
+      },
+    ],
+    relatedLinks: [{ href: "/best-litbuy-finds-under-50", label: "Under $50" }],
+    getProducts: TOP_LISTS["top-products-under-20"].getProducts,
+    productSectionTitle: "Finds under $20",
+  },
+
+  "best-litbuy-under-100": {
+    slug: "best-litbuy-under-100",
+    path: "/best-litbuy-under-100",
+    title: "Best LitBuy Finds Under $100",
+    metaDescription:
+      "Best LitBuy finds under $100 — sneakers, jackets, bags, and streetwear with verified links and QC references.",
+    badge: "Under $100",
+    h1: "Best LitBuy finds under $100",
+    intro:
+      "Mid-range picks under $100 — sneakers, outerwear, and designer accessories with strong QC availability and verified LitBuy links.",
+    sections: [
+      {
+        heading: "Mid-range haul strategy",
+        paragraphs: [
+          "The under-$100 lane covers most sneakers and many jackets. Compare QC references and confirm live LitBuy prices at checkout.",
+        ],
+        links: [
+          { href: "/best-under-100", label: "Under $100 list" },
+          { href: "/best-sneakers", label: "Best sneakers" },
+        ],
+      },
+    ],
+    faqs: [],
+    relatedLinks: [{ href: "/best-litbuy-finds", label: "Best finds" }],
+    getProducts: TOP_LISTS["top-products-under-100"].getProducts,
+    productSectionTitle: "Finds under $100",
+  },
+
+  "top-qc-finds": {
+    slug: "top-qc-finds",
+    path: "/top-qc-finds",
+    title: "Top QC Finds on LitBuy",
+    metaDescription:
+      "Top QC finds on LitBuy — products with quality control reference photos for sneakers, jackets, bags, and streetwear.",
+    badge: "QC",
+    h1: "Top QC finds",
+    intro:
+      "Products with QC reference links help you compare batches before ordering. These are the strongest QC-documented finds in the catalog.",
+    sections: [
+      {
+        heading: "How to use QC finds",
+        paragraphs: [
+          "Reference QC on find pages shows photos from previous buyers or batches. After purchase, request warehouse QC on LitBuy for your exact item before shipping.",
+        ],
+        links: [
+          { href: "/litbuy-qc", label: "LitBuy QC guide" },
+          { href: "/guides/how-to-check-qc-photos", label: "Check QC photos" },
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: "What are QC finds?",
+        answer:
+          "Listings with quality control reference photos attached — useful for comparing materials and construction before you buy.",
+      },
+    ],
+    relatedLinks: [
+      { href: "/best-qc-items", label: "Best QC items" },
+      { href: "/collections/best-qc-approved-finds", label: "QC collection" },
+    ],
+    getProducts: () => withQc(96),
+    productSectionTitle: "Top QC finds",
+  },
+
+  "trending-litbuy-finds": {
+    slug: "trending-litbuy-finds",
+    path: "/trending-litbuy-finds",
+    title: "Trending LitBuy Finds",
+    metaDescription:
+      "Trending LitBuy finds today — hottest sneakers, jackets, hoodies, and streetwear with verified links, updated daily.",
+    badge: "Trending",
+    h1: "Trending LitBuy finds",
+    intro:
+      "What is hot right now across the LitBuy Finds catalog — ranked from trending sheet imports, engagement signals, and daily catalog sync.",
+    sections: [
+      {
+        heading: "How trending works",
+        paragraphs: [
+          "Trending picks rotate daily based on catalog imports and visitor engagement. Sneakers and outerwear typically lead during seasonal peaks.",
+        ],
+        links: [
+          { href: "/trending", label: "Trending page" },
+          { href: "/most-popular-finds-now", label: "Popular today" },
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: "How often does trending update?",
+        answer: "The grid refreshes with daily catalog sync and engagement-weighted rotation.",
+      },
+    ],
+    relatedLinks: [
+      { href: "/best-litbuy-finds", label: "Best finds" },
+      { href: "/best-finds-this-week", label: "This week" },
+    ],
+    getProducts: () => filterFeaturedEligible(priced(getTrendingProducts())).slice(0, 96),
+    productSectionTitle: "Trending now",
+  },
+
+  "best-litbuy-finds-2026": {
+    slug: "best-litbuy-finds-2026",
+    path: "/best-litbuy-finds-2026",
+    title: "Best LitBuy Finds 2026",
+    metaDescription:
+      "Best LitBuy finds in 2026 — editor picks, QC-approved sneakers, jackets, and streetwear with verified links.",
+    badge: "2026",
+    h1: "Best LitBuy finds 2026",
+    intro:
+      "The definitive 2026 collection of top LitBuy finds — combining QC availability, engagement, premium brands, and verified buy links.",
+    sections: [
+      {
+        heading: "2026 editor picks",
+        paragraphs: [
+          "This page highlights the strongest catalog entries for 2026 — sneakers, outerwear, and designer accessories with the best photos and QC coverage.",
+        ],
+        links: [
+          { href: "/collections/best-litbuy-finds-2026", label: "2026 collection" },
+          { href: "/best-litbuy-sneakers-2026", label: "Sneakers 2026" },
+        ],
+      },
+    ],
+    faqs: [],
+    relatedLinks: [
+      { href: "/best-litbuy-finds", label: "Best finds hub" },
+      { href: "/litbuy-finds", label: "All finds" },
+    ],
+    getProducts: () => getEditorsPicks(96),
+    productSectionTitle: "Best finds 2026",
   },
 };
 

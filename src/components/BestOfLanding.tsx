@@ -9,6 +9,7 @@ import {
   getBestOfSupplementaryRails,
   type BestOfPageConfig,
 } from "@/lib/best-of-pages";
+import RelatedPages from "@/components/RelatedPages";
 import { formatDatasetAge } from "@/lib/catalog-meta";
 import { buildCollectionPageSchema, buildFaqSchema } from "@/lib/schema";
 
@@ -201,6 +202,8 @@ export default function BestOfLanding({ config }: BestOfLandingProps) {
           </div>
         </section>
       ) : null}
+
+      <RelatedPages currentPath={config.path} />
     </>
   );
 }

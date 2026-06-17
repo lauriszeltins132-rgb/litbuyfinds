@@ -6,14 +6,15 @@ const CATALOG_COUNT = formatCatalogCountForSeo();
 
 export { PUBLIC_CATALOG_COUNT };
 
-export const HOMEPAGE_TITLE = `LitBuy Finds – ${CATALOG_COUNT} QC Approved Finds`;
+export const HOMEPAGE_TITLE = `${CATALOG_COUNT} QC Approved LitBuy Finds`;
 
-export const SITE_DESCRIPTION = `Browse ${CATALOG_COUNT} curated LitBuy finds including sneakers, clothing, jackets, bags, accessories and trending fashion products. QC-approved items, verified links, trusted sellers and daily updates.`;
+export const SITE_DESCRIPTION =
+  "Browse 10,000+ curated LitBuy finds including sneakers, jackets, hoodies, bags, accessories, QC-approved products, verified links, and daily trending finds.";
 
-export const SITE_OG_TITLE = `LitBuy Finds – ${CATALOG_COUNT} QC Approved Finds`;
+export const SITE_OG_TITLE = `${CATALOG_COUNT} QC Approved LitBuy Finds`;
 
 export const SITE_OG_DESCRIPTION =
-  "Discover 10,000+ trending sneakers, clothing, jackets, bags and accessories from trusted sellers. Updated daily with verified QC finds.";
+  "Browse 10,000+ curated LitBuy finds including sneakers, jackets, hoodies, bags, accessories, QC-approved products, verified links, and daily trending finds.";
 
 export const HERO_HEADLINE = "Discover the Best LitBuy Finds";
 

@@ -6,6 +6,7 @@ import CatalogPanel from "@/components/CatalogPanel";
 import RelatedGuides from "@/components/RelatedGuides";
 import SignupCard from "@/components/SignupCard";
 import BestOfLinks from "@/components/BestOfLinks";
+import RelatedPages from "@/components/RelatedPages";
 import RelatedSeoLinks from "@/components/RelatedSeoLinks";
 import { getRelatedGuidesForCategory } from "@/lib/related-guides";
 import CategorySeoBlock from "@/components/seo/CategorySeoBlock";
@@ -110,6 +111,7 @@ export default async function CategoryLandingPage({ params }: CategoryPageProps)
       <BestOfLinks categorySlug={resolved.slug} />
       <SignupCard location={`category_signup_${slug}`} variant="compact" />
       <RelatedSeoLinks />
+      <RelatedPages currentPath={pagePath} categorySlug={resolved.slug} />
 
       <Suspense fallback={<div className="py-24 text-center text-muted">Loading...</div>}>
         <CatalogPanel

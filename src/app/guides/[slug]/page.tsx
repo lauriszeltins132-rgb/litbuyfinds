@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ContentPageLayout from "@/components/ContentPageLayout";
+import RelatedPages from "@/components/RelatedPages";
 import SchemaScript from "@/components/SchemaScript";
 import { getGuideContentDates } from "@/lib/content-dates";
 import { GUIDE_SLUGS, getGuide } from "@/lib/guides";
@@ -71,6 +72,7 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
         showAuthorMeta
         showSignupCta
       />
+      <RelatedPages currentPath={guide.path} />
     </>
   );
 }

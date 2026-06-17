@@ -6,6 +6,7 @@ import { FASHION_GUIDES } from "./fashion-guides";
 import { BRAND_GUIDES } from "./brand-guides";
 import { BUDGET_GUIDES } from "./budget-guides";
 import { LITBUY_SEO_GUIDES } from "./litbuy-seo-guides";
+import { COMPARISON_GUIDES } from "./comparison-guides";
 import type { GuideCategory, GuidePage } from "./types";
 
 export type { GuideCategory, GuidePage } from "./types";
@@ -21,6 +22,7 @@ export const GUIDE_PAGES: Record<string, GuidePage> = {
   ...BRAND_GUIDES,
   ...BUDGET_GUIDES,
   ...LITBUY_SEO_GUIDES,
+  ...COMPARISON_GUIDES,
 };
 
 export const GUIDE_SLUGS = Object.keys(GUIDE_PAGES);

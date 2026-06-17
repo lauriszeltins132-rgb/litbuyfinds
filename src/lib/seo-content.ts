@@ -6,18 +6,18 @@ type LandingCopy = {
 
 const CATEGORY_COPY: Record<string, LandingCopy> = {
   hoodies: {
-    title: "Hoodie Finds",
+    title: "LitBuy Hoodie Finds",
     description:
-      "Curated hoodie finds on LitBuy — streetwear layers with verified buy links and QC where available.",
+      "Curated hoodie finds on LitBuy — Stussy, Corteiz, Nike tech fleece, and streetwear layers with verified buy links and QC where available.",
     intro:
-      "Hoodies, crewnecks, and sweatshirt layers from across the catalog. Filter by brand and price, then buy through verified LitBuy links.",
+      "Hoodies, crewnecks, and sweatshirt layers from across the catalog — from budget graphic tees to designer streetwear. Filter by brand and price, compare QC references on product pages, and buy through verified LitBuy links.",
   },
   jackets: {
-    title: "Jacket Finds",
+    title: "LitBuy Jacket Finds",
     description:
-      "Jacket and outerwear finds on LitBuy — puffers, shells, and seasonal layers with verified links.",
+      "Jacket and outerwear finds on LitBuy — Moncler, Stone Island, puffers, shells, and seasonal layers with verified links.",
     intro:
-      "Outerwear picks for every season, from lightweight jackets to heavier layers, with clear pricing and outbound buy links.",
+      "Outerwear picks for every season, from lightweight shells to heavy puffers. Moncler, Canada Goose, and Stone Island lead winter searches — every listing links to LitBuy for warehouse QC and international shipping.",
   },
   tshirts: {
     title: "T-Shirt Finds",
@@ -27,18 +27,18 @@ const CATEGORY_COPY: Record<string, LandingCopy> = {
       "A focused lane for tees and tops. Browse by brand, compare prices, and open product pages for QC references.",
   },
   bags: {
-    title: "Bag Finds",
+    title: "LitBuy Bag Finds",
     description:
-      "Bag and backpack finds on LitBuy — totes, crossbody bags, and travel pieces with verified agent links.",
+      "Bag and backpack finds on LitBuy — Louis Vuitton, Gucci, Goyard, totes, crossbody bags, and travel pieces with verified agent links.",
     intro:
-      "Backpacks, totes, and carry pieces pulled from the accessories catalog. Every listing links out to LitBuy for checkout.",
+      "Backpacks, totes, and designer carry pieces pulled from the accessories catalog. Louis Vuitton, Gucci, and Prada styles are the most searched — request warehouse QC on high-value bags before international shipping.",
   },
   shoes: {
-    title: "Shoe Finds",
+    title: "LitBuy Sneakers & Shoe Finds",
     description:
       "Discover curated sneaker and footwear finds on LitBuy — verified links, QC photos, and daily drops across Nike, Jordan, Adidas, and more.",
     intro:
-      "From everyday runners to statement collabs, this collection tracks the strongest shoe finds across the catalog. Every listing includes a verified LitBuy agent link.",
+      "From everyday runners to statement collabs, this collection tracks the strongest shoe finds across the catalog. Nike Dunks, Jordan retros, Adidas Campus, and New Balance runners dominate searches — every listing includes a verified LitBuy agent link. Filter by brand and price, open QC references on product pages, and compare batches before warehouse shipping.",
   },
   "hoodies-and-pants": {
     title: "Streetwear Finds",
@@ -62,18 +62,18 @@ const CATEGORY_COPY: Record<string, LandingCopy> = {
       "Graphic tees, minimal staples, and summer shorts — a focused lane for everyday rotation pieces with verified purchase links.",
   },
   accessories: {
-    title: "Accessory Finds",
+    title: "LitBuy Accessory Finds",
     description:
-      "Bags, belts, jewelry, and accessory finds with LitBuy affiliate links and QC where available.",
+      "Bags, belts, jewelry, hats, and accessory finds with LitBuy affiliate links and QC where available.",
     intro:
-      "Small details that complete a fit. Explore bags, belts, hats, and more with clear pricing and direct LitBuy checkout links.",
+      "Small details that complete a fit — belts, hats, eyewear, jewelry, and carry pieces. Accessories are ideal for filling out a haul without heavy shipping weight. Explore with clear pricing and direct LitBuy checkout links.",
   },
   electronics: {
-    title: "Electronics Finds",
+    title: "LitBuy Electronics Finds",
     description:
-      "Tech and electronics picks from the LitBuy finds spreadsheet — headphones, gadgets, and more.",
+      "Tech and electronics picks from the LitBuy finds spreadsheet — headphones, gadgets, and more with verified links.",
     intro:
-      "A dedicated lane for tech and gadget finds. Compare prices, check QC references when available, and buy through verified LitBuy links.",
+      "A dedicated lane for tech and gadget finds from Weidian and Taobao sellers. Compare specs and model numbers carefully, check QC references when available, and buy through verified LitBuy links.",
   },
 };
 
@@ -204,6 +204,27 @@ const BRAND_COPY: Record<string, LandingCopy> = {
     intro:
       "Stone Island outerwear and badges from the catalog — useful for seasonal layer shopping.",
   },
+  stussy: {
+    title: "Stussy Finds",
+    description:
+      "Stussy streetwear finds on LitBuy — hoodies, tees, and logo pieces with verified buy links.",
+    intro:
+      "Stüssy remains a core streetwear search on Weidian and Taobao. Browse hoodies, graphic tees, and logo staples with photos, pricing, and LitBuy agent links.",
+  },
+  corteiz: {
+    title: "Corteiz Finds",
+    description:
+      "Corteiz streetwear finds on LitBuy — hoodies, cargos, and Alcatraz pieces with verified links.",
+    intro:
+      "Corteiz has become one of the most searched UK streetwear lanes on LitBuy Finds. Explore hoodies, cargos, and graphic pieces with QC references where available.",
+  },
+  ami: {
+    title: "Ami Finds",
+    description:
+      "Ami Paris finds on LitBuy — heart-logo knits, tees, and sweaters with verified agent links.",
+    intro:
+      "Ami heart-logo knits and tees are popular designer-streetwear entry points. Compare embroidery and fit in QC before you ship.",
+  },
 };
 
 const CATEGORY_GUIDES: Record<string, { href: string; label: string }[]> = {
@@ -212,13 +233,23 @@ const CATEGORY_GUIDES: Record<string, { href: string; label: string }[]> = {
     { href: "/guides/qc-checklist-for-shoes", label: "Shoe QC checklist" },
     { href: "/guides/best-nike-finds", label: "Best Nike finds" },
   ],
-  hoodies: [
+  "hoodies-and-pants": [
     { href: "/guides/best-hoodie-finds", label: "Best hoodie finds" },
     { href: "/guides/best-streetwear-finds", label: "Streetwear guide" },
+    { href: "/best-litbuy-hoodies", label: "Best LitBuy hoodies" },
+  ],
+  "coats-and-jackets": [
+    { href: "/guides/best-jacket-finds", label: "Best jacket finds" },
+    { href: "/guides/best-winter-finds", label: "Winter finds guide" },
+    { href: "/best-litbuy-jackets", label: "Best LitBuy jackets" },
+  ],
+  hoodies: [
+    { href: "/guides/best-hoodie-finds", label: "Best hoodie finds" },
+    { href: "/best-litbuy-hoodies", label: "Best LitBuy hoodies" },
   ],
   jackets: [
     { href: "/guides/best-jacket-finds", label: "Best jacket finds" },
-    { href: "/guides/best-winter-finds", label: "Winter finds guide" },
+    { href: "/best-litbuy-jackets", label: "Best LitBuy jackets" },
   ],
   tshirts: [
     { href: "/guides/best-tshirt-finds", label: "Best t-shirt finds" },
@@ -282,6 +313,56 @@ const CATEGORY_FAQS: Record<string, { question: string; answer: string }[]> = {
       question: "Should I request QC for shoes?",
       answer:
         "Most buyers request warehouse QC for pairs above a comfortable price point. Compare photos to listing references before you ship.",
+    },
+    {
+      question: "What are the best LitBuy sneakers?",
+      answer:
+        "Nike Dunks, Jordan 1s, and Adidas Campus lead clicks. See our best sneakers page and Popular Today rail for community-ranked picks.",
+    },
+  ],
+  hoodies: [
+    {
+      question: "What are the best LitBuy hoodies?",
+      answer:
+        "Stussy, Corteiz, Nike tech fleece, and Supreme graphics are among the most saved. Filter this page by brand or visit /best-hoodies for editor picks.",
+    },
+    {
+      question: "How do I check hoodie QC?",
+      answer:
+        "Look at print placement, drawstrings, and tag photos in warehouse QC. Compare measurements to a hoodie you already own.",
+    },
+  ],
+  jackets: [
+    {
+      question: "What jackets are popular on LitBuy?",
+      answer:
+        "Moncler puffers, Stone Island shells, and Canada Goose styles lead winter searches. Puffers are bulky — factor volumetric shipping weight.",
+    },
+    {
+      question: "When should I order outerwear?",
+      answer:
+        "Order six to eight weeks before your local cold season to allow warehouse QC and international shipping time.",
+    },
+  ],
+  bags: [
+    {
+      question: "Are designer bags safe to buy on LitBuy?",
+      answer:
+        "Many buyers order designer-style bags through agents. Always request detailed warehouse QC and compare hardware, stitching, and monogram alignment before shipping.",
+    },
+  ],
+  accessories: [
+    {
+      question: "What accessories are good for first hauls?",
+      answer:
+        "Hats, belts, and small leather goods add variety without heavy freight. They are lower risk than large outerwear pieces.",
+    },
+  ],
+  electronics: [
+    {
+      question: "Should I buy electronics through LitBuy?",
+      answer:
+        "Read listing specs carefully and confirm model numbers. Consider insurance on higher-value tech shipments and review LitBuy return policy before ordering.",
     },
   ],
   default: [

@@ -10,6 +10,7 @@ import { getRelatedGuidesForBrand } from "@/lib/related-guides";
 import BrandAuthoritySections from "@/components/brand/BrandAuthoritySections";
 import BrandSeoBlock from "@/components/seo/BrandSeoBlock";
 import BestOfLinks from "@/components/BestOfLinks";
+import RelatedPages from "@/components/RelatedPages";
 import SchemaScript from "@/components/SchemaScript";
 import { buildCollectionPageSchema } from "@/lib/schema";
 import {
@@ -113,6 +114,7 @@ export default async function BrandLandingPage({ params }: BrandPageProps) {
       <BestOfLinks brandSlug={slug} />
       <SignupCard location={`brand_signup_${slug}`} variant="compact" />
       <RelatedSeoLinks />
+      <RelatedPages currentPath={pagePath} brandSlug={slug} />
 
       <Suspense fallback={<div className="py-24 text-center text-muted">Loading...</div>}>
         <CatalogPanel

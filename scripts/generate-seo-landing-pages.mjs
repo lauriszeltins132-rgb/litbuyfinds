@@ -23,6 +23,13 @@ const SLUGS = [
   "best-litbuy-bags-2026",
   "best-litbuy-accessories-2026",
   "best-litbuy-finds-under-50",
+  "best-litbuy-hoodies",
+  "best-weidian-finds",
+  "best-litbuy-under-20",
+  "best-litbuy-under-100",
+  "top-qc-finds",
+  "trending-litbuy-finds",
+  "best-litbuy-finds-2026",
 ];
 
 const pageTemplate = (slug) => `import { createSeoLandingPage } from "@/lib/seo-landing-page";

@@ -34,6 +34,27 @@ const nextConfig: NextConfig = {
         destination: "/privacy-policy",
         permanent: true,
       },
+      { source: "/category/:slug", destination: "/categories/:slug", permanent: true },
+      { source: "/best-litbuy-sneakers", destination: "/litbuy-sneakers", permanent: true },
+      { source: "/best-litbuy-jackets", destination: "/litbuy-jackets", permanent: true },
+      {
+        source: "/best-litbuy-accessories",
+        destination: "/best-litbuy-accessories-2026",
+        permanent: true,
+      },
+      { source: "/best-litbuy-bags", destination: "/best-litbuy-bags-2026", permanent: true },
+      { source: "/best-litbuy-under-50", destination: "/best-under-50", permanent: true },
+      { source: "/best-qc-finds", destination: "/top-qc-finds", permanent: true },
+      { source: "/guides/how-to-use-litbuy", destination: "/guides/how-to-use-litbuy-finds", permanent: true },
+      { source: "/guides/beginner-guide", destination: "/guides/beginner-guide-to-litbuy", permanent: true },
+      { source: "/guides/qc-guide", destination: "/guides/how-to-check-qc-photos", permanent: true },
+      {
+        source: "/guides/shipping-guide",
+        destination: "/guides/how-shipping-works-with-agents",
+        permanent: true,
+      },
+      { source: "/guides/weidian-guide", destination: "/guides/how-to-buy-from-weidian", permanent: true },
+      { source: "/guides/litbuy-spreadsheet", destination: "/litbuy-spreadsheet", permanent: true },
     ];
   },
   images: {

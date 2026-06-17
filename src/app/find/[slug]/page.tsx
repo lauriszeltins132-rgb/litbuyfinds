@@ -27,6 +27,7 @@ import RelatedGuides from "@/components/RelatedGuides";
 import RecordRecentlyViewed from "@/components/RecordRecentlyViewed";
 import RecentlyViewedRail from "@/components/RecentlyViewedRail";
 import TrackProductView from "@/components/TrackProductView";
+import RelatedPages from "@/components/RelatedPages";
 import { getRelatedGuidesForProduct } from "@/lib/related-guides";
 
 type ProductPageProps = {
@@ -168,6 +169,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
       />
 
       <RecentlyViewedRail excludeProductId={product.id} title="Your recently viewed" />
+      <RelatedPages
+        currentPath={`/find/${slug}`}
+        brandSlug={brand ? slugify(brand) : undefined}
+        categorySlug={product.category_slug}
+      />
 
       <section className="px-4 pb-16 pt-4 sm:px-6">
         <div className="mx-auto flex max-w-7xl flex-wrap justify-center gap-4 text-center">
