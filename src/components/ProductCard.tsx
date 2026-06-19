@@ -75,40 +75,42 @@ export default function ProductCard({
         compact ? "text-[12px] sm:text-[13px]" : ""
       }`}
     >
-      <Link
-        href={productHref}
-        className="product-image-shell product-image-shell--card product-image-hover relative block aspect-square overflow-hidden"
-      >
-        <ProductImage
-          src={product.image}
-          preferredSrc={displayImage?.displaySrc}
-          fallbacks={displayImage?.fallbacks}
-          fillClass={displayImage?.fillClass}
-          needsMatte={displayImage?.needsMatte}
-          enhance={displayImage?.enhance}
-          alt={displayName}
-          productName={displayName}
-          variant="card"
-          productHref={productHref}
-        />
+      <div className="product-card-media">
+        <Link
+          href={productHref}
+          className="product-image-shell product-image-shell--card product-image-hover relative block aspect-square overflow-hidden"
+        >
+          <ProductImage
+            src={product.image}
+            preferredSrc={displayImage?.displaySrc}
+            fallbacks={displayImage?.fallbacks}
+            fillClass={displayImage?.fillClass}
+            needsMatte={displayImage?.needsMatte}
+            enhance={displayImage?.enhance}
+            alt={displayName}
+            productName={displayName}
+            variant="card"
+            productHref={productHref}
+          />
+          <div className="product-card-hover-hint bg-gradient-to-t from-background/50 to-transparent px-3 py-2 opacity-0 transition-opacity group-hover:opacity-100">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-accent">
+              View details
+            </p>
+          </div>
+        </Link>
         <div className="product-card-badges">
           {(showTrendingScore ? heatScore >= 68 : heatScore >= 74) && (
-            <span className="rounded-full border border-accent/35 bg-background/85 px-2 py-0.5 text-[10px] font-bold text-accent backdrop-blur">
+            <span className="product-card-badge rounded-full border border-accent/35 bg-background/90 px-2 py-0.5 text-[10px] font-bold text-accent shadow-sm backdrop-blur-sm">
               {heatScore} hot
             </span>
           )}
           {product.qc_link && (
-            <span className="rounded-full border border-accent/25 bg-accent/15 px-2 py-0.5 text-[10px] font-bold text-accent backdrop-blur">
+            <span className="product-card-badge rounded-full border border-accent/30 bg-background/90 px-2 py-0.5 text-[10px] font-bold text-accent shadow-sm backdrop-blur-sm">
               QC available
             </span>
           )}
         </div>
-        <div className="product-card-hover-hint bg-gradient-to-t from-background/50 to-transparent px-3 py-2 opacity-0 transition-opacity group-hover:opacity-100">
-          <p className="text-[10px] font-bold uppercase tracking-wider text-accent">
-            View details
-          </p>
-        </div>
-      </Link>
+      </div>
 
       <div className={`flex flex-1 flex-col gap-1.5 ${compact ? "p-2.5 sm:p-3" : "p-3.5"}`}>
         <Link href={productHref} className="text-left">
