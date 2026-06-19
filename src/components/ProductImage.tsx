@@ -19,7 +19,42 @@ type ProductImageProps = {
   priority?: boolean;
   variant?: ProductImageVariant;
   productHref?: string;
+  preferredSrc?: string;
+  fallbacks?: string[];
+  fillClass?: string;
+  needsMatte?: boolean;
+  enhance?: boolean;
 };
+
+function isLocalProcessedPath(src: string): boolean {
+  return src.startsWith("/processed/") || src.startsWith("/api/processed-image");
+}
+
+function buildCandidateList(
+  src: string,
+  preferredSrc?: string,
+  fallbacks: string[] = []
+): string[] {
+  const validation = validateImageUrl(src);
+  const plan = validation.valid ? getProductImagePlan(validation.normalized) : null;
+  const ordered = [
+    preferredSrc,
+    plan?.src,
+    validation.valid ? validation.normalized : "",
+    plan?.originalSrc,
+    ...fallbacks,
+    src,
+  ].filter(Boolean) as string[];
+
+  const seen = new Set<string>();
+  const unique: string[] = [];
+  for (const url of ordered) {
+    if (seen.has(url)) continue;
+    seen.add(url);
+    unique.push(url);
+  }
+  return unique;
+}
 
 export default function ProductImage({
   src,
@@ -28,35 +63,34 @@ export default function ProductImage({
   priority = false,
   variant = "card",
   productHref,
+  preferredSrc,
+  fallbacks = [],
+  fillClass = "product-float-asset--fill-balanced",
+  needsMatte = false,
+  enhance = false,
 }: ProductImageProps) {
   const validation = useMemo(() => validateImageUrl(src), [src]);
-  const plan = useMemo(() => {
-    if (!validation.valid) return null;
-    return getProductImagePlan(validation.normalized);
-  }, [validation.normalized, validation.valid]);
+
+  const candidates = useMemo(
+    () => buildCandidateList(src, preferredSrc, fallbacks),
+    [src, preferredSrc, fallbacks]
+  );
 
   const [srcIndex, setSrcIndex] = useState(0);
-  const [failed, setFailed] = useState(!validation.valid || !plan);
+  const [failed, setFailed] = useState(candidates.length === 0);
   const [visible, setVisible] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
   const loggedRef = useRef(false);
 
-  const candidates = useMemo(() => {
-    if (!plan) return [];
-    if (plan.isProcessed && plan.src !== plan.originalSrc) {
-      return [plan.src, plan.originalSrc];
-    }
-    return [plan.src];
-  }, [plan]);
-
   const displaySrc = candidates[srcIndex] ?? "";
+  const useMatte = needsMatte && !isLocalProcessedPath(displaySrc);
 
   useEffect(() => {
     setSrcIndex(0);
-    setFailed(!validation.valid || !plan);
+    setFailed(candidates.length === 0);
     setVisible(false);
     loggedRef.current = false;
-  }, [validation.valid, plan, validation.normalized]);
+  }, [candidates, validation.normalized]);
 
   const confirmLoaded = useCallback(
     (img: HTMLImageElement) => {
@@ -108,7 +142,7 @@ export default function ProductImage({
     }
   }, [confirmLoaded, displaySrc, failed]);
 
-  if (failed || !plan || !displaySrc) {
+  if (failed || !displaySrc) {
     return (
       <ImageUnavailablePlaceholder
         className={className}
@@ -118,12 +152,25 @@ export default function ProductImage({
     );
   }
 
+  const assetClass = [
+    "product-float-asset",
+    fillClass,
+    enhance ? "product-float-asset--enhanced" : "",
+    visible ? "" : "product-float-asset--hidden",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
     <div
       className={`product-float-stage product-float-stage--${variant} ${className}`}
     >
       {variant !== "card" ? <div className="product-float-glow" aria-hidden /> : null}
-      <div className="product-float-matte">
+      <div
+        className={`product-float-matte ${
+          useMatte ? "product-float-matte--transparent" : ""
+        }`}
+      >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           ref={imgRef}
@@ -134,9 +181,7 @@ export default function ProductImage({
           fetchPriority={priority ? "high" : "auto"}
           decoding="async"
           referrerPolicy="no-referrer"
-          className={`product-float-asset ${
-            visible ? "" : "product-float-asset--hidden"
-          }`}
+          className={assetClass}
           onLoad={handleLoad}
           onError={handleError}
         />

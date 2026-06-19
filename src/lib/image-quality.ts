@@ -2,12 +2,19 @@ import manifestData from "@/data/image-quality-manifest.json";
 import { isDeadImageUrl } from "./dead-images";
 import type { Product } from "./types";
 
-type ImageQualityEntry = {
+export type ImageQualityEntry = {
   score: number;
   issues?: string[];
   borderBrightRatio?: number;
   width?: number;
   height?: number;
+  aspectRatio?: number;
+  contentFillRatio?: number;
+  transparencyRatio?: number;
+  emptySpaceRatio?: number;
+  isTransparent?: boolean;
+  needsMatte?: boolean;
+  enhance?: boolean;
 };
 
 type ImageQualityManifest = {
@@ -16,11 +23,20 @@ type ImageQualityManifest = {
 
 const catalog = manifestData as ImageQualityManifest;
 
-const HOMEPAGE_MIN_SCORE = 70;
+export const HOMEPAGE_MIN_SCORE = 70;
+export const CARD_DISPLAY_MIN_SCORE = 42;
+export const FEATURED_MIN_SCORE = 55;
+
+const DEFAULT_SCORE = 62;
+
+export function getImageQualityDetails(imageUrl: string): ImageQualityEntry | null {
+  if (!imageUrl || isDeadImageUrl(imageUrl)) return null;
+  return catalog.urls[imageUrl] ?? null;
+}
 
 export function getImageQualityScore(imageUrl: string): number {
   if (!imageUrl || isDeadImageUrl(imageUrl)) return 0;
-  return catalog.urls[imageUrl]?.score ?? 65;
+  return catalog.urls[imageUrl]?.score ?? DEFAULT_SCORE;
 }
 
 export function getImageQualityIssues(imageUrl: string): string[] {
@@ -36,4 +52,26 @@ export function passesHomepageQualityGate(product: Product): boolean {
   return isHomepageImageQuality(product.image);
 }
 
-export { HOMEPAGE_MIN_SCORE };
+export function needsTransparentMatte(imageUrl: string): boolean {
+  const entry = catalog.urls[imageUrl];
+  if (!entry) return false;
+  return (
+    entry.needsMatte === true ||
+    (entry.isTransparent === true && (entry.transparencyRatio ?? 0) > 0.1)
+  );
+}
+
+export function shouldEnhanceImage(imageUrl: string): boolean {
+  const entry = catalog.urls[imageUrl];
+  if (!entry) return false;
+  return entry.enhance === true;
+}
+
+/** Scale class when product occupies too little of the frame. */
+export function getImageFillClass(imageUrl: string): string {
+  const fill = catalog.urls[imageUrl]?.contentFillRatio;
+  if (fill == null) return "product-float-asset--fill-balanced";
+  if (fill < 0.32) return "product-float-asset--fill-sparse";
+  if (fill < 0.52) return "product-float-asset--fill-balanced";
+  return "product-float-asset--fill-dense";
+}

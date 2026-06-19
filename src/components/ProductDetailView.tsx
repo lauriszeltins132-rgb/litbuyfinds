@@ -14,6 +14,7 @@ import { getProductHref, slugify } from "@/lib/slugs";
 import { usePreferences } from "@/context/PreferencesContext";
 import { useWishlist } from "@/context/WishlistContext";
 import { trackProductContext } from "@/lib/analytics-events";
+import { resolveProductDisplayImage } from "@/lib/product-image-presentation";
 import HowToBuySteps from "./HowToBuySteps";
 import ProductImage from "./ProductImage";
 
@@ -39,6 +40,7 @@ export default function ProductDetailView({
   const [copied, setCopied] = useState(false);
   const saved = isInWishlist(product.id);
   const source = getProductSource(product.affiliate_link);
+  const displayImage = resolveProductDisplayImage(product);
 
   async function copyLink() {
     const url = `${window.location.origin}${getProductHref(product)}`;
@@ -62,6 +64,11 @@ export default function ProductDetailView({
         <div className="product-image-shell product-image-shell--featured product-image-hover overflow-hidden rounded-3xl border border-border">
           <ProductImage
             src={product.image}
+            preferredSrc={displayImage?.displaySrc}
+            fallbacks={displayImage?.fallbacks}
+            fillClass={displayImage?.fillClass}
+            needsMatte={displayImage?.needsMatte}
+            enhance={displayImage?.enhance}
             alt={facts.displayName}
             productName={facts.displayName}
             priority

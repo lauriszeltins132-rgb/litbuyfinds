@@ -2,6 +2,11 @@ import Link from "next/link";
 
 const RESOURCES = [
   {
+    href: "/brands",
+    label: "Browse All Brands",
+    description: "Nike, Moncler, Chrome Hearts, Stussy and more",
+  },
+  {
     href: "/litbuy-spreadsheet",
     label: "LitBuy Spreadsheet Guide",
     description: "Searchable catalog vs raw spreadsheet rows",

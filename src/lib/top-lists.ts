@@ -1,6 +1,6 @@
 import { extractBrand } from "./brands";
 import { getMonthlyHighlights, getPopularToday } from "./popular-picks";
-import { filterFeaturedEligible } from "./product-media";
+import { filterFeaturedEligible, sortByVisualQuality } from "./product-media";
 import { hasExactPrice } from "./pricing";
 import { getAllProducts } from "./products";
 import type { Product } from "./types";
@@ -20,11 +20,7 @@ export type SeoListConfig = {
 };
 
 function sortByQuality(items: Product[]): Product[] {
-  return [...items].sort((a, b) => {
-    const aScore = (a.qc_link ? 2 : 0) + (a.image ? 1 : 0);
-    const bScore = (b.qc_link ? 2 : 0) + (b.image ? 1 : 0);
-    return bScore - aScore;
-  });
+  return sortByVisualQuality(items);
 }
 
 function priced(items: Product[]): Product[] {

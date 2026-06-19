@@ -6,6 +6,7 @@ import type { Product } from "@/lib/types";
 import { getDisplayProductName, getDisplayBrand } from "@/lib/product-validation";
 import { formatProductPrice, getPriceStatus } from "@/lib/pricing";
 import { getTrendingScore } from "@/lib/discovery";
+import { resolveProductDisplayImage } from "@/lib/product-image-presentation";
 import { getProductSource } from "@/lib/filters";
 import { getProductHref } from "@/lib/slugs";
 import { usePreferences } from "@/context/PreferencesContext";
@@ -49,6 +50,7 @@ export default function ProductCard({
   const source = getProductSource(product.affiliate_link);
   const productHref = getProductHref(product);
   const heatScore = getTrendingScore(product);
+  const displayImage = resolveProductDisplayImage(product);
 
   async function handleCopy() {
     const url = `${window.location.origin}${productHref}`;
@@ -76,6 +78,11 @@ export default function ProductCard({
       >
         <ProductImage
           src={product.image}
+          preferredSrc={displayImage?.displaySrc}
+          fallbacks={displayImage?.fallbacks}
+          fillClass={displayImage?.fillClass}
+          needsMatte={displayImage?.needsMatte}
+          enhance={displayImage?.enhance}
           alt={displayName}
           productName={displayName}
           variant="card"

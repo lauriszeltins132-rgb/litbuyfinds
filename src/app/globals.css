@@ -222,7 +222,7 @@ body::before {
 }
 
 .product-float-stage--card {
-  padding: 0.35rem;
+  padding: 6%;
 }
 
 .product-float-matte {
@@ -234,7 +234,17 @@ body::before {
   height: 100%;
   min-height: inherit;
   border-radius: 0.75rem;
-  background: #141418;
+  background: linear-gradient(165deg, #101014 0%, #17171c 48%, #101014 100%);
+}
+
+.product-float-matte--transparent {
+  background: linear-gradient(
+    165deg,
+    #0e0e12 0%,
+    #16161c 42%,
+    #121218 100%
+  );
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
 }
 
 .catalog-product-grid {
@@ -315,8 +325,6 @@ body::before {
   position: relative;
   z-index: 2;
   display: block;
-  max-width: 96%;
-  max-height: 96%;
   width: auto;
   height: auto;
   object-fit: contain;
@@ -324,6 +332,31 @@ body::before {
   image-rendering: auto;
   opacity: 1;
   transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease;
+}
+
+.product-float-asset--fill-sparse {
+  min-width: 78%;
+  min-height: 78%;
+  max-width: 90%;
+  max-height: 90%;
+}
+
+.product-float-asset--fill-balanced {
+  min-width: 72%;
+  min-height: 72%;
+  max-width: 88%;
+  max-height: 88%;
+}
+
+.product-float-asset--fill-dense {
+  min-width: 68%;
+  min-height: 68%;
+  max-width: 82%;
+  max-height: 82%;
+}
+
+.product-float-asset--enhanced {
+  filter: contrast(1.08) brightness(1.05) saturate(1.04);
 }
 
 .product-float-stage--featured .product-float-asset {
@@ -337,8 +370,8 @@ body::before {
 }
 
 .product-float-stage--card .product-float-asset {
-  max-width: 98%;
-  max-height: 98%;
+  max-width: 90%;
+  max-height: 90%;
 }
 
 

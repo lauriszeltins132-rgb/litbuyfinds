@@ -235,6 +235,8 @@ async function processOne(url, sharp) {
       channels: 4,
     },
   })
+    .modulate({ brightness: 1.04, saturation: 1.02 })
+    .linear(1.06, -(255 * 0.03))
     .png({ compressionLevel: 9, effort: 7 })
     .toFile(outFile);
   return { url, path: publicPath };

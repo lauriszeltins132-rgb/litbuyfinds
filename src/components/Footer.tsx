@@ -102,10 +102,18 @@ export default function Footer() {
           </div>
 
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-muted">
-              Top brands
-            </p>
+            <Link
+              href="/brands"
+              className="text-xs font-bold uppercase tracking-[0.18em] text-muted transition hover:text-accent"
+            >
+              Brand directory
+            </Link>
             <ul className="mt-4 space-y-2.5 text-sm">
+              <li>
+                <Link href="/brands" className="font-bold text-accent hover:underline">
+                  Browse all brands
+                </Link>
+              </li>
               {brands.map((brand) => (
                 <li key={brand.slug}>
                   <Link
@@ -116,11 +124,6 @@ export default function Footer() {
                   </Link>
                 </li>
               ))}
-              <li>
-                <Link href="/brands" className="font-bold text-accent hover:underline">
-                  All brands →
-                </Link>
-              </li>
             </ul>
           </div>
 

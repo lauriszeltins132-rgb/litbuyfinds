@@ -207,6 +207,8 @@ async function toFlatPng(
   return sharp(out, {
     raw: { width: flat.info.width, height: flat.info.height, channels: 4 },
   })
+    .modulate({ brightness: 1.04, saturation: 1.02 })
+    .linear(1.06, -(255 * 0.03))
     .png({ compressionLevel: 9 })
     .toBuffer();
 }

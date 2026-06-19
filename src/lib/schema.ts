@@ -87,6 +87,33 @@ export function buildFaqSchema(faqs: { question: string; answer: string }[]) {
   };
 }
 
+export function buildItemListSchema({
+  name,
+  description,
+  path,
+  items,
+}: {
+  name: string;
+  description?: string;
+  path: string;
+  items: { name: string; url: string; position: number }[];
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name,
+    description,
+    url: `${SITE_URL}${path}`,
+    numberOfItems: items.length,
+    itemListElement: items.map((item) => ({
+      "@type": "ListItem",
+      position: item.position,
+      name: item.name,
+      url: item.url,
+    })),
+  };
+}
+
 export function buildCollectionPageSchema({
   name,
   description,

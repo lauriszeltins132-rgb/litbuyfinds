@@ -14,6 +14,7 @@ import {
 import { usePreferences } from "@/context/PreferencesContext";
 import { useConversion } from "@/context/ConversionContext";
 import { trackProductContext } from "@/lib/analytics-events";
+import { resolveProductDisplayImage } from "@/lib/product-image-presentation";
 import ProductImage from "./ProductImage";
 
 type ProductModalProps = {
@@ -42,6 +43,7 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
   const displayName = getDisplayProductName(product);
   const brand = getDisplayBrand(product);
   const source = getProductSource(product.affiliate_link);
+  const displayImage = resolveProductDisplayImage(product);
 
   return (
     <div className="fixed inset-0 z-[150] flex items-end justify-center sm:items-center sm:p-4">
@@ -71,6 +73,11 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
             <div className="product-image-shell product-image-hover relative aspect-square overflow-hidden rounded-2xl">
               <ProductImage
                 src={product.image}
+                preferredSrc={displayImage?.displaySrc}
+                fallbacks={displayImage?.fallbacks}
+                fillClass={displayImage?.fillClass}
+                needsMatte={displayImage?.needsMatte}
+                enhance={displayImage?.enhance}
                 alt={displayName}
                 productName={displayName}
                 variant="card"

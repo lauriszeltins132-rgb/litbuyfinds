@@ -1,4 +1,6 @@
 import { extractBrand, getBrandsFromProducts } from "./brands";
+import { getImageQualityScore } from "./image-quality";
+import { getProductVisualScore } from "./product-image-presentation";
 import { isFeaturedEligible, isHomepageFeaturedEligible } from "./product-media";
 import { hasExactPrice } from "./pricing";
 import { getDisplayBrand, validateProduct } from "./product-validation";
@@ -16,6 +18,8 @@ function qualityScore(product: Product, trendingIndex = 999): number {
   let score = 0;
   if (product.image) score += 25;
   if (product.qc_link) score += 20;
+  score += Math.round(getProductVisualScore(product) * 0.35);
+  score += Math.round(getImageQualityScore(product.image) * 0.15);
   if (hasExactPrice(product.price)) score += 10;
   if (product.category_slug === "trending-now") score += 30 - Math.min(trendingIndex, 29);
   if (product.category_slug === "latest-finds") score += 15;

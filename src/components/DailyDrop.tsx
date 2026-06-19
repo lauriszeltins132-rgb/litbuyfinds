@@ -6,6 +6,7 @@ import type { Product } from "@/lib/types";
 import { formatProductPrice } from "@/lib/pricing";
 import { trackProductContext } from "@/lib/analytics-events";
 import { getProductHref } from "@/lib/slugs";
+import { resolveProductDisplayImage } from "@/lib/product-image-presentation";
 import ProductImage from "./ProductImage";
 
 export default function DailyDrop() {
@@ -38,6 +39,8 @@ export default function DailyDrop() {
     );
   }
 
+  const displayImage = resolveProductDisplayImage(product);
+
   return (
     <section className="px-4 py-4 sm:px-6">
       <div className="mx-auto max-w-7xl">
@@ -46,6 +49,11 @@ export default function DailyDrop() {
             <div className="product-image-shell product-image-shell--hero">
               <ProductImage
                 src={product.image}
+                preferredSrc={displayImage?.displaySrc}
+                fallbacks={displayImage?.fallbacks}
+                fillClass={displayImage?.fillClass}
+                needsMatte={displayImage?.needsMatte}
+                enhance={displayImage?.enhance}
                 alt={product.product_name}
                 productName={product.product_name}
                 priority
