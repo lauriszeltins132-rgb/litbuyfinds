@@ -91,7 +91,7 @@ export default function ProductCard({
           variant="card"
           productHref={productHref}
         />
-        <div className="absolute left-2 top-2 flex flex-col gap-1">
+        <div className="product-card-badges">
           {(showTrendingScore ? heatScore >= 68 : heatScore >= 74) && (
             <span className="rounded-full border border-accent/35 bg-background/85 px-2 py-0.5 text-[10px] font-bold text-accent backdrop-blur">
               {heatScore} hot
@@ -103,7 +103,7 @@ export default function ProductCard({
             </span>
           )}
         </div>
-        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-background/50 to-transparent px-3 py-2 opacity-0 transition-opacity group-hover:opacity-100">
+        <div className="product-card-hover-hint bg-gradient-to-t from-background/50 to-transparent px-3 py-2 opacity-0 transition-opacity group-hover:opacity-100">
           <p className="text-[10px] font-bold uppercase tracking-wider text-accent">
             View details
           </p>
