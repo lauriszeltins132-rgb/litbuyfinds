@@ -2,6 +2,10 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { trackBrokenImage } from "@/lib/analytics-events";
+import {
+  getImageFillClass,
+  shouldEnhanceImage,
+} from "@/lib/image-quality";
 import { getProductImagePlan } from "@/lib/processed-images";
 import {
   hasPlausibleImageDimensions,
@@ -26,18 +30,12 @@ type ProductImageProps = {
   enhance?: boolean;
 };
 
-function buildCandidateList(
-  src: string,
-  preferredSrc?: string,
-  fallbacks: string[] = []
-): string[] {
+function buildCandidateList(src: string): string[] {
   const validation = validateImageUrl(src);
   if (!validation.valid) return [];
 
   const plan = getProductImagePlan(validation.normalized);
-  const ordered = [preferredSrc, plan.src, ...plan.fallbacks, ...fallbacks].filter(
-    Boolean
-  ) as string[];
+  const ordered = [plan.src, ...plan.fallbacks, plan.originalSrc].filter(Boolean);
 
   const seen = new Set<string>();
   const unique: string[] = [];
@@ -56,17 +54,21 @@ export default function ProductImage({
   priority = false,
   variant = "card",
   productHref,
-  preferredSrc,
-  fallbacks = [],
-  fillClass = "product-float-asset--fill-balanced",
-  enhance = false,
+  fillClass,
+  enhance,
 }: ProductImageProps) {
   const validation = useMemo(() => validateImageUrl(src), [src]);
 
-  const candidates = useMemo(
-    () => buildCandidateList(src, preferredSrc, fallbacks),
-    [src, preferredSrc, fallbacks]
-  );
+  const candidates = useMemo(() => buildCandidateList(src), [src]);
+  const candidateKey = candidates.join("|");
+
+  const resolvedFillClass =
+    fillClass ??
+    (validation.valid
+      ? getImageFillClass(validation.normalized)
+      : "product-float-asset--fill-balanced");
+  const resolvedEnhance =
+    enhance ?? (validation.valid ? shouldEnhanceImage(validation.normalized) : false);
 
   const [srcIndex, setSrcIndex] = useState(0);
   const [failed, setFailed] = useState(candidates.length === 0);
@@ -81,27 +83,37 @@ export default function ProductImage({
     setFailed(candidates.length === 0);
     setVisible(false);
     loggedRef.current = false;
-  }, [candidates, validation.normalized]);
+  }, [candidateKey, candidates.length]);
+
+  const failExhausted = useCallback(() => {
+    setFailed(true);
+    setVisible(false);
+    if (!loggedRef.current) {
+      loggedRef.current = true;
+      trackBrokenImage(validation.normalized || src, variant);
+    }
+  }, [src, validation.normalized, variant]);
+
+  const advanceOrFail = useCallback(() => {
+    setSrcIndex((currentIndex) => {
+      if (currentIndex + 1 < candidates.length) {
+        setVisible(false);
+        return currentIndex + 1;
+      }
+      failExhausted();
+      return currentIndex;
+    });
+  }, [candidates.length, failExhausted]);
 
   const confirmLoaded = useCallback(
     (img: HTMLImageElement) => {
       if (!hasPlausibleImageDimensions(img.naturalWidth, img.naturalHeight)) {
-        if (srcIndex + 1 < candidates.length) {
-          setSrcIndex((i) => i + 1);
-          setVisible(false);
-          return;
-        }
-        setFailed(true);
-        setVisible(false);
-        if (!loggedRef.current) {
-          loggedRef.current = true;
-          trackBrokenImage(validation.normalized || src, variant);
-        }
+        advanceOrFail();
         return;
       }
       setVisible(true);
     },
-    [candidates.length, src, srcIndex, validation.normalized, variant]
+    [advanceOrFail]
   );
 
   const handleLoad = useCallback(
@@ -112,18 +124,8 @@ export default function ProductImage({
   );
 
   const handleError = useCallback(() => {
-    if (srcIndex + 1 < candidates.length) {
-      setSrcIndex((i) => i + 1);
-      setVisible(false);
-      return;
-    }
-    setFailed(true);
-    setVisible(false);
-    if (!loggedRef.current) {
-      loggedRef.current = true;
-      trackBrokenImage(validation.normalized || src, variant);
-    }
-  }, [candidates.length, src, srcIndex, validation.normalized, variant]);
+    advanceOrFail();
+  }, [advanceOrFail]);
 
   useEffect(() => {
     const img = imgRef.current;
@@ -131,7 +133,7 @@ export default function ProductImage({
     if (img.complete && img.naturalWidth > 0) {
       confirmLoaded(img);
     }
-  }, [confirmLoaded, displaySrc, failed]);
+  }, [confirmLoaded, displaySrc, failed, srcIndex]);
 
   if (failed || !displaySrc) {
     return (
@@ -145,8 +147,8 @@ export default function ProductImage({
 
   const assetClass = [
     "product-float-asset",
-    fillClass,
-    enhance ? "product-float-asset--enhanced" : "",
+    resolvedFillClass,
+    resolvedEnhance ? "product-float-asset--enhanced" : "",
     visible ? "" : "product-float-asset--hidden",
   ]
     .filter(Boolean)

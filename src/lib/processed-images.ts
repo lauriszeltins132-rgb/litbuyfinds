@@ -13,7 +13,7 @@ export type ProductImagePlan = {
   fallbacks: string[];
 };
 
-/** Matte-processed assets only — never raw spreadsheet URLs. */
+/** Prefer pre-built matte PNGs, then API processing, then the catalog original. */
 export function getProductImagePlan(sourceUrl: string): ProductImagePlan {
   const apiSrc = `/api/processed-image?url=${encodeURIComponent(sourceUrl)}`;
   const staticPath = catalog.urls[sourceUrl];
@@ -23,7 +23,7 @@ export function getProductImagePlan(sourceUrl: string): ProductImagePlan {
       src: staticPath,
       originalSrc: sourceUrl,
       isProcessed: true,
-      fallbacks: [apiSrc],
+      fallbacks: [apiSrc, sourceUrl],
     };
   }
 
@@ -31,6 +31,6 @@ export function getProductImagePlan(sourceUrl: string): ProductImagePlan {
     src: apiSrc,
     originalSrc: sourceUrl,
     isProcessed: true,
-    fallbacks: [],
+    fallbacks: [sourceUrl],
   };
 }

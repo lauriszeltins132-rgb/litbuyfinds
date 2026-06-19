@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { Product } from "@/lib/types";
 import { getDisplayProductName, getDisplayBrand } from "@/lib/product-validation";
 import { formatProductPrice, getPriceStatus } from "@/lib/pricing";
@@ -49,8 +49,11 @@ export default function ProductCard({
   const brand = getDisplayBrand(product);
   const source = getProductSource(product.affiliate_link);
   const productHref = getProductHref(product);
-  const heatScore = getTrendingScore(product);
-  const displayImage = resolveProductDisplayImage(product);
+  const heatScore = useMemo(() => getTrendingScore(product), [product]);
+  const displayImage = useMemo(
+    () => resolveProductDisplayImage(product),
+    [product]
+  );
 
   async function handleCopy() {
     const url = `${window.location.origin}${productHref}`;

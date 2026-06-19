@@ -225,6 +225,12 @@ body::before {
   padding: 6%;
 }
 
+.product-float-stage > .image-unavailable {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
 .product-float-matte--opaque,
 .product-float-matte {
   position: relative;

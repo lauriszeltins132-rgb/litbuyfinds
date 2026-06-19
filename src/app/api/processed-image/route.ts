@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
     });
 
     if (!upstream.ok) {
-      return NextResponse.json({ error: "Upstream fetch failed" }, { status: 502 });
+      return NextResponse.redirect(normalized, 302);
     }
 
     const input = Buffer.from(await upstream.arrayBuffer());
@@ -41,6 +41,6 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch {
-    return NextResponse.json({ error: "Image processing failed" }, { status: 502 });
+    return NextResponse.redirect(normalized, 302);
   }
 }
