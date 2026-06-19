@@ -18,17 +18,6 @@ export type ResolvedProductImage = {
   fallbacks: string[];
 };
 
-function uniqueUrls(urls: string[]): string[] {
-  const seen = new Set<string>();
-  const out: string[] = [];
-  for (const url of urls) {
-    if (!url || seen.has(url)) continue;
-    seen.add(url);
-    out.push(url);
-  }
-  return out;
-}
-
 export function resolveProductDisplayImage(
   product: Product
 ): ResolvedProductImage | null {
@@ -36,24 +25,16 @@ export function resolveProductDisplayImage(
 
   const sourceUrl = product.image;
   const plan = getProductImagePlan(sourceUrl);
-  const displaySrc = plan.src;
-
-  const fallbacks = uniqueUrls([
-    displaySrc,
-    `/api/processed-image?url=${encodeURIComponent(sourceUrl)}`,
-  ]);
-
-  const score = getImageQualityScore(sourceUrl) + 12;
 
   return {
-    displaySrc,
+    displaySrc: plan.src,
     sourceUrl,
-    score,
+    score: getImageQualityScore(sourceUrl) + 12,
     fillClass: getImageFillClass(sourceUrl),
     needsMatte: false,
     enhance: shouldEnhanceImage(sourceUrl),
     isProcessed: true,
-    fallbacks,
+    fallbacks: plan.fallbacks,
   };
 }
 

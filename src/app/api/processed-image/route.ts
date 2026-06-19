@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
     });
 
     if (!upstream.ok) {
-      return NextResponse.redirect(normalized, 302);
+      return NextResponse.json({ error: "Upstream fetch failed" }, { status: 502 });
     }
 
     const input = Buffer.from(await upstream.arrayBuffer());

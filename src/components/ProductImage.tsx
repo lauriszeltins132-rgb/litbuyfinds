@@ -35,14 +35,9 @@ function buildCandidateList(
   if (!validation.valid) return [];
 
   const plan = getProductImagePlan(validation.normalized);
-  const apiSrc = `/api/processed-image?url=${encodeURIComponent(validation.normalized)}`;
-
-  const ordered = [
-    preferredSrc,
-    plan.src,
-    apiSrc,
-    ...fallbacks,
-  ].filter(Boolean) as string[];
+  const ordered = [preferredSrc, plan.src, ...plan.fallbacks, ...fallbacks].filter(
+    Boolean
+  ) as string[];
 
   const seen = new Set<string>();
   const unique: string[] = [];
