@@ -6,6 +6,7 @@ type ProductClicks = {
   name: string;
   brand: string;
   clicks: number;
+  saves: number;
 };
 
 type PlacementStats = {
@@ -103,14 +104,20 @@ function bumpProduct(
   store: AnalyticsStore,
   productId: string,
   productName: string,
-  brand: string
+  brand: string,
+  kind: "clicks" | "saves" = "clicks"
 ) {
   const existing = store.products[productId];
   if (existing) {
-    existing.clicks += 1;
+    existing[kind] += 1;
     return;
   }
-  store.products[productId] = { name: productName, brand, clicks: 1 };
+  store.products[productId] = {
+    name: productName,
+    brand,
+    clicks: kind === "clicks" ? 1 : 0,
+    saves: kind === "saves" ? 1 : 0,
+  };
 }
 
 function bumpBrand(store: AnalyticsStore, brand?: string) {
@@ -153,6 +160,17 @@ export function recordEvent(body: EventBody) {
       }
       bumpBrand(store, body.brand);
       break;
+    case "save_click":
+      if (body.productId) {
+        bumpProduct(
+          store,
+          body.productId,
+          body.productName ?? "Saved item",
+          body.brand ?? "Unknown",
+          "saves"
+        );
+      }
+      break;
     case "discord_click":
       store.discordClicks += 1;
       break;
@@ -177,6 +195,15 @@ export function recordEvent(body: EventBody) {
 export function getProductEngagementScore(productId: string): number {
   const entry = getStore().products[productId];
   return entry?.clicks ?? 0;
+}
+
+export function getProductSaveScore(productId: string): number {
+  const entry = getStore().products[productId];
+  return entry?.saves ?? 0;
+}
+
+export function getProductCombinedEngagement(productId: string): number {
+  return getProductEngagementScore(productId) + getProductSaveScore(productId);
 }
 
 export function getProductEngagementMap(): Record<string, number> {

@@ -8,6 +8,12 @@ export const PREMIUM_BRAND_WEIGHTS: Record<string, number> = {
   "Arc'teryx": 84,
   Arcteryx: 84,
   "Canada Goose": 82,
+  Chrome: 87,
+  "Chrome Hearts": 87,
+  Gucci: 80,
+  "Louis Vuitton": 78,
+  Stussy: 76,
+  Corteiz: 74,
 };
 
 export function getPremiumBrandBoost(productName: string): number {

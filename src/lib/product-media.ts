@@ -1,14 +1,18 @@
 import { isDeadImageUrl } from "./dead-images";
 import {
   getImageQualityScore,
-  passesHomepageQualityGate,
   FEATURED_MIN_SCORE,
+  HOMEPAGE_MIN_SCORE,
 } from "./image-quality";
 import {
   compareProductVisualQuality,
   passesCardDisplayGate,
   resolveProductDisplayImage,
 } from "./product-image-presentation";
+import {
+  isHomepageCuratedEligible,
+  passesHomepageImageThreshold,
+} from "./product-quality-score";
 import { hasExactPrice } from "./pricing";
 import { validateProduct } from "./product-validation";
 import { isUsableImageUrl, validateImageUrl } from "./image-url";
@@ -27,11 +31,15 @@ export function isFeaturedEligible(product: Product): boolean {
 
 /** Stricter gate for homepage hero rails (Popular Today, Trending, etc.). */
 export function isHomepageFeaturedEligible(product: Product): boolean {
-  if (!hasUsableProductImage(product) || !hasExactPrice(product.price)) return false;
-  if (!passesHomepageQualityGate(product)) return false;
-  const validation = validateProduct(product);
-  return validation.confidence >= 0.45;
+  return isHomepageCuratedEligible(product);
 }
+
+export function passesHomepageQualityGate(product: Product): boolean {
+  if (!product.image || isDeadImageUrl(product.image)) return false;
+  return passesHomepageImageThreshold(product);
+}
+
+export { HOMEPAGE_MIN_SCORE };
 
 export function filterFeaturedEligible(items: Product[]): Product[] {
   return items.filter(isFeaturedEligible);

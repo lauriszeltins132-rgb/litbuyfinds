@@ -12,7 +12,9 @@ export type ImageQualityEntry = {
   contentFillRatio?: number;
   transparencyRatio?: number;
   emptySpaceRatio?: number;
+  whiteBlankRatio?: number;
   isTransparent?: boolean;
+  isScreenshotStyle?: boolean;
   needsMatte?: boolean;
   enhance?: boolean;
 };
@@ -23,7 +25,7 @@ type ImageQualityManifest = {
 
 const catalog = manifestData as ImageQualityManifest;
 
-export const HOMEPAGE_MIN_SCORE = 70;
+export const HOMEPAGE_MIN_SCORE = 76;
 export const CARD_DISPLAY_MIN_SCORE = 42;
 export const FEATURED_MIN_SCORE = 55;
 

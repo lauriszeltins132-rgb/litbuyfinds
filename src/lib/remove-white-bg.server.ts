@@ -7,6 +7,36 @@ function isBgPixel(r: number, g: number, b: number, threshold: number): boolean 
   return min >= threshold - 28 && max - min <= 52;
 }
 
+function isMattePixel(r: number, g: number, b: number): boolean {
+  return (
+    Math.abs(r - MATTE.r) <= 6 &&
+    Math.abs(g - MATTE.g) <= 6 &&
+    Math.abs(b - MATTE.b) <= 6
+  );
+}
+
+function replaceAllBrightWithMatte(
+  data: Uint8Array,
+  width: number,
+  height: number,
+  threshold: number
+): number {
+  let replaced = 0;
+  for (let i = 0; i < width * height; i++) {
+    const si = i * 4;
+    const r = data[si];
+    const g = data[si + 1];
+    const b = data[si + 2];
+    if (!isBgPixel(r, g, b, threshold)) continue;
+    data[si] = MATTE.r;
+    data[si + 1] = MATTE.g;
+    data[si + 2] = MATTE.b;
+    data[si + 3] = 255;
+    replaced++;
+  }
+  return replaced;
+}
+
 function flattenOntoMatte(data: Uint8Array, width: number, height: number): Buffer {
   const out = Buffer.alloc(width * height * 4);
   for (let i = 0; i < width * height; i++) {
@@ -86,7 +116,6 @@ function removeEdgeBg(
   return removed;
 }
 
-/** Paint edge-connected background pixels onto matte (fully opaque, no transparency). */
 function replaceEdgeBgWithMatte(
   data: Uint8Array,
   width: number,
@@ -150,28 +179,35 @@ function replaceEdgeBgWithMatte(
   return replaced;
 }
 
-function contentRatio(data: Uint8Array, width: number, height: number): number {
-  let opaque = 0;
+function contentPixelRatio(data: Uint8Array, width: number, height: number): number {
+  let content = 0;
   for (let i = 0; i < width * height; i++) {
-    if (data[i * 4 + 3] > 40) opaque++;
+    const si = i * 4;
+    if (data[si + 3] < 40) continue;
+    if (isMattePixel(data[si], data[si + 1], data[si + 2])) continue;
+    content++;
   }
-  return opaque / (width * height);
+  return content / (width * height);
 }
 
 function getBounds(data: Uint8Array, width: number, height: number) {
-  let minX = width,
-    minY = height,
-    maxX = 0,
-    maxY = 0;
+  let minX = width;
+  let minY = height;
+  let maxX = 0;
+  let maxY = 0;
+
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
-      if (data[(y * width + x) * 4 + 3] < 40) continue;
+      const si = (y * width + x) * 4;
+      if (data[si + 3] < 40) continue;
+      if (isMattePixel(data[si], data[si + 1], data[si + 2])) continue;
       minX = Math.min(minX, x);
       minY = Math.min(minY, y);
       maxX = Math.max(maxX, x);
       maxY = Math.max(maxY, y);
     }
   }
+
   if (maxX <= minX) return null;
   const pad = Math.round(Math.max(maxX - minX, maxY - minY) * 0.03);
   return {
@@ -213,7 +249,34 @@ async function toFlatPng(
     .toBuffer();
 }
 
-/** Remove white bg, flatten onto opaque matte. Always returns an opaque PNG. */
+async function toOpaqueMattePng(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  sharp: any,
+  pixels: Uint8Array,
+  width: number,
+  height: number
+): Promise<Buffer> {
+  const bounds = getBounds(pixels, width, height);
+  let pipeline = sharp(Buffer.from(pixels), {
+    raw: { width, height, channels: 4 },
+  });
+  if (
+    bounds &&
+    bounds.width > 2 &&
+    bounds.height > 2 &&
+    bounds.left + bounds.width <= width &&
+    bounds.top + bounds.height <= height
+  ) {
+    pipeline = pipeline.extract(bounds);
+  }
+  return pipeline
+    .modulate({ brightness: 1.04, saturation: 1.02 })
+    .linear(1.06, -(255 * 0.03))
+    .png({ compressionLevel: 9 })
+    .toBuffer();
+}
+
+/** Remove white/light backgrounds and flatten onto opaque dark matte. */
 export async function removeWhiteBackgroundFromBuffer(
   input: Buffer
 ): Promise<Buffer> {
@@ -234,7 +297,7 @@ export async function removeWhiteBackgroundFromBuffer(
     const removed = removeEdgeBg(copy, width, height, threshold);
     const ratio = removed / (width * height);
     if (ratio < 0.005 || ratio > 0.97) continue;
-    if (contentRatio(copy, width, height) < 0.04) continue;
+    if (contentPixelRatio(copy, width, height) < 0.04) continue;
     return toFlatPng(sharp, copy, width, height);
   }
 
@@ -244,9 +307,21 @@ export async function removeWhiteBackgroundFromBuffer(
     const replaced = replaceEdgeBgWithMatte(copy, width, height, threshold);
     const ratio = replaced / (width * height);
     if (ratio < 0.008 || ratio > 0.98) continue;
-    return toFlatPng(sharp, copy, width, height);
+    if (contentPixelRatio(copy, width, height) < 0.04) continue;
+    return toOpaqueMattePng(sharp, copy, width, height);
   }
 
-  const opaque = new Uint8Array(pixels);
-  return toFlatPng(sharp, opaque, width, height);
+  const aggressiveAttempts = [250, 245, 240, 235, 228, 220];
+  for (const threshold of aggressiveAttempts) {
+    const copy = new Uint8Array(pixels);
+    const replaced = replaceAllBrightWithMatte(copy, width, height, threshold);
+    const ratio = replaced / (width * height);
+    if (ratio < 0.04 || ratio > 0.94) continue;
+    if (contentPixelRatio(copy, width, height) < 0.05) continue;
+    return toOpaqueMattePng(sharp, copy, width, height);
+  }
+
+  const fallback = new Uint8Array(pixels);
+  replaceAllBrightWithMatte(fallback, width, height, 235);
+  return toOpaqueMattePng(sharp, fallback, width, height);
 }

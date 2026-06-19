@@ -51,6 +51,8 @@ function analyzePixels(data, width, height) {
 
   let transparent = 0;
   let opaque = 0;
+  let brightBlank = 0;
+  let sampledOpaque = 0;
   let minX = width;
   let minY = height;
   let maxX = 0;
@@ -67,6 +69,11 @@ function analyzePixels(data, width, height) {
         transparent++;
       } else {
         opaque++;
+        sampledOpaque++;
+        const r = data[i];
+        const g = data[i + 1];
+        const b = data[i + 2];
+        if (isBrightBorderPixel(r, g, b)) brightBlank++;
         minX = Math.min(minX, x);
         minY = Math.min(minY, y);
         maxX = Math.max(maxX, x);
@@ -90,6 +97,15 @@ function analyzePixels(data, width, height) {
   }
   const emptySpaceRatio = Number((1 - contentFillRatio).toFixed(3));
   const aspectRatio = Number((width / Math.max(height, 1)).toFixed(3));
+  const whiteBlankRatio =
+    sampledOpaque > 0
+      ? Number((brightBlank / sampledOpaque).toFixed(3))
+      : Number(emptySpaceRatio.toFixed(3));
+
+  const isScreenshotStyle =
+    (aspectRatio > 1.7 && (borderBrightRatio > 0.14 || whiteBlankRatio > 0.38)) ||
+    (aspectRatio < 0.5 && emptySpaceRatio > 0.48) ||
+    (contentFillRatio < 0.3 && borderBrightRatio > 0.1);
 
   return {
     borderBrightRatio: Number(borderBrightRatio.toFixed(3)),
@@ -99,7 +115,9 @@ function analyzePixels(data, width, height) {
     contentFillRatio,
     transparencyRatio,
     emptySpaceRatio,
+    whiteBlankRatio,
     isTransparent,
+    isScreenshotStyle,
     needsMatte: isTransparent && borderBrightRatio < 0.15,
     enhance: borderBrightRatio > 0.08 && contentFillRatio < 0.65,
   };
@@ -167,8 +185,19 @@ function scoreMetrics(metrics, { hasProcessed, inSkip }) {
     issues.push("unprocessed");
   }
 
-  if (metrics.enhance) {
-    issues.push("needs_enhancement");
+  if (metrics.isScreenshotStyle) {
+    score -= 40;
+    issues.push("screenshot_style");
+  }
+
+  if (metrics.whiteBlankRatio >= 0.55) {
+    score -= 38;
+    issues.push("white_blank");
+  } else if (metrics.whiteBlankRatio >= 0.4) {
+    score -= 28;
+    issues.push("white_blank");
+  } else if (metrics.whiteBlankRatio >= 0.3) {
+    score -= 14;
   }
 
   return {
@@ -230,7 +259,9 @@ async function main() {
           contentFillRatio: 0.45,
           transparencyRatio: 0,
           emptySpaceRatio: 0.55,
+          whiteBlankRatio: 0.42,
           isTransparent: false,
+          isScreenshotStyle: false,
           needsMatte: false,
           enhance: true,
         },

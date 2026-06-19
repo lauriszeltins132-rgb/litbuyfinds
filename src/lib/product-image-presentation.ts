@@ -1,19 +1,14 @@
 import { isDeadImageUrl } from "./dead-images";
 import {
   getImageFillClass,
-  getImageQualityDetails,
   getImageQualityScore,
   shouldEnhanceImage,
-  needsTransparentMatte,
-  CARD_DISPLAY_MIN_SCORE,
 } from "./image-quality";
 import { getProductImagePlan } from "./processed-images";
 import type { Product } from "./types";
 
 export type ResolvedProductImage = {
-  /** URL passed to `<img src>` — processed matte when quality benefits. */
   displaySrc: string;
-  /** Original catalog image URL used for quality metadata. */
   sourceUrl: string;
   score: number;
   fillClass: string;
@@ -34,21 +29,6 @@ function uniqueUrls(urls: string[]): string[] {
   return out;
 }
 
-function effectiveScore(
-  sourceUrl: string,
-  displaySrc: string,
-  isProcessed: boolean
-): number {
-  let score = getImageQualityScore(sourceUrl);
-  if (isProcessed && displaySrc !== sourceUrl) score += 10;
-  const details = getImageQualityDetails(sourceUrl);
-  if (details?.contentFillRatio && details.contentFillRatio >= 0.55) score += 5;
-  if (details?.transparencyRatio && details.transparencyRatio > 0.2 && isProcessed) {
-    score += 8;
-  }
-  return score;
-}
-
 export function resolveProductDisplayImage(
   product: Product
 ): ResolvedProductImage | null {
@@ -56,36 +36,23 @@ export function resolveProductDisplayImage(
 
   const sourceUrl = product.image;
   const plan = getProductImagePlan(sourceUrl);
-  const primaryScore = getImageQualityScore(sourceUrl);
-  const details = getImageQualityDetails(sourceUrl);
-
-  const preferProcessed =
-    plan.isProcessed &&
-    plan.src !== sourceUrl &&
-    (primaryScore < 65 ||
-      (details?.transparencyRatio ?? 0) > 0.12 ||
-      (details?.contentFillRatio ?? 1) < 0.48 ||
-      (details?.issues ?? []).includes("unprocessed") ||
-      (details?.issues ?? []).includes("transparent_cutout") ||
-      (details?.issues ?? []).includes("white_border"));
-
-  const displaySrc = preferProcessed ? plan.src : sourceUrl;
-  const isProcessed = preferProcessed;
+  const displaySrc = plan.src;
 
   const fallbacks = uniqueUrls([
     displaySrc,
-    ...(displaySrc !== sourceUrl ? [sourceUrl] : []),
-    ...(plan.isProcessed && plan.src !== displaySrc ? [plan.src] : []),
+    `/api/processed-image?url=${encodeURIComponent(sourceUrl)}`,
   ]);
+
+  let score = getImageQualityScore(sourceUrl) + 12;
 
   return {
     displaySrc,
     sourceUrl,
-    score: effectiveScore(sourceUrl, displaySrc, isProcessed),
+    score,
     fillClass: getImageFillClass(sourceUrl),
-    needsMatte: needsTransparentMatte(sourceUrl) && !isProcessed,
+    needsMatte: false,
     enhance: shouldEnhanceImage(sourceUrl),
-    isProcessed,
+    isProcessed: true,
     fallbacks,
   };
 }
@@ -94,7 +61,7 @@ export function passesCardDisplayGate(product: Product): boolean {
   if (!product.image || isDeadImageUrl(product.image)) return false;
   const resolved = resolveProductDisplayImage(product);
   if (!resolved) return false;
-  return resolved.score >= CARD_DISPLAY_MIN_SCORE;
+  return resolved.score >= 42;
 }
 
 export function getProductVisualScore(product: Product): number {

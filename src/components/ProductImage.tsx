@@ -26,24 +26,22 @@ type ProductImageProps = {
   enhance?: boolean;
 };
 
-function isLocalProcessedPath(src: string): boolean {
-  return src.startsWith("/processed/") || src.startsWith("/api/processed-image");
-}
-
 function buildCandidateList(
   src: string,
   preferredSrc?: string,
   fallbacks: string[] = []
 ): string[] {
   const validation = validateImageUrl(src);
-  const plan = validation.valid ? getProductImagePlan(validation.normalized) : null;
+  if (!validation.valid) return [];
+
+  const plan = getProductImagePlan(validation.normalized);
+  const apiSrc = `/api/processed-image?url=${encodeURIComponent(validation.normalized)}`;
+
   const ordered = [
     preferredSrc,
-    plan?.src,
-    validation.valid ? validation.normalized : "",
-    plan?.originalSrc,
+    plan.src,
+    apiSrc,
     ...fallbacks,
-    src,
   ].filter(Boolean) as string[];
 
   const seen = new Set<string>();
@@ -66,7 +64,6 @@ export default function ProductImage({
   preferredSrc,
   fallbacks = [],
   fillClass = "product-float-asset--fill-balanced",
-  needsMatte = false,
   enhance = false,
 }: ProductImageProps) {
   const validation = useMemo(() => validateImageUrl(src), [src]);
@@ -83,7 +80,6 @@ export default function ProductImage({
   const loggedRef = useRef(false);
 
   const displaySrc = candidates[srcIndex] ?? "";
-  const useMatte = needsMatte && !isLocalProcessedPath(displaySrc);
 
   useEffect(() => {
     setSrcIndex(0);
@@ -166,11 +162,7 @@ export default function ProductImage({
       className={`product-float-stage product-float-stage--${variant} ${className}`}
     >
       {variant !== "card" ? <div className="product-float-glow" aria-hidden /> : null}
-      <div
-        className={`product-float-matte ${
-          useMatte ? "product-float-matte--transparent" : ""
-        }`}
-      >
+      <div className="product-float-matte product-float-matte--opaque">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           ref={imgRef}
