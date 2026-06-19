@@ -1,4 +1,4 @@
-import { getProductEngagementScore, getProductSaveScore } from "./analytics-store";
+import { getProductEngagementScore, getProductSaveScore } from "./analytics-engagement";
 import { getPremiumBrandBoost } from "./curation";
 import {
   getEditorialBrandBoost,

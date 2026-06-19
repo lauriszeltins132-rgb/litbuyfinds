@@ -43,7 +43,7 @@ export function resolveProductDisplayImage(
     `/api/processed-image?url=${encodeURIComponent(sourceUrl)}`,
   ]);
 
-  let score = getImageQualityScore(sourceUrl) + 12;
+  const score = getImageQualityScore(sourceUrl) + 12;
 
   return {
     displaySrc,
