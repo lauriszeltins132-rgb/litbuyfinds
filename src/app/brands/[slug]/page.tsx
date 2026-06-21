@@ -12,6 +12,7 @@ import BrandProductRails from "@/components/brand/BrandProductRails";
 import BrandSeoCollapsible from "@/components/brand/BrandSeoCollapsible";
 import BrandStats from "@/components/brand/BrandStats";
 import BestOfLinks from "@/components/BestOfLinks";
+import LastUpdated from "@/components/LastUpdated";
 import RelatedPages from "@/components/RelatedPages";
 import SchemaScript from "@/components/SchemaScript";
 import { buildCollectionPageSchema } from "@/lib/schema";
@@ -92,8 +93,10 @@ export default async function BrandLandingPage({ params }: BrandPageProps) {
           </p>
           <h1 className="mt-3 text-3xl font-black sm:text-4xl">{copy.title}</h1>
           <p className="mt-3 max-w-2xl text-sm text-muted">
-            Browse {brand.name} finds with photos, QC references, and verified LitBuy links.
+            Browse {brand.name} products with photos, QC references, source links,
+            and your preferred buying agent.
           </p>
+          <LastUpdated className="mt-3" />
           {collectionHref ? (
             <p className="mt-3">
               <Link
@@ -107,9 +110,9 @@ export default async function BrandLandingPage({ params }: BrandPageProps) {
         </div>
       </section>
 
-      <BrandStats brandName={brand.name} rails={rails} />
-
       <BrandProductRails brandSlug={slug} brandName={brand.name} rails={rails} />
+
+      <BrandStats brandName={brand.name} rails={rails} />
 
       <section className="px-4 pb-2 sm:px-6">
         <div className="mx-auto max-w-7xl">

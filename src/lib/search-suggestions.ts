@@ -11,6 +11,7 @@ import { getProductHref } from "./slugs";
 export type SearchSuggestionType =
   | "brand"
   | "category"
+  | "product"
   | "guide"
   | "best-of"
   | "landing"
@@ -245,9 +246,19 @@ function buildIndex(): SearchSuggestion[] {
     items.push({
       label: product.product_name.slice(0, 48),
       href: getProductHref(product),
-      type: "query",
+      type: "product",
       keywords: product.product_name.toLowerCase(),
       priority: 65,
+    });
+  }
+
+  for (const product of products.slice(0, 160)) {
+    items.push({
+      label: product.product_name.slice(0, 54),
+      href: getProductHref(product),
+      type: "product",
+      keywords: `${product.product_name} ${product.category}`.toLowerCase(),
+      priority: 58,
     });
   }
 
@@ -283,6 +294,7 @@ export function getSearchSuggestions(query: string, limit = 12): SearchSuggestio
 
   const groups: Record<string, SearchSuggestion[]> = {
     brands: [],
+    products: [],
     categories: [],
     collections: [],
     "best-of": [],
@@ -291,7 +303,8 @@ export function getSearchSuggestions(query: string, limit = 12): SearchSuggestio
   };
 
   for (const item of matches) {
-    if (item.type === "brand" && groups.brands.length < 5) groups.brands.push(item);
+    if (item.type === "product" && groups.products.length < 4) groups.products.push(item);
+    else if (item.type === "brand" && groups.brands.length < 5) groups.brands.push(item);
     else if (item.type === "category" && groups.categories.length < 4) groups.categories.push(item);
     else if (item.type === "collection" && groups.collections.length < 4)
       groups.collections.push(item);
@@ -302,6 +315,8 @@ export function getSearchSuggestions(query: string, limit = 12): SearchSuggestio
   }
 
   const result: SearchSuggestionGroup[] = [];
+  if (groups.products.length)
+    result.push({ id: "products", label: "Products", icon: "🛍", items: groups.products });
   if (groups.brands.length)
     result.push({ id: "brands", label: "Brands", icon: "🏷", items: groups.brands });
   if (groups.categories.length)
@@ -328,10 +343,12 @@ function getDefaultSuggestionGroups(): SearchSuggestionGroup[] {
     .sort((a, b) => b.priority - a.priority)
     .slice(0, 6);
   const brands = index.filter((i) => i.type === "brand" && !i.label.includes(" ")).slice(0, 8);
+  const products = index.filter((i) => i.type === "product").slice(0, 6);
   const categories = index.filter((i) => i.type === "category").slice(0, 6);
 
   return [
     { id: "popular", label: "Popular searches", icon: "🔥", items: popular },
+    { id: "products", label: "Products", icon: "🛍", items: products },
     { id: "trending", label: "Trending searches", icon: "⭐", items: trending },
     { id: "brands", label: "Brands", icon: "🏷", items: brands },
     { id: "categories", label: "Categories", icon: "📂", items: categories },

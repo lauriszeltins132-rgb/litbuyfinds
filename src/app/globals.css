@@ -177,17 +177,24 @@ body::before {
 .product-card-media {
   position: relative;
   isolation: isolate;
+  overflow: visible;
+}
+
+.product-card {
+  overflow: visible;
 }
 
 .product-card-badges {
   position: absolute;
-  z-index: 20;
-  top: 0.5rem;
-  left: 0.5rem;
+  z-index: 40;
+  top: 0.65rem;
+  left: 0.65rem;
+  right: 0.65rem;
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
-  max-width: calc(100% - 1rem);
+  align-items: flex-start;
+  max-width: calc(100% - 1.3rem);
   pointer-events: none;
 }
 
@@ -197,6 +204,10 @@ body::before {
 
 .product-card-badge {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .product-card-hover-hint {

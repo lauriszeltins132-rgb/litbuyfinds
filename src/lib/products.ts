@@ -9,16 +9,22 @@ import {
 import { auditCatalogPrices, hasExactPrice } from "./pricing";
 import { isDeadImageUrl } from "./dead-images";
 import { validateImageUrl } from "./image-url";
+import { getOriginalSourceUrl } from "./agents";
 
 function normalizeProduct(product: Product): Product {
   const validation = validateImageUrl(product.image);
   const normalized = validation.valid ? validation.normalized : "";
   if (normalized && isDeadImageUrl(normalized)) {
-    return { ...product, image: "" };
+    return {
+      ...product,
+      image: "",
+      source_url: product.source_url ?? getOriginalSourceUrl(product),
+    };
   }
   return {
     ...product,
     image: normalized,
+    source_url: product.source_url ?? getOriginalSourceUrl(product),
   };
 }
 

@@ -7,6 +7,8 @@ export type Product = {
   group: "featured" | "category";
   price: number | null;
   affiliate_link: string;
+  /** Original marketplace URL when the source feed provides it. */
+  source_url?: string;
   qc_link: string;
   image: string;
 };

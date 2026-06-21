@@ -10,12 +10,13 @@ import {
 
 type CouponContextValue = {
   isOpen: boolean;
-  openCoupon: () => void;
+  openCoupon: (options?: { manual?: boolean }) => void;
   closeCoupon: () => void;
 };
 
 const CouponContext = createContext<CouponContextValue | null>(null);
 const DISMISS_KEY = "litbuy-finds-offer-dismissed";
+const SESSION_SHOWN_KEY = "litbuy-finds-offer-shown-session";
 const DISMISS_MS = 14 * 24 * 60 * 60 * 1000;
 
 function isDismissedRecently(): boolean {
@@ -33,7 +34,15 @@ function isDismissedRecently(): boolean {
 export function CouponProvider({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const openCoupon = useCallback(() => {
+  const openCoupon = useCallback((options: { manual?: boolean } = {}) => {
+    if (!options.manual) {
+      try {
+        if (sessionStorage.getItem(SESSION_SHOWN_KEY)) return;
+        sessionStorage.setItem(SESSION_SHOWN_KEY, "1");
+      } catch {
+        // ignore storage errors
+      }
+    }
     if (isDismissedRecently()) return;
     setIsOpen(true);
   }, []);

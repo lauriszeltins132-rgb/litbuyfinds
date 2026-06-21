@@ -6,6 +6,7 @@ import CatalogPanel from "@/components/CatalogPanel";
 import RelatedGuides from "@/components/RelatedGuides";
 import SignupCard from "@/components/SignupCard";
 import BestOfLinks from "@/components/BestOfLinks";
+import LastUpdated from "@/components/LastUpdated";
 import RelatedPages from "@/components/RelatedPages";
 import RelatedSeoLinks from "@/components/RelatedSeoLinks";
 import { getRelatedGuidesForCategory } from "@/lib/related-guides";
@@ -84,20 +85,31 @@ export default async function CategoryLandingPage({ params }: CategoryPageProps)
         currentPath={pagePath}
       />
 
-      <section className="px-4 pb-6 pt-4 sm:px-6">
+      <section className="px-4 pb-4 pt-4 sm:px-6">
         <div className="mx-auto max-w-7xl">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
             Category
           </p>
           <h1 className="mt-3 text-3xl font-black sm:text-4xl">{copy.title}</h1>
-          <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted">
-            {copy.intro}
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted">
+            Browse {resolved.name} products first, then use brand and price
+            filters to narrow the catalog.
           </p>
           <p className="mt-3 text-sm text-muted">
             {resolved.count.toLocaleString()} products indexed
           </p>
+          <LastUpdated className="mt-3" />
         </div>
       </section>
+
+      <Suspense fallback={<div className="py-24 text-center text-muted">Loading...</div>}>
+        <CatalogPanel
+          products={resolved.products}
+          categories={allCategories}
+          brands={brands}
+          basePath={resolved.href}
+        />
+      </Suspense>
 
       <CategorySeoBlock
         categorySlug={slug}
@@ -112,15 +124,6 @@ export default async function CategoryLandingPage({ params }: CategoryPageProps)
       <SignupCard location={`category_signup_${slug}`} variant="compact" />
       <RelatedSeoLinks />
       <RelatedPages currentPath={pagePath} categorySlug={resolved.slug} />
-
-      <Suspense fallback={<div className="py-24 text-center text-muted">Loading...</div>}>
-        <CatalogPanel
-          products={resolved.products}
-          categories={allCategories}
-          brands={brands}
-          basePath={resolved.href}
-        />
-      </Suspense>
     </>
   );
 }
