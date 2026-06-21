@@ -1,6 +1,7 @@
 import Link from "next/link";
 import SchemaScript from "@/components/SchemaScript";
 import { getBrandAuthority } from "@/lib/brand-authority-content";
+import { getBrandCollectionHref } from "@/lib/brand-collections";
 import { buildFaqSchema } from "@/lib/schema";
 import { getBrandFaqs, getBrandRelatedGuides } from "@/lib/seo-content";
 
@@ -23,6 +24,19 @@ const BRAND_TIPS: Record<string, string> = {
     "Filter by price, open QC when available, and compare photos to listing references before shipping.",
 };
 
+const POPULAR_PRODUCT_LANES: Record<string, string[]> = {
+  nike: ["Dunks", "Air Max", "Tech fleece", "Jackets"],
+  moncler: ["Puffers", "Vests", "Winter jackets", "Hoodies"],
+  "stone-island": ["Nylon jackets", "Compass badge pieces", "Sweaters"],
+  "chrome-hearts": ["Jewelry", "Graphic hoodies", "Denim", "Accessories"],
+  stussy: ["Hoodies", "Graphic tees", "Zip-ups", "Accessories"],
+  corteiz: ["Hoodies", "Cargos", "Tracksuits", "Graphic tees"],
+  dior: ["B30 sneakers", "Saddle bags", "Oblique accessories"],
+  "louis-vuitton": ["Bags", "Belts", "Wallets", "Accessories"],
+  balenciaga: ["Runners", "Oversized hoodies", "Statement sneakers"],
+  default: ["Trending products", "QC-linked finds", "Budget picks", "New arrivals"],
+};
+
 export default function BrandSeoCollapsible({
   brandSlug,
   brandName,
@@ -31,6 +45,14 @@ export default function BrandSeoCollapsible({
   const authority = getBrandAuthority(brandSlug);
   const tip = authority?.buyingTips[0] ?? BRAND_TIPS[brandSlug] ?? BRAND_TIPS.default;
   const relatedGuides = getBrandRelatedGuides(brandSlug);
+  const collectionHref = getBrandCollectionHref(brandSlug);
+  const popularLanes = POPULAR_PRODUCT_LANES[brandSlug] ?? POPULAR_PRODUCT_LANES.default;
+  const relatedCollections = [
+    ...(collectionHref ? [{ href: collectionHref, label: `Best ${brandName} Finds` }] : []),
+    ...(authority?.sections.flatMap((section) => section.links ?? []) ?? []),
+  ].filter(
+    (link, index, arr) => arr.findIndex((item) => item.href === link.href) === index
+  );
   const baseFaqs = getBrandFaqs(brandSlug, brandName);
   const faqs = authority
     ? [
@@ -119,6 +141,52 @@ export default function BrandSeoCollapsible({
                         className="font-semibold text-muted hover:text-accent"
                       >
                         {guide.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-3">
+              <div className="rounded-xl border border-border bg-surface/40 p-4">
+                <h3 className="text-sm font-bold uppercase tracking-[0.14em] text-muted">
+                  Popular products
+                </h3>
+                <ul className="mt-3 flex flex-wrap gap-2">
+                  {popularLanes.map((lane) => (
+                    <li
+                      key={lane}
+                      className="rounded-full border border-border px-3 py-1 text-xs font-bold text-foreground/80"
+                    >
+                      {lane}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="rounded-xl border border-border bg-surface/40 p-4">
+                <h3 className="text-sm font-bold uppercase tracking-[0.14em] text-muted">
+                  QC tips
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted">
+                  {tip} Open QC references when available and request warehouse
+                  photos for your exact item before approving international shipping.
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-border bg-surface/40 p-4">
+                <h3 className="text-sm font-bold uppercase tracking-[0.14em] text-muted">
+                  Related collections
+                </h3>
+                <ul className="mt-3 flex flex-wrap gap-2">
+                  {relatedCollections.slice(0, 5).map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        href={link.href}
+                        className="rounded-full border border-border px-3 py-1 text-xs font-bold hover:border-accent/40 hover:text-accent"
+                      >
+                        {link.label}
                       </Link>
                     </li>
                   ))}

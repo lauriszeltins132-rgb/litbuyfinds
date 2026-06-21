@@ -79,7 +79,7 @@ export function hasLargeWhiteBackground(imageUrl: string): boolean {
   const empty = details.emptySpaceRatio ?? 1 - (details.contentFillRatio ?? 0.5);
   const border = details.borderBrightRatio ?? 0;
 
-  return whiteBlank > 0.4 || empty > 0.4 || border > 0.22;
+  return whiteBlank > 0.35 || empty > 0.38 || border > 0.18;
 }
 
 export function isScreenshotStyleProduct(product: Product): boolean {
@@ -108,7 +108,7 @@ export function hasTinyProductSubject(imageUrl: string): boolean {
   const details = getImageQualityDetails(imageUrl);
   if (!details) return false;
   return (
-    (details.contentFillRatio ?? 1) < 0.32 ||
+    (details.contentFillRatio ?? 1) < 0.5 ||
     details.issues?.includes("tiny_product") === true
   );
 }
@@ -122,7 +122,7 @@ export function passesHomepageVisualPresentation(product: Product): boolean {
   const details = getImageQualityDetails(product.image);
   if (details?.issues?.includes("white_border")) return false;
   if (details?.issues?.includes("damaged_cutout")) return false;
-  if ((details?.contentFillRatio ?? 0) < 0.4) return false;
+  if ((details?.contentFillRatio ?? 0) < 0.5) return false;
 
   return true;
 }

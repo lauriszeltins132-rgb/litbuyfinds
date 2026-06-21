@@ -1,5 +1,6 @@
 import type { Product } from "./types";
 import { productMatchesBrand } from "./brands";
+import { getMarketplaceSource } from "./agents";
 
 export type FilterState = {
   search: string;
@@ -77,8 +78,5 @@ export function filterProducts(
 }
 
 export function getProductSource(affiliateLink: string): string {
-  if (affiliateLink.includes("/weidian/")) return "weidian";
-  if (affiliateLink.includes("/taobao/")) return "taobao";
-  if (affiliateLink.includes("/1688/")) return "1688";
-  return "litbuy";
+  return getMarketplaceSource(affiliateLink);
 }

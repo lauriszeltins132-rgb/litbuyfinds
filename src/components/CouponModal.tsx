@@ -15,11 +15,11 @@ export default function CouponModal() {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-end justify-center p-3 sm:items-center sm:p-4">
+    <div className="fixed inset-0 z-[200] flex items-end justify-center p-3 sm:items-end sm:justify-end sm:p-6">
       <button
         type="button"
         aria-label="Close"
-        className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/55 backdrop-blur-[2px]"
         onClick={closeCoupon}
       />
 

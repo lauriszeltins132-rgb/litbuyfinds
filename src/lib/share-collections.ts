@@ -102,6 +102,25 @@ export const SHARE_COLLECTIONS: Record<string, SeoListConfig> = {
       { href: "/collections/best-qc-approved-finds", label: "QC finds" },
     ],
   }),
+  "best-stone-island-finds": wrap("best-stone-island-finds", {
+    title: "Best Stone Island Finds",
+    metaDescription:
+      "Stone Island jackets, badges, and streetwear finds with strong photos, QC references, and source links.",
+    badge: "Collection",
+    h1: "Best Stone Island finds",
+    intro:
+      "Stone Island picks from the catalog — compass badges, nylon jackets, and streetwear layers ranked for product photos and QC signals.",
+    getProducts: () =>
+      filterFeaturedEligible(byBrand("Stone Island")).slice(0, 72),
+    relatedLinks: [
+      { href: "/brands/stone-island", label: "All Stone Island" },
+      { href: "/collections/best-jackets", label: "Best jackets" },
+    ],
+    clusterLinks: [
+      { href: "/collections/best-moncler-finds", label: "Moncler finds" },
+      { href: "/collections/top-qc-finds", label: "Top QC finds" },
+    ],
+  }),
   "best-budget-finds": wrap("best-budget-finds", {
     title: "Best Budget LitBuy Finds Under $30",
     metaDescription:
@@ -134,6 +153,24 @@ export const SHARE_COLLECTIONS: Record<string, SeoListConfig> = {
     ],
     clusterLinks: [
       { href: "/collections/best-nike-finds", label: "Nike finds" },
+    ],
+  }),
+  "best-qc-finds": wrap("best-qc-finds", {
+    title: "Best QC Finds",
+    metaDescription:
+      "Best QC finds across sneakers, jackets, bags, and streetwear with warehouse reference photos.",
+    badge: "Collection",
+    h1: "Best QC finds",
+    intro:
+      "A product-first collection of listings with QC references so you can compare real warehouse photos before choosing an agent.",
+    getProducts: TOP_LISTS["best-qc-approved-finds"].getProducts,
+    relatedLinks: [
+      { href: "/best-qc-approved-finds", label: "QC approved list" },
+      { href: "/guides/how-to-check-qc-photos", label: "QC guide" },
+    ],
+    clusterLinks: [
+      { href: "/collections/top-qc-finds", label: "Top QC finds" },
+      { href: "/collections/best-sneakers", label: "Best sneakers" },
     ],
   }),
   "best-jackets": wrap("best-jackets", {

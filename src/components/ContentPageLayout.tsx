@@ -6,6 +6,7 @@ import type { ContentDates } from "@/lib/content-dates";
 import { buildBreadcrumbSchema, buildFaqSchema } from "@/lib/schema";
 import MemberBenefitsStrip from "@/components/conversion/MemberBenefitsStrip";
 import GuideSignupCallout from "@/components/conversion/GuideSignupCallout";
+import LastUpdated from "@/components/LastUpdated";
 import SignupCard from "@/components/SignupCard";
 import type { StaticPageSection } from "@/lib/static-pages";
 
@@ -65,6 +66,9 @@ export default function ContentPageLayout({
             {h1}
           </h1>
           <p className="mt-5 text-base leading-relaxed text-muted">{intro}</p>
+          {contentDates ? (
+            <LastUpdated iso={contentDates.updatedIso} className="mt-4" />
+          ) : null}
 
           {showAuthorMeta && contentDates ? (
             <ContentAuthorMeta dates={contentDates} />

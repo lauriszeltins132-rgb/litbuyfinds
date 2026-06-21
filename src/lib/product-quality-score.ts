@@ -96,14 +96,15 @@ export function computeVisualAppealScore(product: Product): number {
   const resolved = resolveProductDisplayImage(product);
 
   if (fill >= 0.6) score += 22;
-  else if (fill >= 0.5) score += 12;
+  else if (fill >= 0.5) score += 10;
+  else if (fill >= 0.42) score -= 12;
   else if (fill < 0.38) score -= 30;
 
   if (empty > 0.55) score -= 35;
   else if (empty > 0.4) score -= 28;
 
-  if (whiteBlank > 0.45) score -= 32;
-  else if (whiteBlank > 0.35) score -= 18;
+  if (whiteBlank > 0.45) score -= 38;
+  else if (whiteBlank > 0.35) score -= 24;
 
   if (border > 0.25) score -= 30;
   else if (border > 0.15) score -= 20;
@@ -224,7 +225,7 @@ export function isHomepageCuratedEligible(product: Product): boolean {
   if (validation.confidence < 0.5) return false;
 
   const visual = computeVisualAppealScore(product);
-  if (visual < 65) return false;
+  if (visual < 70) return false;
 
   const image = computeImageQualityScore(product);
   if (image < HOMEPAGE_MIN_SCORE) return false;
@@ -233,8 +234,8 @@ export function isHomepageCuratedEligible(product: Product): boolean {
   const resolved = resolveProductDisplayImage(product);
   if (
     !resolved?.isProcessed &&
-    ((details?.borderBrightRatio ?? 0) > 0.12 ||
-      (details?.whiteBlankRatio ?? 0) > 0.32)
+    ((details?.borderBrightRatio ?? 0) > 0.1 ||
+      (details?.whiteBlankRatio ?? 0) > 0.3)
   ) {
     return false;
   }

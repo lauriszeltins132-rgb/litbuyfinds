@@ -9,7 +9,7 @@ export const BRAND_COLLECTION_SLUGS: Record<string, string> = {
   gucci: "best-bags",
   "louis-vuitton": "best-bags",
   prada: "best-bags",
-  "stone-island": "best-jackets",
+  "stone-island": "best-stone-island-finds",
   "ralph-lauren": "best-hoodies",
   balenciaga: "best-sneakers",
   dior: "best-bags",

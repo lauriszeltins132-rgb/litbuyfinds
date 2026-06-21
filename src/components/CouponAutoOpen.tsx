@@ -5,7 +5,7 @@ import { useCoupon } from "@/context/CouponContext";
 import { useConversion } from "@/context/ConversionContext";
 import { COUPON_AUTOOPEN_VIEW_THRESHOLD } from "@/lib/conversion";
 
-const OPEN_DELAY_MS = 1200;
+const OPEN_DELAY_MS = 9000;
 
 /** Opens signup modal after meaningful browsing — not on first page load. */
 export default function CouponAutoOpen() {

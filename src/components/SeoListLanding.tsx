@@ -5,7 +5,7 @@ import CatalogPanel from "@/components/CatalogPanel";
 import ProductGrid from "@/components/ProductGrid";
 import RelatedPages from "@/components/RelatedPages";
 import SchemaScript from "@/components/SchemaScript";
-import { formatDatasetAge } from "@/lib/catalog-meta";
+import LastUpdated from "@/components/LastUpdated";
 import { getBrandsFromProducts } from "@/lib/brands";
 import { getCategories } from "@/lib/products";
 import { buildCollectionPageSchema, buildFaqSchema } from "@/lib/schema";
@@ -55,9 +55,9 @@ export default function SeoListLanding({ config }: SeoListLandingProps) {
             {config.intro}
           </p>
           <p className="mt-3 text-sm text-muted">
-            {products.length.toLocaleString()} products shown · Dataset updated{" "}
-            {formatDatasetAge()}
+            {products.length.toLocaleString()} products shown
           </p>
+          <LastUpdated className="mt-2" />
         </div>
       </section>
 

@@ -5,21 +5,22 @@ export const SITE_NAME = "LitBuy Finds";
 const CATALOG_COUNT = formatCatalogCountForSeo();
 
 export { PUBLIC_CATALOG_COUNT };
+export { AGENT_CONFIG as AGENTS, type AgentId } from "./agents";
 
-export const HOMEPAGE_TITLE = `${CATALOG_COUNT} QC Approved LitBuy Finds`;
+export const HOMEPAGE_TITLE = `${CATALOG_COUNT} QC Approved Rep Finds`;
 
 export const SITE_DESCRIPTION =
-  "Browse 10,000+ curated LitBuy finds including sneakers, jackets, hoodies, bags, accessories, QC-approved products, verified links, and daily trending finds.";
+  "Browse 10,000+ curated rep finds including sneakers, jackets, hoodies, bags, accessories, QC-approved products, source links, and daily trending finds.";
 
-export const SITE_OG_TITLE = `${CATALOG_COUNT} QC Approved LitBuy Finds`;
+export const SITE_OG_TITLE = `${CATALOG_COUNT} QC Approved Rep Finds`;
 
 export const SITE_OG_DESCRIPTION =
-  "Browse 10,000+ curated LitBuy finds including sneakers, jackets, hoodies, bags, accessories, QC-approved products, verified links, and daily trending finds.";
+  "Browse 10,000+ curated rep finds including sneakers, jackets, hoodies, bags, accessories, QC-approved products, source links, and daily trending finds.";
 
-export const HERO_HEADLINE = "Discover the Best LitBuy Finds";
+export const HERO_HEADLINE = "Discover the Best Rep Finds";
 
 export const HERO_SUBHEADLINE =
-  "LitBuy Finds turns spreadsheet-style catalogs into searchable pages — QC approved products from Weidian and Taobao with verified LitBuy links and daily updates.";
+  "LitBuyFinds turns spreadsheet-style catalogs into searchable product pages — discover QC-approved finds from Weidian, Taobao, and 1688, then choose your preferred buying agent.";
 
 export const HERO_TAGLINE = HERO_SUBHEADLINE;
 
@@ -114,14 +115,4 @@ export const EXCHANGE_RATES = {
   CNY: 6.5,
 };
 
-export const AGENTS = [
-  {
-    id: "litbuy",
-    name: "LitBuy",
-    signupUrl: LITBUY_SIGNUP_URL,
-    description: "Primary buying agent",
-  },
-] as const;
-
-export type AgentId = (typeof AGENTS)[number]["id"];
 export type CurrencyCode = "USD" | "EUR" | "CNY";
