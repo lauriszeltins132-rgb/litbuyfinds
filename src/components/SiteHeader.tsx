@@ -8,6 +8,7 @@ import { REGISTER_HEADER_CTA_LABEL, SITE_NAME } from "@/lib/constants";
 import CommunityLinks from "./CommunityLinks";
 import RegisterLink from "./RegisterLink";
 import GlobalSearch from "./GlobalSearch";
+import AgentSelector from "./agents/AgentSelector";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -67,6 +68,7 @@ export default function SiteHeader() {
           </nav>
 
           <div className="flex items-center gap-1 sm:gap-2">
+            <AgentSelector variant="header" className="hidden sm:block" />
             <CommunityLinks variant="header" location="header" />
             <GlobalSearch className="hidden sm:inline-flex" />
             <RegisterLink

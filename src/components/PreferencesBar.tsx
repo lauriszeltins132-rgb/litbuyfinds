@@ -24,7 +24,9 @@ export default function PreferencesBar() {
             onChange={(value) => setAgentId(value as typeof agentId)}
             options={agents.map((agent) => ({
               value: agent.id,
-              label: agent.name,
+              label: agent.recommended
+                ? `${agent.name} (Recommended)`
+                : agent.name,
             }))}
             size="sm"
           />

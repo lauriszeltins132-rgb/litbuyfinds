@@ -9,11 +9,13 @@ import ConversionLayer from "@/components/conversion/ConversionLayer";
 import CouponAutoOpen from "@/components/CouponAutoOpen";
 import CouponModal from "@/components/CouponModal";
 import MobileDock from "@/components/MobileDock";
+import AgentSelector from "@/components/agents/AgentSelector";
 import PreferencesBar from "@/components/PreferencesBar";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import AnalyticsBoot from "@/components/AnalyticsBoot";
 import JsonLd from "@/components/JsonLd";
 import { ConversionProvider } from "@/context/ConversionContext";
+import { AgentModalProvider } from "@/context/AgentModalContext";
 import { WishlistProvider } from "@/context/WishlistContext";
 import { PreferencesProvider } from "@/context/PreferencesContext";
 import { CouponProvider } from "@/context/CouponContext";
@@ -111,11 +113,16 @@ export default function RootLayout({
             <WishlistProvider>
               <RecentlyViewedProvider>
                 <ConversionProvider>
+                  <AgentModalProvider>
                   <AnimatedBackground />
                   <JsonLd />
                   <AnalyticsBoot />
                   <PreferencesBar />
                   <SiteHeader />
+                  <AgentSelector
+                    variant="floating"
+                    className="fixed right-3 top-[3.1rem] z-[55] sm:hidden"
+                  />
                   <main className="site-main flex-1">{children}</main>
                   <FooterSignupStrip />
                   <Footer />
@@ -125,6 +132,7 @@ export default function RootLayout({
                   <MobileDock />
                   <Analytics />
                   <SpeedInsights />
+                  </AgentModalProvider>
                 </ConversionProvider>
               </RecentlyViewedProvider>
             </WishlistProvider>

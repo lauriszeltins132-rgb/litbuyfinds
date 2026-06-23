@@ -16,6 +16,7 @@ import { useConversion } from "@/context/ConversionContext";
 import { trackProductContext } from "@/lib/analytics-events";
 import { resolveProductDisplayImage } from "@/lib/product-image-presentation";
 import ProductImage from "./ProductImage";
+import BuyWithAgentButton from "./agents/BuyWithAgentButton";
 
 type ProductModalProps = {
   product: Product | null;
@@ -139,15 +140,12 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
                 Open full product page
               </Link>
               {product.affiliate_link ? (
-                <a
-                  href={product.affiliate_link}
-                  target="_blank"
-                  rel="noopener noreferrer sponsored"
-                  onClick={() => trackProductContext("buy_click", product, "product_modal")}
+                <BuyWithAgentButton
+                  product={product}
+                  location="product_modal"
+                  showAgentPicker
                   className="flex w-full items-center justify-center rounded-full bg-accent py-4 text-sm font-black text-background hover:bg-accent-hover"
-                >
-                  Buy on LitBuy →
-                </a>
+                />
               ) : (
                 <p className="text-center text-sm text-muted">No buy link available</p>
               )}

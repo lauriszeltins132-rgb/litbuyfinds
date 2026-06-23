@@ -114,14 +114,6 @@ export const EXCHANGE_RATES = {
   CNY: 6.5,
 };
 
-export const AGENTS = [
-  {
-    id: "litbuy",
-    name: "LitBuy",
-    signupUrl: LITBUY_SIGNUP_URL,
-    description: "Primary buying agent",
-  },
-] as const;
-
-export type AgentId = (typeof AGENTS)[number]["id"];
+export type { AgentId } from "./agents";
+export { AGENTS, BUYING_AGENTS, DEFAULT_AGENT_ID, isAgentId } from "./agents";
 export type CurrencyCode = "USD" | "EUR" | "CNY";

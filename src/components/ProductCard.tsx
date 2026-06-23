@@ -14,6 +14,7 @@ import { useWishlist } from "@/context/WishlistContext";
 import { trackProductContext, trackSaveClick } from "@/lib/analytics-events";
 import LitBuyMicroCta from "./LitBuyMicroCta";
 import ProductImage from "./ProductImage";
+import BuyWithAgentButton from "./agents/BuyWithAgentButton";
 
 type ProductCardProps = {
   product: Product;
@@ -140,15 +141,12 @@ export default function ProductCard({
 
         <div className="mt-auto flex flex-wrap items-center gap-1.5 pt-1">
           {product.affiliate_link ? (
-            <a
-              href={product.affiliate_link}
-              target="_blank"
-              rel="noopener noreferrer sponsored"
-              onClick={() => trackProductContext("buy_click", product, "product_card")}
-              className="rounded-full bg-accent px-3 py-1.5 text-[11px] font-black text-background"
-            >
-              Buy
-            </a>
+            <BuyWithAgentButton
+              product={product}
+              location="product_card"
+              showAgentPicker
+              compact
+            />
           ) : (
             <button
               type="button"

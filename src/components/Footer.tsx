@@ -37,6 +37,15 @@ const TRUST_LINKS = [
   { href: "/terms", label: "Terms" },
 ];
 
+const AGENT_FINDS_LINKS = [
+  { href: "/litbuy-finds", label: "LitBuy finds" },
+  { href: "/kakobuy-finds", label: "Kakobuy finds" },
+  { href: "/oopbuy-finds", label: "OopBuy finds" },
+  { href: "/hipobuy-finds", label: "HipoBuy finds" },
+  { href: "/acbuy-finds", label: "ACBuy finds" },
+  { href: "/mulebuy-finds", label: "MuleBuy finds" },
+];
+
 export default function Footer() {
   const categories = getCategories().filter((c) => c.group === "category");
   const brands = getBrandsFromProducts(getAllProducts()).slice(0, 8);
@@ -158,6 +167,13 @@ export default function Footer() {
                   Trending finds
                 </Link>
               </li>
+              {AGENT_FINDS_LINKS.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="text-foreground/75 transition hover:text-accent">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
               <li>
                 <RegisterLink
                   location="footer"

@@ -9,14 +9,15 @@ import {
   useState,
 } from "react";
 import type { AgentId, CurrencyCode } from "@/lib/constants";
-import { AGENTS } from "@/lib/constants";
+import { DEFAULT_AGENT_ID, isAgentId } from "@/lib/agents";
+import { BUYING_AGENTS } from "@/lib/agents";
 
 type PreferencesContextValue = {
   currency: CurrencyCode;
   agentId: AgentId;
   setCurrency: (currency: CurrencyCode) => void;
   setAgentId: (agentId: AgentId) => void;
-  agents: typeof AGENTS;
+  agents: typeof BUYING_AGENTS;
 };
 
 const PreferencesContext = createContext<PreferencesContextValue | null>(null);
@@ -28,7 +29,7 @@ export function PreferencesProvider({
   children: React.ReactNode;
 }) {
   const [currency, setCurrencyState] = useState<CurrencyCode>("USD");
-  const [agentId, setAgentIdState] = useState<AgentId>("litbuy");
+  const [agentId, setAgentIdState] = useState<AgentId>(DEFAULT_AGENT_ID);
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
@@ -40,7 +41,9 @@ export function PreferencesProvider({
           agentId?: AgentId;
         };
         if (parsed.currency) setCurrencyState(parsed.currency);
-        if (parsed.agentId) setAgentIdState(parsed.agentId);
+        if (parsed.agentId && isAgentId(parsed.agentId)) {
+          setAgentIdState(parsed.agentId);
+        }
       }
     } catch {
       // ignore
@@ -70,7 +73,7 @@ export function PreferencesProvider({
       agentId,
       setCurrency,
       setAgentId,
-      agents: AGENTS,
+      agents: BUYING_AGENTS,
     }),
     [currency, agentId, setCurrency, setAgentId]
   );

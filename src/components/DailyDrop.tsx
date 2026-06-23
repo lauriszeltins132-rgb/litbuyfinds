@@ -4,10 +4,10 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { Product } from "@/lib/types";
 import { formatProductPrice } from "@/lib/pricing";
-import { trackProductContext } from "@/lib/analytics-events";
 import { getProductHref } from "@/lib/slugs";
 import { resolveProductDisplayImage } from "@/lib/product-image-presentation";
 import ProductImage from "./ProductImage";
+import BuyWithAgentButton from "./agents/BuyWithAgentButton";
 
 export default function DailyDrop() {
   const [product, setProduct] = useState<Product | null>(null);
@@ -87,15 +87,12 @@ export default function DailyDrop() {
                   View product
                 </Link>
                 {product.affiliate_link && (
-                  <a
-                    href={product.affiliate_link}
-                    target="_blank"
-                    rel="noopener noreferrer sponsored"
-                    onClick={() => trackProductContext("buy_click", product, "daily_drop")}
-                    className="rounded-full border border-border px-6 py-3 text-sm font-bold text-foreground hover:border-accent/40"
-                  >
-                    Buy on LitBuy
-                  </a>
+                  <BuyWithAgentButton
+                    product={product}
+                    location="daily_drop"
+                    showAgentPicker
+                    appearance="secondary"
+                  />
                 )}
               </div>
             </div>

@@ -17,6 +17,9 @@ import { trackProductContext } from "@/lib/analytics-events";
 import { resolveProductDisplayImage } from "@/lib/product-image-presentation";
 import HowToBuySteps from "./HowToBuySteps";
 import ProductImage from "./ProductImage";
+import BuyWithAgentButton, {
+  BuyingAgentPanel,
+} from "./agents/BuyWithAgentButton";
 
 type ProductDetailViewProps = {
   product: Product;
@@ -127,7 +130,7 @@ export default function ProductDetailView({
               </span>
             </div>
             <p className="text-xs text-muted">
-              Confirm live price on LitBuy before checkout.
+              Confirm live price on your preferred agent before checkout.
             </p>
           </div>
 
@@ -148,17 +151,16 @@ export default function ProductDetailView({
             ))}
           </ul>
 
+          <div className="mt-6">
+            <BuyingAgentPanel product={product} />
+          </div>
+
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             {product.affiliate_link && (
-              <a
-                href={product.affiliate_link}
-                target="_blank"
-                rel="noopener noreferrer sponsored"
-                onClick={() => trackProductContext("buy_click", product, "product_page")}
-                className="inline-flex items-center justify-center rounded-full bg-accent px-8 py-3.5 text-sm font-black text-background hover:bg-accent-hover"
-              >
-                Buy on LitBuy
-              </a>
+              <BuyWithAgentButton
+                product={product}
+                location="product_page"
+              />
             )}
             {product.qc_link ? (
               <QcAccessGate

@@ -238,11 +238,11 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
     path: "/litbuy-finds",
     title: "LitBuy Finds Catalog",
     metaDescription:
-      "Browse 10,000+ LitBuy finds — sneakers, jackets, bags, and streetwear with QC references, verified links, and daily catalog updates.",
+      "Browse verified sneaker, fashion and streetwear finds. LitBuy is our recommended agent — or choose Kakobuy, OopBuy, ACBuy, MuleBuy and HipoBuy before buying.",
     badge: "LitBuy Finds",
     h1: "LitBuy finds",
     intro:
-      "LitBuy Finds is a curated discovery catalog for fashion and sneaker products linked to LitBuy. Search by brand or category, save favorites, and open verified buy links when you are ready to order from Weidian, Taobao, and other marketplaces.",
+      "LitBuy Finds is a curated discovery catalog for fashion and sneaker products. LitBuy is our recommended agent, but you can choose Kakobuy, OopBuy, HipoBuy, ACBuy or MuleBuy before checkout. Search by brand or category, save favorites, and open verified links when you are ready to order.",
     sections: [
       {
         heading: "What makes LitBuy Finds different",
