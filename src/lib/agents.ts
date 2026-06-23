@@ -1,6 +1,8 @@
-import { LITBUY_SIGNUP_URL } from "./constants";
 import { extractMarketplaceListingId } from "./product-title-quality";
 import type { Product } from "./types";
+
+const LITBUY_SIGNUP_URL = "https://litbuy.com/register?inviteCode=SMKS";
+const LITBUY_INVITE_CODE = "SMKS";
 
 export type AgentId =
   | "litbuy"
@@ -149,7 +151,7 @@ type AgentUrlBuilder = {
 const AGENT_URL_BUILDERS: Record<AgentId, AgentUrlBuilder> = {
   litbuy: {
     fromListing: (platform, id) =>
-      `https://litbuy.com/product/${platform}/${id}?inviteCode=SMKS`,
+      `https://litbuy.com/product/${platform}/${id}?inviteCode=${LITBUY_INVITE_CODE}`,
     search: (query) =>
       `https://litbuy.com/search?q=${encodeURIComponent(query)}`,
   },
