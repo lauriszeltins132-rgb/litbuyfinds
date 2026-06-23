@@ -18,6 +18,7 @@ import {
   getProductSeoDescription,
   getProductSeoTitle,
 } from "@/lib/product-details";
+import { getTrendingProducts, getLatestProducts } from "@/lib/products";
 import { getAllProductSlugs, getProductBySlug, getProductSlug, slugify } from "@/lib/slugs";
 import { buildPageMetadata } from "@/lib/seo";
 import FloatingBackButton from "@/components/FloatingBackButton";
@@ -34,8 +35,35 @@ type ProductPageProps = {
   params: Promise<{ slug: string }>;
 };
 
+export const dynamicParams = true;
+
+/** Pre-render a capped set at build time; remaining PDPs generate on first visit. */
 export async function generateStaticParams() {
-  return getAllProductSlugs().map((slug) => ({ slug }));
+  const priority = [
+    ...getTrendingProducts(),
+    ...getLatestProducts(),
+  ];
+  const seen = new Set<string>();
+  const slugs: string[] = [];
+
+  for (const product of priority) {
+    const slug = getProductSlug(product);
+    if (seen.has(slug)) continue;
+    seen.add(slug);
+    slugs.push(slug);
+    if (slugs.length >= 200) break;
+  }
+
+  if (slugs.length < 200) {
+    for (const slug of getAllProductSlugs()) {
+      if (seen.has(slug)) continue;
+      seen.add(slug);
+      slugs.push(slug);
+      if (slugs.length >= 200) break;
+    }
+  }
+
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({

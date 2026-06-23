@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  staticPageGenerationTimeout: 300,
   async redirects() {
     return [
       {
