@@ -169,6 +169,11 @@ export default function Footer() {
                   All Telegram guides
                 </Link>
               </li>
+              <li>
+                <Link href="/advertise" className="text-foreground/75 transition hover:text-accent">
+                  Advertise
+                </Link>
+              </li>
             </ul>
           </div>
 

@@ -110,6 +110,11 @@ export const TELEGRAM_CHANNEL_NAME = "RN Finds";
 
 export const TELEGRAM_MEMBER_LABEL = "40,000+ members";
 
+/** Business / advertising inquiries only — not general support */
+export const TELEGRAM_COLLAB_CONTACT = "@smukasolas";
+
+export const TELEGRAM_COLLAB_URL = "https://t.me/smukasolas";
+
 export const CONTACT_EMAIL = "hello@litbuyfinds.io";
 
 export const EXCHANGE_RATES = {

@@ -14,6 +14,7 @@ import {
   TELEGRAM_SEO_PAGES,
   TELEGRAM_SEO_SLUGS,
 } from "@/lib/telegram-seo-pages";
+import { ADVERTISE_PAGE_PATH } from "@/lib/advertise-page";
 import { SITE_URL } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -73,6 +74,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.82,
     });
   }
+
+  routes.push({
+    url: `${SITE_URL}${ADVERTISE_PAGE_PATH}`,
+    changeFrequency: "monthly",
+    priority: 0.7,
+  });
 
   for (const slug of BEST_OF_SLUGS) {
     const page = BEST_OF_PAGES[slug];
