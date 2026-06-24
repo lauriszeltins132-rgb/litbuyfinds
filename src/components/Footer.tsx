@@ -5,7 +5,9 @@ import {
   CONTACT_EMAIL,
   REGISTER_CTA_LABEL,
   SITE_NAME,
+  SOCIAL_LINKS,
 } from "@/lib/constants";
+import { TELEGRAM_COMMUNITY_FOOTER_LINKS } from "@/lib/telegram-seo-pages";
 import RegisterLink from "./RegisterLink";
 import CommunityLinks from "./CommunityLinks";
 import FooterTrustBar from "./FooterTrustBar";
@@ -81,7 +83,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-6">
           <div className="lg:col-span-2">
             <p className="text-xl font-black text-foreground">{SITE_NAME}</p>
             <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted">
@@ -133,6 +135,40 @@ export default function Footer() {
                   </Link>
                 </li>
               ))}
+            </ul>
+          </div>
+
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-muted">
+              Community
+            </p>
+            <ul className="mt-4 space-y-2.5 text-sm">
+              {TELEGRAM_COMMUNITY_FOOTER_LINKS.map((link) => (
+                <li key={link.href}>
+                  {link.external ? (
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-foreground/75 transition hover:text-accent"
+                    >
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link
+                      href={link.href}
+                      className="text-foreground/75 transition hover:text-accent"
+                    >
+                      {link.label}
+                    </Link>
+                  )}
+                </li>
+              ))}
+              <li>
+                <Link href="/telegram" className="text-foreground/75 transition hover:text-accent">
+                  All Telegram guides
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -193,7 +229,15 @@ export default function Footer() {
             LitBuy Finds is an independent discovery catalog. We do not sell
             products directly. Images and links are sourced from public
             spreadsheets and affiliate programs. Always verify QC and seller
-            details before purchasing.
+            details before purchasing.{" "}
+            <a
+              href={SOCIAL_LINKS.telegram}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-accent hover:underline"
+            >
+              Join RN Finds Telegram
+            </a>
           </p>
           <p className="shrink-0 text-foreground/50">
             © {new Date().getFullYear()} {SITE_NAME}

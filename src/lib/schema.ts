@@ -159,3 +159,31 @@ export function buildAboutPageSchema({
     author: getContentAuthorSchema(),
   };
 }
+
+export function buildWebPageSchema({
+  name,
+  description,
+  path,
+}: {
+  name: string;
+  description: string;
+  path: string;
+}) {
+  const url = `${SITE_URL}${path}`;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name,
+    description,
+    url,
+    mainEntityOfPage: { "@id": url },
+    isPartOf: {
+      "@type": "WebSite",
+      "@id": WEBSITE_SCHEMA_ID,
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
+    publisher: { "@id": ORGANIZATION_SCHEMA_ID },
+  };
+}

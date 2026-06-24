@@ -169,19 +169,19 @@ const AGENT_URL_BUILDERS: Record<AgentId, AgentUrlBuilder> = {
   },
   hipobuy: {
     fromListing: (platform, id) =>
-      `https://hipobuy.com/pd/${platform}/${id}`,
+      `https://hipobuy.com/product/${platform}/${id}`,
     search: (query) =>
       `https://hipobuy.com/search?keyword=${encodeURIComponent(query)}`,
   },
   acbuy: {
-    fromListing: (_platform, _id, sourceUrl) =>
-      `https://www.acbuy.com/product-detail?url=${encodeURIComponent(sourceUrl)}`,
+    fromListing: (platform, id) =>
+      `https://www.acbuy.com/product/${platform}/${id}`,
     search: (query) =>
       `https://www.acbuy.com/search?keyword=${encodeURIComponent(query)}`,
   },
   mulebuy: {
-    fromListing: (_platform, _id, sourceUrl) =>
-      `https://mulebuy.com/product-detail?url=${encodeURIComponent(sourceUrl)}`,
+    fromListing: (platform, id) =>
+      `https://mulebuy.com/product/${platform}/${id}`,
     search: (query) =>
       `https://mulebuy.com/search?q=${encodeURIComponent(query)}`,
   },

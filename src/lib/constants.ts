@@ -106,6 +106,10 @@ export const SOCIAL_LINKS = {
 
 export const TELEGRAM_HANDLE = "@RNFinds";
 
+export const TELEGRAM_CHANNEL_NAME = "RN Finds";
+
+export const TELEGRAM_MEMBER_LABEL = "40,000+ members";
+
 export const CONTACT_EMAIL = "hello@litbuyfinds.io";
 
 export const EXCHANGE_RATES = {

@@ -10,6 +10,10 @@ import { STATIC_PAGES } from "@/lib/static-pages";
 import { SHARE_COLLECTION_SLUGS, SHARE_COLLECTIONS } from "@/lib/share-collections";
 import { BEST_OF_PAGES, BEST_OF_SLUGS } from "@/lib/best-of-pages";
 import { SEO_LANDING_PAGES, SEO_LANDING_SLUGS } from "@/lib/seo-landing-pages";
+import {
+  TELEGRAM_SEO_PAGES,
+  TELEGRAM_SEO_SLUGS,
+} from "@/lib/telegram-seo-pages";
 import { SITE_URL } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -58,6 +62,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${SITE_URL}${page.path}`,
       changeFrequency: "weekly",
       priority: 0.88,
+    });
+  }
+
+  for (const slug of TELEGRAM_SEO_SLUGS) {
+    const page = TELEGRAM_SEO_PAGES[slug];
+    routes.push({
+      url: `${SITE_URL}${page.path}`,
+      changeFrequency: "weekly",
+      priority: 0.82,
     });
   }
 

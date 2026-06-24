@@ -29,6 +29,7 @@ import RecordRecentlyViewed from "@/components/RecordRecentlyViewed";
 import RecentlyViewedRail from "@/components/RecentlyViewedRail";
 import TrackProductView from "@/components/TrackProductView";
 import RelatedPages from "@/components/RelatedPages";
+import TelegramDailyFindsCta from "@/components/TelegramDailyFindsCta";
 import { getRelatedGuidesForProduct } from "@/lib/related-guides";
 
 type ProductPageProps = {
@@ -197,6 +198,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       />
 
       <RecentlyViewedRail excludeProductId={product.id} title="Your recently viewed" />
+      <TelegramDailyFindsCta />
       <RelatedPages
         currentPath={`/find/${slug}`}
         brandSlug={brand ? slugify(brand) : undefined}

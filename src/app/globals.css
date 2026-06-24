@@ -1604,9 +1604,81 @@ body::before {
   border-color: rgba(212, 255, 60, 0.35);
 }
 
-.agent-selector--floating {
-  max-width: 9.5rem;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+.agent-selector--mobile {
+  display: inline-flex;
+  max-width: none;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 9999px;
+  padding: 0.35rem 1.4rem 0.35rem 0.65rem;
+  white-space: nowrap;
+}
+
+.agent-selector__mobile-prefix {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.agent-selector__mobile-value {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--color-foreground);
+}
+
+.agent-selector__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  border: none;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(2px);
+}
+
+.agent-selector__sheet {
+  position: fixed;
+  left: max(0.75rem, env(safe-area-inset-left, 0px));
+  right: max(0.75rem, env(safe-area-inset-right, 0px));
+  bottom: max(4.75rem, calc(env(safe-area-inset-bottom, 0px) + 4.25rem));
+  z-index: 95;
+  overflow: hidden;
+  border-radius: 1.1rem;
+  border: 1px solid var(--color-border);
+  background: rgba(12, 12, 16, 0.98);
+  padding: 0.45rem;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.5);
+}
+
+.agent-selector__sheet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.35rem 0.55rem 0.55rem;
+}
+
+.agent-selector__sheet-title {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.agent-selector__sheet-close {
+  display: inline-flex;
+  height: 1.75rem;
+  width: 1.75rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid var(--color-border);
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 0.7rem;
+  color: var(--color-muted);
 }
 
 .agent-selector__label {
@@ -1648,7 +1720,7 @@ body::before {
 }
 
 .agent-selector--header,
-.agent-selector--floating {
+.agent-selector--mobile {
   position: relative;
   padding-right: 1.25rem;
 }

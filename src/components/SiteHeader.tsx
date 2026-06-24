@@ -67,7 +67,8 @@ export default function SiteHeader() {
             })}
           </nav>
 
-          <div className="flex items-center gap-1 sm:gap-2">
+          <div className="flex min-w-0 items-center gap-1 sm:gap-2">
+            <AgentSelector variant="mobile" className="sm:hidden" />
             <AgentSelector variant="header" className="hidden sm:block" />
             <CommunityLinks variant="header" location="header" />
             <GlobalSearch className="hidden sm:inline-flex" />

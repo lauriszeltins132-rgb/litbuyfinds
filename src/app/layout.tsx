@@ -9,7 +9,6 @@ import ConversionLayer from "@/components/conversion/ConversionLayer";
 import CouponAutoOpen from "@/components/CouponAutoOpen";
 import CouponModal from "@/components/CouponModal";
 import MobileDock from "@/components/MobileDock";
-import AgentSelector from "@/components/agents/AgentSelector";
 import PreferencesBar from "@/components/PreferencesBar";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import AnalyticsBoot from "@/components/AnalyticsBoot";
@@ -119,10 +118,6 @@ export default function RootLayout({
                   <AnalyticsBoot />
                   <PreferencesBar />
                   <SiteHeader />
-                  <AgentSelector
-                    variant="floating"
-                    className="fixed right-3 top-[3.1rem] z-[55] sm:hidden"
-                  />
                   <main className="site-main flex-1">{children}</main>
                   <FooterSignupStrip />
                   <Footer />
