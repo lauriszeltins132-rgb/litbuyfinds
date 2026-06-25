@@ -1,5 +1,6 @@
 import type { StaticPageSection } from "./static-pages";
 import { getEditorsPicks } from "./discovery";
+import { getSpreadsheetMetadataCopy } from "./metadata-copy";
 import { filterFeaturedEligible } from "./product-media";
 import { hasExactPrice } from "./pricing";
 import { getAllProducts, getTrendingProducts } from "./products";
@@ -46,9 +47,8 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
   "litbuy-spreadsheet": {
     slug: "litbuy-spreadsheet",
     path: "/litbuy-spreadsheet",
-    title: "LitBuy Spreadsheet Guide",
-    metaDescription:
-      "LitBuy spreadsheet explained — how to browse 10,000+ finds, use QC references, and open verified LitBuy links without scrolling endless rows.",
+    title: getSpreadsheetMetadataCopy().title,
+    metaDescription: getSpreadsheetMetadataCopy().description,
     badge: "LitBuy resource",
     h1: "LitBuy spreadsheet guide",
     intro:

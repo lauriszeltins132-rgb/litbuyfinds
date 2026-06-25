@@ -1,3 +1,10 @@
+import {
+  buildBrandMetaDescription,
+  buildBrandMetaTitle,
+  buildCategoryMetaDescription,
+  buildCategoryMetaTitle,
+} from "./metadata-copy";
+
 type LandingCopy = {
   title: string;
   description: string;
@@ -408,20 +415,26 @@ const BRAND_FAQS: Record<string, { question: string; answer: string }[]> = {
 
 export function getCategorySeo(slug: string, name: string, count: number): LandingCopy {
   const copy = CATEGORY_COPY[slug];
-  if (copy) return copy;
+  const title = buildCategoryMetaTitle(name, slug);
+  const description = buildCategoryMetaDescription(name, count);
+
+  if (copy) {
+    return { title, description, intro: copy.intro };
+  }
 
   return {
-    title: `${name} Finds`,
-    description: `Browse ${count.toLocaleString()} curated ${name.toLowerCase()} finds on LitBuy Finds with verified links and product photos.`,
+    title,
+    description,
     intro: `Explore ${name.toLowerCase()} from the LitBuy Finds catalog. Filter by brand and price, open product details for QC references, and buy through verified affiliate links.`,
   };
 }
 
 export function getBrandSeo(slug: string, name: string, count: number): LandingCopy {
   const copy = BRAND_COPY[slug];
-  const categoryLine = BRAND_CATEGORY_LINES[slug] ?? "sneakers, hoodies, jackets and accessories";
-  const title = `${name} LitBuy Finds`;
-  const description = `Browse the best ${name} LitBuy finds including ${categoryLine} and QC-approved products. ${count.toLocaleString()} listings indexed.`;
+  const categoryLine =
+    BRAND_CATEGORY_LINES[slug] ?? "sneakers, hoodies, jackets and accessories";
+  const title = buildBrandMetaTitle(name, slug);
+  const description = buildBrandMetaDescription(name, count, categoryLine);
 
   if (copy) {
     return {

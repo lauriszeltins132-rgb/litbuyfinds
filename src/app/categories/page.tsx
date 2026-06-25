@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import CategoryBrandGrid from "@/components/CategoryBrandGrid";
 import { getCategories } from "@/lib/products";
+import { getCategoriesHubMetadataCopy } from "@/lib/metadata-copy";
 import { buildPageMetadata } from "@/lib/seo";
 
+const categoriesHubMeta = getCategoriesHubMetadataCopy();
+
 export const metadata: Metadata = buildPageMetadata({
-  title: "Browse by Category – Shoes, Streetwear, Bags & More",
-  description:
-    "Browse LitBuy finds by category — sneakers, hoodies, jackets, bags, accessories, and electronics with filters and agent links.",
+  title: categoriesHubMeta.title,
+  description: categoriesHubMeta.description,
   path: "/categories",
 });
 

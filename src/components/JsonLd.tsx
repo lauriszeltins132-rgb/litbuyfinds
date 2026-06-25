@@ -2,8 +2,13 @@ import {
   CONTACT_EMAIL,
   SITE_DESCRIPTION,
   SITE_NAME,
-  SOCIAL_LINKS,
 } from "@/lib/constants";
+import {
+  getOrganizationKnowsAbout,
+  getOrganizationSameAsLinks,
+  SITE_ALTERNATE_NAMES,
+  SITE_ENTITY_DESCRIPTION,
+} from "@/lib/brand-entity";
 import { getAllProducts, getCategories } from "@/lib/products";
 import {
   CONTENT_TEAM_DESCRIPTION,
@@ -23,6 +28,7 @@ export default function JsonLd() {
       "@type": "Organization",
       "@id": ORGANIZATION_SCHEMA_ID,
       name: SITE_NAME,
+      alternateName: [...SITE_ALTERNATE_NAMES],
       url: SITE_URL,
       logo: {
         "@type": "ImageObject",
@@ -30,25 +36,11 @@ export default function JsonLd() {
         width: 180,
         height: 180,
       },
-      description: SITE_DESCRIPTION,
+      description: SITE_ENTITY_DESCRIPTION,
       email: CONTACT_EMAIL,
       foundingDate: "2026",
-      knowsAbout: [
-        "LitBuy product discovery",
-        "shopping agents",
-        "QC photos",
-        "Weidian finds",
-        "Taobao finds",
-        "sneaker finds",
-        "streetwear finds",
-        "budget finds",
-      ],
-      sameAs: [
-        SOCIAL_LINKS.discord,
-        SOCIAL_LINKS.telegram,
-        SOCIAL_LINKS.tiktok,
-        SOCIAL_LINKS.instagram,
-      ],
+      knowsAbout: getOrganizationKnowsAbout(),
+      sameAs: getOrganizationSameAsLinks(),
       contactPoint: {
         "@type": "ContactPoint",
         contactType: "customer support",
@@ -68,6 +60,7 @@ export default function JsonLd() {
       "@type": "WebSite",
       "@id": WEBSITE_SCHEMA_ID,
       name: SITE_NAME,
+      alternateName: [...SITE_ALTERNATE_NAMES],
       url: SITE_URL,
       description: SITE_DESCRIPTION,
       publisher: { "@id": ORGANIZATION_SCHEMA_ID },
@@ -76,7 +69,7 @@ export default function JsonLd() {
         "@type": "SearchAction",
         target: {
           "@type": "EntryPoint",
-          urlTemplate: `${SITE_URL}/?q={search_term_string}`,
+          urlTemplate: `${SITE_URL}/?q={search_term_string}#browse`,
         },
         "query-input": "required name=search_term_string",
       },

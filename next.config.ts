@@ -56,6 +56,19 @@ const nextConfig: NextConfig = {
       },
       { source: "/guides/weidian-guide", destination: "/guides/how-to-buy-from-weidian", permanent: true },
       { source: "/guides/litbuy-spreadsheet", destination: "/litbuy-spreadsheet", permanent: true },
+      { source: "/litbuyfids", destination: "/", permanent: true },
+      { source: "/litbuyfind", destination: "/", permanent: true },
+      { source: "/litbuy-find", destination: "/", permanent: true },
+      {
+        source: "/litbuy-finds-spreadsheet",
+        destination: "/litbuy-spreadsheet",
+        permanent: true,
+      },
+      {
+        source: "/litbuyfinds-spreadsheet",
+        destination: "/litbuy-spreadsheet",
+        permanent: true,
+      },
     ];
   },
   images: {

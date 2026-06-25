@@ -5,12 +5,14 @@ import SchemaScript from "@/components/SchemaScript";
 import { SHARE_COLLECTION_SLUGS, SHARE_COLLECTIONS } from "@/lib/share-collections";
 import { COLLECTION_SLUGS, COLLECTIONS } from "@/lib/collections";
 import { buildCollectionPageSchema } from "@/lib/schema";
+import { getCollectionsHubMetadataCopy } from "@/lib/metadata-copy";
 import { buildPageMetadata } from "@/lib/seo";
 
+const collectionsHubMeta = getCollectionsHubMetadataCopy();
+
 export const metadata: Metadata = buildPageMetadata({
-  title: "LitBuy Find Collections",
-  description:
-    "Browse curated LitBuy find collections — Nike, Jordan, Moncler, sneakers, jackets, QC finds, budget picks, and trending lists.",
+  title: collectionsHubMeta.title,
+  description: collectionsHubMeta.description,
   path: "/collections",
 });
 

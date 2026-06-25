@@ -30,12 +30,22 @@ type ProductImageProps = {
   enhance?: boolean;
 };
 
-function buildCandidateList(src: string): string[] {
+function buildCandidateList(
+  src: string,
+  preferredSrc?: string,
+  extraFallbacks: string[] = []
+): string[] {
   const validation = validateImageUrl(src);
   if (!validation.valid) return [];
 
   const plan = getProductImagePlan(validation.normalized);
-  const ordered = [plan.src, ...plan.fallbacks, plan.originalSrc].filter(Boolean);
+  const ordered = [
+    preferredSrc,
+    plan.src,
+    ...extraFallbacks,
+    ...plan.fallbacks,
+    plan.originalSrc,
+  ].filter(Boolean) as string[];
 
   const seen = new Set<string>();
   const unique: string[] = [];
@@ -54,12 +64,17 @@ export default function ProductImage({
   priority = false,
   variant = "card",
   productHref,
+  preferredSrc,
+  fallbacks = [],
   fillClass,
   enhance,
 }: ProductImageProps) {
   const validation = useMemo(() => validateImageUrl(src), [src]);
 
-  const candidates = useMemo(() => buildCandidateList(src), [src]);
+  const candidates = useMemo(
+    () => buildCandidateList(src, preferredSrc, fallbacks),
+    [src, preferredSrc, fallbacks]
+  );
   const candidateKey = candidates.join("|");
 
   const resolvedFillClass =
@@ -72,7 +87,7 @@ export default function ProductImage({
 
   const [srcIndex, setSrcIndex] = useState(0);
   const [failed, setFailed] = useState(candidates.length === 0);
-  const [visible, setVisible] = useState(false);
+  const [loaded, setLoaded] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
   const loggedRef = useRef(false);
 
@@ -81,13 +96,13 @@ export default function ProductImage({
   useEffect(() => {
     setSrcIndex(0);
     setFailed(candidates.length === 0);
-    setVisible(false);
+    setLoaded(false);
     loggedRef.current = false;
   }, [candidateKey, candidates.length]);
 
   const failExhausted = useCallback(() => {
     setFailed(true);
-    setVisible(false);
+    setLoaded(false);
     if (!loggedRef.current) {
       loggedRef.current = true;
       trackBrokenImage(validation.normalized || src, variant);
@@ -97,7 +112,7 @@ export default function ProductImage({
   const advanceOrFail = useCallback(() => {
     setSrcIndex((currentIndex) => {
       if (currentIndex + 1 < candidates.length) {
-        setVisible(false);
+        setLoaded(false);
         return currentIndex + 1;
       }
       failExhausted();
@@ -111,7 +126,7 @@ export default function ProductImage({
         advanceOrFail();
         return;
       }
-      setVisible(true);
+      setLoaded(true);
     },
     [advanceOrFail]
   );
@@ -149,7 +164,7 @@ export default function ProductImage({
     "product-float-asset",
     resolvedFillClass,
     resolvedEnhance ? "product-float-asset--enhanced" : "",
-    visible ? "" : "product-float-asset--hidden",
+    loaded ? "product-float-asset--ready" : "product-float-asset--loading",
   ]
     .filter(Boolean)
     .join(" ");
@@ -175,13 +190,13 @@ export default function ProductImage({
           onError={handleError}
         />
       </div>
-      {!visible && (
+      {!loaded ? (
         <ImageUnavailablePlaceholder
           variant={variant}
           loading
           productHref={productHref}
         />
-      )}
+      ) : null}
     </div>
   );
 }

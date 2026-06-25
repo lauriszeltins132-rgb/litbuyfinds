@@ -1,25 +1,24 @@
-import { PUBLIC_CATALOG_COUNT, formatCatalogCountForSeo } from "./catalog-count";
+import { PUBLIC_CATALOG_COUNT } from "./catalog-count";
+import { getHomepageMetadataCopy } from "./metadata-copy";
 
 export const SITE_NAME = "LitBuy Finds";
 
-const CATALOG_COUNT = formatCatalogCountForSeo();
-
 export { PUBLIC_CATALOG_COUNT };
 
-export const HOMEPAGE_TITLE = `${CATALOG_COUNT} QC Approved LitBuy Finds`;
+const homepageMeta = getHomepageMetadataCopy();
 
-export const SITE_DESCRIPTION =
-  "Browse 10,000+ curated LitBuy finds including sneakers, jackets, hoodies, bags, accessories, QC-approved products, verified links, and daily trending finds.";
+export const HOMEPAGE_TITLE = homepageMeta.title;
 
-export const SITE_OG_TITLE = `${CATALOG_COUNT} QC Approved LitBuy Finds`;
+export const SITE_DESCRIPTION = homepageMeta.description;
 
-export const SITE_OG_DESCRIPTION =
-  "Browse 10,000+ curated LitBuy finds including sneakers, jackets, hoodies, bags, accessories, QC-approved products, verified links, and daily trending finds.";
+export const SITE_OG_TITLE = HOMEPAGE_TITLE;
+
+export const SITE_OG_DESCRIPTION = SITE_DESCRIPTION;
 
 export const HERO_HEADLINE = "Discover the Best LitBuy Finds";
 
 export const HERO_SUBHEADLINE =
-  "LitBuy Finds turns spreadsheet-style catalogs into searchable pages — QC approved products from Weidian and Taobao with verified LitBuy links and daily updates.";
+  "LitBuy Finds is a product discovery platform for QC photos, spreadsheet finds, fashion finds, sneaker finds and multi-agent shopping links — LitBuy, MuleBuy, OopBuy, ACBuy and Kakobuy.";
 
 export const HERO_TAGLINE = HERO_SUBHEADLINE;
 

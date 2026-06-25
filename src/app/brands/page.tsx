@@ -19,14 +19,14 @@ import {
   buildFaqSchema,
   buildItemListSchema,
 } from "@/lib/schema";
+import { getBrandsHubMetadataCopy } from "@/lib/metadata-copy";
 import { buildPageMetadata } from "@/lib/seo";
 
-const HUB_DESCRIPTION =
-  "Discover Nike, Moncler, Chrome Hearts, Stussy, Balenciaga, Stone Island and hundreds of other LitBuy brands with QC photos, verified links and daily updates.";
+const brandsHubMeta = getBrandsHubMetadataCopy();
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "Browse All LitBuy Brands",
-  description: HUB_DESCRIPTION,
+  title: brandsHubMeta.title,
+  description: brandsHubMeta.description,
   path: "/brands",
 });
 
@@ -47,8 +47,8 @@ export default function BrandsPage() {
       <SchemaScript data={buildFaqSchema([...BRANDS_HUB_FAQS])} />
       <SchemaScript
         data={buildCollectionPageSchema({
-          name: "Browse All LitBuy Brands",
-          description: HUB_DESCRIPTION,
+          name: brandsHubMeta.title,
+          description: brandsHubMeta.description,
           path: pagePath,
           numberOfItems: brands.length,
         })}
@@ -71,7 +71,7 @@ export default function BrandsPage() {
           </p>
           <h1 className="mt-3 text-3xl font-black sm:text-4xl">Browse All LitBuy Brands</h1>
           <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted">
-            {HUB_DESCRIPTION}
+            {brandsHubMeta.description}
           </p>
           <p className="mt-3 text-sm text-muted">
             {stats.totalBrands.toLocaleString()} brands ·{" "}

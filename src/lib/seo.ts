@@ -47,9 +47,10 @@ export function buildPageMetadata({
 }: PageMetadataOptions): Metadata {
   const url = `${BASE_URL}${path}`;
   const ogImage = resolveOgImage(image);
+  const pageTitle = title.trim();
 
   return {
-    title,
+    title: { absolute: pageTitle },
     description,
     alternates: { canonical: url },
     ...(type === "article" && publishedTime
@@ -63,17 +64,17 @@ export function buildPageMetadata({
         }
       : {}),
     openGraph: {
-      title: `${title} | ${SITE_NAME}`,
+      title: pageTitle,
       description,
       url,
       siteName: SITE_NAME,
       type,
       locale: "en_US",
-      images: [{ ...DEFAULT_OG_IMAGE, url: ogImage, alt: title }],
+      images: [{ ...DEFAULT_OG_IMAGE, url: ogImage, alt: pageTitle }],
     },
     twitter: {
       card: "summary_large_image",
-      title: `${title} | ${SITE_NAME}`,
+      title: pageTitle,
       description,
       images: [ogImage],
     },

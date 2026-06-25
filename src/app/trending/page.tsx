@@ -5,12 +5,14 @@ import CatalogPanel from "@/components/CatalogPanel";
 import SignupCard from "@/components/SignupCard";
 import { getBrandsFromProducts } from "@/lib/brands";
 import { getCategories, getTrendingProducts } from "@/lib/products";
+import { getTrendingMetadataCopy } from "@/lib/metadata-copy";
 import { buildPageMetadata } from "@/lib/seo";
 
+const trendingMeta = getTrendingMetadataCopy();
+
 export const metadata: Metadata = buildPageMetadata({
-  title: "Trending This Week",
-  description:
-    "Trending LitBuy finds this week — the most popular sneakers, fashion, and accessories with verified links and QC.",
+  title: trendingMeta.title,
+  description: trendingMeta.description,
   path: "/trending",
 });
 

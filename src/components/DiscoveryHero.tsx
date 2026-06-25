@@ -1,6 +1,7 @@
 import HeroSearch from "@/components/HeroSearch";
 import LiveSiteSignals from "@/components/LiveSiteSignals";
 import { HERO_HEADLINE, HERO_SUBHEADLINE } from "@/lib/constants";
+import { HERO_ENTITY_LINE } from "@/lib/brand-entity";
 import { getSearchIndex } from "@/lib/search-suggestions";
 
 export default function DiscoveryHero() {
@@ -24,6 +25,10 @@ export default function DiscoveryHero() {
 
         <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-muted sm:text-base">
           {HERO_SUBHEADLINE}
+        </p>
+
+        <p className="mx-auto mt-2 max-w-2xl text-xs leading-relaxed text-muted/80 sm:text-sm">
+          {HERO_ENTITY_LINE}
         </p>
 
         <LiveSiteSignals />

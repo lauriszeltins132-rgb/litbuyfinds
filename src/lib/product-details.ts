@@ -1,3 +1,7 @@
+import {
+  buildProductMetaDescription,
+  buildProductMetaTitle,
+} from "./metadata-copy";
 import type { Product } from "./types";
 import { formatPrice } from "./currency";
 import { getProductSource } from "./filters";
@@ -95,7 +99,7 @@ export function getProductHighlights(product: Product): string[] {
 }
 
 export function getProductSeoTitle(product: Product): string {
-  return getDisplayProductName(product);
+  return buildProductMetaTitle(getDisplayProductName(product));
 }
 
 export function getProductImageAlt(product: Product): string {
@@ -110,12 +114,15 @@ export function getProductImageAlt(product: Product): string {
 export function getProductSeoDescription(product: Product): string {
   const brand = getDisplayBrand(product);
   const name = getDisplayProductName(product);
-  const priceBit =
+  const price =
     hasExactPrice(product.price) && product.price !== null
-      ? ` from ${formatPrice(product.price, "USD")}`
-      : "";
-  const qcBit = product.qc_link ? " · QC linked" : "";
-  const source = getProductSource(product.affiliate_link);
+      ? formatPrice(product.price, "USD")
+      : null;
 
-  return `${name}${brand ? ` · ${brand}` : ""} — ${product.category} find${priceBit}${qcBit}. ${source.toUpperCase()} via LitBuy.`;
+  return buildProductMetaDescription({
+    name,
+    brand,
+    price,
+    hasQc: Boolean(product.qc_link),
+  });
 }

@@ -444,7 +444,11 @@ body::before {
 
 
 .product-float-asset--loading {
-  opacity: 0.85;
+  opacity: 0;
+}
+
+.product-float-asset--ready {
+  opacity: 1;
 }
 
 .product-float-stage--empty {
@@ -563,15 +567,6 @@ body::before {
   }
 }
 
-.product-float-asset--hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.glow-spot {
   background: radial-gradient(circle at 50% 35%, rgba(212, 255, 60, 0.12), transparent 60%);
 }
 
@@ -1692,7 +1687,15 @@ body::before {
 }
 
 .agent-selector-trigger--mobile {
-  padding: 0.35rem 1.35rem 0.35rem 0.4rem;
+  padding: 0.3rem 1.1rem 0.3rem 0.35rem;
+  max-width: 7.5rem;
+}
+
+.agent-selector-trigger--mobile .agent-selector-trigger__value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 4.5rem;
 }
 
 .agent-selector-trigger__text {

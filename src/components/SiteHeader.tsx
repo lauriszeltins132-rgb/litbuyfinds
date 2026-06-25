@@ -67,14 +67,14 @@ export default function SiteHeader() {
             })}
           </nav>
 
-          <div className="flex min-w-0 items-center gap-1 sm:gap-2">
+          <div className="flex min-w-0 flex-1 items-center justify-end gap-1 sm:gap-2">
             <AgentSelector variant="mobile" className="sm:hidden" />
             <AgentSelector variant="header" className="hidden sm:block" />
             <CommunityLinks variant="header" location="header" />
             <GlobalSearch className="hidden sm:inline-flex" />
             <RegisterLink
               location="header"
-              className="inline-flex rounded-full bg-accent px-3 py-1.5 text-[11px] font-black text-background sm:px-4 sm:py-2 sm:text-sm"
+              className="inline-flex shrink-0 rounded-full bg-accent px-2.5 py-1.5 text-[10px] font-black leading-none text-background sm:px-4 sm:py-2 sm:text-sm"
             >
               {REGISTER_HEADER_CTA_LABEL}
             </RegisterLink>
