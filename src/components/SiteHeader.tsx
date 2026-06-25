@@ -29,7 +29,7 @@ export default function SiteHeader() {
       <div className="accent-line" />
       <header className="site-header sticky top-0 z-50 px-3 sm:px-6">
         <div className="mx-auto flex h-11 max-w-7xl items-center justify-between gap-2 sm:h-16">
-          <Link href="/" className="flex shrink-0 items-center gap-2">
+          <Link href="/" rel="home" className="flex shrink-0 items-center gap-2">
             <Image
               src="/logo.svg"
               alt={SITE_NAME}

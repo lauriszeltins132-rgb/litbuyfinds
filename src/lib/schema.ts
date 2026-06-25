@@ -164,10 +164,12 @@ export function buildWebPageSchema({
   name,
   description,
   path,
+  aboutOrganization = false,
 }: {
   name: string;
   description: string;
   path: string;
+  aboutOrganization?: boolean;
 }) {
   const url = `${SITE_URL}${path}`;
 
@@ -185,5 +187,8 @@ export function buildWebPageSchema({
       url: SITE_URL,
     },
     publisher: { "@id": ORGANIZATION_SCHEMA_ID },
+    ...(aboutOrganization
+      ? { about: { "@id": ORGANIZATION_SCHEMA_ID } }
+      : {}),
   };
 }

@@ -10,11 +10,14 @@ import HomepageCollections from "@/components/HomepageCollections";
 import HomepageFaq from "@/components/HomepageFaq";
 import RecentlyViewedRail from "@/components/RecentlyViewedRail";
 import ProductGridSkeleton from "@/components/ProductGridSkeleton";
+import SchemaScript from "@/components/SchemaScript";
 import TrustStrip from "@/components/TrustStrip";
+import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/constants";
 import { getEditorsPicks } from "@/lib/discovery";
 import { getHomepageRails } from "@/lib/homepage-rails";
 import { getBrandsFromProducts } from "@/lib/brands";
 import { getAllProducts, getCategories, getDealProducts } from "@/lib/products";
+import { buildWebPageSchema } from "@/lib/schema";
 import { buildHomepageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildHomepageMetadata();
@@ -29,6 +32,15 @@ export default function HomePage() {
 
   return (
     <>
+      <SchemaScript
+        data={buildWebPageSchema({
+          name: SITE_NAME,
+          description: SITE_DESCRIPTION,
+          path: "/",
+          aboutOrganization: true,
+        })}
+      />
+
       <DiscoveryHero />
 
       <DiscoveryRail

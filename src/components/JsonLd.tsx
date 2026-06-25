@@ -30,6 +30,11 @@ export default function JsonLd() {
       name: SITE_NAME,
       alternateName: [...SITE_ALTERNATE_NAMES],
       url: SITE_URL,
+      identifier: {
+        "@type": "PropertyValue",
+        propertyID: "domain",
+        value: "litbuyfinds.io",
+      },
       logo: {
         "@type": "ImageObject",
         url: `${SITE_URL}/apple-touch-icon.png`,

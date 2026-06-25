@@ -70,7 +70,7 @@ export const BRANDS_HUB_FAQS = [
   {
     question: "What are the most popular LitBuy brands?",
     answer:
-      "Nike, Jordan, Adidas, Moncler, Gucci, Louis Vuitton, Stussy, Chrome Hearts, Stone Island, and Balenciaga are among the most searched brands on LitBuy Finds. Use the Most Popular Brands section on this page to browse the highest-volume labels in the catalog.",
+      "Nike, Jordan, Adidas, Moncler, Gucci, Louis Vuitton, Stussy, Chrome Hearts, Stone Island, and Balenciaga are among the most searched brands on LitBuy Finds. Start on the homepage for full-catalog search, or use the Most Popular Brands section here to browse by label.",
   },
   {
     question: "Which brands have QC photos?",
@@ -170,8 +170,8 @@ export const BRANDS_HUB_SEO_SECTIONS = [
   {
     heading: "The LitBuy brand directory",
     paragraphs: [
-      "LitBuy Finds is the searchable brand directory for LitBuy shoppers. Instead of scrolling endless spreadsheet rows, you can open a dedicated page for Nike, Moncler, Chrome Hearts, Stussy, Balenciaga, Stone Island, and hundreds of other labels — each with product photos, pricing, QC references where available, and verified LitBuy buy links.",
-      "This /brands hub is the authoritative entry point for brand-specific discovery on the site. Every major label links to its own collection of indexed finds, updated when the catalog syncs from Weidian, Taobao, and curated spreadsheet imports.",
+      "LitBuy Finds (litbuyfinds.io) is the main QC-approved discovery catalog for LitBuy shoppers. The homepage search and filters cover the full indexed catalog — sneakers, streetwear, designer pieces, and accessories with photos, pricing, QC references where available, and verified agent buy links.",
+      "This brand directory is a supporting view of the same catalog, organized by label. Open Nike, Moncler, Chrome Hearts, Stussy, Balenciaga, Stone Island, or hundreds of other brand pages — each updated when listings sync from Weidian, Taobao, and curated spreadsheet imports.",
     ],
   },
   {
@@ -198,15 +198,15 @@ export const BRANDS_HUB_SEO_SECTIONS = [
   {
     heading: "LitBuy Finds vs spreadsheets",
     paragraphs: [
-      "Raw LitBuy spreadsheets are powerful but hard to browse on mobile. LitBuy Finds turns those rows into brand pages, category filters, QC badges, and shareable collection links. Search by brand name in the header, open /brands for the full directory, or deep-link directly to /brands/nike, /brands/moncler, and other authority pages.",
-      "Whether you are building a first haul or restocking seasonal rotation pieces, start here — pick a brand, compare finds, then open LitBuy to purchase and ship internationally.",
+      "Raw LitBuy spreadsheets are powerful but hard to browse on mobile. LitBuy Finds turns those rows into a searchable homepage catalog plus brand pages, category filters, QC badges, and shareable collection links. Search from the homepage, filter by label here, or deep-link to /brands/nike, /brands/moncler, and other brand hubs.",
+      "Whether you are building a first haul or restocking seasonal rotation pieces, start on the LitBuy Finds homepage for full-catalog search — then use this directory when you want a brand-specific starting point before opening LitBuy to purchase and ship internationally.",
     ],
   },
   {
     heading: "Brand pages, collections, and guides",
     paragraphs: [
       "Beyond individual brand hubs, LitBuy Finds groups related picks into shareable collections — best Nike finds, Moncler jackets under budget, QC-approved sneakers, and seasonal roundups. Collections complement brand pages when you want a curated shortlist instead of scrolling the full catalog.",
-      "New to agent shopping? Read our beginner guide to LitBuy for registration, warehouse QC, shipping lines, and customs basics. Return to this directory anytime you need a brand-specific starting point — every link on this page points to indexed, verified finds updated as the catalog grows.",
+      "New to agent shopping? Read our beginner guide to LitBuy for registration, warehouse QC, shipping lines, and customs basics. Return to the LitBuy Finds homepage for the full catalog, or use this directory when you need a brand-specific filter on the same indexed finds.",
     ],
   },
 ] as const;

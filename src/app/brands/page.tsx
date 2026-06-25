@@ -19,7 +19,7 @@ import {
   buildFaqSchema,
   buildItemListSchema,
 } from "@/lib/schema";
-import { getBrandsHubMetadataCopy } from "@/lib/metadata-copy";
+import { getBrandsHubMetadataCopy, BRANDS_HUB_SCHEMA_NAME } from "@/lib/metadata-copy";
 import { buildPageMetadata } from "@/lib/seo";
 
 const brandsHubMeta = getBrandsHubMetadataCopy();
@@ -47,7 +47,7 @@ export default function BrandsPage() {
       <SchemaScript data={buildFaqSchema([...BRANDS_HUB_FAQS])} />
       <SchemaScript
         data={buildCollectionPageSchema({
-          name: brandsHubMeta.title,
+          name: BRANDS_HUB_SCHEMA_NAME,
           description: brandsHubMeta.description,
           path: pagePath,
           numberOfItems: brands.length,
@@ -67,11 +67,22 @@ export default function BrandsPage() {
       <section className="border-b border-border/50 px-4 pb-8 pt-4 sm:px-6 sm:pb-10 sm:pt-6">
         <div className="mx-auto max-w-7xl">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
+            <Link href="/" className="hover:underline">
+              LitBuy Finds
+            </Link>
+            {" · "}
             Brand directory
           </p>
-          <h1 className="mt-3 text-3xl font-black sm:text-4xl">Browse All LitBuy Brands</h1>
+          <h1 className="mt-3 text-3xl font-black sm:text-4xl">Browse by Brand</h1>
           <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted">
             {brandsHubMeta.description}
+          </p>
+          <p className="mt-2 text-sm text-muted">
+            Filter the{" "}
+            <Link href="/" className="font-semibold text-accent hover:underline">
+              LitBuy Finds homepage catalog
+            </Link>{" "}
+            by label — same indexed finds, organized for brand-specific browsing.
           </p>
           <p className="mt-3 text-sm text-muted">
             {stats.totalBrands.toLocaleString()} brands ·{" "}

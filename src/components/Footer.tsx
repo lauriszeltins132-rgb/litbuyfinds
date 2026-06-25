@@ -85,7 +85,9 @@ export default function Footer() {
 
         <div className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-6">
           <div className="lg:col-span-2">
-            <p className="text-xl font-black text-foreground">{SITE_NAME}</p>
+            <Link href="/" className="text-xl font-black text-foreground hover:text-accent">
+              {SITE_NAME}
+            </Link>
             <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted">
               Curated LitBuy discovery — verified links, QC references, and
               fresh catalog updates across fashion, sneakers, and accessories.

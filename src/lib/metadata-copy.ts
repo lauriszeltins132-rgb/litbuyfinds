@@ -43,10 +43,10 @@ export function truncateMetaTitle(text: string, max = TITLE_MAX): string {
 export function getHomepageMetadataCopy() {
   return {
     title: truncateMetaTitle(
-      `${META_SCALE} Curated LitBuy Finds | QC Photos, Coupons & Agent Links`
+      `LitBuy Finds | ${META_SCALE} QC Photos, Coupons & Agent Links`
     ),
     description: truncateMetaDescription(
-      `${META_SCALE} QC-approved finds with ${META_VALUE_STACK}. Multi-agent support: ${META_AGENTS}.`
+      `LitBuy Finds (litbuyfinds.io) — ${META_SCALE} QC-approved finds with ${META_VALUE_STACK}. Multi-agent support: ${META_AGENTS}.`
     ),
   };
 }
@@ -54,13 +54,16 @@ export function getHomepageMetadataCopy() {
 export function getBrandsHubMetadataCopy() {
   return {
     title: truncateMetaTitle(
-      `${META_SCALE} QC Photos & LitBuy Finds | Nike, Jordan, Adidas & More`
+      `Nike, Jordan, Adidas & More | LitBuy Brand Directory`
     ),
     description: truncateMetaDescription(
-      `${META_SCALE} QC-approved finds across Nike, Jordan, Adidas, Louis Vuitton, Gucci and more. ${META_VALUE_STACK}.`
+      `Browse the LitBuy Finds catalog by brand — Nike, Jordan, Adidas, Louis Vuitton, Gucci and ${META_SCALE} indexed finds. ${META_VALUE_STACK}.`
     ),
   };
 }
+
+/** CollectionPage / on-page name — distinct from homepage title to avoid branded cannibalization. */
+export const BRANDS_HUB_SCHEMA_NAME = "LitBuy Brand Directory";
 
 export function getCategoriesHubMetadataCopy() {
   return {

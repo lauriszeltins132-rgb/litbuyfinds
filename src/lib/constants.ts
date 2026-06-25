@@ -15,7 +15,7 @@ export const SITE_OG_TITLE = HOMEPAGE_TITLE;
 
 export const SITE_OG_DESCRIPTION = SITE_DESCRIPTION;
 
-export const HERO_HEADLINE = "Discover the Best LitBuy Finds";
+export const HERO_HEADLINE = "LitBuy Finds";
 
 export const HERO_SUBHEADLINE =
   "LitBuy Finds is a product discovery platform for QC photos, spreadsheet finds, fashion finds, sneaker finds and multi-agent shopping links — LitBuy, MuleBuy, OopBuy, ACBuy and Kakobuy.";
