@@ -194,6 +194,22 @@ export function getPopularInCategory(product: Product, limit = 6): Product[] {
     .slice(0, limit);
 }
 
+export function getSimilarFinds(product: Product, limit = 8): Product[] {
+  const related = getRelatedProducts(product, limit);
+  const alsoLike = getYouMayAlsoLike(product, limit);
+  const seen = new Set<string>([product.id]);
+  const merged: Product[] = [];
+
+  for (const item of [...related, ...alsoLike]) {
+    if (seen.has(item.id)) continue;
+    seen.add(item.id);
+    merged.push(item);
+    if (merged.length >= limit) break;
+  }
+
+  return merged;
+}
+
 export function getRecentlyAdded(limit = 12): Product[] {
   return getRecentlyAddedPreview(limit);
 }

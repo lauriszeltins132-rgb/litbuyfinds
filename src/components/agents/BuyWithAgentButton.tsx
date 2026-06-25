@@ -9,6 +9,7 @@ import type { Product } from "@/lib/types";
 import { usePreferences } from "@/context/PreferencesContext";
 import { useAgentModal } from "@/context/AgentModalContext";
 import { trackProductContext } from "@/lib/analytics-events";
+import AgentLogo from "./AgentLogo";
 
 type BuyLocation = "product_card" | "product_page" | "product_modal" | "daily_drop";
 
@@ -123,22 +124,25 @@ export function BuyingAgentPanel({
       className={`rounded-2xl border border-border bg-surface/40 px-4 py-3 ${className}`}
     >
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-[0.14em] text-muted">
-            Buying agent
-          </p>
-          <p className="mt-1 text-sm font-bold text-foreground">
-            {agent.name}
-            {agent.recommended ? (
-              <span className="ml-2 rounded-full border border-accent/30 bg-accent/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-accent">
-                Recommended
-              </span>
-            ) : null}
-          </p>
-          <p className="mt-1 text-xs text-muted">
-            LitBuy recommended — or choose OopBuy, Kakobuy, HipoBuy, ACBuy, or
-            MuleBuy.
-          </p>
+        <div className="flex items-start gap-3">
+          <AgentLogo agentId={agentId} size="md" />
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.14em] text-muted">
+              Buying agent
+            </p>
+            <p className="mt-1 flex flex-wrap items-center gap-2 text-sm font-bold text-foreground">
+              {agent.name}
+              {agent.recommended ? (
+                <span className="rounded-full border border-accent/30 bg-accent/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-accent">
+                  Recommended
+                </span>
+              ) : null}
+            </p>
+            <p className="mt-1 text-xs text-muted">
+              LitBuy recommended — or choose OopBuy, Kakobuy, HipoBuy, ACBuy, or
+              MuleBuy.
+            </p>
+          </div>
         </div>
         <button
           type="button"

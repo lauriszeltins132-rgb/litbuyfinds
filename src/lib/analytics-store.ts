@@ -1,4 +1,3 @@
-import fs from "fs";
 import path from "path";
 import type { ConversionEvent } from "./analytics-events";
 
@@ -75,7 +74,19 @@ function bumpPlacement(
   store.signupPlacements[location] = existing;
 }
 
+function getFs() {
+  if (typeof window !== "undefined") return null;
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    return require("fs") as typeof import("fs");
+  } catch {
+    return null;
+  }
+}
+
 function readFileStore(): AnalyticsStore | null {
+  const fs = getFs();
+  if (!fs) return null;
   try {
     if (!fs.existsSync(STORE_PATH)) return null;
     return JSON.parse(fs.readFileSync(STORE_PATH, "utf-8")) as AnalyticsStore;
@@ -85,6 +96,8 @@ function readFileStore(): AnalyticsStore | null {
 }
 
 function writeFileStore(store: AnalyticsStore) {
+  const fs = getFs();
+  if (!fs) return;
   try {
     fs.mkdirSync(path.dirname(STORE_PATH), { recursive: true });
     fs.writeFileSync(STORE_PATH, JSON.stringify(store, null, 2));
@@ -219,6 +232,21 @@ export function getTopProductIds(limit = 12): string[] {
     .sort(([, a], [, b]) => b.clicks - a.clicks)
     .slice(0, limit)
     .map(([id]) => id);
+}
+
+export function getProductEngagementStats(productId: string): {
+  views: number;
+  saves: number;
+} {
+  const entry = getStore().products[productId];
+  return {
+    views: entry?.clicks ?? 0,
+    saves: entry?.saves ?? 0,
+  };
+}
+
+export function isProductTrending(productId: string, limit = 24): boolean {
+  return getTopProductIds(limit).includes(productId);
 }
 
 export function getAnalyticsSummary() {

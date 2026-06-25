@@ -98,6 +98,15 @@ export function getProductSeoTitle(product: Product): string {
   return getDisplayProductName(product);
 }
 
+export function getProductImageAlt(product: Product): string {
+  const brand = getDisplayBrand(product);
+  const name = getDisplayProductName(product);
+  if (brand) {
+    return `${brand} ${name} — ${product.category} find on LitBuy Finds`;
+  }
+  return `${name} — LitBuy Finds`;
+}
+
 export function getProductSeoDescription(product: Product): string {
   const brand = getDisplayBrand(product);
   const name = getDisplayProductName(product);

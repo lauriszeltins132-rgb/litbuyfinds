@@ -1,19 +1,25 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { Product } from "@/lib/types";
 import type { ProductFacts } from "@/lib/product-details";
+import { getProductImageAlt } from "@/lib/product-details";
 import DataFreshness from "@/components/DataFreshness";
 import MemberBenefitsStrip from "@/components/conversion/MemberBenefitsStrip";
+import ProductEngagementStats from "@/components/ProductEngagementStats";
+import ProductBadges from "@/components/ProductBadges";
 import ProductTrustPanel from "@/components/ProductTrustPanel";
 import QcAccessGate from "@/components/conversion/QcAccessGate";
 import { formatProductPrice, getPriceStatus } from "@/lib/pricing";
+import { getProductBadges } from "@/lib/product-badges";
+import { getProductFreshnessLabel } from "@/lib/product-freshness";
+import { getRnScore } from "@/lib/rn-score";
 import { getProductSource } from "@/lib/filters";
 import { getProductHref, slugify } from "@/lib/slugs";
 import { usePreferences } from "@/context/PreferencesContext";
 import { useWishlist } from "@/context/WishlistContext";
-import { trackProductContext } from "@/lib/analytics-events";
+import { trackProductContext, trackSaveClick } from "@/lib/analytics-events";
 import { resolveProductDisplayImage } from "@/lib/product-image-presentation";
 import HowToBuySteps from "./HowToBuySteps";
 import ProductImage from "./ProductImage";
@@ -28,6 +34,9 @@ type ProductDetailViewProps = {
   highlights: string[];
   brand: string | null;
   categoryHref: string;
+  engagementViews?: number;
+  engagementSaves?: number;
+  engagementTrending?: boolean;
 };
 
 export default function ProductDetailView({
@@ -37,6 +46,9 @@ export default function ProductDetailView({
   highlights,
   brand,
   categoryHref,
+  engagementViews = 0,
+  engagementSaves = 0,
+  engagementTrending = false,
 }: ProductDetailViewProps) {
   const { currency } = usePreferences();
   const { isInWishlist, toggleWishlist } = useWishlist();
@@ -44,6 +56,10 @@ export default function ProductDetailView({
   const saved = isInWishlist(product.id);
   const source = getProductSource(product.affiliate_link);
   const displayImage = resolveProductDisplayImage(product);
+  const imageAlt = getProductImageAlt(product);
+  const badges = useMemo(() => getProductBadges(product, { maxBadges: 3 }), [product]);
+  const rnScore = useMemo(() => getRnScore(product), [product]);
+  const freshnessLabel = useMemo(() => getProductFreshnessLabel(product), [product]);
 
   async function copyLink() {
     const url = `${window.location.origin}${getProductHref(product)}`;
@@ -64,7 +80,7 @@ export default function ProductDetailView({
   return (
     <section className="px-4 py-6 sm:px-6">
       <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-2 lg:gap-12">
-        <div className="product-image-shell product-image-shell--featured product-image-hover overflow-hidden rounded-3xl border border-border">
+        <div className="product-image-shell product-image-shell--featured product-image-hover relative overflow-hidden rounded-3xl border border-border">
           <ProductImage
             src={product.image}
             preferredSrc={displayImage?.displaySrc}
@@ -72,12 +88,13 @@ export default function ProductDetailView({
             fillClass={displayImage?.fillClass}
             needsMatte={displayImage?.needsMatte}
             enhance={displayImage?.enhance}
-            alt={facts.displayName}
+            alt={imageAlt}
             productName={facts.displayName}
             priority
             variant="featured"
             productHref={getProductHref(product)}
           />
+          <ProductBadges badges={badges} className="!left-auto !right-3 !top-3 !items-end" />
         </div>
 
         <div className="flex flex-col">
@@ -87,6 +104,16 @@ export default function ProductDetailView({
                 QC available
               </span>
             )}
+            {badges
+              .filter((badge) => badge.kind !== "qc")
+              .map((badge) => (
+                <span
+                  key={badge.kind}
+                  className="rounded-full border border-border bg-surface/60 px-3 py-1 text-[11px] font-bold text-foreground/90"
+                >
+                  {badge.label}
+                </span>
+              ))}
             <Link
               href={categoryHref}
               className="rounded-full border border-border px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-muted hover:border-accent/40 hover:text-accent"
@@ -101,6 +128,14 @@ export default function ProductDetailView({
           <h1 className="mt-4 text-3xl font-black leading-[1.1] tracking-tight sm:text-4xl lg:text-[2.6rem]">
             {facts.displayName}
           </h1>
+
+          <div className="mt-3">
+            <ProductEngagementStats
+              views={engagementViews}
+              saves={engagementSaves}
+              trending={engagementTrending}
+            />
+          </div>
 
           <div className="mt-4 flex flex-wrap gap-2">
             {brand && (
@@ -135,7 +170,11 @@ export default function ProductDetailView({
           </div>
 
           <div className="mt-4">
-            <ProductTrustPanel facts={facts} />
+            <ProductTrustPanel
+              facts={facts}
+              rnScore={rnScore}
+              freshnessLabel={freshnessLabel}
+            />
           </div>
 
           <p className="mt-5 text-sm leading-relaxed text-muted">{description}</p>
@@ -182,7 +221,10 @@ export default function ProductDetailView({
           <div className="mt-6 flex flex-wrap gap-2">
             <button
               type="button"
-              onClick={() => toggleWishlist(product.id)}
+              onClick={() => {
+                if (!saved) trackSaveClick(product.id, "product_page");
+                toggleWishlist(product.id);
+              }}
               className={`rounded-full border px-5 py-2.5 text-sm font-bold ${
                 saved
                   ? "border-accent bg-accent text-background"

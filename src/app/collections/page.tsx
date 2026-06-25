@@ -3,6 +3,7 @@ import Link from "next/link";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import SchemaScript from "@/components/SchemaScript";
 import { SHARE_COLLECTION_SLUGS, SHARE_COLLECTIONS } from "@/lib/share-collections";
+import { COLLECTION_SLUGS, COLLECTIONS } from "@/lib/collections";
 import { buildCollectionPageSchema } from "@/lib/schema";
 import { buildPageMetadata } from "@/lib/seo";
 
@@ -15,6 +16,9 @@ export const metadata: Metadata = buildPageMetadata({
 
 export default function CollectionsHubPage() {
   const collections = SHARE_COLLECTION_SLUGS.map((slug) => SHARE_COLLECTIONS[slug]);
+  const curatedRails = COLLECTION_SLUGS.map((slug) => COLLECTIONS[slug]).filter(
+    (item) => item.href !== "/trending" && item.href !== "/deals"
+  );
 
   return (
     <>
@@ -43,6 +47,20 @@ export default function CollectionsHubPage() {
           </p>
 
           <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {curatedRails.map((item) => (
+              <li key={item.slug}>
+                <Link
+                  href={item.href}
+                  className="block rounded-2xl border border-border bg-surface/20 p-5 transition hover:border-accent/35"
+                >
+                  <p className="text-xs font-bold uppercase tracking-[0.14em] text-accent">
+                    {item.badge}
+                  </p>
+                  <h2 className="mt-2 text-lg font-black">{item.title}</h2>
+                  <p className="mt-2 line-clamp-2 text-sm text-muted">{item.intro}</p>
+                </Link>
+              </li>
+            ))}
             {collections.map((item) => (
               <li key={item.slug}>
                 <Link

@@ -1,9 +1,12 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useMemo, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import ControlButton from "@/components/ui/ControlButton";
 import TextInput from "@/components/ui/TextInput";
+import { POPULAR_SEARCHES } from "@/lib/constants";
+import { getSearchIndex } from "@/lib/search-suggestions";
 
 function SearchIcon({ className = "h-5 w-5" }: { className?: string }) {
   return (
@@ -35,6 +38,23 @@ export default function GlobalSearch({
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const searchIndex = useMemo(() => getSearchIndex(), []);
+
+  const suggestions = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) {
+      return searchIndex
+        .filter((item) => item.priority >= 88)
+        .slice(0, 8);
+    }
+    return searchIndex
+      .filter(
+        (item) =>
+          item.keywords.includes(q) || item.label.toLowerCase().includes(q)
+      )
+      .sort((a, b) => b.priority - a.priority)
+      .slice(0, 8);
+  }, [query, searchIndex]);
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
@@ -91,6 +111,38 @@ export default function GlobalSearch({
                 Search
               </ControlButton>
             </div>
+
+            {suggestions.length > 0 ? (
+              <ul className="mt-4 max-h-56 space-y-1 overflow-y-auto border-t border-border pt-3">
+                {suggestions.map((item) => (
+                  <li key={`${item.type}-${item.href}-${item.label}`}>
+                    <Link
+                      href={item.href}
+                      onClick={() => setOpen(false)}
+                      className="block rounded-xl px-3 py-2 text-sm font-semibold text-foreground/85 hover:bg-surface/60 hover:text-accent"
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            ) : query.trim() ? (
+              <div className="mt-4 border-t border-border pt-3">
+                <p className="text-xs text-muted">Try popular searches:</p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {POPULAR_SEARCHES.slice(0, 5).map((term) => (
+                    <button
+                      key={term}
+                      type="button"
+                      onClick={() => setQuery(term)}
+                      className="rounded-full border border-border px-2.5 py-1 text-xs font-bold text-foreground/80"
+                    >
+                      {term}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : null}
           </form>
         </div>
       )}

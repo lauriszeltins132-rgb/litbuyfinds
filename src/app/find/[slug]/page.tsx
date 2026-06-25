@@ -8,8 +8,7 @@ import { getDisplayBrand } from "@/lib/product-validation";
 import {
   getMoreFromBrand,
   getPopularInCategory,
-  getRelatedProducts,
-  getYouMayAlsoLike,
+  getSimilarFinds,
 } from "@/lib/discovery";
 import {
   getProductDescription,
@@ -18,8 +17,12 @@ import {
   getProductSeoDescription,
   getProductSeoTitle,
 } from "@/lib/product-details";
-import { getTrendingProducts, getLatestProducts } from "@/lib/products";
+import {
+  getProductEngagementStats,
+  isProductTrending,
+} from "@/lib/analytics-store";
 import { getAllProductSlugs, getProductBySlug, getProductSlug, slugify } from "@/lib/slugs";
+import { getLatestProducts, getTrendingProducts } from "@/lib/products";
 import { buildPageMetadata } from "@/lib/seo";
 import FloatingBackButton from "@/components/FloatingBackButton";
 import ProductJsonLd from "@/components/ProductJsonLd";
@@ -96,8 +99,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   }
 
   const brand = getDisplayBrand(product);
-  const related = getRelatedProducts(product);
-  const alsoLike = getYouMayAlsoLike(product);
+  const similar = getSimilarFinds(product, 8);
   const moreFromBrand = brand ? getMoreFromBrand(product, brand) : [];
   const popularInCategory = getPopularInCategory(product);
   const categoryHref =
@@ -107,6 +109,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
         : "/latest"
       : `/categories/${product.category_slug}`;
   const facts = getProductFacts(product, categoryHref);
+  const engagement = getProductEngagementStats(product.id);
+  const showTrending = isProductTrending(product.id);
 
   return (
     <>
@@ -130,32 +134,21 @@ export default async function ProductPage({ params }: ProductPageProps) {
         highlights={getProductHighlights(product)}
         brand={brand}
         categoryHref={categoryHref}
+        engagementViews={engagement.views}
+        engagementSaves={engagement.saves}
+        engagementTrending={showTrending}
       />
 
-      {related.length > 0 ? (
+      {similar.length > 0 ? (
         <section className="px-4 pt-4 sm:px-6">
           <div className="mx-auto max-w-7xl">
-            <h2 className="text-xl font-black">Related LitBuy Finds</h2>
+            <h2 className="text-xl font-black">Similar finds</h2>
             <p className="mt-1 text-sm text-muted">
-              More in {product.category}
+              You might also like these picks in {product.category}
               {brand ? ` and ${brand}` : ""}.
             </p>
             <div className="mt-6">
-              <ProductGrid products={related} />
-            </div>
-          </div>
-        </section>
-      ) : null}
-
-      {alsoLike.length > 0 ? (
-        <section className="px-4 pt-4 sm:px-6">
-          <div className="mx-auto max-w-7xl">
-            <h2 className="text-xl font-black">Related Products</h2>
-            <p className="mt-1 text-sm text-muted">
-              Other picks in a similar price range and style.
-            </p>
-            <div className="mt-6">
-              <ProductGrid products={alsoLike} />
+              <ProductGrid products={similar} />
             </div>
           </div>
         </section>
@@ -218,6 +211,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
               More {brand} finds →
             </Link>
           ) : null}
+          <Link href="/trending" className="text-sm font-bold text-muted hover:text-accent">
+            Trending finds →
+          </Link>
           <Link href="/recently-added" className="text-sm font-bold text-muted hover:text-accent">
             Recently added →
           </Link>

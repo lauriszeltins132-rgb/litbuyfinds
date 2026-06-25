@@ -1,21 +1,28 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import { FormEvent, useEffect, useMemo, useRef, useState, useTransition } from "react";
+import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { BrandInfo } from "@/lib/brands";
 import type { CategoryInfo, Product } from "@/lib/types";
 import { filterProducts } from "@/lib/filters";
+import { POPULAR_SEARCHES } from "@/lib/constants";
+import { useWishlist } from "@/context/WishlistContext";
 import ControlButton from "@/components/ui/ControlButton";
 import Select from "@/components/ui/Select";
 import TextInput from "@/components/ui/TextInput";
 import FilterChips from "./FilterChips";
 import Pagination from "./Pagination";
 import ProductGrid from "./ProductGrid";
+import ProductGridSkeleton from "./ProductGridSkeleton";
 
 const PAGE_SIZE = 48;
 
 const SORT_OPTIONS = [
   { value: "featured", label: "Featured order" },
+  { value: "popular", label: "Most popular" },
+  { value: "newest", label: "Newest" },
+  { value: "qc", label: "QC linked first" },
   { value: "price-asc", label: "Price: low to high" },
   { value: "price-desc", label: "Price: high to low" },
   { value: "name", label: "Name A–Z" },
@@ -78,19 +85,26 @@ export default function CatalogPanel({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const [isPending, startTransition] = useTransition();
   const params = currentParams(searchParams);
+  const { wishlist } = useWishlist();
 
   const search = searchParams.get("q") ?? "";
   const brand = searchParams.get("brand") ?? "";
   const minPrice = searchParams.get("min") ?? "";
   const maxPrice = searchParams.get("max") ?? "";
   const sort = searchParams.get("sort") ?? "featured";
+  const qcOnly = searchParams.get("qc") === "1";
+  const savedOnly = searchParams.get("saved") === "1";
   const page = Math.max(1, parseInt(searchParams.get("page") ?? "1", 10) || 1);
   const prevPageRef = useRef(page);
 
   const [query, setQuery] = useState(search);
   const [minInput, setMinInput] = useState(minPrice);
   const [maxInput, setMaxInput] = useState(maxPrice);
+  const [filtersOpen, setFiltersOpen] = useState(false);
+
+  const savedIds = useMemo(() => new Set(wishlist), [wishlist]);
 
   const filtered = useMemo(
     () =>
@@ -101,8 +115,11 @@ export default function CatalogPanel({
         minPrice,
         maxPrice,
         sort,
+        qcOnly,
+        savedOnly,
+        savedIds,
       }),
-    [products, search, brand, minPrice, maxPrice, sort]
+    [products, search, brand, minPrice, maxPrice, sort, qcOnly, savedOnly, savedIds]
   );
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
@@ -124,13 +141,19 @@ export default function CatalogPanel({
     });
   }, [currentPage]);
 
+  function navigate(url: string) {
+    startTransition(() => {
+      router.push(url);
+    });
+  }
+
   function handleSearch(event: FormEvent) {
     event.preventDefault();
-    router.push(buildUrl(basePath, params, { q: query.trim() }));
+    navigate(buildUrl(basePath, params, { q: query.trim() }));
   }
 
   function applyPrice() {
-    router.push(
+    navigate(
       buildUrl(basePath, params, {
         min: minInput.trim(),
         max: maxInput.trim(),
@@ -138,10 +161,57 @@ export default function CatalogPanel({
     );
   }
 
+  function toggleParam(key: string, active: boolean) {
+    navigate(buildUrl(basePath, params, { [key]: active ? "" : "1" }));
+  }
+
   const topBrands = brands.slice(0, 18);
   const onCategoryPage =
     pathname.startsWith("/category/") || pathname.startsWith("/categories/");
   const onFeaturedPage = pathname === "/trending" || pathname === "/latest";
+
+  const filterControls = (
+    <>
+      <Select
+        id="sort"
+        label="Sort items"
+        value={sort}
+        onChange={(value) =>
+          navigate(buildUrl(basePath, params, { sort: value }))
+        }
+        options={SORT_OPTIONS}
+        fullWidth
+      />
+
+      <TextInput
+        id="min-price"
+        label="Min price (USD)"
+        type="number"
+        min={0}
+        value={minInput}
+        onChange={setMinInput}
+        placeholder="0"
+      />
+
+      <TextInput
+        id="max-price"
+        label="Max price (USD)"
+        type="number"
+        min={0}
+        value={maxInput}
+        onChange={setMaxInput}
+        placeholder="500"
+      />
+
+      <ControlButton
+        variant="primary"
+        onClick={applyPrice}
+        className="w-full lg:mb-0.5 lg:w-auto"
+      >
+        Apply price
+      </ControlButton>
+    </>
+  );
 
   return (
     <section className="px-4 pb-16 sm:px-6">
@@ -166,6 +236,38 @@ export default function CatalogPanel({
             </ControlButton>
           </div>
         </form>
+
+        <div className="mb-4 flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => toggleParam("qc", qcOnly)}
+            className={`rounded-full border px-3 py-1.5 text-xs font-bold transition ${
+              qcOnly
+                ? "border-accent bg-accent/12 text-accent"
+                : "border-border text-muted hover:border-accent/40"
+            }`}
+          >
+            QC linked
+          </button>
+          <button
+            type="button"
+            onClick={() => toggleParam("saved", savedOnly)}
+            className={`rounded-full border px-3 py-1.5 text-xs font-bold transition ${
+              savedOnly
+                ? "border-accent bg-accent/12 text-accent"
+                : "border-border text-muted hover:border-accent/40"
+            }`}
+          >
+            Saved only
+          </button>
+          <button
+            type="button"
+            onClick={() => setFiltersOpen((value) => !value)}
+            className="rounded-full border border-border px-3 py-1.5 text-xs font-bold text-muted sm:hidden"
+          >
+            {filtersOpen ? "Hide filters" : "More filters"}
+          </button>
+        </div>
 
         <div className="space-y-6 border-b border-border pb-6">
           <FilterChips
@@ -193,45 +295,12 @@ export default function CatalogPanel({
           />
         </div>
 
-        <div className="mt-6 grid grid-cols-1 gap-4 border-b border-border pb-6 lg:grid-cols-[1fr_1fr_1fr_auto] lg:items-end">
-          <Select
-            id="sort"
-            label="Sort items"
-            value={sort}
-            onChange={(value) =>
-              router.push(buildUrl(basePath, params, { sort: value }))
-            }
-            options={SORT_OPTIONS}
-            fullWidth
-          />
-
-          <TextInput
-            id="min-price"
-            label="Min price (USD)"
-            type="number"
-            min={0}
-            value={minInput}
-            onChange={setMinInput}
-            placeholder="0"
-          />
-
-          <TextInput
-            id="max-price"
-            label="Max price (USD)"
-            type="number"
-            min={0}
-            value={maxInput}
-            onChange={setMaxInput}
-            placeholder="500"
-          />
-
-          <ControlButton
-            variant="primary"
-            onClick={applyPrice}
-            className="w-full lg:mb-0.5 lg:w-auto"
-          >
-            Apply price
-          </ControlButton>
+        <div
+          className={`mt-6 grid grid-cols-1 gap-4 border-b border-border pb-6 lg:grid-cols-[1fr_1fr_1fr_auto] lg:items-end ${
+            filtersOpen ? "" : "hidden sm:grid"
+          }`}
+        >
+          {filterControls}
         </div>
 
         <div className="mt-6 flex items-center justify-between gap-4">
@@ -249,7 +318,41 @@ export default function CatalogPanel({
         </div>
 
         <div id="catalog-product-grid" className="catalog-product-grid mt-6 scroll-mt-24">
-          <ProductGrid products={paginated} />
+          {isPending ? (
+            <ProductGridSkeleton count={8} />
+          ) : paginated.length > 0 ? (
+            <ProductGrid products={paginated} />
+          ) : (
+            <div className="rounded-2xl border border-border bg-surface/30 px-6 py-10 text-center">
+              <p className="text-base font-bold text-foreground">No finds matched</p>
+              <p className="mt-2 text-sm text-muted">
+                Try a broader search, clear filters, or browse popular picks.
+              </p>
+              <div className="mt-5 flex flex-wrap justify-center gap-2">
+                {POPULAR_SEARCHES.slice(0, 6).map((term) => (
+                  <Link
+                    key={term}
+                    href={buildUrl(basePath, params, { q: term })}
+                    className="rounded-full border border-border px-3 py-1.5 text-xs font-bold text-foreground/80 hover:border-accent/40 hover:text-accent"
+                  >
+                    {term}
+                  </Link>
+                ))}
+                <Link
+                  href="/trending"
+                  className="rounded-full border border-border px-3 py-1.5 text-xs font-bold text-accent hover:underline"
+                >
+                  Trending finds
+                </Link>
+                <Link
+                  href="/wishlist"
+                  className="rounded-full border border-border px-3 py-1.5 text-xs font-bold text-foreground/80 hover:border-accent/40"
+                >
+                  Saved items
+                </Link>
+              </div>
+            </div>
+          )}
         </div>
 
         <Pagination

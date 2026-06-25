@@ -8,14 +8,13 @@ import HomepageBrands from "@/components/HomepageBrands";
 import HomepageCategories from "@/components/HomepageCategories";
 import HomepageCollections from "@/components/HomepageCollections";
 import HomepageFaq from "@/components/HomepageFaq";
-import HomepageLitBuyResources from "@/components/HomepageLitBuyResources";
-import HomepageWhyLitBuy from "@/components/HomepageWhyLitBuy";
 import RecentlyViewedRail from "@/components/RecentlyViewedRail";
+import ProductGridSkeleton from "@/components/ProductGridSkeleton";
 import TrustStrip from "@/components/TrustStrip";
+import { getEditorsPicks } from "@/lib/discovery";
 import { getHomepageRails } from "@/lib/homepage-rails";
 import { getBrandsFromProducts } from "@/lib/brands";
-import { getAllProducts, getCategories } from "@/lib/products";
-import { slugify } from "@/lib/slugs";
+import { getAllProducts, getCategories, getDealProducts } from "@/lib/products";
 import { buildHomepageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildHomepageMetadata();
@@ -25,103 +24,59 @@ export default function HomePage() {
   const categories = getCategories();
   const brands = getBrandsFromProducts(products);
   const rails = getHomepageRails(12);
+  const editorsPicks = getEditorsPicks(12);
+  const bestUnder20 = getDealProducts(20).slice(0, 12);
 
   return (
     <>
       <DiscoveryHero />
 
       <DiscoveryRail
-        title="Popular Today"
+        title="Trending Today"
         subtitle="Most viewed and clicked in the last 24 hours"
         href="/most-popular-finds-now"
         products={rails.popularToday}
         showTrendingScore
       />
 
-      <HomepageWhyLitBuy location="homepage_after_popular" />
+      <DiscoveryRail
+        title="Just Added"
+        subtitle="Fresh listings from the latest catalog sync"
+        href="/recently-added"
+        products={rails.addedToday}
+      />
+
+      {editorsPicks.length > 0 ? (
+        <DiscoveryRail
+          title="Editor's Picks"
+          subtitle="QC-linked standouts with strong presentation"
+          href="/editors-picks"
+          products={editorsPicks}
+        />
+      ) : null}
+
+      {bestUnder20.length > 0 ? (
+        <DiscoveryRail
+          title="Best Under $20"
+          subtitle="Budget-friendly finds that still look premium"
+          href="/best-under-30"
+          products={bestUnder20}
+        />
+      ) : null}
 
       <DiscoveryRail
-        title="Popular This Week"
-        subtitle="Trending sneakers, jackets and streetwear from the last 7 days"
+        title="Most Viewed This Week"
+        subtitle="Trending sneakers, jackets and streetwear"
         href="/trending"
         products={rails.popularWeek}
         showTrendingScore
       />
 
-      <DiscoveryRail
-        title="Added Today"
-        subtitle="Newest listings from the latest catalog sync"
-        href="/recently-added"
-        products={rails.addedToday}
-      />
-
-      <DiscoveryRail
-        title="Recently Added"
-        subtitle="Fresh Weidian, Taobao and LitBuy listings"
-        href="/recently-added"
-        products={rails.recentlyAdded}
-      />
-
       <TrustStrip compact />
 
-      <DiscoveryRail
-        title="Top QC Finds"
-        subtitle="QC-approved products with warehouse photo references"
-        href="/best-qc-approved-finds"
-        products={rails.topQcFinds}
-      />
-
-      <DiscoveryRail
-        title="Most Saved This Week"
-        subtitle="Products with the most clicks and saves"
-        href="/most-popular-finds-now"
-        products={rails.mostSavedWeek}
-      />
-
-      <DiscoveryRail
-        title="Highest QC Rated"
-        subtitle="QC-linked finds with strong engagement"
-        href="/best-qc-items"
-        products={rails.highestQcRated}
-      />
-
-      <DiscoveryRail
-        title="Best Under $30"
-        subtitle="Affordable picks that still look premium"
-        href="/best-under-30"
-        products={rails.budgetFinds}
-      />
-
-      <DiscoveryRail
-        title="Rising This Week"
-        subtitle="Gaining momentum across the catalog"
-        href="/best-finds-this-week"
-        products={rails.risingWeek}
-      />
-
       <HomepageCategories categories={categories} />
-
-      <HomepageLitBuyResources />
-
       <HomepageCollections />
-
-      {rails.trendingBrand ? (
-        <DiscoveryRail
-          title={`Trending: ${rails.trendingBrand.brand}`}
-          subtitle="Popular finds from this brand right now"
-          href={`/brands/${slugify(rails.trendingBrand.brand)}`}
-          products={rails.trendingBrand.products}
-        />
-      ) : null}
-
       <HomepageBrands hideSpotlight />
-
-      <DiscoveryRail
-        title="Popular This Month"
-        subtitle="Standout finds from the last 30 days"
-        href="/top-litbuy-finds-this-month"
-        products={rails.popularMonth}
-      />
 
       <RecentlyViewedRail />
 
@@ -144,7 +99,11 @@ export default function HomePage() {
 
       <Suspense
         fallback={
-          <div className="py-24 text-center text-muted">Loading catalog...</div>
+          <section className="px-4 pb-16 sm:px-6">
+            <div className="panel-shell mx-auto max-w-7xl rounded-[32px] border border-border-strong bg-panel p-5 sm:p-7">
+              <ProductGridSkeleton count={12} />
+            </div>
+          </section>
         }
       >
         <CatalogPanel

@@ -1,12 +1,19 @@
 import Link from "next/link";
 import type { ProductFacts } from "@/lib/product-details";
+import type { RnScoreResult } from "@/lib/rn-score";
 import { formatSyncedTimestamp } from "@/lib/catalog-meta";
 
 type ProductTrustPanelProps = {
   facts: ProductFacts;
+  rnScore?: RnScoreResult | null;
+  freshnessLabel?: string | null;
 };
 
-export default function ProductTrustPanel({ facts }: ProductTrustPanelProps) {
+export default function ProductTrustPanel({
+  facts,
+  rnScore,
+  freshnessLabel,
+}: ProductTrustPanelProps) {
   return (
     <div className="rounded-2xl border border-border bg-surface/35 p-4 sm:p-5">
       <p className="text-xs font-bold uppercase tracking-[0.16em] text-accent">
@@ -14,6 +21,24 @@ export default function ProductTrustPanel({ facts }: ProductTrustPanelProps) {
       </p>
 
       <dl className="mt-4 grid gap-3 sm:grid-cols-2">
+        {rnScore?.show ? (
+          <div>
+            <dt className="text-[11px] font-bold uppercase tracking-wider text-muted">
+              RN Score
+            </dt>
+            <dd className="mt-1 text-sm font-black text-accent">{rnScore.display}</dd>
+          </div>
+        ) : null}
+        {freshnessLabel ? (
+          <div>
+            <dt className="text-[11px] font-bold uppercase tracking-wider text-muted">
+              Freshness
+            </dt>
+            <dd className="mt-1 text-sm font-semibold text-foreground">
+              {freshnessLabel}
+            </dd>
+          </div>
+        ) : null}
         <div>
           <dt className="text-[11px] font-bold uppercase tracking-wider text-muted">
             Catalog images

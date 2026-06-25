@@ -20,11 +20,13 @@ export default function RecentlyViewedRail({
   if (products.length === 0) return null;
 
   return (
-    <DiscoveryRail
+    <div id="recently-viewed">
+      <DiscoveryRail
       title={title}
       subtitle="People also viewed these finds"
-      href="/"
+      href="/#recently-viewed"
       products={products}
     />
+    </div>
   );
 }

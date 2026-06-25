@@ -10,6 +10,7 @@ import {
 import type { Product } from "@/lib/types";
 import { usePreferences } from "@/context/PreferencesContext";
 import { trackProductContext } from "@/lib/analytics-events";
+import AgentLogo from "./AgentLogo";
 
 type AgentModalProps = {
   open: boolean;
@@ -104,39 +105,26 @@ export default function AgentModal({
                 <button
                   type="button"
                   onClick={() => handleSelect(agent.id)}
-                  className={`agent-modal__option flex w-full flex-col items-start rounded-2xl border px-4 py-3 text-left transition-colors ${
-                    selected
-                      ? "border-accent/50 bg-accent/10"
-                      : "border-border bg-surface/40 hover:border-accent/30 hover:bg-surface/70"
+                  className={`agent-selector-card w-full ${
+                    selected ? "agent-selector-card--selected" : ""
                   } ${agent.recommended ? "agent-modal__option--recommended" : ""}`}
                 >
-                  <div className="flex w-full items-center justify-between gap-2">
-                    <span className="flex items-center gap-2">
-                      <span
-                        className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-black ${
-                          agent.recommended
-                            ? "bg-accent text-background"
-                            : "bg-border text-foreground"
-                        }`}
-                        aria-hidden
-                      >
-                        {agent.shortLabel.slice(0, 2).toUpperCase()}
-                      </span>
-                      <span className="font-bold text-foreground">{agent.name}</span>
-                    </span>
+                  <AgentLogo agentId={agent.id} size="md" />
+                  <span className="agent-selector-card__body">
+                    <span className="agent-selector-card__name">{agent.name}</span>
                     {agent.recommended ? (
-                      <span className="rounded-full border border-accent/35 bg-accent/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-accent">
-                        Recommended
+                      <span className="agent-selector-card__badge">
+                        ⭐ Recommended
                       </span>
                     ) : null}
-                  </div>
-                  <p className="mt-2 text-xs leading-relaxed text-muted">
-                    {agent.description}
-                  </p>
+                    <span className="mt-1 text-xs leading-relaxed text-muted">
+                      {agent.description}
+                    </span>
+                  </span>
                   {product && !buyUrl ? (
-                    <p className="mt-2 text-[11px] font-semibold text-amber-300/90">
-                      Opens agent search for this item
-                    </p>
+                    <span className="text-[11px] font-semibold text-amber-300/90">
+                      Search on agent
+                    </span>
                   ) : null}
                 </button>
               </li>
@@ -147,7 +135,8 @@ export default function AgentModal({
         {product ? (
           <p className="mt-4 text-center text-xs text-muted">
             Selected:{" "}
-            <span className="font-bold text-foreground">
+            <span className="inline-flex items-center gap-1.5 font-bold text-foreground">
+              <AgentLogo agentId={agentId} size="xs" />
               {getAgentById(agentId).name}
             </span>
           </p>

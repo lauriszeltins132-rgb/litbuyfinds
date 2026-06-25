@@ -4,15 +4,19 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import type { Product } from "@/lib/types";
 import { getDisplayProductName, getDisplayBrand } from "@/lib/product-validation";
+import { getProductImageAlt } from "@/lib/product-details";
 import { formatProductPrice, getPriceStatus } from "@/lib/pricing";
-import { getTrendingScore } from "@/lib/discovery";
+import { getProductBadges } from "@/lib/product-badges";
+import { getProductFreshnessLabel } from "@/lib/product-freshness";
 import { resolveProductDisplayImage } from "@/lib/product-image-presentation";
 import { getProductSource } from "@/lib/filters";
 import { getProductHref } from "@/lib/slugs";
+import BrandMark from "./BrandMark";
 import { usePreferences } from "@/context/PreferencesContext";
 import { useWishlist } from "@/context/WishlistContext";
 import { trackProductContext, trackSaveClick } from "@/lib/analytics-events";
 import LitBuyMicroCta from "./LitBuyMicroCta";
+import ProductBadges from "./ProductBadges";
 import ProductImage from "./ProductImage";
 import BuyWithAgentButton from "./agents/BuyWithAgentButton";
 
@@ -50,7 +54,12 @@ export default function ProductCard({
   const brand = getDisplayBrand(product);
   const source = getProductSource(product.affiliate_link);
   const productHref = getProductHref(product);
-  const heatScore = useMemo(() => getTrendingScore(product), [product]);
+  const imageAlt = getProductImageAlt(product);
+  const badges = useMemo(
+    () => getProductBadges(product, { showTrendingScore, maxBadges: 2 }),
+    [product, showTrendingScore]
+  );
+  const freshness = useMemo(() => getProductFreshnessLabel(product), [product]);
   const displayImage = useMemo(
     () => resolveProductDisplayImage(product),
     [product]
@@ -72,7 +81,7 @@ export default function ProductCard({
 
   return (
     <article
-      className={`product-card group flex flex-col overflow-hidden rounded-xl border border-border bg-panel transition-all duration-300 active:scale-[0.99] sm:rounded-2xl sm:hover:-translate-y-1 sm:hover:border-accent/30 sm:hover:shadow-[0_12px_40px_rgba(212,255,60,0.08)] ${
+      className={`product-card group flex flex-col overflow-hidden rounded-xl border border-border bg-panel active:scale-[0.99] sm:rounded-2xl ${
         compact ? "text-[12px] sm:text-[13px]" : ""
       }`}
     >
@@ -88,7 +97,7 @@ export default function ProductCard({
             fillClass={displayImage?.fillClass}
             needsMatte={displayImage?.needsMatte}
             enhance={displayImage?.enhance}
-            alt={displayName}
+            alt={imageAlt}
             productName={displayName}
             variant="card"
             productHref={productHref}
@@ -99,18 +108,7 @@ export default function ProductCard({
             </p>
           </div>
         </Link>
-        <div className="product-card-badges">
-          {(showTrendingScore ? heatScore >= 68 : heatScore >= 74) && (
-            <span className="product-card-badge rounded-full border border-accent/35 bg-background/90 px-2 py-0.5 text-[10px] font-bold text-accent shadow-sm backdrop-blur-sm">
-              {heatScore} hot
-            </span>
-          )}
-          {product.qc_link && (
-            <span className="product-card-badge rounded-full border border-accent/30 bg-background/90 px-2 py-0.5 text-[10px] font-bold text-accent shadow-sm backdrop-blur-sm">
-              QC available
-            </span>
-          )}
-        </div>
+        <ProductBadges badges={badges} />
       </div>
 
       <div className={`flex flex-1 flex-col gap-1.5 ${compact ? "p-2.5 sm:p-3" : "p-3.5"}`}>
@@ -125,8 +123,11 @@ export default function ProductCard({
         </Link>
 
         <div className="flex flex-wrap items-center gap-1.5 text-[11px] text-muted">
-          {brand && <span>{brand}</span>}
+          {brand ? <BrandMark name={brand} size="sm" /> : null}
           <span className="rounded bg-surface px-1.5 py-0.5 uppercase">{source}</span>
+          {freshness ? (
+            <span className="text-[10px] font-semibold text-accent/80">{freshness}</span>
+          ) : null}
         </div>
 
         <p

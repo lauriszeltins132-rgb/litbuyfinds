@@ -1,6 +1,5 @@
-import { getStore, getTopProductIds } from "./analytics-store";
 import { getBrandsFromProducts, extractBrand } from "./brands";
-import { getCategories, getAllProducts } from "./products";
+import { getCategories, getAllProducts, getTrendingProducts } from "./products";
 import { BEST_OF_PAGES, BEST_OF_SLUGS } from "./best-of-pages";
 import { GUIDE_PAGES } from "./guides";
 import { SHARE_COLLECTION_SLUGS, SHARE_COLLECTIONS } from "./share-collections";
@@ -109,10 +108,10 @@ function buildIndex(): SearchSuggestion[] {
   const products = getAllProducts();
   const brands = getBrandsFromProducts(products);
   const topBrandNames = new Set(
-    Object.entries(getStore().brands)
-      .sort(([, a], [, b]) => b - a)
+    brands
+      .sort((a, b) => b.count - a.count)
       .slice(0, 12)
-      .map(([name]) => name.toLowerCase())
+      .map((brand) => brand.name.toLowerCase())
   );
 
   for (const brand of POPULAR_SEARCHES) {
@@ -239,7 +238,9 @@ function buildIndex(): SearchSuggestion[] {
     });
   }
 
-  const trendingIds = new Set(getTopProductIds(20));
+  const trendingIds = new Set(
+    getTrendingProducts().slice(0, 20).map((product) => product.id)
+  );
   for (const product of products) {
     if (!trendingIds.has(product.id)) continue;
     items.push({

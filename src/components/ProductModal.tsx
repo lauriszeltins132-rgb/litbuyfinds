@@ -1,20 +1,25 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import type { Product } from "@/lib/types";
 import { getProductHref } from "@/lib/slugs";
 import { getDisplayBrand, getDisplayProductName } from "@/lib/product-validation";
+import { getProductImageAlt } from "@/lib/product-details";
 import { formatProductPrice } from "@/lib/pricing";
+import { getProductBadges } from "@/lib/product-badges";
 import { getProductSource } from "@/lib/filters";
 import {
   getProductDescription,
   getProductHighlights,
 } from "@/lib/product-details";
 import { usePreferences } from "@/context/PreferencesContext";
+import { useWishlist } from "@/context/WishlistContext";
+import { useRecentlyViewed } from "@/context/RecentlyViewedContext";
 import { useConversion } from "@/context/ConversionContext";
-import { trackProductContext } from "@/lib/analytics-events";
+import { trackProductContext, trackSaveClick } from "@/lib/analytics-events";
 import { resolveProductDisplayImage } from "@/lib/product-image-presentation";
+import ProductBadges from "./ProductBadges";
 import ProductImage from "./ProductImage";
 import BuyWithAgentButton from "./agents/BuyWithAgentButton";
 
@@ -26,10 +31,13 @@ type ProductModalProps = {
 export default function ProductModal({ product, onClose }: ProductModalProps) {
   const { currency } = usePreferences();
   const { recordProductView } = useConversion();
+  const { isInWishlist, toggleWishlist } = useWishlist();
+  const { addViewed } = useRecentlyViewed();
 
   useEffect(() => {
     if (!product) return;
     recordProductView(product.id);
+    addViewed(product.id);
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     document.body.style.overflow = "hidden";
     window.addEventListener("keydown", onKey);
@@ -37,7 +45,12 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
       document.body.style.overflow = "";
       window.removeEventListener("keydown", onKey);
     };
-  }, [product, onClose, recordProductView]);
+  }, [product, onClose, recordProductView, addViewed]);
+
+  const badges = useMemo(
+    () => (product ? getProductBadges(product, { maxBadges: 2 }) : []),
+    [product]
+  );
 
   if (!product) return null;
 
@@ -45,6 +58,8 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
   const brand = getDisplayBrand(product);
   const source = getProductSource(product.affiliate_link);
   const displayImage = resolveProductDisplayImage(product);
+  const imageAlt = getProductImageAlt(product);
+  const saved = isInWishlist(product.id);
 
   return (
     <div className="fixed inset-0 z-[150] flex items-end justify-center sm:items-center sm:p-4">
@@ -79,11 +94,12 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
                 fillClass={displayImage?.fillClass}
                 needsMatte={displayImage?.needsMatte}
                 enhance={displayImage?.enhance}
-                alt={displayName}
+                alt={imageAlt}
                 productName={displayName}
                 variant="card"
                 productHref={getProductHref(product)}
               />
+              <ProductBadges badges={badges} />
             </div>
             {product.qc_link && (
               <a
@@ -132,13 +148,29 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
             </ul>
 
             <div className="mt-auto space-y-3 pt-8">
-              <Link
-                href={getProductHref(product)}
-                onClick={onClose}
-                className="flex w-full items-center justify-center rounded-full border border-border py-3 text-sm font-bold text-foreground hover:border-accent/40"
-              >
-                Open full product page
-              </Link>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (!saved) trackSaveClick(product.id, "product_modal");
+                    toggleWishlist(product.id);
+                  }}
+                  className={`flex flex-1 items-center justify-center rounded-full border py-3 text-sm font-bold ${
+                    saved
+                      ? "border-accent bg-accent text-background"
+                      : "border-border text-foreground hover:border-accent/40"
+                  }`}
+                >
+                  {saved ? "Saved" : "Save"}
+                </button>
+                <Link
+                  href={getProductHref(product)}
+                  onClick={onClose}
+                  className="flex flex-1 items-center justify-center rounded-full border border-border py-3 text-sm font-bold text-foreground hover:border-accent/40"
+                >
+                  Full page
+                </Link>
+              </div>
               {product.affiliate_link ? (
                 <BuyWithAgentButton
                   product={product}

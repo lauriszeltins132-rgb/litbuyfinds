@@ -5,11 +5,27 @@ import type { AgentId } from "@/lib/agents";
 import { BUYING_AGENTS, getAgentById } from "@/lib/agents";
 import { usePreferences } from "@/context/PreferencesContext";
 import { useAgentModal } from "@/context/AgentModalContext";
+import AgentLogo from "./AgentLogo";
 
 type AgentSelectorProps = {
   variant?: "header" | "mobile";
   className?: string;
 };
+
+/** Primary agents shown first in mobile sheet */
+const MOBILE_AGENT_ORDER: AgentId[] = [
+  "litbuy",
+  "mulebuy",
+  "oopbuy",
+  "kakobuy",
+  "acbuy",
+  "hipobuy",
+];
+
+function orderedAgents(): typeof BUYING_AGENTS {
+  const byId = Object.fromEntries(BUYING_AGENTS.map((a) => [a.id, a]));
+  return MOBILE_AGENT_ORDER.map((id) => byId[id]).filter(Boolean);
+}
 
 export default function AgentSelector({
   variant = "header",
@@ -21,6 +37,7 @@ export default function AgentSelector({
   const rootRef = useRef<HTMLDivElement>(null);
   const current = getAgentById(agentId);
   const isMobile = variant === "mobile";
+  const agents = orderedAgents();
 
   useEffect(() => {
     if (!open) return;
@@ -47,99 +64,109 @@ export default function AgentSelector({
     setOpen(false);
   }
 
-  const triggerClass = isMobile
-    ? "agent-selector agent-selector--mobile"
-    : "agent-selector agent-selector--header";
-
   return (
-    <div ref={rootRef} className={`relative ${className}`}>
+    <div ref={rootRef} className={`agent-selector-root ${className}`}>
       <button
         type="button"
         onClick={() => setOpen((value) => !value)}
-        className={triggerClass}
+        className={
+          isMobile ? "agent-selector-trigger agent-selector-trigger--mobile" : "agent-selector-trigger agent-selector-trigger--desktop"
+        }
         aria-expanded={open}
         aria-haspopup="listbox"
       >
-        {isMobile ? (
-          <>
-            <span className="agent-selector__mobile-prefix">Agent</span>
-            <span className="agent-selector__mobile-value">{current.name}</span>
-            <span className="agent-selector__chevron" aria-hidden>
-              ▾
-            </span>
-          </>
-        ) : (
-          <>
-            <span className="agent-selector__label">Choose your agent</span>
-            <span className="agent-selector__value">
-              {current.name}
-              {current.recommended ? (
-                <span className="agent-selector__recommended">Recommended</span>
-              ) : null}
-            </span>
-            <span className="agent-selector__chevron" aria-hidden>
-              ▾
-            </span>
-          </>
-        )}
+        <AgentLogo agentId={agentId} size={isMobile ? "xs" : "sm"} />
+        <span className="agent-selector-trigger__text">
+          {!isMobile ? (
+            <>
+              <span className="agent-selector-trigger__label">Agent</span>
+              <span className="agent-selector-trigger__value">{current.name}</span>
+            </>
+          ) : (
+            <span className="agent-selector-trigger__value">{current.name}</span>
+          )}
+        </span>
+        {current.recommended && !isMobile ? (
+          <span className="agent-selector-trigger__pill">Recommended</span>
+        ) : null}
+        <span className="agent-selector-trigger__chevron" aria-hidden>
+          ▾
+        </span>
       </button>
 
       {open ? (
         <>
-          {isMobile ? (
-            <button
-              type="button"
-              className="agent-selector__backdrop"
-              aria-label="Close agent menu"
-              onClick={() => setOpen(false)}
-            />
-          ) : null}
+          <button
+            type="button"
+            className="agent-selector-backdrop"
+            aria-label="Close agent menu"
+            onClick={() => setOpen(false)}
+          />
           <div
             className={
-              isMobile ? "agent-selector__sheet" : "agent-selector__menu"
+              isMobile
+                ? "agent-selector-panel agent-selector-panel--sheet"
+                : "agent-selector-panel agent-selector-panel--dropdown"
             }
             role="listbox"
             aria-label="Buying agents"
           >
-            {isMobile ? (
-              <div className="agent-selector__sheet-header">
-                <span className="agent-selector__sheet-title">
-                  Choose your agent
-                </span>
-                <button
-                  type="button"
-                  className="agent-selector__sheet-close"
-                  onClick={() => setOpen(false)}
-                  aria-label="Close"
-                >
-                  ✕
-                </button>
-              </div>
-            ) : null}
-            {BUYING_AGENTS.map((agent) => (
+            <div className="agent-selector-panel__header">
+              <h2 className="agent-selector-panel__title">Choose agent</h2>
               <button
-                key={agent.id}
                 type="button"
-                role="option"
-                aria-selected={agentId === agent.id}
-                onClick={() => selectAgent(agent.id)}
-                className={`agent-selector__option ${
-                  agentId === agent.id ? "agent-selector__option--active" : ""
-                }`}
+                className="agent-selector-panel__close"
+                onClick={() => setOpen(false)}
+                aria-label="Close"
               >
-                <span className="font-bold">{agent.name}</span>
-                {agent.recommended ? (
-                  <span className="agent-selector__pill">Recommended</span>
-                ) : null}
+                ✕
               </button>
-            ))}
+            </div>
+
+            <ul className="agent-selector-list">
+              {agents.map((agent) => {
+                const selected = agentId === agent.id;
+                return (
+                  <li key={agent.id}>
+                    <button
+                      type="button"
+                      role="option"
+                      aria-selected={selected}
+                      onClick={() => selectAgent(agent.id)}
+                      className={`agent-selector-card ${
+                        selected ? "agent-selector-card--selected" : ""
+                      } ${agent.recommended ? "agent-selector-card--recommended" : ""}`}
+                    >
+                      <span
+                        className={`agent-selector-card__radio ${
+                          selected ? "agent-selector-card__radio--on" : ""
+                        }`}
+                        aria-hidden
+                      />
+                      <AgentLogo agentId={agent.id} size="md" />
+                      <span className="agent-selector-card__body">
+                        <span className="agent-selector-card__name">
+                          {agent.name}
+                        </span>
+                        {agent.recommended ? (
+                          <span className="agent-selector-card__badge">
+                            ⭐ Recommended
+                          </span>
+                        ) : null}
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+
             <button
               type="button"
               onClick={() => {
                 setOpen(false);
                 openAgentModal({ redirectOnSelect: false });
               }}
-              className="agent-selector__footer"
+              className="agent-selector-panel__footer"
             >
               Compare all agents
             </button>
