@@ -15,6 +15,15 @@ import ImageUnavailablePlaceholder from "./ImageUnavailablePlaceholder";
 
 type ProductImageVariant = "card" | "featured" | "hero";
 
+const IMAGE_LAYOUT: Record<
+  ProductImageVariant,
+  { width: number; height: number }
+> = {
+  card: { width: 400, height: 400 },
+  featured: { width: 540, height: 500 },
+  hero: { width: 600, height: 560 },
+};
+
 type ProductImageProps = {
   src: string;
   alt: string;
@@ -92,6 +101,7 @@ export default function ProductImage({
   const loggedRef = useRef(false);
 
   const displaySrc = candidates[srcIndex] ?? "";
+  const loadEager = priority || variant === "card";
 
   useEffect(() => {
     setSrcIndex(0);
@@ -145,9 +155,27 @@ export default function ProductImage({
   useEffect(() => {
     const img = imgRef.current;
     if (!img || failed || !displaySrc) return;
-    if (img.complete && img.naturalWidth > 0) {
-      confirmLoaded(img);
-    }
+
+    const tryConfirm = () => {
+      if (img.complete && img.naturalWidth > 0) {
+        confirmLoaded(img);
+        return true;
+      }
+      return false;
+    };
+
+    if (tryConfirm()) return;
+
+    let cancelled = false;
+    void img.decode?.().then(() => {
+      if (!cancelled) tryConfirm();
+    }).catch(() => {
+      if (!cancelled) tryConfirm();
+    });
+
+    return () => {
+      cancelled = true;
+    };
   }, [confirmLoaded, displaySrc, failed, srcIndex]);
 
   if (failed || !displaySrc) {
@@ -164,7 +192,9 @@ export default function ProductImage({
     "product-float-asset",
     resolvedFillClass,
     resolvedEnhance ? "product-float-asset--enhanced" : "",
-    loaded ? "product-float-asset--ready" : "product-float-asset--loading",
+    loaded || variant === "card"
+      ? "product-float-asset--ready"
+      : "product-float-asset--loading",
   ]
     .filter(Boolean)
     .join(" ");
@@ -181,8 +211,10 @@ export default function ProductImage({
           key={displaySrc}
           src={displaySrc}
           alt={alt}
-          loading={priority ? "eager" : "lazy"}
-          fetchPriority={priority ? "high" : "auto"}
+          width={IMAGE_LAYOUT[variant].width}
+          height={IMAGE_LAYOUT[variant].height}
+          loading={loadEager ? "eager" : "lazy"}
+          fetchPriority={loadEager ? "high" : "auto"}
           decoding="async"
           referrerPolicy="no-referrer"
           className={assetClass}
@@ -190,7 +222,7 @@ export default function ProductImage({
           onError={handleError}
         />
       </div>
-      {!loaded ? (
+      {!loaded && variant !== "card" ? (
         <ImageUnavailablePlaceholder
           variant={variant}
           loading

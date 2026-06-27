@@ -25,6 +25,7 @@ type ProductCardProps = {
   onOpen?: (product: Product) => void;
   compact?: boolean;
   showTrendingScore?: boolean;
+  priority?: boolean;
 };
 
 async function shareProduct(product: Product, title: string) {
@@ -45,6 +46,7 @@ export default function ProductCard({
   onOpen,
   compact = false,
   showTrendingScore = false,
+  priority = false,
 }: ProductCardProps) {
   const { currency } = usePreferences();
   const { isInWishlist, toggleWishlist } = useWishlist();
@@ -101,6 +103,7 @@ export default function ProductCard({
             productName={displayName}
             variant="card"
             productHref={productHref}
+            priority={priority}
           />
           <div className="product-card-hover-hint bg-gradient-to-t from-background/50 to-transparent px-3 py-2 opacity-0 transition-opacity group-hover:opacity-100">
             <p className="text-[10px] font-bold uppercase tracking-wider text-accent">

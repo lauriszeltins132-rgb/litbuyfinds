@@ -61,12 +61,13 @@ export default function ProductGrid({
   return (
     <>
       <div className="product-grid grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6">
-        {products.map((product) => (
+        {products.map((product, index) => (
           <ProductCard
             key={product.id}
             product={product}
             onOpen={setSelected}
             showTrendingScore
+            priority={index < 12}
           />
         ))}
       </div>

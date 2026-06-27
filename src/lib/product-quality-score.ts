@@ -15,6 +15,7 @@ import { hasExactPrice } from "./pricing";
 import { resolveProductDisplayImage } from "./product-image-presentation";
 import { validateProduct } from "./product-validation";
 import { isUsableImageUrl } from "./image-url";
+import { seededShuffle } from "./rotation-seeds";
 import type { Product } from "./types";
 
 const LOW_PRIORITY_PATTERN =
@@ -299,7 +300,7 @@ export function pickFeaturedProducts(
   pool: Product[],
   limit: number,
   used: Set<string>,
-  day: number,
+  periodSeed: number,
   salt: string,
   options: {
     predicate?: (product: Product) => boolean;
@@ -307,16 +308,6 @@ export function pickFeaturedProducts(
     preferEditorial?: boolean;
   } = {}
 ): Product[] {
-  const dayHash = (id: string) => {
-    const s = `${salt}:${day}:${id}`;
-    let h = 2166136261;
-    for (let i = 0; i < s.length; i++) {
-      h ^= s.charCodeAt(i);
-      h = Math.imul(h, 16777619);
-    }
-    return h >>> 0;
-  };
-
   const eligible = pool.filter(
     (product) =>
       isHomepageCuratedEligible(product) &&
@@ -340,10 +331,18 @@ export function pickFeaturedProducts(
       getProductQualityScore(a, { analyticsRank: aRank });
     if (scoreDiff !== 0) return scoreDiff;
 
-    return dayHash(b.id) - dayHash(a.id);
+    return Number(b.id) - Number(a.id);
   });
 
   let tiered = filterVisualTier(ranked);
+  if (tiered.length === 0) return [];
+
+  const rotationDepth = Math.min(
+    tiered.length,
+    Math.max(limit * 5, limit + 24, 36)
+  );
+  const rotationPool = tiered.slice(0, rotationDepth);
+  tiered = seededShuffle(rotationPool, periodSeed, salt, (product) => product.id);
 
   if (options.preferEditorial !== false && tiered.length > limit) {
     const editorial = tiered.filter((p) => getEditorialBrandBoost(p) > 0);
@@ -352,10 +351,7 @@ export function pickFeaturedProducts(
       editorial.length,
       Math.max(Math.ceil(limit * 0.65), limit - 3)
     );
-    tiered = [
-      ...editorial.slice(0, editorialQuota),
-      ...rest,
-    ];
+    tiered = [...editorial.slice(0, editorialQuota), ...rest];
     const seen = new Set<string>();
     tiered = tiered.filter((p) => {
       if (seen.has(p.id)) return false;

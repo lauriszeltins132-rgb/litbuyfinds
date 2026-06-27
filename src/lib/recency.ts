@@ -1,8 +1,6 @@
 import { getAllProducts, getLatestProducts, sortWithImagesFirst } from "./products";
+import { getUtcDayIndex, rotateWindow } from "./rotation-seeds";
 import type { Product } from "./types";
-function getUtcDayIndex(): number {
-  return Math.floor(Date.now() / 86_400_000);
-}
 
 function byNewestId(a: Product, b: Product): number {
   return Number(b.id) - Number(a.id);
@@ -32,18 +30,14 @@ export function getRecencyPool(): Product[] {
   return sortWithImagesFirst(merged);
 }
 
-function sliceRotating(pool: Product[], window: number, step: number): Product[] {
-  if (pool.length === 0) return [];
-  if (pool.length <= window) return pool;
-
-  const offset = (step * 7) % (pool.length - window + 1);
-  return pool.slice(offset, offset + window);
+function sliceRotating(pool: Product[], window: number, day: number): Product[] {
+  return rotateWindow(pool, window, day, "recency-pool");
 }
 
 /** Rotates daily so the homepage always feels fresh. */
 export function getNewToday(limit = 12): Product[] {
   const pool = getRecencyPool().filter((product) => product.image);
-  return sliceRotating(pool, limit, getUtcDayIndex()).slice(0, limit);
+  return sliceRotating(pool, limit, getUtcDayIndex());
 }
 
 /** Latest arrivals from the past week window in the dataset. */

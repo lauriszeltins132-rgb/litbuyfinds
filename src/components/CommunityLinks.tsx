@@ -7,6 +7,7 @@ type CommunityLinksProps = {
   location?: string;
   fullWidth?: boolean;
   showTelegramHandle?: boolean;
+  className?: string;
 };
 
 export default function CommunityLinks({
@@ -14,6 +15,7 @@ export default function CommunityLinks({
   location = variant,
   fullWidth = false,
   showTelegramHandle = false,
+  className = "",
 }: CommunityLinksProps) {
   const buttonVariant =
     variant === "header" ? "icon" : variant === "cta" ? "cta" : "pill";
@@ -22,13 +24,13 @@ export default function CommunityLinks({
     variant === "cta"
       ? "flex flex-col gap-3 sm:flex-row sm:items-center"
       : variant === "header"
-        ? "hidden shrink-0 items-center gap-1 sm:flex"
+        ? "flex shrink-0 items-center gap-0.5 sm:gap-1"
       : fullWidth
         ? "flex w-full flex-col gap-2.5 sm:flex-row sm:justify-center"
         : "flex flex-wrap items-center gap-2";
 
   return (
-    <div className={layoutClass}>
+    <div className={`${layoutClass} ${className}`}>
       <CommunityButton
         platform="discord"
         variant={buttonVariant}

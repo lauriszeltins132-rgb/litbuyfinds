@@ -72,6 +72,7 @@ export default function BuyWithAgentButton({
         type="button"
         onClick={handleBuyClick}
         className={`${baseClass} ${className}`}
+        style={{ touchAction: "manipulation" }}
       >
         {compact ? "Buy" : label}
       </button>

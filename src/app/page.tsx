@@ -13,10 +13,9 @@ import ProductGridSkeleton from "@/components/ProductGridSkeleton";
 import SchemaScript from "@/components/SchemaScript";
 import TrustStrip from "@/components/TrustStrip";
 import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/constants";
-import { getEditorsPicks } from "@/lib/discovery";
 import { getHomepageRails } from "@/lib/homepage-rails";
 import { getBrandsFromProducts } from "@/lib/brands";
-import { getAllProducts, getCategories, getDealProducts } from "@/lib/products";
+import { getAllProducts, getCategories } from "@/lib/products";
 import { buildWebPageSchema } from "@/lib/schema";
 import { buildHomepageMetadata } from "@/lib/seo";
 
@@ -27,8 +26,6 @@ export default function HomePage() {
   const categories = getCategories();
   const brands = getBrandsFromProducts(products);
   const rails = getHomepageRails(12);
-  const editorsPicks = getEditorsPicks(12);
-  const bestUnder20 = getDealProducts(20).slice(0, 12);
 
   return (
     <>
@@ -58,21 +55,21 @@ export default function HomePage() {
         products={rails.addedToday}
       />
 
-      {editorsPicks.length > 0 ? (
+      {rails.editorsPicks.length > 0 ? (
         <DiscoveryRail
           title="Editor's Picks"
           subtitle="QC-linked standouts with strong presentation"
           href="/editors-picks"
-          products={editorsPicks}
+          products={rails.editorsPicks}
         />
       ) : null}
 
-      {bestUnder20.length > 0 ? (
+      {rails.bestUnder20.length > 0 ? (
         <DiscoveryRail
           title="Best Under $20"
           subtitle="Budget-friendly finds that still look premium"
           href="/best-under-30"
-          products={bestUnder20}
+          products={rails.bestUnder20}
         />
       ) : null}
 

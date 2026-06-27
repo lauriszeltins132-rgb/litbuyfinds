@@ -1,5 +1,6 @@
 import { extractBrand, getBrandsFromProducts } from "./brands";
-import { isFeaturedEligible, isHomepageFeaturedEligible } from "./product-media";
+import { getHomepageEditorsPicks } from "./homepage-rails";
+import { isFeaturedEligible } from "./product-media";
 import { getProductQualityScore } from "./product-quality-score";
 import { hasExactPrice } from "./pricing";
 import { getDisplayBrand, validateProduct } from "./product-validation";
@@ -11,6 +12,7 @@ import {
   getTrendingProducts,
   products,
 } from "./products";
+import { getUtcDayIndex as readUtcDayIndex, getUtcWeekIndex } from "./rotation-seeds";
 import type { Product } from "./types";
 
 function qualityScore(product: Product, trendingIndex = 999): number {
@@ -30,18 +32,7 @@ export function getTrendingScore(product: Product): number {
 }
 
 export function getEditorsPicks(limit = 12): Product[] {
-  const pool = [...getTrendingProducts(), ...getLatestProducts()];
-  const seen = new Set<string>();
-
-  return pool
-    .filter((product) => isHomepageFeaturedEligible(product) && product.qc_link)
-    .filter((product) => {
-      if (seen.has(product.id)) return false;
-      seen.add(product.id);
-      return true;
-    })
-    .sort((a, b) => qualityScore(b) - qualityScore(a))
-    .slice(0, limit);
+  return getHomepageEditorsPicks(limit);
 }
 
 export function getHiddenGems(limit = 12): Product[] {
@@ -68,7 +59,7 @@ export function getMostSavedPicks(limit = 12): Product[] {
 
 /** UTC day number — stable for the entire calendar day worldwide. */
 export function getUtcDayIndex(): number {
-  return Math.floor(Date.now() / 86_400_000);
+  return readUtcDayIndex();
 }
 
 export function getDailyDropPool(): Product[] {
@@ -90,7 +81,7 @@ export function getDailyDrop(): Product {
 
 export function getBrandSpotlight() {
   const brands = getBrandsFromProducts(products);
-  const week = Math.floor(Date.now() / (1000 * 60 * 60 * 24 * 7));
+  const week = getUtcWeekIndex();
   const brand = brands[week % brands.length];
 
   if (!brand) {

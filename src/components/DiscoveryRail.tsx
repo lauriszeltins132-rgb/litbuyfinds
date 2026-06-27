@@ -50,7 +50,7 @@ export default function DiscoveryRail({
         )}
 
         <div className="discovery-rail -mx-0.5 flex gap-2.5 overflow-x-auto px-0.5 pb-1 sm:gap-4">
-          {products.map((product) => (
+          {products.map((product, index) => (
             <div
               key={product.id}
               className="w-[calc(50vw-1.25rem)] max-w-[178px] shrink-0 sm:w-[240px] sm:max-w-none"
@@ -60,6 +60,7 @@ export default function DiscoveryRail({
                 onOpen={setSelected}
                 compact
                 showTrendingScore={showTrendingScore}
+                priority={index < 4}
               />
             </div>
           ))}

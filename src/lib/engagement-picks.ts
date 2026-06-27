@@ -5,6 +5,7 @@ import {
   sortByProductQuality,
 } from "./product-quality-score";
 import { getAllProducts } from "./products";
+import { getUtcDayIndex } from "./rotation-seeds";
 import type { Product } from "./types";
 
 /** Server-only picks ranked by product quality score and engagement. */
@@ -21,7 +22,7 @@ export function getEngagementPicks(limit = 12): Product[] {
     analyticsPool.length > 0 ? analyticsPool : getAllProducts(),
     limit,
     new Set(),
-    Math.floor(Date.now() / 86_400_000),
+    getUtcDayIndex(),
     "engagement-picks",
     { analyticsRankById: ranks }
   );
