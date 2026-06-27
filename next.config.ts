@@ -47,6 +47,21 @@ const nextConfig: NextConfig = {
       { source: "/best-litbuy-under-50", destination: "/best-under-50", permanent: true },
       { source: "/best-qc-finds", destination: "/top-qc-finds", permanent: true },
       { source: "/guides/how-to-use-litbuy", destination: "/guides/how-to-use-litbuy-finds", permanent: true },
+      {
+        source: "/guides/how-to-qc-photos-work",
+        destination: "/guides/how-to-check-qc-photos",
+        permanent: true,
+      },
+      {
+        source: "/guides/how-to-reduce-shipping-cost",
+        destination: "/guides/how-shipping-works-with-agents",
+        permanent: true,
+      },
+      {
+        source: "/guides/best-shipping-line",
+        destination: "/guides/how-shipping-works-with-agents",
+        permanent: true,
+      },
       { source: "/guides/beginner-guide", destination: "/guides/beginner-guide-to-litbuy", permanent: true },
       { source: "/guides/qc-guide", destination: "/guides/how-to-check-qc-photos", permanent: true },
       {

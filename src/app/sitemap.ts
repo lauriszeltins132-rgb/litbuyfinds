@@ -11,6 +11,11 @@ import { SHARE_COLLECTION_SLUGS, SHARE_COLLECTIONS } from "@/lib/share-collectio
 import { BEST_OF_PAGES, BEST_OF_SLUGS } from "@/lib/best-of-pages";
 import { SEO_LANDING_PAGES, SEO_LANDING_SLUGS } from "@/lib/seo-landing-pages";
 import {
+  getPublishedSeoLandingConfigs,
+  getSitemapChangeFrequency,
+} from "@/lib/seo-landing-engine";
+import { AGENT_LANDING_SLUGS } from "@/lib/agent-landing-pages";
+import {
   TELEGRAM_SEO_PAGES,
   TELEGRAM_SEO_SLUGS,
 } from "@/lib/telegram-seo-pages";
@@ -63,6 +68,22 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${SITE_URL}${page.path}`,
       changeFrequency: "weekly",
       priority: 0.88,
+    });
+  }
+
+  for (const entry of getPublishedSeoLandingConfigs()) {
+    routes.push({
+      url: `${SITE_URL}/${entry.slug}`,
+      changeFrequency: getSitemapChangeFrequency(entry),
+      priority: entry.type === "freshness" ? 0.9 : 0.87,
+    });
+  }
+
+  for (const slug of AGENT_LANDING_SLUGS) {
+    routes.push({
+      url: `${SITE_URL}/${slug}`,
+      changeFrequency: "weekly",
+      priority: 0.86,
     });
   }
 
