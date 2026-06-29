@@ -36,6 +36,7 @@ export function sanitizeImageUrl(raw: string | null | undefined): string {
   url = url.replace(/[，。、；]+$/g, "");
   url = url.replace(/(\.(?:png|jpe?g|webp|gif)).*$/i, "$1");
   url = url.replace(/[^a-zA-Z0-9/_%.?=&-]+$/g, "");
+  url = url.replace(/[)"']+$/g, "");
 
   if (url.startsWith("//")) {
     url = `https:${url}`;

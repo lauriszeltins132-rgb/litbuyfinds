@@ -1,4 +1,5 @@
 import deadData from "@/data/dead-image-urls.json";
+import mapData from "@/data/processed-image-map.json";
 
 type DeadImageManifest = {
   urls: string[];
@@ -6,8 +7,15 @@ type DeadImageManifest = {
 
 const manifest = deadData as DeadImageManifest;
 const deadSet = new Set(manifest.urls ?? []);
+const processedUrls = (mapData as { urls: Record<string, string> }).urls ?? {};
 
+/** CDN URL is dead — but still usable when we have a local /processed/ matte file. */
 export function isDeadImageUrl(url: string): boolean {
   if (!url) return true;
+  if (processedUrls[url]) return false;
   return deadSet.has(url);
+}
+
+export function hasProcessedStaticImage(url: string): boolean {
+  return Boolean(url && processedUrls[url]);
 }

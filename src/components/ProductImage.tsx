@@ -6,7 +6,8 @@ import {
   getImageFillClass,
   shouldEnhanceImage,
 } from "@/lib/image-quality";
-import { getProductImagePlan } from "@/lib/processed-images";
+import { isDeadImageUrl } from "@/lib/dead-images";
+import { getProductImagePlan, getProcessedApiSrc } from "@/lib/processed-images";
 import {
   hasPlausibleImageDimensions,
   validateImageUrl,
@@ -41,25 +42,28 @@ type ProductImageProps = {
 
 function buildCandidateList(
   src: string,
-  preferredSrc?: string,
-  extraFallbacks: string[] = []
+  preferredSrc: string | undefined,
+  extraFallbacks: string[] = [],
+  variant: ProductImageVariant = "card"
 ): string[] {
   const validation = validateImageUrl(src);
   if (!validation.valid) return [];
 
   const plan = getProductImagePlan(validation.normalized);
-  const ordered = [
-    preferredSrc,
-    plan.src,
-    ...extraFallbacks,
-    ...plan.fallbacks,
-    plan.originalSrc,
-  ].filter(Boolean) as string[];
+  const ordered = [preferredSrc, plan.src];
+
+  if (!isDeadImageUrl(plan.originalSrc)) {
+    ordered.push(plan.originalSrc, ...extraFallbacks, ...plan.fallbacks);
+  }
+
+  if (variant !== "card") {
+    ordered.push(getProcessedApiSrc(validation.normalized));
+  }
 
   const seen = new Set<string>();
   const unique: string[] = [];
   for (const url of ordered) {
-    if (seen.has(url)) continue;
+    if (!url || seen.has(url)) continue;
     seen.add(url);
     unique.push(url);
   }
@@ -81,8 +85,8 @@ export default function ProductImage({
   const validation = useMemo(() => validateImageUrl(src), [src]);
 
   const candidates = useMemo(
-    () => buildCandidateList(src, preferredSrc, fallbacks),
-    [src, preferredSrc, fallbacks]
+    () => buildCandidateList(src, preferredSrc, fallbacks, variant),
+    [src, preferredSrc, fallbacks, variant]
   );
   const candidateKey = candidates.join("|");
 
@@ -170,7 +174,9 @@ export default function ProductImage({
     void img.decode?.().then(() => {
       if (!cancelled) tryConfirm();
     }).catch(() => {
-      if (!cancelled) tryConfirm();
+      if (!cancelled && img.complete && img.naturalWidth > 0) {
+        setLoaded(true);
+      }
     });
 
     return () => {

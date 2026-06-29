@@ -18,7 +18,11 @@ export type ProductImagePlan = {
   fallbacks: string[];
 };
 
-/** Prefer pre-built matte PNGs, then API processing, then the catalog original. */
+export function getProcessedApiSrc(sourceUrl: string): string {
+  return `/api/processed-image?url=${encodeURIComponent(sourceUrl)}`;
+}
+
+/** Prefer pre-built matte PNGs, then catalog original. API processing is a last resort. */
 export function getProductImagePlan(sourceUrl: string): ProductImagePlan {
   if (FORCE_ORIGINAL_URLS.has(sourceUrl)) {
     return {
@@ -29,7 +33,6 @@ export function getProductImagePlan(sourceUrl: string): ProductImagePlan {
     };
   }
 
-  const apiSrc = `/api/processed-image?url=${encodeURIComponent(sourceUrl)}`;
   const staticPath = catalog.urls[sourceUrl];
 
   if (staticPath) {
@@ -37,14 +40,14 @@ export function getProductImagePlan(sourceUrl: string): ProductImagePlan {
       src: staticPath,
       originalSrc: sourceUrl,
       isProcessed: true,
-      fallbacks: [apiSrc, sourceUrl],
+      fallbacks: [sourceUrl],
     };
   }
 
   return {
-    src: apiSrc,
+    src: sourceUrl,
     originalSrc: sourceUrl,
-    isProcessed: true,
-    fallbacks: [sourceUrl],
+    isProcessed: false,
+    fallbacks: [],
   };
 }
