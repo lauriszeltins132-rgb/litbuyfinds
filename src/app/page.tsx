@@ -21,6 +21,9 @@ import { buildHomepageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildHomepageMetadata();
 
+/** Refresh discovery rails hourly so rotation and dedupe stay current. */
+export const revalidate = 3600;
+
 export default function HomePage() {
   const products = getAllProducts();
   const categories = getCategories();

@@ -15,6 +15,11 @@ import { hasExactPrice } from "./pricing";
 import { resolveProductDisplayImage } from "./product-image-presentation";
 import { validateProduct } from "./product-validation";
 import { isUsableImageUrl } from "./image-url";
+import {
+  dedupeListingProducts,
+  getListingDedupeKey,
+} from "./listing-dedupe";
+import { getEffectiveProductTitle } from "./product-title-quality";
 import { seededShuffle } from "./rotation-seeds";
 import type { Product } from "./types";
 
@@ -306,13 +311,18 @@ export function pickFeaturedProducts(
     predicate?: (product: Product) => boolean;
     analyticsRankById?: Map<string, number>;
     preferEditorial?: boolean;
+    usedListingKeys?: Set<string>;
   } = {}
 ): Product[] {
-  const eligible = pool.filter(
-    (product) =>
-      isHomepageCuratedEligible(product) &&
-      !used.has(product.id) &&
-      (!options.predicate || options.predicate(product))
+  const eligible = dedupeListingProducts(
+    pool.filter(
+      (product) =>
+        isHomepageCuratedEligible(product) &&
+        !used.has(product.id) &&
+        (!options.usedListingKeys ||
+          !options.usedListingKeys.has(getListingDedupeKey(product))) &&
+        (!options.predicate || options.predicate(product))
+    )
   );
 
   const ranked = [...eligible].sort((a, b) => {
@@ -334,7 +344,7 @@ export function pickFeaturedProducts(
     return Number(b.id) - Number(a.id);
   });
 
-  let tiered = filterVisualTier(ranked);
+  let tiered = filterVisualTier(dedupeListingProducts(ranked));
   if (tiered.length === 0) return [];
 
   const rotationDepth = Math.min(
@@ -361,14 +371,21 @@ export function pickFeaturedProducts(
   }
 
   const seenIds = new Set<string>();
+  const seenListingKeys = new Set<string>();
   const seenTitles = new Set<string>();
   const deduped: Product[] = [];
 
   for (const product of tiered) {
     if (seenIds.has(product.id)) continue;
-    const titleKey = product.product_name.trim().toLowerCase();
+
+    const listingKey = getListingDedupeKey(product);
+    if (seenListingKeys.has(listingKey)) continue;
+
+    const titleKey = getEffectiveProductTitle(product).trim().toLowerCase();
     if (seenTitles.has(titleKey)) continue;
+
     seenIds.add(product.id);
+    seenListingKeys.add(listingKey);
     seenTitles.add(titleKey);
     deduped.push(product);
     if (deduped.length >= limit) break;

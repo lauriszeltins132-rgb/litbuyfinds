@@ -14,6 +14,7 @@ import {
   sortByProductQuality,
 } from "./product-quality-score";
 import { getNewToday, getRecencyPool } from "./recency";
+import { getListingDedupeKey, dedupeListingRail } from "./listing-dedupe";
 import {
   getUtcDayIndex,
   getUtcMonthIndex,
@@ -52,6 +53,19 @@ function hasMeaningfulAnalytics(ranks: Map<string, number>): boolean {
   return ranks.size >= ANALYTICS_MIN_PRODUCTS;
 }
 
+function registerRailProducts(
+  products: Product[],
+  used: Set<string>,
+  usedListingKeys: Set<string>
+): Product[] {
+  const rail = dedupeListingRail(products);
+  for (const product of rail) {
+    used.add(product.id);
+    usedListingKeys.add(getListingDedupeKey(product));
+  }
+  return rail;
+}
+
 function mergeUniqueProducts(...groups: Product[][]): Product[] {
   const seen = new Set<string>();
   const merged: Product[] = [];
@@ -77,10 +91,18 @@ function buildAnalyticsPool(
     .filter((product): product is Product => !!product);
 }
 
+function pickFeaturedOptions(
+  usedListingKeys: Set<string>,
+  options: Parameters<typeof pickFeaturedProducts>[5] = {}
+) {
+  return { ...options, usedListingKeys };
+}
+
 /** Daily — analytics when available, otherwise quality pool with daily seed. */
 function pickPopularToday(
   limit: number,
   used: Set<string>,
+  usedListingKeys: Set<string>,
   day: number
 ): Product[] {
   const ranks = analyticsRankMap(limit * 12);
@@ -104,6 +126,7 @@ function pickPopularToday(
 
   return pickFeaturedProducts(pool, limit, used, day, "popular-today", {
     analyticsRankById: ranks,
+    ...pickFeaturedOptions(usedListingKeys),
   });
 }
 
@@ -111,6 +134,7 @@ function pickPopularToday(
 function pickPopularWeek(
   limit: number,
   used: Set<string>,
+  usedListingKeys: Set<string>,
   week: number
 ): Product[] {
   const ranks = analyticsRankMap(limit * 12);
@@ -136,6 +160,7 @@ function pickPopularWeek(
 
   return pickFeaturedProducts(pool, limit, used, week, "popular-week", {
     analyticsRankById: ranks,
+    ...pickFeaturedOptions(usedListingKeys),
   });
 }
 
@@ -143,6 +168,7 @@ function pickPopularWeek(
 function pickAddedToday(
   limit: number,
   used: Set<string>,
+  usedListingKeys: Set<string>,
   day: number
 ): Product[] {
   return pickFeaturedProducts(
@@ -150,7 +176,8 @@ function pickAddedToday(
     limit,
     used,
     day,
-    "added-today"
+    "added-today",
+    pickFeaturedOptions(usedListingKeys)
   );
 }
 
@@ -158,6 +185,7 @@ function pickAddedToday(
 function pickEditorsPicks(
   limit: number,
   used: Set<string>,
+  usedListingKeys: Set<string>,
   month: number
 ): Product[] {
   const pool = mergeUniqueProducts(
@@ -169,6 +197,7 @@ function pickEditorsPicks(
   return pickFeaturedProducts(pool, limit, used, month, "editors-picks", {
     predicate: (product) => Boolean(product.qc_link),
     preferEditorial: true,
+    ...pickFeaturedOptions(usedListingKeys),
   });
 }
 
@@ -176,6 +205,7 @@ function pickEditorsPicks(
 function pickBestUnder20(
   limit: number,
   used: Set<string>,
+  usedListingKeys: Set<string>,
   week: number
 ): Product[] {
   return pickFeaturedProducts(
@@ -183,13 +213,15 @@ function pickBestUnder20(
     limit,
     used,
     week,
-    "budget-under-20"
+    "budget-under-20",
+    pickFeaturedOptions(usedListingKeys)
   );
 }
 
 function pickRecentlyAdded(
   limit: number,
   used: Set<string>,
+  usedListingKeys: Set<string>,
   day: number
 ): Product[] {
   const latest = fashionPool(getLatestProducts());
@@ -205,24 +237,28 @@ function pickRecentlyAdded(
     limit,
     used,
     day,
-    "recently-added"
+    "recently-added",
+    pickFeaturedOptions(usedListingKeys)
   );
 }
 
 function pickTopQcFinds(
   limit: number,
   used: Set<string>,
+  usedListingKeys: Set<string>,
   month: number
 ): Product[] {
   const pool = fashionPool(getAllProducts()).filter((product) => product.qc_link);
   return pickFeaturedProducts(pool, limit, used, month, "top-qc", {
     predicate: (product) => Boolean(product.qc_link),
+    ...pickFeaturedOptions(usedListingKeys),
   });
 }
 
 function pickPopularMonth(
   limit: number,
   used: Set<string>,
+  usedListingKeys: Set<string>,
   month: number
 ): Product[] {
   return pickFeaturedProducts(
@@ -230,13 +266,15 @@ function pickPopularMonth(
     limit,
     used,
     month,
-    "popular-month"
+    "popular-month",
+    pickFeaturedOptions(usedListingKeys)
   );
 }
 
 function pickBudgetFinds(
   limit: number,
   used: Set<string>,
+  usedListingKeys: Set<string>,
   week: number
 ): Product[] {
   return pickFeaturedProducts(
@@ -244,13 +282,15 @@ function pickBudgetFinds(
     limit,
     used,
     week,
-    "budget-finds"
+    "budget-finds",
+    pickFeaturedOptions(usedListingKeys)
   );
 }
 
 function pickMostSavedWeek(
   limit: number,
   used: Set<string>,
+  usedListingKeys: Set<string>,
   week: number
 ): Product[] {
   const ranks = analyticsRankMap(limit * 8);
@@ -259,12 +299,14 @@ function pickMostSavedWeek(
   });
   return pickFeaturedProducts(pool, limit, used, week, "most-saved", {
     analyticsRankById: ranks,
+    ...pickFeaturedOptions(usedListingKeys),
   });
 }
 
 function pickHighestQcRated(
   limit: number,
   used: Set<string>,
+  usedListingKeys: Set<string>,
   month: number
 ): Product[] {
   const pool = fashionPool(getAllProducts())
@@ -274,12 +316,20 @@ function pickHighestQcRated(
         getProductQualityScore(b) - getProductQualityScore(a)
     );
 
-  return pickFeaturedProducts(pool, limit, used, month, "highest-qc");
+  return pickFeaturedProducts(
+    pool,
+    limit,
+    used,
+    month,
+    "highest-qc",
+    pickFeaturedOptions(usedListingKeys)
+  );
 }
 
 function pickRisingWeek(
   limit: number,
   used: Set<string>,
+  usedListingKeys: Set<string>,
   week: number
 ): Product[] {
   const ranks = analyticsRankMap(40);
@@ -289,12 +339,16 @@ function pickRisingWeek(
     used,
     week,
     "rising-week",
-    { analyticsRankById: ranks }
+    {
+      analyticsRankById: ranks,
+      ...pickFeaturedOptions(usedListingKeys),
+    }
   );
 }
 
 function pickTrendingBrand(
   used: Set<string>,
+  usedListingKeys: Set<string>,
   week: number
 ): { brand: string; products: Product[] } | null {
   const brands = getBrandsFromProducts(fashionPool(getAllProducts())).filter((brand) =>
@@ -314,7 +368,8 @@ function pickTrendingBrand(
     8,
     block,
     week,
-    `brand-${brand.slug}`
+    `brand-${brand.slug}`,
+    pickFeaturedOptions(usedListingKeys)
   );
 
   if (products.length === 0) return null;
@@ -346,45 +401,92 @@ export function getHomepageRails(limit = 12): HomepageRails {
   const week = getUtcWeekIndex();
   const month = getUtcMonthIndex();
   const used = new Set<string>();
+  const usedListingKeys = new Set<string>();
 
-  const popularToday = pickPopularToday(limit, used, day);
-  popularToday.forEach((product) => used.add(product.id));
+  const popularToday = registerRailProducts(
+    pickPopularToday(limit, used, usedListingKeys, day),
+    used,
+    usedListingKeys
+  );
 
-  const addedToday = pickAddedToday(limit, used, day);
-  addedToday.forEach((product) => used.add(product.id));
+  const addedToday = registerRailProducts(
+    pickAddedToday(limit, used, usedListingKeys, day),
+    used,
+    usedListingKeys
+  );
 
-  const editorsPicks = pickEditorsPicks(limit, used, month);
-  editorsPicks.forEach((product) => used.add(product.id));
+  const editorsPicks = registerRailProducts(
+    pickEditorsPicks(limit, used, usedListingKeys, month),
+    used,
+    usedListingKeys
+  );
 
-  const bestUnder20 = pickBestUnder20(limit, used, week);
-  bestUnder20.forEach((product) => used.add(product.id));
+  const bestUnder20 = registerRailProducts(
+    pickBestUnder20(limit, used, usedListingKeys, week),
+    used,
+    usedListingKeys
+  );
 
-  const popularWeek = pickPopularWeek(limit, used, week);
-  popularWeek.forEach((product) => used.add(product.id));
+  const popularWeek = registerRailProducts(
+    pickPopularWeek(limit, used, usedListingKeys, week),
+    used,
+    usedListingKeys
+  );
 
-  const recentlyAdded = pickRecentlyAdded(limit, used, day);
-  recentlyAdded.forEach((product) => used.add(product.id));
+  const recentlyAdded = registerRailProducts(
+    pickRecentlyAdded(limit, used, usedListingKeys, day),
+    used,
+    usedListingKeys
+  );
 
-  const topQcFinds = pickTopQcFinds(limit, used, month);
-  topQcFinds.forEach((product) => used.add(product.id));
+  const topQcFinds = registerRailProducts(
+    pickTopQcFinds(limit, used, usedListingKeys, month),
+    used,
+    usedListingKeys
+  );
 
-  const budgetFinds = pickBudgetFinds(limit, used, week);
-  budgetFinds.forEach((product) => used.add(product.id));
+  const budgetFinds = registerRailProducts(
+    pickBudgetFinds(limit, used, usedListingKeys, week),
+    used,
+    usedListingKeys
+  );
 
-  const mostSavedWeek = pickMostSavedWeek(limit, used, week);
-  mostSavedWeek.forEach((product) => used.add(product.id));
+  const mostSavedWeek = registerRailProducts(
+    pickMostSavedWeek(limit, used, usedListingKeys, week),
+    used,
+    usedListingKeys
+  );
 
-  const highestQcRated = pickHighestQcRated(limit, used, month);
-  highestQcRated.forEach((product) => used.add(product.id));
+  const highestQcRated = registerRailProducts(
+    pickHighestQcRated(limit, used, usedListingKeys, month),
+    used,
+    usedListingKeys
+  );
 
-  const risingWeek = pickRisingWeek(limit, used, week);
-  risingWeek.forEach((product) => used.add(product.id));
+  const risingWeek = registerRailProducts(
+    pickRisingWeek(limit, used, usedListingKeys, week),
+    used,
+    usedListingKeys
+  );
 
-  const popularMonth = pickPopularMonth(limit, used, month);
-  popularMonth.forEach((product) => used.add(product.id));
+  const popularMonth = registerRailProducts(
+    pickPopularMonth(limit, used, usedListingKeys, month),
+    used,
+    usedListingKeys
+  );
 
-  const trendingBrand = pickTrendingBrand(used, week);
-  trendingBrand?.products.forEach((product) => used.add(product.id));
+  let trendingBrand = pickTrendingBrand(used, usedListingKeys, week);
+  if (trendingBrand) {
+    const brandProducts = registerRailProducts(
+      trendingBrand.products,
+      used,
+      usedListingKeys
+    );
+    trendingBrand =
+      brandProducts.length > 0
+        ? { ...trendingBrand, products: brandProducts }
+        : null;
+  }
 
   return {
     popularToday,
@@ -409,9 +511,10 @@ export function getHomepageRails(limit = 12): HomepageRails {
 /** Shared editor's picks rail — monthly rotation, optional dedup set. */
 export function getHomepageEditorsPicks(
   limit = 12,
-  used: Set<string> = new Set()
+  used: Set<string> = new Set(),
+  usedListingKeys: Set<string> = new Set()
 ): Product[] {
-  return pickEditorsPicks(limit, used, getUtcMonthIndex());
+  return pickEditorsPicks(limit, used, usedListingKeys, getUtcMonthIndex());
 }
 
 /** @deprecated use popularWeek */

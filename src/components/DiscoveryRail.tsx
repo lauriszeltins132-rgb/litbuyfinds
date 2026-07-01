@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import type { Product } from "@/lib/types";
+import { dedupeListingRail } from "@/lib/listing-dedupe";
 import ProductCard from "./ProductCard";
 import ProductModal from "./ProductModal";
 import { useState } from "react";
@@ -22,8 +23,9 @@ export default function DiscoveryRail({
   showTrendingScore = false,
 }: DiscoveryRailProps) {
   const [selected, setSelected] = useState<Product | null>(null);
+  const railProducts = dedupeListingRail(products);
 
-  if (products.length === 0) return null;
+  if (railProducts.length === 0) return null;
 
   return (
     <section className="px-3 py-4 sm:px-6 sm:py-8">
@@ -50,7 +52,7 @@ export default function DiscoveryRail({
         )}
 
         <div className="discovery-rail -mx-0.5 flex gap-2.5 overflow-x-auto px-0.5 pb-1 sm:gap-4">
-          {products.map((product, index) => (
+          {railProducts.map((product, index) => (
             <div
               key={product.id}
               className="w-[calc(50vw-1.25rem)] max-w-[178px] shrink-0 sm:w-[240px] sm:max-w-none"
