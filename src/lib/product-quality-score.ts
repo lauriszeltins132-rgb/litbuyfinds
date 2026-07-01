@@ -360,5 +360,19 @@ export function pickFeaturedProducts(
     });
   }
 
-  return tiered.slice(0, limit);
+  const seenIds = new Set<string>();
+  const seenTitles = new Set<string>();
+  const deduped: Product[] = [];
+
+  for (const product of tiered) {
+    if (seenIds.has(product.id)) continue;
+    const titleKey = product.product_name.trim().toLowerCase();
+    if (seenTitles.has(titleKey)) continue;
+    seenIds.add(product.id);
+    seenTitles.add(titleKey);
+    deduped.push(product);
+    if (deduped.length >= limit) break;
+  }
+
+  return deduped;
 }

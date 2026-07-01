@@ -1,14 +1,25 @@
+import damagedData from "@/data/damaged-processed-manifest.json";
 import mapData from "@/data/processed-image-map.json";
 
 type ProcessedImageMap = {
   urls: Record<string, string>;
 };
 
+type DamagedProcessedManifest = {
+  urls: string[];
+  paths: string[];
+};
+
 const catalog = mapData as ProcessedImageMap;
+const damaged = damagedData as DamagedProcessedManifest;
+const damagedUrls = new Set(damaged.urls ?? []);
+const damagedPaths = new Set(damaged.paths ?? []);
 
 /** Broken background removal — serve catalog original instead. */
 const FORCE_ORIGINAL_URLS = new Set([
   "https://i.postimg.cc/zzMm64y4/1.png", // Jordan Socks (jordan-socks-2829)
+  // Air Jordan 5 [OG BATCH] — matte cutout corrupts midsole panels
+  "https://si.geilicdn.com/open1807578469-1234478995-754a000001921680ad3b0a8115b5_689_689.jpg",
 ]);
 
 export type ProductImagePlan = {
@@ -22,7 +33,14 @@ export function getProcessedApiSrc(sourceUrl: string): string {
   return `/api/processed-image?url=${encodeURIComponent(sourceUrl)}`;
 }
 
-/** Prefer pre-built matte PNGs, then catalog original. API processing is a last resort. */
+function shouldUseOriginal(sourceUrl: string, staticPath?: string): boolean {
+  if (FORCE_ORIGINAL_URLS.has(sourceUrl)) return true;
+  if (damagedUrls.has(sourceUrl)) return true;
+  if (staticPath && damagedPaths.has(staticPath)) return true;
+  return false;
+}
+
+/** Prefer pre-built matte PNGs when clean; otherwise catalog original. */
 export function getProductImagePlan(sourceUrl: string): ProductImagePlan {
   if (FORCE_ORIGINAL_URLS.has(sourceUrl)) {
     return {
@@ -35,7 +53,7 @@ export function getProductImagePlan(sourceUrl: string): ProductImagePlan {
 
   const staticPath = catalog.urls[sourceUrl];
 
-  if (staticPath) {
+  if (staticPath && !shouldUseOriginal(sourceUrl, staticPath)) {
     return {
       src: staticPath,
       originalSrc: sourceUrl,
@@ -48,6 +66,6 @@ export function getProductImagePlan(sourceUrl: string): ProductImagePlan {
     src: sourceUrl,
     originalSrc: sourceUrl,
     isProcessed: false,
-    fallbacks: [],
+    fallbacks: staticPath ? [] : [],
   };
 }
