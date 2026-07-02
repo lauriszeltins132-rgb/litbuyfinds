@@ -7,7 +7,7 @@ import {
   getLatestProducts,
   getTrendingProducts,
 } from "./products";
-import { passesCardDisplayGate } from "./product-image-presentation";
+import { passesCardDisplayGate, resolveProductDisplayImage } from "./product-image-presentation";
 import {
   getProductQualityScore,
   isHomepageCuratedEligible,
@@ -165,7 +165,7 @@ function pickPopularWeek(
   });
 }
 
-/** Newest sheet imports — stable order by ID, no strict visual curation. */
+/** Newest sheet imports — prefer processed mattes like trending rails. */
 function pickLatestFinds(
   limit: number,
   used: Set<string>,
@@ -178,7 +178,12 @@ function pickLatestFinds(
         !used.has(product.id) &&
         !usedListingKeys.has(getListingDedupeKey(product))
     )
-    .sort((a, b) => Number(b.id) - Number(a.id));
+    .sort((a, b) => {
+      const aProcessed = resolveProductDisplayImage(a)?.isProcessed ? 1 : 0;
+      const bProcessed = resolveProductDisplayImage(b)?.isProcessed ? 1 : 0;
+      if (bProcessed !== aProcessed) return bProcessed - aProcessed;
+      return Number(b.id) - Number(a.id);
+    });
 
   return dedupeListingRail(pool).slice(0, limit);
 }
