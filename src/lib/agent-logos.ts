@@ -6,6 +6,7 @@ export const AGENT_LOGO_PATHS: Partial<Record<AgentId, string>> = {
   mulebuy: "/agents/mulebuy.png",
   oopbuy: "/agents/oopbuy.png",
   kakobuy: "/agents/kakobuy.png",
+  hipobuy: "/agents/hipobuy.png",
   acbuy: "/agents/acbuy.png",
 };
 
