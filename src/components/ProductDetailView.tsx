@@ -78,9 +78,9 @@ export default function ProductDetailView({
   }
 
   return (
-    <section className="px-4 py-6 sm:px-6">
-      <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-2 lg:gap-12">
-        <div className="product-image-shell product-image-shell--featured product-image-hover relative overflow-hidden rounded-3xl border border-border">
+    <section className="product-detail-hero px-4 pb-6 pt-2 sm:px-6 sm:pt-3">
+      <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-2 lg:gap-12">
+        <div className="product-image-shell product-image-shell--featured product-image-hover relative overflow-hidden rounded-3xl border border-border lg:sticky lg:top-[4.75rem] lg:self-start">
           <ProductImage
             src={product.image}
             preferredSrc={displayImage?.displaySrc}

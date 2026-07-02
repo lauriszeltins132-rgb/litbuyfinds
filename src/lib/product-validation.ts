@@ -161,7 +161,9 @@ export function validateProduct(product: Product): ProductValidation {
   const multiItem = looksLikeMultiItemListing(title, imageUrl);
   const hasOverride = getProductNameOverride(product) !== null;
   const batchMislabel =
-    !hasOverride && isBatchMislabelTitle(product.product_name);
+    !hasOverride &&
+    product.category_slug !== "latest-finds" &&
+    isBatchMislabelTitle(product.product_name);
 
   let confidence = 1;
   const issues: string[] = [];

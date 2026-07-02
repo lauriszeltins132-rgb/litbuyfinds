@@ -125,6 +125,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           { label: facts.displayName },
         ]}
         currentPath={`/find/${slug}`}
+        compact
       />
 
       <ProductDetailView

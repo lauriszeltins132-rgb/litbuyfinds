@@ -258,7 +258,9 @@ body::before {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 400px;
+  aspect-ratio: 1 / 1;
+  min-height: min(72vw, 420px);
+  max-height: min(72vh, 520px);
 }
 
 .product-image-shell--hero {
@@ -274,7 +276,8 @@ body::before {
   }
 
   .product-image-shell--featured {
-    min-height: 460px;
+    min-height: min(52vh, 460px);
+    max-height: min(68vh, 520px);
   }
 }
 

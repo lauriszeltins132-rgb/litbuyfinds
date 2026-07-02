@@ -105,6 +105,17 @@ function nameFromImage(url) {
     .join(" ");
 }
 
+function parseUsdPrice(nums) {
+  const fractional = nums.find(
+    (value) =>
+      value >= 3 &&
+      value <= 150 &&
+      Math.abs(value - Math.round(value)) > 0.001
+  );
+  if (fractional != null) return Math.round(fractional * 100) / 100;
+  return null;
+}
+
 function parseLatestFindsSheetHtml(html) {
   const needle = "litbuy.com/product/weidian/";
   const suffix = "?inviteCode\\\\u003dSMKS";
@@ -139,14 +150,8 @@ function parseLatestFindsSheetHtml(html) {
     const nums = [...after.matchAll(/\\"3\\":(\d+(?:\.\d+)?)/g)].map((match) =>
       parseFloat(match[1])
     );
-    const usd =
-      nums.find(
-        (value) =>
-          value >= 3 &&
-          value <= 150 &&
-          Math.abs(value - Math.round(value)) > 0.001
-      ) ?? nums.find((value) => value >= 3 && value <= 150) ?? null;
-    const price = usd != null ? Math.round(usd * 100) / 100 : null;
+    const usd = parseUsdPrice(nums);
+    const price = usd;
 
     products.push({
       product_name: normalizeProductName(
