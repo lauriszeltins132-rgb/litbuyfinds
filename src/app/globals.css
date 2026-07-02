@@ -427,6 +427,14 @@ body::before {
   filter: contrast(1.08) brightness(1.05) saturate(1.04);
 }
 
+.product-float-asset--knockout-white {
+  mix-blend-mode: multiply;
+}
+
+.product-float-stage--card .product-float-matte--opaque {
+  background: #141414;
+}
+
 .product-float-stage--featured .product-float-asset {
   max-width: min(98%, 540px);
   max-height: min(98%, 500px);

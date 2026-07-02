@@ -13,8 +13,52 @@ const root = path.join(__dirname, "..");
 const mapPath = path.join(root, "src/data/processed-image-map.json");
 const outPath = path.join(root, "src/data/damaged-processed-manifest.json");
 
-const BLACK_THRESHOLD = 15;
-const BLACK_RATIO_LIMIT = 0.04;
+const EDGE_BAND = 3;
+const WHITE_FRINGE_LIMIT = 0.06;
+
+function analyzeProcessedPng(data, width, height) {
+  const total = width * height;
+  const edgePixels = Math.max(1, 2 * EDGE_BAND * (width + height) - 4 * EDGE_BAND * EDGE_BAND);
+
+  let black = 0;
+  let whiteEdge = 0;
+  let darkEdge = 0;
+
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      const i = (y * width + x) * 4;
+      const r = data[i];
+      const g = data[i + 1];
+      const b = data[i + 2];
+
+      if (r < 15 && g < 15 && b < 15) black++;
+
+      const onEdge =
+        x < EDGE_BAND ||
+        y < EDGE_BAND ||
+        x >= width - EDGE_BAND ||
+        y >= height - EDGE_BAND;
+      if (!onEdge) continue;
+
+      if (r > 235 && g > 235 && b > 235) whiteEdge++;
+      if (r < 48 && g < 48 && b < 48) darkEdge++;
+    }
+  }
+
+  const blackRatio = black / total;
+  const whiteFringeRatio = whiteEdge / edgePixels;
+  const edgeDarkRatio = darkEdge / edgePixels;
+  const intentionalMatte = edgeDarkRatio >= 0.88 && blackRatio >= 0.04;
+
+  return {
+    damaged:
+      whiteFringeRatio >= WHITE_FRINGE_LIMIT ||
+      (blackRatio > 0.04 && !intentionalMatte),
+    whiteFringeRatio,
+    edgeDarkRatio,
+    blackRatio,
+  };
+}
 
 async function main() {
   const map = JSON.parse(fs.readFileSync(mapPath, "utf8"));
@@ -32,18 +76,8 @@ async function main() {
       const total = info.width * info.height;
       if (total === 0) continue;
 
-      let black = 0;
-      for (let i = 0; i < data.length; i += 4) {
-        if (
-          data[i] < BLACK_THRESHOLD &&
-          data[i + 1] < BLACK_THRESHOLD &&
-          data[i + 2] < BLACK_THRESHOLD
-        ) {
-          black++;
-        }
-      }
-
-      if (black / total > BLACK_RATIO_LIMIT) {
+      const metrics = analyzeProcessedPng(data, info.width, info.height);
+      if (metrics.damaged) {
         damagedUrls.push(url);
         damagedPaths.push(relPath);
       }

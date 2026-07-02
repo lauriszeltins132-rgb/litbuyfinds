@@ -2,6 +2,7 @@ import { isDeadImageUrl } from "./dead-images";
 import {
   getImageFillClass,
   getImageQualityScore,
+  needsWhiteKnockout,
   shouldEnhanceImage,
 } from "./image-quality";
 import { getProductImagePlan } from "./processed-images";
@@ -13,6 +14,7 @@ export type ResolvedProductImage = {
   score: number;
   fillClass: string;
   needsMatte: boolean;
+  knockoutWhite: boolean;
   enhance: boolean;
   isProcessed: boolean;
   fallbacks: string[];
@@ -26,14 +28,18 @@ export function resolveProductDisplayImage(
   const sourceUrl = product.image;
   const plan = getProductImagePlan(sourceUrl);
 
+  const knockoutWhite =
+    plan.knockoutWhite || (!plan.isProcessed && needsWhiteKnockout(sourceUrl));
+
   return {
     displaySrc: plan.src,
     sourceUrl,
-    score: getImageQualityScore(sourceUrl) + 12,
+    score: getImageQualityScore(sourceUrl) + (plan.isProcessed ? 12 : 0),
     fillClass: getImageFillClass(sourceUrl),
     needsMatte: false,
+    knockoutWhite,
     enhance: shouldEnhanceImage(sourceUrl),
-    isProcessed: true,
+    isProcessed: plan.isProcessed,
     fallbacks: plan.fallbacks,
   };
 }

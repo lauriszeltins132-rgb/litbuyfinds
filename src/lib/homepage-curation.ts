@@ -1,6 +1,7 @@
 import { extractBrand } from "./brands";
 import { getPremiumBrandBoost } from "./curation";
 import { getImageQualityDetails } from "./image-quality";
+import { resolveProductDisplayImage } from "./product-image-presentation";
 import type { Product } from "./types";
 
 /** Categories allowed on fashion-focused homepage rails. */
@@ -115,6 +116,11 @@ export function hasTinyProductSubject(imageUrl: string): boolean {
 
 export function passesHomepageVisualPresentation(product: Product): boolean {
   if (!product.image) return false;
+  const resolved = resolveProductDisplayImage(product);
+  if (resolved?.isProcessed) {
+    if (isScreenshotStyleProduct(product)) return false;
+    return true;
+  }
   if (hasLargeWhiteBackground(product.image)) return false;
   if (isScreenshotStyleProduct(product)) return false;
   if (hasTinyProductSubject(product.image)) return false;

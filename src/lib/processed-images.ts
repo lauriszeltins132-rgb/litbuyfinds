@@ -26,6 +26,7 @@ export type ProductImagePlan = {
   src: string;
   originalSrc: string;
   isProcessed: boolean;
+  knockoutWhite: boolean;
   fallbacks: string[];
 };
 
@@ -47,6 +48,7 @@ export function getProductImagePlan(sourceUrl: string): ProductImagePlan {
       src: sourceUrl,
       originalSrc: sourceUrl,
       isProcessed: false,
+      knockoutWhite: false,
       fallbacks: [],
     };
   }
@@ -58,6 +60,7 @@ export function getProductImagePlan(sourceUrl: string): ProductImagePlan {
       src: staticPath,
       originalSrc: sourceUrl,
       isProcessed: true,
+      knockoutWhite: false,
       fallbacks: [sourceUrl],
     };
   }
@@ -66,6 +69,7 @@ export function getProductImagePlan(sourceUrl: string): ProductImagePlan {
     src: sourceUrl,
     originalSrc: sourceUrl,
     isProcessed: false,
+    knockoutWhite: false,
     fallbacks: staticPath ? [] : [],
   };
 }

@@ -69,6 +69,13 @@ export function shouldEnhanceImage(imageUrl: string): boolean {
   return entry.enhance === true;
 }
 
+/** Studio white backdrops that should be knocked out on dark cards. */
+export function needsWhiteKnockout(imageUrl: string): boolean {
+  const entry = catalog.urls[imageUrl];
+  if (!entry) return false;
+  return (entry.whiteBlankRatio ?? 0) >= 0.12;
+}
+
 /** Scale class when product occupies too little of the frame. */
 export function getImageFillClass(imageUrl: string): string {
   const fill = catalog.urls[imageUrl]?.contentFillRatio;

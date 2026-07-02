@@ -1,7 +1,7 @@
-# Put your Excel file here
+# Spreadsheet data
 
-1. Copy your spreadsheet into this folder.
-2. Name it: `products.xlsx` (recommended)
-3. Tell Cursor you've uploaded it so it can be converted to JSON.
+1. Keep `products.xlsx` in this folder when refreshing from Google Sheets.
+2. Full rebuild: `npm run convert-data`
+3. Add only new Latest Finds rows without touching existing products: `npm run merge:latest-finds`
 
 Supported formats: `.xlsx`, `.xls`

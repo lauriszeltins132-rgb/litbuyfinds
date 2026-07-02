@@ -52,7 +52,7 @@ export default function DailyDrop() {
                 preferredSrc={displayImage?.displaySrc}
                 fallbacks={displayImage?.fallbacks}
                 fillClass={displayImage?.fillClass}
-                needsMatte={displayImage?.needsMatte}
+                knockoutWhite={displayImage?.knockoutWhite}
                 enhance={displayImage?.enhance}
                 alt={product.product_name}
                 productName={product.product_name}

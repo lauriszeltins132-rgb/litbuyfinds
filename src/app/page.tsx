@@ -52,10 +52,10 @@ export default function HomePage() {
       />
 
       <DiscoveryRail
-        title="Just Added"
-        subtitle="Fresh listings from the latest catalog sync"
-        href="/recently-added"
-        products={rails.addedToday}
+        title="Latest Finds"
+        subtitle="Newest drops from the LitBuy spreadsheet sync"
+        href="/latest"
+        products={rails.latestFinds}
       />
 
       {rails.editorsPicks.length > 0 ? (

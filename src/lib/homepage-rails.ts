@@ -7,13 +7,14 @@ import {
   getLatestProducts,
   getTrendingProducts,
 } from "./products";
+import { passesCardDisplayGate } from "./product-image-presentation";
 import {
   getProductQualityScore,
   isHomepageCuratedEligible,
   pickFeaturedProducts,
   sortByProductQuality,
 } from "./product-quality-score";
-import { getNewToday, getRecencyPool } from "./recency";
+import { getRecencyPool } from "./recency";
 import { getListingDedupeKey, dedupeListingRail } from "./listing-dedupe";
 import {
   getUtcDayIndex,
@@ -164,21 +165,22 @@ function pickPopularWeek(
   });
 }
 
-/** Daily — newest imports with daily rotation. */
-function pickAddedToday(
+/** Newest sheet imports — stable order by ID, no strict visual curation. */
+function pickLatestFinds(
   limit: number,
   used: Set<string>,
-  usedListingKeys: Set<string>,
-  day: number
+  usedListingKeys: Set<string>
 ): Product[] {
-  return pickFeaturedProducts(
-    fashionPool(getNewToday(limit * 6)),
-    limit,
-    used,
-    day,
-    "added-today",
-    pickFeaturedOptions(usedListingKeys)
-  );
+  const pool = fashionPool(getLatestProducts())
+    .filter(
+      (product) =>
+        passesCardDisplayGate(product) &&
+        !used.has(product.id) &&
+        !usedListingKeys.has(getListingDedupeKey(product))
+    )
+    .sort((a, b) => Number(b.id) - Number(a.id));
+
+  return dedupeListingRail(pool).slice(0, limit);
 }
 
 /** Monthly — QC standouts with monthly rotation. */
@@ -378,6 +380,8 @@ function pickTrendingBrand(
 
 export type HomepageRails = {
   popularToday: Product[];
+  latestFinds: Product[];
+  /** @deprecated use latestFinds */
   addedToday: Product[];
   editorsPicks: Product[];
   bestUnder20: Product[];
@@ -409,8 +413,8 @@ export function getHomepageRails(limit = 12): HomepageRails {
     usedListingKeys
   );
 
-  const addedToday = registerRailProducts(
-    pickAddedToday(limit, used, usedListingKeys, day),
+  const latestFinds = registerRailProducts(
+    pickLatestFinds(limit, used, usedListingKeys),
     used,
     usedListingKeys
   );
@@ -490,7 +494,8 @@ export function getHomepageRails(limit = 12): HomepageRails {
 
   return {
     popularToday,
-    addedToday,
+    latestFinds,
+    addedToday: latestFinds,
     editorsPicks,
     bestUnder20,
     popularWeek,

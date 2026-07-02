@@ -37,6 +37,7 @@ type ProductImageProps = {
   fallbacks?: string[];
   fillClass?: string;
   needsMatte?: boolean;
+  knockoutWhite?: boolean;
   enhance?: boolean;
 };
 
@@ -80,6 +81,7 @@ export default function ProductImage({
   preferredSrc,
   fallbacks = [],
   fillClass,
+  knockoutWhite = false,
   enhance,
 }: ProductImageProps) {
   const validation = useMemo(() => validateImageUrl(src), [src]);
@@ -198,6 +200,7 @@ export default function ProductImage({
     "product-float-asset",
     resolvedFillClass,
     resolvedEnhance ? "product-float-asset--enhanced" : "",
+    knockoutWhite ? "product-float-asset--knockout-white" : "",
     loaded || variant === "card"
       ? "product-float-asset--ready"
       : "product-float-asset--loading",

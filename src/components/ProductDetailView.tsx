@@ -86,7 +86,7 @@ export default function ProductDetailView({
             preferredSrc={displayImage?.displaySrc}
             fallbacks={displayImage?.fallbacks}
             fillClass={displayImage?.fillClass}
-            needsMatte={displayImage?.needsMatte}
+            knockoutWhite={displayImage?.knockoutWhite}
             enhance={displayImage?.enhance}
             alt={imageAlt}
             productName={facts.displayName}
