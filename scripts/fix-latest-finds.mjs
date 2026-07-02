@@ -1,12 +1,9 @@
 #!/usr/bin/env node
 /**
- * Merge newest rows from the LitBuy spreadsheet "Latest Finds" tab into
- * src/data/products.json without removing existing products.
+ * Re-sync Latest Finds products from the live Google Sheet with correct
+ * row-aligned names, prices, images, and affiliate links.
  *
- * Uses row-aligned parsing from the live sheet HTML so names, prices,
- * images, and affiliate links stay matched.
- *
- * Run: npm run merge:latest-finds
+ * Run: npm run fix:latest-finds
  */
 import fs from "fs";
 import path from "path";
@@ -84,6 +81,15 @@ function isValidProductName(name) {
   return true;
 }
 
+function normalizeProductName(name) {
+  const value = normalize(name);
+  const walletMatch = value.match(/^wallet\s+(.+)$/i);
+  if (walletMatch) {
+    return `${normalize(walletMatch[1])} Wallet`;
+  }
+  return value;
+}
+
 function nameFromImage(url) {
   const file = url.split("/").pop()?.replace(/\.[^.]+$/, "") ?? "";
   if (!file || isSocialAsset(file)) return "";
@@ -130,10 +136,6 @@ function parseLatestFindsSheetHtml(html) {
     const imgMatch = after.match(/postimg\.cc\/([^\\"]+\.(?:png|jpg|jpeg|webp))/i);
     const image = imgMatch ? `https://i.postimg.cc/${imgMatch[1]}` : "";
 
-    let product_name =
-      [...inlineNames].reverse().find((name) => name && !invalidName.test(name)) ||
-      nameFromImage(image);
-
     const nums = [...after.matchAll(/\\"3\\":(\d+(?:\.\d+)?)/g)].map((match) =>
       parseFloat(match[1])
     );
@@ -147,7 +149,10 @@ function parseLatestFindsSheetHtml(html) {
     const price = usd != null ? Math.round(usd * 100) / 100 : null;
 
     products.push({
-      product_name: normalize(product_name),
+      product_name: normalizeProductName(
+        [...inlineNames].reverse().find((name) => name && !invalidName.test(name)) ||
+          nameFromImage(image)
+      ),
       price,
       affiliate_link,
       image,
@@ -158,6 +163,56 @@ function parseLatestFindsSheetHtml(html) {
   }
 
   return products;
+}
+
+async function fetchGvizPriceQueues() {
+  const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&gid=${LATEST_FINDS_GID}`;
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Google Sheets gviz request failed (${response.status})`);
+  }
+
+  const raw = await response.text();
+  const match = raw.match(/setResponse\((.*)\);?\s*$/s);
+  if (!match) throw new Error("Could not parse Google Sheets gviz response");
+
+  const data = JSON.parse(match[1]);
+  const rows = data.table?.rows ?? [];
+  const queues = new Map();
+
+  for (const row of rows) {
+    const cells = row.c ?? [];
+    for (let index = 0; index < cells.length; index++) {
+      if (cells[index]?.v !== "LINK") continue;
+
+      const name = normalizeProductName(cells[index - 1]?.v);
+      if (!isValidProductName(name)) continue;
+
+      const usdCell = cells[index + 2];
+      let price = null;
+      if (
+        usdCell &&
+        typeof usdCell.v === "number" &&
+        String(usdCell.f ?? "").includes("$")
+      ) {
+        price = Math.round(usdCell.v * 100) / 100;
+      }
+
+      const key = name.toLowerCase();
+      if (!queues.has(key)) queues.set(key, []);
+      queues.get(key).push(price);
+    }
+  }
+
+  return queues;
+}
+
+function enrichPriceFromGviz(row, queues) {
+  if (row.price != null) return row.price;
+  const key = row.product_name.toLowerCase();
+  const queue = queues.get(key);
+  if (!queue || queue.length === 0) return null;
+  return queue.shift() ?? null;
 }
 
 async function fetchSheetHtml() {
@@ -181,61 +236,111 @@ function dedupeByLink(products) {
   return deduped;
 }
 
-function nextId(existing) {
-  const max = existing.reduce(
-    (highest, product) => Math.max(highest, Number(product.id) || 0),
-    0
-  );
-  return String(max + 1);
+function buildSheetProduct(row) {
+  return {
+    product_name: row.product_name,
+    category: SHEET_META.category,
+    category_slug: SHEET_META.slug,
+    sheet: SHEET_META.sheet,
+    group: SHEET_META.group,
+    price: row.price,
+    affiliate_link: row.affiliate_link,
+    qc_link: row.qc_link ?? "",
+    image: row.image,
+  };
 }
 
 async function main() {
   console.log("Fetching Latest Finds sheet model…");
-  const html = await fetchSheetHtml();
-  const parsed = dedupeByLink(parseLatestFindsSheetHtml(html)).filter(
-    (row) =>
-      isValidProductName(row.product_name) &&
-      isUsableImage(row.image) &&
-      !isSocialAsset(row.image, row.product_name)
-  );
+  const [html, priceQueues] = await Promise.all([
+    fetchSheetHtml(),
+    fetchGvizPriceQueues(),
+  ]);
+
+  const parsed = dedupeByLink(parseLatestFindsSheetHtml(html))
+    .map((row) => ({
+      ...row,
+      price: enrichPriceFromGviz(row, priceQueues),
+    }))
+    .filter(
+      (row) =>
+        isValidProductName(row.product_name) &&
+        isUsableImage(row.image) &&
+        !isSocialAsset(row.image, row.product_name)
+    );
 
   console.log(`  Parsed ${parsed.length} row-aligned products`);
 
   const existing = JSON.parse(fs.readFileSync(PRODUCTS_PATH, "utf8"));
-  const existingLinks = new Set(
-    existing.map((product) => canonicalLink(product.affiliate_link))
+  const sheetByLink = new Map(
+    parsed.map((row) => [canonicalLink(row.affiliate_link), row])
   );
 
-  const candidates = parsed.filter(
-    (row) => !existingLinks.has(canonicalLink(row.affiliate_link))
-  );
+  let updated = 0;
+  let removed = 0;
+  let keptLegacy = 0;
 
-  if (candidates.length === 0) {
-    console.log("\nNo new Latest Finds products to add.");
-    return;
+  const repaired = [];
+
+  for (const product of existing) {
+    const key = canonicalLink(product.affiliate_link);
+    const row = sheetByLink.get(key);
+
+    if (product.category_slug !== SHEET_META.slug) {
+      repaired.push(product);
+      continue;
+    }
+
+    if (row) {
+      repaired.push({
+        ...product,
+        ...buildSheetProduct(row),
+      });
+      sheetByLink.delete(key);
+      updated++;
+      continue;
+    }
+
+    if (
+      Number(product.id) >= 2974 ||
+      isSocialAsset(product.image, product.product_name) ||
+      !isValidProductName(product.product_name) ||
+      !isUsableImage(product.image)
+    ) {
+      removed++;
+      continue;
+    }
+
+    repaired.push(product);
+    keptLegacy++;
   }
 
-  let idCounter = Number(nextId(existing));
-  const merged = [
-    ...existing,
-    ...candidates.map((row) => ({
-      id: String(idCounter++),
-      product_name: row.product_name,
-      category: SHEET_META.category,
-      category_slug: SHEET_META.slug,
-      sheet: SHEET_META.sheet,
-      group: SHEET_META.group,
-      price: row.price,
-      affiliate_link: row.affiliate_link,
-      qc_link: row.qc_link ?? "",
-      image: row.image,
-    })),
-  ];
+  let nextId =
+    repaired.reduce((max, product) => Math.max(max, Number(product.id) || 0), 0) + 1;
+  const existingLinks = new Set(
+    repaired.map((product) => canonicalLink(product.affiliate_link))
+  );
 
-  fs.writeFileSync(PRODUCTS_PATH, JSON.stringify(merged, null, 2), "utf8");
+  let added = 0;
+  for (const row of parsed) {
+    const key = canonicalLink(row.affiliate_link);
+    if (!key || existingLinks.has(key)) continue;
+    repaired.push({
+      id: String(nextId++),
+      ...buildSheetProduct(row),
+    });
+    existingLinks.add(key);
+    added++;
+  }
 
-  console.log(`\nAdded ${candidates.length} new Latest Finds products.`);
-  console.log(`  Catalog total: ${merged.length}`);
+  fs.writeFileSync(PRODUCTS_PATH, JSON.stringify(repaired, null, 2), "utf8");
+
+  console.log("\nLatest Finds repair complete:");
+  console.log(`  Updated: ${updated}`);
+  console.log(`  Added: ${added}`);
+  console.log(`  Removed bad rows: ${removed}`);
+  console.log(`  Kept legacy latest-finds: ${keptLegacy}`);
+  console.log(`  Catalog total: ${repaired.length}`);
 }
 
 main().catch((error) => {

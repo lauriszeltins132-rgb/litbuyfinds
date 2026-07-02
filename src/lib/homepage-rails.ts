@@ -8,6 +8,7 @@ import {
   getTrendingProducts,
 } from "./products";
 import { passesCardDisplayGate, resolveProductDisplayImage } from "./product-image-presentation";
+import { hasExactPrice } from "./pricing";
 import {
   getProductQualityScore,
   isHomepageCuratedEligible,
@@ -174,6 +175,7 @@ function pickLatestFinds(
   const pool = fashionPool(getLatestProducts())
     .filter(
       (product) =>
+        hasExactPrice(product.price) &&
         passesCardDisplayGate(product) &&
         !used.has(product.id) &&
         !usedListingKeys.has(getListingDedupeKey(product))
