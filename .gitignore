@@ -29,15 +29,9 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files
-.env*.local
-
-# runtime analytics aggregates
-/data/analytics-stats.json
+.env*
+!.env.example
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-# local QA artifacts
-/.playwright-browsers/
-/audit-screenshots/

@@ -1,37 +1,18 @@
 {
-  "name": "litbuyfinds",
+  "name": "cursed-chest",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "node scripts/generate-dataset-meta.mjs && next dev",
-    "build": "node scripts/generate-dataset-meta.mjs && node scripts/audit-prices.mjs --ci && node scripts/generate-seo-list-pages.mjs && node scripts/generate-seo-landing-pages.mjs && node scripts/generate-seo-landing-config-pages.mjs && node scripts/generate-best-of-pages.mjs && node scripts/generate-damaged-processed-manifest.mjs && node scripts/generate-favicons.mjs && node scripts/generate-image-quality-manifest.mjs && next build",
-    "generate:favicons": "node scripts/generate-favicons.mjs",
+    "dev": "next dev",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "convert-data": "node scripts/convert-spreadsheet.mjs && node scripts/generate-bright-bg-manifest.mjs",
-    "merge:latest-finds": "node scripts/merge-latest-finds.mjs",
-    "fix:latest-finds": "node scripts/fix-latest-finds.mjs",
-    "audit:site": "node scripts/site-audit.mjs",
-    "audit:prices": "node scripts/audit-prices.mjs",
-    "audit:images": "node scripts/audit-images.mjs",
-    "generate:dead-images": "node scripts/generate-dead-image-manifest.mjs",
-    "audit:cutouts": "node scripts/audit-cutout-quality.mjs",
-    "generate:bright-bg": "node scripts/generate-bright-bg-manifest.mjs",
-    "process:images": "node scripts/generate-bright-bg-manifest.mjs && node scripts/process-catalog-images.mjs",
-    "flatten:images": "node scripts/flatten-processed-images.mjs",
-    "process:remaining": "node scripts/process-remaining-images.mjs",
-    "generate:banner": "node scripts/generate-promo-banner.mjs",
-    "generate:image-quality": "node scripts/generate-image-quality-manifest.mjs",
-    "audit:og": "node scripts/audit-og-images.mjs"
+    "simulate:rtp": "node scripts/simulate-rtp.mjs"
   },
   "dependencies": {
-    "@vercel/analytics": "^2.0.1",
-    "@vercel/speed-insights": "^2.0.0",
     "next": "^15.3.3",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "sharp": "^0.35.0",
-    "xlsx": "^0.18.5"
+    "react-dom": "^19.1.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
@@ -41,7 +22,6 @@
     "@types/react-dom": "^19.1.5",
     "eslint": "^9.28.0",
     "eslint-config-next": "^15.3.3",
-    "png-to-ico": "^3.0.1",
     "tailwindcss": "^4.1.8",
     "typescript": "^5.8.3"
   }
