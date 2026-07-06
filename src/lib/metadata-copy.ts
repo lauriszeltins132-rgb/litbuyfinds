@@ -43,10 +43,11 @@ export function truncateMetaTitle(text: string, max = TITLE_MAX): string {
 export function getHomepageMetadataCopy() {
   return {
     title: truncateMetaTitle(
-      `LitBuy Finds | ${META_SCALE} QC Photos, Coupons & Agent Links`
+      `LitBuy Finds 2026 | ${META_SCALE} QC Photos, Spreadsheet Finds & Best Reps`,
+      72
     ),
     description: truncateMetaDescription(
-      `LitBuy Finds (litbuyfinds.io) — ${META_SCALE} QC-approved finds with ${META_VALUE_STACK}. Multi-agent support: ${META_AGENTS}.`
+      `Browse ${META_SCALE} LitBuy finds with QC photos, spreadsheet-style product discovery, Weidian and Taobao links, sneaker finds, fashion finds, coupons and multi-agent support.`
     ),
   };
 }

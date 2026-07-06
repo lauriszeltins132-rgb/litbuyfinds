@@ -84,6 +84,15 @@ const nextConfig: NextConfig = {
         destination: "/litbuy-spreadsheet",
         permanent: true,
       },
+      { source: "/collections/best-nike-litbuy-finds", destination: "/collections/best-nike-finds", permanent: true },
+      { source: "/collections/best-jordan-litbuy-finds", destination: "/collections/best-jordan-finds", permanent: true },
+      { source: "/collections/best-moncler-litbuy-finds", destination: "/collections/best-moncler-finds", permanent: true },
+      { source: "/collections/best-stussy-litbuy-finds", destination: "/collections/best-stussy-finds", permanent: true },
+      { source: "/collections/best-sneaker-finds", destination: "/collections/best-sneakers", permanent: true },
+      { source: "/collections/best-jacket-finds", destination: "/collections/best-jackets", permanent: true },
+      { source: "/collections/best-hoodie-finds", destination: "/collections/best-hoodies", permanent: true },
+      { source: "/collections/best-bag-finds", destination: "/collections/best-bags", permanent: true },
+      { source: "/collections/best-finds-under-50", destination: "/collections/best-under-50", permanent: true },
     ];
   },
   images: {

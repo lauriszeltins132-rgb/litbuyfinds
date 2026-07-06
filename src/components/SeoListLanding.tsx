@@ -54,6 +54,18 @@ export default function SeoListLanding({ config }: SeoListLandingProps) {
           <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted">
             {config.intro}
           </p>
+          {"seoBody" in config && config.seoBody ? (
+            <details className="group mt-4 max-w-3xl">
+              <summary className="cursor-pointer text-sm font-bold text-accent">
+                More about this collection
+              </summary>
+              <div className="mt-3 space-y-3 text-sm leading-relaxed text-muted">
+                {config.seoBody.split("\n\n").map((paragraph) => (
+                  <p key={paragraph.slice(0, 40)}>{paragraph}</p>
+                ))}
+              </div>
+            </details>
+          ) : null}
           <p className="mt-3 text-sm text-muted">
             {products.length.toLocaleString()} products shown · Dataset updated{" "}
             {formatDatasetAge()}

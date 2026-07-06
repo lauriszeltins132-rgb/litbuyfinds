@@ -1,5 +1,6 @@
 import type { SeoListConfig } from "./top-lists";
 import { TOP_LISTS } from "./top-lists";
+import { COLLECTION_SEO_BODIES } from "./collection-seo-bodies";
 import { getEditorsPicks } from "./discovery";
 import { getEngagementPicks } from "./engagement-picks";
 import { extractBrand } from "./brands";
@@ -42,6 +43,7 @@ function wrap(
     slug,
     path: `/collections/${slug}`,
     ...config,
+    seoBody: config.seoBody ?? COLLECTION_SEO_BODIES[slug]?.join("\n\n"),
     faqs: config.faqs ?? getCollectionFaqs(slug, config.h1),
   };
 }

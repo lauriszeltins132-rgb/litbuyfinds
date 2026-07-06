@@ -13,6 +13,7 @@ export type SeoListConfig = {
   badge: string;
   h1: string;
   intro: string;
+  seoBody?: string;
   getProducts: () => Product[];
   relatedLinks: { href: string; label: string }[];
   clusterLinks?: { href: string; label: string }[];

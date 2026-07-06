@@ -15,10 +15,11 @@ export const SITE_OG_TITLE = HOMEPAGE_TITLE;
 
 export const SITE_OG_DESCRIPTION = SITE_DESCRIPTION;
 
-export const HERO_HEADLINE = "LitBuy Finds";
+export const HERO_HEADLINE =
+  "LitBuy Finds – 10,000+ QC Photos, Spreadsheet Finds & Best Reps 2026";
 
 export const HERO_SUBHEADLINE =
-  "LitBuy Finds is a product discovery platform for QC photos, spreadsheet finds, fashion finds, sneaker finds and multi-agent shopping links — LitBuy, MuleBuy, OopBuy, ACBuy and Kakobuy.";
+  "Search QC photos, spreadsheet-style fashion and sneaker finds from Weidian and Taobao — open verified links through LitBuy, OopBuy, Kakobuy, MuleBuy, or ACBuy.";
 
 export const HERO_TAGLINE = HERO_SUBHEADLINE;
 

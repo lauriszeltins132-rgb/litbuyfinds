@@ -7,11 +7,13 @@ import DiscoveryRail from "@/components/DiscoveryRail";
 import HomepageBrands from "@/components/HomepageBrands";
 import HomepageCategories from "@/components/HomepageCategories";
 import HomepageCollections from "@/components/HomepageCollections";
+import HomepageConversion from "@/components/HomepageConversion";
 import HomepageFaq from "@/components/HomepageFaq";
+import HomepageInternalLinks from "@/components/HomepageInternalLinks";
+import HomepageSeoContent from "@/components/HomepageSeoContent";
 import RecentlyViewedRail from "@/components/RecentlyViewedRail";
 import ProductGridSkeleton from "@/components/ProductGridSkeleton";
 import SchemaScript from "@/components/SchemaScript";
-import TrustStrip from "@/components/TrustStrip";
 import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/constants";
 import { getHomepageRails } from "@/lib/homepage-rails";
 import { getBrandsFromProducts } from "@/lib/brands";
@@ -84,14 +86,15 @@ export default function HomePage() {
         showTrendingScore
       />
 
-      <TrustStrip compact />
-
       <HomepageCategories categories={categories} />
       <HomepageCollections />
       <HomepageBrands hideSpotlight />
 
       <RecentlyViewedRail />
 
+      <HomepageConversion />
+      <HomepageInternalLinks />
+      <HomepageSeoContent />
       <HomepageFaq />
 
       <section className="px-4 pb-2 sm:px-6">

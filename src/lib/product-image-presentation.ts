@@ -31,10 +31,16 @@ export function resolveProductDisplayImage(
   const knockoutWhite =
     plan.knockoutWhite || (!plan.isProcessed && needsWhiteKnockout(sourceUrl));
 
+  const baseScore = getImageQualityScore(sourceUrl);
+  const score =
+    plan.isProcessed && plan.src.startsWith("/processed/")
+      ? Math.max(58, baseScore + 12)
+      : baseScore + (plan.isProcessed ? 12 : 0);
+
   return {
     displaySrc: plan.src,
     sourceUrl,
-    score: getImageQualityScore(sourceUrl) + (plan.isProcessed ? 12 : 0),
+    score,
     fillClass: getImageFillClass(sourceUrl),
     needsMatte: false,
     knockoutWhite,

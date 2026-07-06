@@ -13,8 +13,7 @@ export default function HomepageFaq() {
         <div className="mx-auto max-w-3xl">
           <h2 className="text-2xl font-black">LitBuy Finds FAQ</h2>
           <p className="mt-1 text-sm text-muted">
-            What LitBuy Finds is, how it relates to spreadsheets, and which agents
-            are supported.
+            What LitBuy Finds is, how ordering works, QC photos, agents, and where to find the best picks.
           </p>
           <p className="mt-2 text-[11px] leading-relaxed text-muted/70">
             {HOMEPAGE_AKA_LINE}
