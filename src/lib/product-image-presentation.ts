@@ -1,12 +1,46 @@
+import { getCatalogBrightBgTreatment } from "./bright-bg";
 import { isDeadImageUrl, isCatalogImageUrlDead } from "./dead-images";
 import {
   getImageFillClass,
+  getImageQualityDetails,
   getImageQualityScore,
   needsWhiteKnockout,
   shouldEnhanceImage,
 } from "./image-quality";
-import { getProductImagePlan } from "./processed-images";
+import {
+  getProcessedApiSrc,
+  getProductImagePlan,
+  type ProductImagePlan,
+} from "./processed-images";
 import type { Product } from "./types";
+
+/** True when the catalog original has a studio white / bright backdrop. */
+function imageHasBrightBackground(sourceUrl: string): boolean {
+  if (getCatalogBrightBgTreatment(sourceUrl) !== "none") return true;
+  if (needsWhiteKnockout(sourceUrl)) return true;
+
+  const details = getImageQualityDetails(sourceUrl);
+  if (!details) return false;
+
+  if (details.issues?.includes("white_blank")) return true;
+  if (details.issues?.includes("white_border")) return true;
+
+  const whiteBlank = details.whiteBlankRatio ?? 0;
+  const border = details.borderBrightRatio ?? 0;
+  const empty = details.emptySpaceRatio ?? 0;
+
+  return whiteBlank >= 0.12 || border >= 0.15 || empty >= 0.35;
+}
+
+function shouldPreferProcessedDisplay(
+  sourceUrl: string,
+  plan: ProductImagePlan,
+  catalogDead: boolean
+): boolean {
+  if (catalogDead && plan.isProcessed) return true;
+  if (!plan.isProcessed) return false;
+  return imageHasBrightBackground(sourceUrl);
+}
 
 export type ResolvedProductImage = {
   displaySrc: string;
@@ -31,11 +65,21 @@ export function resolveProductDisplayImage(
   if (isDeadImageUrl(sourceUrl) && !plan.isProcessed) return null;
 
   const catalogDead = isCatalogImageUrlDead(sourceUrl);
-  // Always show the catalog original first; processed mattes are fallback only.
-  const displaySrc = sourceUrl;
+  const useProcessed = shouldPreferProcessedDisplay(sourceUrl, plan, catalogDead);
+  const hasBrightBg = imageHasBrightBackground(sourceUrl);
+
+  const displaySrc = useProcessed
+    ? plan.src
+    : hasBrightBg
+      ? getProcessedApiSrc(sourceUrl)
+      : sourceUrl;
+
+  const showingProcessed =
+    displaySrc.startsWith("/processed/") ||
+    displaySrc.startsWith("/api/processed-image");
 
   const knockoutWhite =
-    !plan.isProcessed &&
+    !showingProcessed &&
     (plan.knockoutWhite || needsWhiteKnockout(sourceUrl));
 
   const baseScore = getImageQualityScore(sourceUrl);
@@ -47,9 +91,10 @@ export function resolveProductDisplayImage(
   const fallbacks = [
     ...new Set(
       [
-        catalogDead && plan.isProcessed ? plan.src : null,
-        ...plan.fallbacks,
+        sourceUrl,
         plan.isProcessed ? plan.src : null,
+        hasBrightBg ? getProcessedApiSrc(sourceUrl) : null,
+        ...plan.fallbacks,
       ].filter((url): url is string => Boolean(url) && url !== displaySrc)
     ),
   ];
@@ -58,11 +103,13 @@ export function resolveProductDisplayImage(
     displaySrc,
     sourceUrl,
     score,
-    fillClass: getImageFillClass(sourceUrl),
+    fillClass: showingProcessed
+      ? "product-float-asset--fill-balanced"
+      : getImageFillClass(sourceUrl),
     needsMatte: false,
     knockoutWhite,
-    enhance: shouldEnhanceImage(sourceUrl),
-    isProcessed: false,
+    enhance: showingProcessed || shouldEnhanceImage(sourceUrl),
+    isProcessed: useProcessed,
     fallbacks,
   };
 }
