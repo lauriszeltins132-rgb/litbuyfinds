@@ -18,8 +18,6 @@ const damagedPaths = new Set(damaged.paths ?? []);
 /** Broken background removal — serve catalog original instead. */
 const FORCE_ORIGINAL_URLS = new Set([
   "https://i.postimg.cc/zzMm64y4/1.png", // Jordan Socks (jordan-socks-2829)
-  // Air Jordan 5 [OG BATCH] — matte cutout corrupts midsole panels
-  "https://si.geilicdn.com/open1807578469-1234478995-754a000001921680ad3b0a8115b5_689_689.jpg",
 ]);
 
 export type ProductImagePlan = {
