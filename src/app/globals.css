@@ -295,7 +295,17 @@ body::before {
 }
 
 .product-float-stage--card {
-  padding: 4%;
+  padding: 3%;
+}
+
+.product-float-stage--card .product-float-asset {
+  max-width: 94%;
+  max-height: 94%;
+  filter: brightness(1.08) contrast(1.04) saturate(1.03);
+}
+
+.product-float-asset--processed-fallback {
+  filter: brightness(1.16) contrast(1.06) saturate(1.05) !important;
 }
 
 .product-float-stage > .image-unavailable {
@@ -445,12 +455,6 @@ body::before {
   filter: contrast(1.05) brightness(1.08) saturate(1.04);
 }
 
-.product-float-stage--card .product-float-matte--opaque,
-.product-float-stage--card .product-float-matte--card {
-  background: transparent;
-  box-shadow: none;
-}
-
 .product-float-stage--featured .product-float-asset {
   max-width: min(98%, 540px);
   max-height: min(98%, 500px);
@@ -460,13 +464,6 @@ body::before {
   max-width: min(99%, 600px);
   max-height: min(98%, 560px);
 }
-
-.product-float-stage--card .product-float-asset {
-  max-width: 90%;
-  max-height: 90%;
-  filter: brightness(1.06) contrast(1.03) saturate(1.02);
-}
-
 
 .product-float-asset--loading {
   opacity: 0.72;

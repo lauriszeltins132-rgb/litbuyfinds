@@ -31,8 +31,8 @@ export function resolveProductDisplayImage(
   if (isDeadImageUrl(sourceUrl) && !plan.isProcessed) return null;
 
   const catalogDead = isCatalogImageUrlDead(sourceUrl);
-  const displaySrc =
-    catalogDead && plan.isProcessed ? plan.src : sourceUrl;
+  // Always show the catalog original first; processed mattes are fallback only.
+  const displaySrc = sourceUrl;
 
   const knockoutWhite =
     !plan.isProcessed &&
@@ -44,28 +44,25 @@ export function resolveProductDisplayImage(
       ? Math.max(58, baseScore + 12)
       : baseScore + (plan.isProcessed ? 12 : 0);
 
-  const fallbacks = [...new Set(
-    [
-      plan.isProcessed ? plan.src : null,
-      ...plan.fallbacks,
-      sourceUrl,
-    ].filter((url): url is string => Boolean(url) && url !== displaySrc)
-  )];
+  const fallbacks = [
+    ...new Set(
+      [
+        catalogDead && plan.isProcessed ? plan.src : null,
+        ...plan.fallbacks,
+        plan.isProcessed ? plan.src : null,
+      ].filter((url): url is string => Boolean(url) && url !== displaySrc)
+    ),
+  ];
 
   return {
     displaySrc,
     sourceUrl,
     score,
-    fillClass: plan.isProcessed && displaySrc.startsWith("/processed/")
-      ? "product-float-asset--fill-balanced"
-      : getImageFillClass(sourceUrl),
+    fillClass: getImageFillClass(sourceUrl),
     needsMatte: false,
     knockoutWhite,
-    enhance:
-      shouldEnhanceImage(sourceUrl) ||
-      plan.isProcessed ||
-      displaySrc.startsWith("/processed/"),
-    isProcessed: plan.isProcessed && displaySrc.startsWith("/processed/"),
+    enhance: shouldEnhanceImage(sourceUrl),
+    isProcessed: false,
     fallbacks,
   };
 }

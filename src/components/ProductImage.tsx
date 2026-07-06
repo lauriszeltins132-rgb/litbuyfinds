@@ -6,7 +6,6 @@ import {
   getImageFillClass,
   shouldEnhanceImage,
 } from "@/lib/image-quality";
-import { isCatalogImageUrlDead } from "@/lib/dead-images";
 import { getProductImagePlan, getProcessedApiSrc } from "@/lib/processed-images";
 import {
   hasPlausibleImageDimensions,
@@ -51,20 +50,14 @@ function buildCandidateList(
   if (!validation.valid) return [];
 
   const plan = getProductImagePlan(validation.normalized);
-  const catalogDead = isCatalogImageUrlDead(validation.normalized);
-  const ordered: (string | undefined)[] = [preferredSrc];
-
-  if (catalogDead && plan.isProcessed) {
-    ordered.push(plan.src, plan.originalSrc, ...plan.fallbacks, ...extraFallbacks);
-  } else {
-    ordered.push(
-      validation.normalized,
-      plan.src,
-      plan.originalSrc,
-      ...plan.fallbacks,
-      ...extraFallbacks
-    );
-  }
+  const ordered: (string | undefined)[] = [
+    preferredSrc,
+    validation.normalized,
+    plan.originalSrc,
+    ...extraFallbacks,
+    ...plan.fallbacks,
+    plan.isProcessed ? plan.src : undefined,
+  ];
 
   if (variant !== "card") {
     ordered.push(getProcessedApiSrc(validation.normalized));
@@ -210,40 +203,41 @@ export default function ProductImage({
     resolvedFillClass,
     resolvedEnhance ? "product-float-asset--enhanced" : "",
     knockoutWhite ? "product-float-asset--knockout-white" : "",
+    displaySrc.startsWith("/processed/") ? "product-float-asset--processed-fallback" : "",
     loaded ? "product-float-asset--ready" : "product-float-asset--loading",
   ]
     .filter(Boolean)
     .join(" ");
+
+  const imageNode = (
+    /* eslint-disable-next-line @next/next/no-img-element */
+    <img
+      ref={imgRef}
+      key={displaySrc}
+      src={displaySrc}
+      alt={alt}
+      width={IMAGE_LAYOUT[variant].width}
+      height={IMAGE_LAYOUT[variant].height}
+      loading={loadEager ? "eager" : "lazy"}
+      fetchPriority={loadEager ? "high" : "auto"}
+      decoding="async"
+      referrerPolicy="no-referrer"
+      className={assetClass}
+      onLoad={handleLoad}
+      onError={handleError}
+    />
+  );
 
   return (
     <div
       className={`product-float-stage product-float-stage--${variant} ${className}`}
     >
       {variant !== "card" ? <div className="product-float-glow" aria-hidden /> : null}
-      <div
-        className={
-          variant === "card"
-            ? "product-float-matte product-float-matte--card"
-            : "product-float-matte product-float-matte--opaque"
-        }
-      >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          ref={imgRef}
-          key={displaySrc}
-          src={displaySrc}
-          alt={alt}
-          width={IMAGE_LAYOUT[variant].width}
-          height={IMAGE_LAYOUT[variant].height}
-          loading={loadEager ? "eager" : "lazy"}
-          fetchPriority={loadEager ? "high" : "auto"}
-          decoding="async"
-          referrerPolicy="no-referrer"
-          className={assetClass}
-          onLoad={handleLoad}
-          onError={handleError}
-        />
-      </div>
+      {variant === "card" ? (
+        imageNode
+      ) : (
+        <div className="product-float-matte product-float-matte--opaque">{imageNode}</div>
+      )}
       {!loaded && variant !== "card" ? (
         <ImageUnavailablePlaceholder
           variant={variant}
