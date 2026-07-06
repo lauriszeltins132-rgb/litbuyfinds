@@ -5,6 +5,7 @@ import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { POPULAR_SEARCHES } from "@/lib/constants";
 import { trackSearchChipClick, trackSearchSubmit } from "@/lib/analytics-events";
+import { scrollToCatalogResults } from "@/lib/scroll-to-catalog";
 import type { SearchSuggestion } from "@/lib/search-suggestions";
 
 type HeroSearchProps = {
@@ -112,16 +113,27 @@ export default function HeroSearch({ searchIndex }: HeroSearchProps) {
     return () => document.removeEventListener("mousedown", onClickOutside);
   }, []);
 
+  function pushCatalogSearch(term: string) {
+    const trimmed = term.trim();
+    if (!trimmed) {
+      router.push("/", { scroll: false });
+      scrollToCatalogResults();
+      return;
+    }
+    router.push(`/?q=${encodeURIComponent(trimmed)}`, { scroll: false });
+    scrollToCatalogResults();
+  }
+
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
     const trimmed = query.trim();
     setOpen(false);
     if (!trimmed) {
-      router.push("/#browse");
+      pushCatalogSearch("");
       return;
     }
     trackSearchSubmit(trimmed, "hero_search");
-    router.push(`/?q=${encodeURIComponent(trimmed)}#browse`);
+    pushCatalogSearch(trimmed);
   }
 
   function navigate(href: string, label: string) {
@@ -133,7 +145,7 @@ export default function HeroSearch({ searchIndex }: HeroSearchProps) {
 
   function searchBrand(brand: string) {
     trackSearchChipClick(brand, "hero_search");
-    router.push(`/?q=${encodeURIComponent(brand)}#browse`);
+    pushCatalogSearch(brand);
   }
 
   return (
@@ -195,7 +207,7 @@ export default function HeroSearch({ searchIndex }: HeroSearchProps) {
                 type="button"
                 onClick={() => {
                   trackSearchSubmit(query.trim(), "hero_search");
-                  router.push(`/?q=${encodeURIComponent(query.trim())}#browse`);
+                  pushCatalogSearch(query.trim());
                   setOpen(false);
                 }}
                 className="text-sm font-bold text-accent hover:underline"

@@ -7,6 +7,7 @@ import ControlButton from "@/components/ui/ControlButton";
 import TextInput from "@/components/ui/TextInput";
 import { POPULAR_SEARCHES } from "@/lib/constants";
 import { getSearchIndex } from "@/lib/search-suggestions";
+import { scrollToCatalogResults } from "@/lib/scroll-to-catalog";
 
 function SearchIcon({ className = "h-5 w-5" }: { className?: string }) {
   return (
@@ -60,7 +61,8 @@ export default function GlobalSearch({
     event.preventDefault();
     const trimmed = query.trim();
     if (!trimmed) return;
-    router.push(`/?q=${encodeURIComponent(trimmed)}#browse`);
+    router.push(`/?q=${encodeURIComponent(trimmed)}`, { scroll: false });
+    scrollToCatalogResults();
     setOpen(false);
     setQuery("");
   }

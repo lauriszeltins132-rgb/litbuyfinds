@@ -28,6 +28,7 @@ export default function FilterChips({
       <div className="flex flex-wrap gap-2">
         <Link
           href={allHref}
+          scroll={false}
           className={`control-chip ${allActive ? "control-chip-active" : ""}`}
         >
           All {title.toLowerCase()}
@@ -37,6 +38,7 @@ export default function FilterChips({
           <Link
             key={item.href}
             href={item.href}
+            scroll={false}
             className={`control-chip ${item.active ? "control-chip-active" : ""}`}
           >
             <span>{item.label}</span>

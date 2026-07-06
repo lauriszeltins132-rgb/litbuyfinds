@@ -104,6 +104,10 @@ export default function CatalogPanel({
   const [maxInput, setMaxInput] = useState(maxPrice);
   const [filtersOpen, setFiltersOpen] = useState(false);
 
+  useEffect(() => {
+    setQuery(search);
+  }, [search]);
+
   const savedIds = useMemo(() => new Set(wishlist), [wishlist]);
 
   const filtered = useMemo(
@@ -143,7 +147,7 @@ export default function CatalogPanel({
 
   function navigate(url: string) {
     startTransition(() => {
-      router.push(url);
+      router.push(url, { scroll: false });
     });
   }
 
@@ -333,6 +337,7 @@ export default function CatalogPanel({
                   <Link
                     key={term}
                     href={buildUrl(basePath, params, { q: term })}
+                    scroll={false}
                     className="rounded-full border border-border px-3 py-1.5 text-xs font-bold text-foreground/80 hover:border-accent/40 hover:text-accent"
                   >
                     {term}
