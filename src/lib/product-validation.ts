@@ -4,6 +4,7 @@ import {
   getEffectiveProductTitle,
   getProductNameOverride,
   isBatchMislabelTitle,
+  isGenericTwoWordTitle,
 } from "./product-title-quality";
 
 export type ProductValidation = {
@@ -21,6 +22,7 @@ const PRODUCT_TYPES: Record<string, RegExp> = {
   shoe: /\b(sneaker|shoe|trainer|boot|sandal|slide|loafer|runner|footwear)\b/i,
   hoodie: /\b(hoodie|sweatshirt|crewneck|sweater|pullover|cardigan)\b/i,
   pants: /\b(pants|jeans|trouser|shorts|jogger|cargo|sweatpant)\b/i,
+  shirt: /\b(tee|t-shirt|tshirt|shirt|polo|blouse|top)\b/i,
   glasses: /\b(glasses|sunglasses|eyewear|shades)\b/i,
   watch: /\b(watch|timepiece)\b/i,
   belt: /\b(belt)\b/i,
@@ -32,20 +34,33 @@ const CATEGORY_TYPES: Record<string, string[]> = {
   accessories: ["bag", "hat", "glasses", "watch", "belt", "scarf"],
   "coats-and-jackets": ["jacket"],
   "hoodies-and-pants": ["hoodie", "pants"],
+  "tshirts-and-shorts": ["shirt", "pants"],
   electronics: ["watch"],
 };
 
 const TYPE_LABELS: Record<string, string> = {
-  bag: "bag",
-  hat: "hat",
-  jacket: "jacket",
-  shoe: "footwear",
-  hoodie: "top",
-  pants: "bottoms",
-  glasses: "eyewear",
-  watch: "watch",
-  belt: "belt",
-  scarf: "scarf",
+  bag: "Bag",
+  hat: "Hat",
+  jacket: "Jacket",
+  shoe: "Sneakers",
+  hoodie: "Hoodie",
+  pants: "Pants",
+  shirt: "T-Shirt",
+  glasses: "Sunglasses",
+  watch: "Watch",
+  belt: "Belt",
+  scarf: "Scarf",
+};
+
+const CATEGORY_DEFAULT_LABELS: Record<string, string> = {
+  shoes: "Sneakers",
+  accessories: "Accessory",
+  "coats-and-jackets": "Jacket",
+  "hoodies-and-pants": "Hoodie",
+  "tshirts-and-shorts": "T-Shirt",
+  electronics: "Electronics",
+  "trending-now": "Find",
+  "latest-finds": "Find",
 };
 
 const INCOMPATIBLE_TYPES: [string, string][] = [
@@ -62,6 +77,9 @@ const COLLECTION_PATTERN =
 
 const SINGULAR_HEADWEAR =
   /\b(hat|cap|beanie|beret)\b/i;
+
+const GENERIC_RAW_TITLE =
+  /^(fashion\s+(top|bottoms?|hoodie|jacket|bag|find)|top|bottoms?|clothing|product|item|untitled|unknown)$/i;
 
 function detectTypes(text: string): Set<string> {
   const found = new Set<string>();
@@ -85,9 +103,20 @@ function singularCategory(product: Product): string {
     accessories: "Accessories",
     "coats-and-jackets": "Outerwear",
     "hoodies-and-pants": "Streetwear",
+    "tshirts-and-shorts": "Apparel",
     electronics: "Electronics",
+    "trending-now": "Trending",
+    "latest-finds": "Latest",
   };
   return map[product.category_slug] ?? product.category;
+}
+
+function capitalizeLabel(value: string): string {
+  if (!value) return value;
+  return value
+    .split(/\s+/)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
 }
 
 function looksLikeMultiItemListing(title: string, imageUrl: string): boolean {
@@ -106,37 +135,39 @@ function pickDisplayType(
   title: string
 ): string | null {
   if (/\bbackpack\b/i.test(title)) return "Backpack";
-  if (/\b(beanie|knit|knitted)\b/i.test(title)) return "Beanie Set";
-  if (/\b(hat|cap)\b/i.test(title)) return "Hat Set";
+  if (/\b(beanie|knit|knitted)\b/i.test(title)) return "Beanie";
+  if (/\b(hat|cap)\b/i.test(title)) return "Hat";
+  if (/\b(sweatpant|jogger)\b/i.test(title)) return "Sweatpants";
+  if (/\b(shorts)\b/i.test(title)) return "Shorts";
+  if (/\b(vest)\b/i.test(title)) return "Vest";
+
   const expected = CATEGORY_TYPES[categorySlug] ?? [];
   for (const type of expected) {
     if (titleTypes.has(type)) return TYPE_LABELS[type] ?? type;
   }
+
   const first = [...titleTypes][0];
-  return first ? (TYPE_LABELS[first] ?? first) : null;
+  return first ? (TYPE_LABELS[first] ?? capitalizeLabel(first)) : null;
 }
 
 function buildGenericTitle(
   product: Product,
   brand: string | null,
   titleTypes: Set<string>,
-  useBrand: boolean,
   multiItem: boolean
 ): string {
+  const categoryDefault = CATEGORY_DEFAULT_LABELS[product.category_slug];
   const typeLabel = pickDisplayType(
     titleTypes,
     product.category_slug,
     product.product_name
   );
-  const fashionLabel = typeLabel
-    ? `${typeLabel.charAt(0).toUpperCase()}${typeLabel.slice(1)}`
-    : singularCategory(product);
+  const typePart =
+    typeLabel ?? categoryDefault ?? singularCategory(product);
   const suffix = multiItem ? " Set" : "";
 
-  if (useBrand && brand && typeLabel) return `${brand} ${fashionLabel}${suffix}`;
-  if (useBrand && brand) return `${brand} find`;
-  if (typeLabel) return `Fashion ${fashionLabel}${suffix}`;
-  return `${singularCategory(product)} find`;
+  if (brand) return `${brand} ${typePart}${suffix}`;
+  return `${typePart}${suffix}`;
 }
 
 function resolveTrustedBrand(
@@ -151,6 +182,14 @@ function resolveTrustedBrand(
   return extractBrand(title);
 }
 
+function isCollabTitle(title: string, titleBrands: string[]): boolean {
+  return (
+    titleBrands.length > 1 &&
+    /\s(x|×|&|and)\s/i.test(title) &&
+    detectTypes(title).size >= 1
+  );
+}
+
 export function validateProduct(product: Product): ProductValidation {
   const title = getEffectiveProductTitle(product);
   const titleBrands = extractAllBrands(title);
@@ -160,6 +199,8 @@ export function validateProduct(product: Product): ProductValidation {
   const expectedTypes = CATEGORY_TYPES[product.category_slug] ?? [];
   const multiItem = looksLikeMultiItemListing(title, imageUrl);
   const hasOverride = getProductNameOverride(product) !== null;
+  const isBrandTypeTitle =
+    isGenericTwoWordTitle(title) && titleBrands.length === 1;
   const batchMislabel =
     !hasOverride &&
     product.category_slug !== "latest-finds" &&
@@ -168,12 +209,12 @@ export function validateProduct(product: Product): ProductValidation {
   let confidence = 1;
   const issues: string[] = [];
 
-  if (batchMislabel) {
+  if (batchMislabel && !isBrandTypeTitle) {
     confidence -= 0.55;
     issues.push("batch_generic_mislabel");
   }
 
-  if (titleBrands.length > 1) {
+  if (titleBrands.length > 1 && !isCollabTitle(title, titleBrands)) {
     confidence -= 0.5;
     issues.push("multiple_brands_in_title");
   }
@@ -220,7 +261,7 @@ export function validateProduct(product: Product): ProductValidation {
     issues.push("title_too_short");
   }
 
-  if (/^(item|product|find|new)\b/i.test(title)) {
+  if (/^(item|product|find|new)\b/i.test(title) || GENERIC_RAW_TITLE.test(title)) {
     confidence -= 0.2;
     issues.push("generic_title");
   }
@@ -229,26 +270,29 @@ export function validateProduct(product: Product): ProductValidation {
   const brandConflict =
     issues.includes("multiple_brands_in_title") ||
     issues.includes("image_url_brand_mismatch") ||
-    issues.includes("category_type_mismatch") ||
-    issues.includes("batch_generic_mislabel");
+    issues.includes("category_type_mismatch");
   const trustBrand = resolveTrustedBrand(
     title,
     titleBrands,
     urlBrands,
     brandConflict
   );
+
+  const collabTitle = isCollabTitle(title, titleBrands);
   const isTitleTrusted =
-    normalized >= 0.6 &&
-    !issues.includes("likely_multi_item_listing") &&
-    !issues.includes("batch_generic_mislabel");
+    isBrandTypeTitle ||
+    collabTitle ||
+    (normalized >= 0.6 &&
+      !issues.includes("likely_multi_item_listing") &&
+      !issues.includes("batch_generic_mislabel") &&
+      !issues.includes("generic_title"));
 
   let displayName = isTitleTrusted ? title : "";
   if (!isTitleTrusted) {
     displayName = buildGenericTitle(
       { ...product, product_name: title },
-      trustBrand,
+      trustBrand ?? (urlBrands.length === 1 ? urlBrands[0] : null),
       titleTypes,
-      !brandConflict && !batchMislabel,
       multiItem
     );
   } else if (
@@ -264,7 +308,7 @@ export function validateProduct(product: Product): ProductValidation {
     issues,
     isTitleTrusted,
     displayName,
-    displayBrand: trustBrand,
+    displayBrand: trustBrand ?? (isBrandTypeTitle ? titleBrands[0] : null),
   };
 }
 

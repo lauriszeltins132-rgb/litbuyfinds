@@ -3,7 +3,7 @@ import { extractAllBrands } from "./brands";
 import type { Product } from "./types";
 
 const GENERIC_TYPE_PATTERN =
-  /^(bag|bags|backpack|shoe|shoes|sneaker|sneakers|jacket|jackets|hoodie|hoodies|hat|hats|cap|caps|tee|tees|t-shirt|belt|belts|watch|watches|glasses|sunglasses|pants|shorts|vest|vests|coat|coats|parka|boot|boots|sandals|slide|slides|runner|runners|trainer|trainers|footwear|accessories|find|set|perfume|sweater|sweaters|polo|polos)$/i;
+  /^(bag|bags|backpack|shoe|shoes|sneaker|sneakers|jacket|jackets|hoodie|hoodies|hat|hats|cap|caps|tee|tees|t-shirt|belt|belts|watch|watches|glasses|sunglasses|pants|shorts|vest|vests|coat|coats|parka|boot|boots|sandals|slide|slides|runner|runners|trainer|trainers|footwear|accessories|find|set|perfume|sweater|sweaters|polo|polos|shirt|shirts|top|tops|scarf|scarves|wallet|wallets|ring|rings|necklace|necklaces|bracelet|bracelets)$/i;
 
 /** Spreadsheet rows often share a wrong "{Brand} {Type}" label across many listings. */
 export function isGenericTwoWordTitle(name: string): boolean {

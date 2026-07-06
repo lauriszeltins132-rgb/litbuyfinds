@@ -201,9 +201,7 @@ export default function ProductImage({
     resolvedFillClass,
     resolvedEnhance ? "product-float-asset--enhanced" : "",
     knockoutWhite ? "product-float-asset--knockout-white" : "",
-    loaded || variant === "card"
-      ? "product-float-asset--ready"
-      : "product-float-asset--loading",
+    loaded ? "product-float-asset--ready" : "product-float-asset--loading",
   ]
     .filter(Boolean)
     .join(" ");

@@ -23,10 +23,12 @@ export type ResolvedProductImage = {
 export function resolveProductDisplayImage(
   product: Product
 ): ResolvedProductImage | null {
-  if (!product.image || isDeadImageUrl(product.image)) return null;
+  if (!product.image) return null;
 
   const sourceUrl = product.image;
   const plan = getProductImagePlan(sourceUrl);
+
+  if (isDeadImageUrl(sourceUrl) && !plan.isProcessed) return null;
 
   const knockoutWhite =
     plan.knockoutWhite || (!plan.isProcessed && needsWhiteKnockout(sourceUrl));
@@ -41,17 +43,21 @@ export function resolveProductDisplayImage(
     displaySrc: plan.src,
     sourceUrl,
     score,
-    fillClass: getImageFillClass(sourceUrl),
+    fillClass: plan.isProcessed
+      ? "product-float-asset--fill-balanced"
+      : getImageFillClass(sourceUrl),
     needsMatte: false,
     knockoutWhite,
-    enhance: shouldEnhanceImage(sourceUrl),
+    enhance: shouldEnhanceImage(sourceUrl) || plan.isProcessed,
     isProcessed: plan.isProcessed,
     fallbacks: plan.fallbacks,
   };
 }
 
 export function passesCardDisplayGate(product: Product): boolean {
-  if (!product.image || isDeadImageUrl(product.image)) return false;
+  if (!product.image) return false;
+  const plan = getProductImagePlan(product.image);
+  if (isDeadImageUrl(product.image) && !plan.isProcessed) return false;
   const resolved = resolveProductDisplayImage(product);
   if (!resolved) return false;
   return resolved.score >= 42;
