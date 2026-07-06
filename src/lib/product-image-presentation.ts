@@ -1,4 +1,4 @@
-import { isDeadImageUrl } from "./dead-images";
+import { isDeadImageUrl, isCatalogImageUrlDead } from "./dead-images";
 import {
   getImageFillClass,
   getImageQualityScore,
@@ -30,8 +30,13 @@ export function resolveProductDisplayImage(
 
   if (isDeadImageUrl(sourceUrl) && !plan.isProcessed) return null;
 
+  const catalogDead = isCatalogImageUrlDead(sourceUrl);
+  const displaySrc =
+    catalogDead && plan.isProcessed ? plan.src : sourceUrl;
+
   const knockoutWhite =
-    plan.knockoutWhite || (!plan.isProcessed && needsWhiteKnockout(sourceUrl));
+    !plan.isProcessed &&
+    (plan.knockoutWhite || needsWhiteKnockout(sourceUrl));
 
   const baseScore = getImageQualityScore(sourceUrl);
   const score =
@@ -39,18 +44,29 @@ export function resolveProductDisplayImage(
       ? Math.max(58, baseScore + 12)
       : baseScore + (plan.isProcessed ? 12 : 0);
 
+  const fallbacks = [...new Set(
+    [
+      plan.isProcessed ? plan.src : null,
+      ...plan.fallbacks,
+      sourceUrl,
+    ].filter((url): url is string => Boolean(url) && url !== displaySrc)
+  )];
+
   return {
-    displaySrc: plan.src,
+    displaySrc,
     sourceUrl,
     score,
-    fillClass: plan.isProcessed
+    fillClass: plan.isProcessed && displaySrc.startsWith("/processed/")
       ? "product-float-asset--fill-balanced"
       : getImageFillClass(sourceUrl),
     needsMatte: false,
     knockoutWhite,
-    enhance: shouldEnhanceImage(sourceUrl) || plan.isProcessed,
-    isProcessed: plan.isProcessed,
-    fallbacks: plan.fallbacks,
+    enhance:
+      shouldEnhanceImage(sourceUrl) ||
+      plan.isProcessed ||
+      displaySrc.startsWith("/processed/"),
+    isProcessed: plan.isProcessed && displaySrc.startsWith("/processed/"),
+    fallbacks,
   };
 }
 

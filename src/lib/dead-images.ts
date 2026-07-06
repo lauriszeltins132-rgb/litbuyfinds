@@ -9,6 +9,12 @@ const manifest = deadData as DeadImageManifest;
 const deadSet = new Set(manifest.urls ?? []);
 const processedUrls = (mapData as { urls: Record<string, string> }).urls ?? {};
 
+/** True when the source CDN URL is in the dead manifest (ignores processed fallback). */
+export function isCatalogImageUrlDead(url: string): boolean {
+  if (!url) return true;
+  return deadSet.has(url);
+}
+
 /** CDN URL is dead — but still usable when we have a local /processed/ matte file. */
 export function isDeadImageUrl(url: string): boolean {
   if (!url) return true;

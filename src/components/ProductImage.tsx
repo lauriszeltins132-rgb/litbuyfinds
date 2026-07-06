@@ -6,7 +6,7 @@ import {
   getImageFillClass,
   shouldEnhanceImage,
 } from "@/lib/image-quality";
-import { isDeadImageUrl } from "@/lib/dead-images";
+import { isCatalogImageUrlDead } from "@/lib/dead-images";
 import { getProductImagePlan, getProcessedApiSrc } from "@/lib/processed-images";
 import {
   hasPlausibleImageDimensions,
@@ -51,10 +51,19 @@ function buildCandidateList(
   if (!validation.valid) return [];
 
   const plan = getProductImagePlan(validation.normalized);
-  const ordered = [preferredSrc, plan.src];
+  const catalogDead = isCatalogImageUrlDead(validation.normalized);
+  const ordered: (string | undefined)[] = [preferredSrc];
 
-  if (!isDeadImageUrl(plan.originalSrc)) {
-    ordered.push(plan.originalSrc, ...extraFallbacks, ...plan.fallbacks);
+  if (catalogDead && plan.isProcessed) {
+    ordered.push(plan.src, plan.originalSrc, ...plan.fallbacks, ...extraFallbacks);
+  } else {
+    ordered.push(
+      validation.normalized,
+      plan.src,
+      plan.originalSrc,
+      ...plan.fallbacks,
+      ...extraFallbacks
+    );
   }
 
   if (variant !== "card") {
@@ -211,7 +220,13 @@ export default function ProductImage({
       className={`product-float-stage product-float-stage--${variant} ${className}`}
     >
       {variant !== "card" ? <div className="product-float-glow" aria-hidden /> : null}
-      <div className="product-float-matte product-float-matte--opaque">
+      <div
+        className={
+          variant === "card"
+            ? "product-float-matte product-float-matte--card"
+            : "product-float-matte product-float-matte--opaque"
+        }
+      >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           ref={imgRef}
