@@ -1,6 +1,20 @@
 import type { StaticPageSection } from "./static-pages";
+import { filterFeaturedEligible } from "./product-media";
+import { hasExactPrice } from "./pricing";
+import { getAllProducts } from "./products";
 import { TOP_LISTS } from "./top-lists";
 import type { Product } from "./types";
+import {
+  getKakobuySpreadsheetMetadataCopy,
+} from "./metadata-copy";
+
+function weidianProducts(limit = 72): Product[] {
+  return filterFeaturedEligible(
+    getAllProducts().filter(
+      (product) => hasExactPrice(product.price) && /weidian/i.test(product.affiliate_link)
+    )
+  ).slice(0, limit);
+}
 
 export type SeoLandingPageType =
   | "collection"
@@ -322,9 +336,9 @@ export const SEO_LANDING_CONFIG: Record<string, SeoLandingPageEntry> = {
   "mulebuy-spreadsheet": {
     slug: "mulebuy-spreadsheet",
     type: "spreadsheet",
-    title: "MuleBuy Spreadsheet Finds",
+    title: "MuleBuy Spreadsheet | QC Photos, Product Finds & Weidian Links",
     description:
-      "Browse spreadsheet-style finds and open them on MuleBuy or LitBuy — QC photos, verified links, and daily catalog updates.",
+      "Browse MuleBuy spreadsheet-style finds with QC photos, Weidian products, Taobao links, sneaker finds, fashion items, and trending product links.",
     h1: "MuleBuy spreadsheet finds",
     intro:
       "MuleBuy shoppers often start from community spreadsheets. LitBuy Finds indexes the same product universe — set MuleBuy as your preferred agent in the header, then browse normally.",
@@ -350,9 +364,8 @@ export const SEO_LANDING_CONFIG: Record<string, SeoLandingPageEntry> = {
   "kakobuy-spreadsheet": {
     slug: "kakobuy-spreadsheet",
     type: "spreadsheet",
-    title: "Kakobuy Spreadsheet Finds",
-    description:
-      "Kakobuy spreadsheet-style discovery on LitBuy Finds — searchable catalog with QC references and agent choice at checkout.",
+    title: getKakobuySpreadsheetMetadataCopy().title,
+    description: getKakobuySpreadsheetMetadataCopy().description,
     h1: "Kakobuy spreadsheet finds",
     intro:
       "Use this page like a Kakobuy-friendly spreadsheet view: curated rows become product cards with photos, filters, and your saved agent preference.",
@@ -377,9 +390,9 @@ export const SEO_LANDING_CONFIG: Record<string, SeoLandingPageEntry> = {
   "oopbuy-spreadsheet": {
     slug: "oopbuy-spreadsheet",
     type: "spreadsheet",
-    title: "OopBuy Spreadsheet Finds",
+    title: "OopBuy Spreadsheet | QC Photos, Product Finds & Weidian Links",
     description:
-      "OopBuy spreadsheet finds on LitBuy Finds — browse QC-curated products and open them on OopBuy or LitBuy.",
+      "Explore OopBuy spreadsheet-style finds with QC photos, Weidian products, Taobao links, sneaker finds, fashion items, and trending product links.",
     h1: "OopBuy spreadsheet finds",
     intro:
       "OopBuy users can treat this as a cleaner spreadsheet front-end: same catalog data, better photos, and agent switching without leaving the site.",
@@ -403,9 +416,9 @@ export const SEO_LANDING_CONFIG: Record<string, SeoLandingPageEntry> = {
   "acbuy-spreadsheet": {
     slug: "acbuy-spreadsheet",
     type: "spreadsheet",
-    title: "ACBuy Spreadsheet Finds",
+    title: "ACBuy Spreadsheet | QC Photos, Product Finds & Weidian Links",
     description:
-      "ACBuy spreadsheet-style finds — searchable LitBuy Finds catalog with verified links and optional ACBuy checkout.",
+      "Browse ACBuy spreadsheet-style finds with QC photos, Weidian products, Taobao links, sneaker finds, fashion items, and trending product links.",
     h1: "ACBuy spreadsheet finds",
     intro:
       "ACBuy shoppers get the same indexed catalog as everyone else. Filter by brand, compare QC-linked listings, then route purchases through ACBuy if that is your preference.",
@@ -665,6 +678,258 @@ export const SEO_LANDING_CONFIG: Record<string, SeoLandingPageEntry> = {
       },
     ],
     productSectionTitle: "Best value picks",
+  },
+
+  "weidian-finds": {
+    slug: "weidian-finds",
+    type: "collection",
+    title: "Weidian Finds | QC Photos, Spreadsheet Links & Streetwear",
+    description:
+      "Browse Weidian finds with QC photos, spreadsheet-style product links, sneakers, jackets, hoodies, bags, and verified agent shopping links.",
+    h1: "Weidian finds",
+    intro:
+      "Weidian is a major source for streetwear and sneaker finds. LitBuy Finds indexes Weidian-linked products with searchable pages, photos, pricing, and QC references where available.",
+    badge: "Weidian",
+    keywords: ["weidian finds", "weidian litbuy", "weidian spreadsheet"],
+    updateFrequency: "weekly",
+    filter: {
+      keywords: ["weidian"],
+    },
+    getProducts: () => weidianProducts(),
+    relatedLinks: [
+      { href: "/litbuy-weidian", label: "Weidian guide" },
+      { href: "/taobao-finds", label: "Taobao finds" },
+      { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+      { href: "/trending", label: "Trending" },
+      { href: "/categories", label: "Categories" },
+    ],
+    faqs: [
+      {
+        question: "What are Weidian finds?",
+        answer:
+          "Products listed on Weidian, a Chinese marketplace. LitBuy and other agents place orders on your behalf for international shipping.",
+      },
+      {
+        question: "Can I buy Weidian finds without an agent?",
+        answer:
+          "Most buyers use a shopping agent like LitBuy, MuleBuy, or Kakobuy to pay, receive warehouse QC, and ship internationally.",
+      },
+    ],
+    productSectionTitle: "Top Weidian finds",
+  },
+
+  "taobao-finds": {
+    slug: "taobao-finds",
+    type: "collection",
+    title: "Taobao Finds | QC Photos, Spreadsheet Links & Fashion Picks",
+    description:
+      "Explore Taobao finds with QC photos, spreadsheet-style product links, sneakers, hoodies, jackets, bags, and verified agent shopping links.",
+    h1: "Taobao finds",
+    intro:
+      "Taobao offers a massive range of fashion and sneaker finds. LitBuy Finds curates Taobao-linked listings so you can discover products before opening your agent to complete purchase.",
+    badge: "Taobao",
+    keywords: ["taobao finds", "taobao litbuy", "taobao spreadsheet"],
+    updateFrequency: "weekly",
+    filter: { categories: ["shoes", "hoodies-and-pants", "coats-and-jackets", "accessories"] },
+    relatedLinks: [
+      { href: "/litbuy-taobao", label: "Taobao guide" },
+      { href: "/weidian-finds", label: "Weidian finds" },
+      { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+      { href: "/latest", label: "Latest finds" },
+      { href: "/brands", label: "Brands" },
+    ],
+    faqs: [
+      {
+        question: "Can I search Taobao finds in English?",
+        answer:
+          "Yes — use English brand names and keywords in the LitBuy Finds search bar or browse this page's product grid.",
+      },
+    ],
+    productSectionTitle: "Taobao-linked finds",
+  },
+
+  "qc-finds": {
+    slug: "qc-finds",
+    type: "collection",
+    title: "QC Finds | QC Photo Finds, Spreadsheet Links & Verified Picks",
+    description:
+      "Browse QC finds and QC photo finds — sneakers, jackets, bags, and streetwear with quality control reference photos and verified agent links.",
+    h1: "QC finds",
+    intro:
+      "QC (quality control) finds include reference photos from previous buyers or batches. Use them to compare stitching, materials, and shape before you order — then request warehouse QC after purchase.",
+    badge: "QC finds",
+    keywords: ["qc finds", "qc photo finds", "qc approved finds"],
+    updateFrequency: "weekly",
+    filter: { requireQc: true },
+    relatedLinks: [
+      { href: "/litbuy-qc", label: "LitBuy QC guide" },
+      { href: "/top-qc-finds", label: "Top QC finds" },
+      { href: "/sneaker-finds", label: "Sneaker finds" },
+      { href: "/trending", label: "Trending" },
+      { href: "/categories", label: "Categories" },
+    ],
+    faqs: [
+      {
+        question: "What are QC photo finds?",
+        answer:
+          "Listings with quality control reference photos attached — useful for comparing materials and construction before you buy.",
+      },
+      {
+        question: "Is reference QC the same as warehouse QC?",
+        answer:
+          "No. Reference QC shows examples from other orders. Warehouse QC is taken of your exact item after you pay.",
+      },
+    ],
+    productSectionTitle: "QC photo finds",
+  },
+
+  "sneaker-finds": {
+    slug: "sneaker-finds",
+    type: "collection",
+    title: "Sneaker Finds | QC Photos, Spreadsheet Links & Agent Shopping",
+    description:
+      "Browse sneaker finds and sneaker finds spreadsheets — Nike, Jordan, Adidas, New Balance picks with QC photos and verified agent links.",
+    h1: "Sneaker finds",
+    intro:
+      "Sneakers are the most searched category on LitBuy Finds. This page surfaces current Nike, Jordan, Adidas, and New Balance picks with photos, pricing, and direct agent purchase links.",
+    badge: "Sneakers",
+    keywords: ["sneaker finds", "sneaker finds spreadsheet", "rep sneakers"],
+    updateFrequency: "weekly",
+    getProducts: TOP_LISTS["top-rep-sneakers"].getProducts,
+    categoryLinks: ["shoes"],
+    relatedLinks: [
+      { href: "/litbuy-sneakers", label: "LitBuy sneakers" },
+      { href: "/best-sneakers", label: "Best sneakers" },
+      { href: "/brands/nike", label: "Nike" },
+      { href: "/brands/jordan", label: "Jordan" },
+      { href: "/qc-finds", label: "QC finds" },
+    ],
+    faqs: [
+      {
+        question: "What are the best sneaker finds right now?",
+        answer:
+          "Popular picks rotate daily. Check Trending Today and this page's product grid for current Nike and Jordan heat.",
+      },
+    ],
+    productSectionTitle: "Top sneaker finds",
+  },
+
+  "fashion-finds": {
+    slug: "fashion-finds",
+    type: "collection",
+    title: "Fashion Finds | QC Photos, Spreadsheet Links & Streetwear",
+    description:
+      "Explore fashion finds and fashion finds spreadsheets — hoodies, jackets, tees, cargos, and streetwear with QC photos and verified agent links.",
+    h1: "Fashion finds",
+    intro:
+      "Fashion finds cover hoodies, jackets, tees, cargos, and designer streetwear from Weidian and Taobao sellers. Browse curated picks with photos, QC references, and verified buy links.",
+    badge: "Fashion",
+    keywords: ["fashion finds", "fashion finds spreadsheet", "streetwear finds"],
+    updateFrequency: "weekly",
+    getProducts: TOP_LISTS["top-streetwear-finds"].getProducts,
+    categoryLinks: ["hoodies-and-pants", "coats-and-jackets", "tshirts-and-shorts"],
+    relatedLinks: [
+      { href: "/top-streetwear-finds", label: "Top streetwear" },
+      { href: "/best-hoodies", label: "Best hoodies" },
+      { href: "/fashion-finds-telegram", label: "Fashion Telegram" },
+      { href: "/trending", label: "Trending" },
+      { href: "/categories", label: "Categories" },
+    ],
+    faqs: [
+      {
+        question: "What counts as a fashion find?",
+        answer:
+          "Streetwear layers, graphic tees, cargos, jackets, and designer-inspired clothing from Weidian and Taobao sellers.",
+      },
+    ],
+    productSectionTitle: "Top fashion finds",
+  },
+
+  "designer-finds": {
+    slug: "designer-finds",
+    type: "collection",
+    title: "Designer Finds | QC Photos, Bags, Jackets & Spreadsheet Links",
+    description:
+      "Browse designer finds and designer finds spreadsheets — Louis Vuitton, Gucci, Prada, Dior bags, jackets, and accessories with QC photos and agent links.",
+    h1: "Designer finds",
+    intro:
+      "Designer finds include luxury bags, belts, jackets, and accessories from high-demand brands. QC references matter most here — compare hardware, stitching, and materials before shipping.",
+    badge: "Designer",
+    keywords: ["designer finds", "designer finds spreadsheet", "designer bags"],
+    updateFrequency: "weekly",
+    getProducts: TOP_LISTS["top-designer-bags"].getProducts,
+    brandLinks: ["louis-vuitton", "gucci", "prada", "dior"],
+    categoryLinks: ["accessories", "coats-and-jackets"],
+    relatedLinks: [
+      { href: "/top-designer-bags", label: "Designer bags" },
+      { href: "/top-louis-vuitton-finds", label: "Louis Vuitton" },
+      { href: "/top-gucci-finds", label: "Gucci finds" },
+      { href: "/qc-finds", label: "QC finds" },
+      { href: "/brands", label: "All brands" },
+    ],
+    faqs: [
+      {
+        question: "Which designer brands have the most QC references?",
+        answer:
+          "Louis Vuitton, Gucci, and Goyard styles tend to have the most community QC threads. Always request warehouse photos before shipping.",
+      },
+    ],
+    productSectionTitle: "Top designer finds",
+  },
+
+  "agent-spreadsheet": {
+    slug: "agent-spreadsheet",
+    type: "spreadsheet",
+    title: "Shopping Agent Spreadsheet | QC Photos, Finds & Agent Links",
+    description:
+      "Browse shopping agent spreadsheet finds — LitBuy, Kakobuy, MuleBuy, OopBuy, and ACBuy product links with QC photos, Weidian items, Taobao products, and verified buy buttons.",
+    h1: "Shopping agent spreadsheet finds",
+    intro:
+      "Community agent spreadsheets list Weidian and Taobao links, prices, and QC notes. LitBuy Finds turns that same catalog into searchable pages with photos, filters, and your preferred agent at checkout.",
+    badge: "Agent spreadsheet",
+    keywords: [
+      "shopping agent spreadsheet",
+      "agent spreadsheet finds",
+      "litbuy spreadsheet",
+      "kakobuy spreadsheet",
+    ],
+    updateFrequency: "weekly",
+    filter: { trending: true },
+    sections: [
+      {
+        heading: "Agent spreadsheet hubs",
+        paragraphs: [
+          "Each supported agent has its own spreadsheet-style landing page. Browse the catalog once, then open products on LitBuy (recommended), Kakobuy, MuleBuy, OopBuy, or ACBuy.",
+        ],
+        links: [
+          { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+          { href: "/kakobuy-spreadsheet", label: "Kakobuy spreadsheet" },
+          { href: "/mulebuy-spreadsheet", label: "MuleBuy spreadsheet" },
+          { href: "/oopbuy-spreadsheet", label: "OopBuy spreadsheet" },
+          { href: "/acbuy-spreadsheet", label: "ACBuy spreadsheet" },
+        ],
+      },
+    ],
+    relatedLinks: [
+      { href: "/litbuy-finds", label: "LitBuy finds" },
+      { href: "/best-shopping-agent", label: "Best shopping agent" },
+      { href: "/weidian-finds", label: "Weidian finds" },
+      { href: "/taobao-finds", label: "Taobao finds" },
+      { href: "/trending", label: "Trending" },
+    ],
+    faqs: [
+      {
+        question: "What is a shopping agent spreadsheet?",
+        answer:
+          "A shared list of marketplace product links buyers track in Google Sheets or Excel. LitBuy Finds indexes the same product universe into searchable pages.",
+      },
+      {
+        question: "Which agent should I use?",
+        answer:
+          "LitBuy is recommended on this site, but you can switch to MuleBuy, Kakobuy, OopBuy, or ACBuy from the header before buying.",
+      },
+    ],
+    productSectionTitle: "Trending agent spreadsheet picks",
   },
 };
 

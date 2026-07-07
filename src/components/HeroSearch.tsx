@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { POPULAR_SEARCHES } from "@/lib/constants";
+import { EXPLORE_FINDS_LINKS, POPULAR_SEARCHES } from "@/lib/constants";
 import { trackSearchChipClick, trackSearchSubmit } from "@/lib/analytics-events";
 import { scrollToCatalogResults } from "@/lib/scroll-to-catalog";
 import type { SearchSuggestion } from "@/lib/search-suggestions";
@@ -233,6 +233,24 @@ export default function HeroSearch({ searchIndex }: HeroSearchProps) {
             >
               {brand}
             </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-4">
+        <p className="text-center text-[11px] font-bold uppercase tracking-[0.14em] text-muted">
+          Explore finds
+        </p>
+        <div className="mt-2 flex flex-wrap justify-center gap-2 px-1">
+          {EXPLORE_FINDS_LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              onClick={() => trackSearchChipClick(link.label, "hero_explore_finds")}
+              className="rounded-full border border-border/80 bg-surface/30 px-3 py-1.5 text-xs font-semibold text-muted transition hover:border-accent/40 hover:text-accent"
+            >
+              {link.label}
+            </Link>
           ))}
         </div>
       </div>

@@ -46,6 +46,10 @@ const nextConfig: NextConfig = {
       { source: "/best-litbuy-bags", destination: "/best-litbuy-bags-2026", permanent: true },
       { source: "/best-litbuy-under-50", destination: "/best-under-50", permanent: true },
       { source: "/best-qc-finds", destination: "/top-qc-finds", permanent: true },
+      { source: "/qc-photo-finds", destination: "/qc-finds", permanent: true },
+      { source: "/litbuyfinds", destination: "/", permanent: true },
+      { source: "/mule-buy-finds", destination: "/mulebuy-finds", permanent: true },
+      { source: "/mule-buy-spreadsheet", destination: "/mulebuy-spreadsheet", permanent: true },
       { source: "/guides/how-to-use-litbuy", destination: "/guides/how-to-use-litbuy-finds", permanent: true },
       {
         source: "/guides/how-to-qc-photos-work",

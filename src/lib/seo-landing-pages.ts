@@ -236,9 +236,9 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
   "litbuy-finds": {
     slug: "litbuy-finds",
     path: "/litbuy-finds",
-    title: "LitBuy Finds Catalog",
+    title: "LitBuy Finds | QC Photos, Spreadsheet Links & Agent Shopping",
     metaDescription:
-      "Browse verified sneaker, fashion and streetwear finds. LitBuy is our recommended agent — or choose Kakobuy, OopBuy, ACBuy, MuleBuy and HipoBuy before buying.",
+      "Search LitBuy finds with QC photos, spreadsheet-style product links, Weidian finds, Taobao finds, sneaker finds, fashion finds, and multi-agent checkout.",
     badge: "LitBuy Finds",
     h1: "LitBuy finds",
     intro:

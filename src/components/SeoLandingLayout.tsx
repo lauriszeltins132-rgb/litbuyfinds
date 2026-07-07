@@ -4,7 +4,14 @@ import ProductGrid from "@/components/ProductGrid";
 import SchemaScript from "@/components/SchemaScript";
 import type { SeoLandingConfig } from "@/lib/seo-landing-pages";
 import RelatedPages from "@/components/RelatedPages";
-import { buildCollectionPageSchema, buildFaqSchema } from "@/lib/schema";
+import { getProductHref } from "@/lib/slugs";
+import {
+  buildBreadcrumbSchema,
+  buildCollectionPageSchema,
+  buildFaqSchema,
+  buildItemListSchema,
+  buildWebPageSchema,
+} from "@/lib/schema";
 
 type SeoLandingLayoutProps = {
   config: SeoLandingConfig;
@@ -13,24 +20,53 @@ type SeoLandingLayoutProps = {
 export default function SeoLandingLayout({ config }: SeoLandingLayoutProps) {
   const products = config.getProducts();
   const faqs = config.faqs.length > 0 ? config.faqs : undefined;
+  const breadcrumbItems = [
+    { label: "Home", href: "/" },
+    { label: config.h1 },
+  ];
+
+  const schema: Record<string, unknown>[] = [
+    buildWebPageSchema({
+      name: config.h1,
+      description: config.metaDescription,
+      path: config.path,
+    }),
+    buildBreadcrumbSchema(breadcrumbItems, config.path),
+  ];
+
+  if (products.length > 0) {
+    schema.push(
+      buildCollectionPageSchema({
+        name: config.h1,
+        description: config.metaDescription,
+        path: config.path,
+        numberOfItems: products.length,
+      })
+    );
+    schema.push(
+      buildItemListSchema({
+        name: config.productSectionTitle,
+        description: config.metaDescription,
+        path: config.path,
+        items: products.slice(0, 48).map((product, index) => ({
+          name: product.product_name,
+          url: getProductHref(product),
+          position: index + 1,
+        })),
+      })
+    );
+  }
+
+  if (faqs) {
+    schema.push(buildFaqSchema(faqs));
+  }
 
   return (
     <>
-      <SchemaScript
-        data={buildCollectionPageSchema({
-          name: config.h1,
-          description: config.metaDescription,
-          path: config.path,
-          numberOfItems: products.length,
-        })}
-      />
-      {faqs ? <SchemaScript data={buildFaqSchema(faqs)} /> : null}
+      <SchemaScript data={schema} />
 
       <Breadcrumbs
-        items={[
-          { label: "Home", href: "/" },
-          { label: config.h1 },
-        ]}
+        items={breadcrumbItems}
         currentPath={config.path}
       />
 

@@ -4,6 +4,7 @@ import { BEST_OF_PAGES, BEST_OF_SLUGS } from "./best-of-pages";
 import { GUIDE_PAGES } from "./guides";
 import { SHARE_COLLECTION_SLUGS, SHARE_COLLECTIONS } from "./share-collections";
 import { SEO_LANDING_SLUGS, SEO_LANDING_PAGES } from "./seo-landing-pages";
+import { SEO_LANDING_CONFIG, SEO_LANDING_CONFIG_SLUGS } from "./seo-landing-config";
 import { POPULAR_SEARCHES } from "./constants";
 import { getProductHref } from "./slugs";
 
@@ -215,6 +216,17 @@ function buildIndex(): SearchSuggestion[] {
       type: "landing",
       keywords: `${page.title} ${page.slug} litbuy`.toLowerCase(),
       priority: 72,
+    });
+  }
+
+  for (const slug of SEO_LANDING_CONFIG_SLUGS) {
+    const page = SEO_LANDING_CONFIG[slug];
+    items.push({
+      label: page.h1,
+      href: `/${page.slug}`,
+      type: "landing",
+      keywords: `${page.title} ${page.keywords.join(" ")} ${page.slug}`.toLowerCase(),
+      priority: slug.includes("spreadsheet") || slug.includes("finds") ? 82 : 74,
     });
   }
 

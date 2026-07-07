@@ -2,6 +2,12 @@ import type { SeoLandingConfig } from "./seo-landing-pages";
 import { filterFeaturedEligible } from "./product-media";
 import { hasExactPrice } from "./pricing";
 import { getAllProducts, getTrendingProducts } from "./products";
+import {
+  getAcbuyFindsMetadataCopy,
+  getKakobuyFindsMetadataCopy,
+  getMulebuyFindsMetadataCopy,
+  getOopbuyFindsMetadataCopy,
+} from "./metadata-copy";
 
 const AGENT_LINKS = [
   { href: "/litbuy-finds", label: "LitBuy finds" },
@@ -92,11 +98,10 @@ export const AGENT_LANDING_PAGES: Record<string, SeoLandingConfig> = {
   "kakobuy-finds": buildAgentLandingConfig({
     slug: "kakobuy-finds",
     agentName: "Kakobuy",
-    title: "Kakobuy Finds & Spreadsheet",
-    metaDescription:
-      "Explore verified sneaker, fashion and streetwear finds. Use LitBuy as the recommended agent or choose Kakobuy, OopBuy, ACBuy, MuleBuy or HipoBuy before buying.",
+    title: getKakobuyFindsMetadataCopy().title,
+    metaDescription: getKakobuyFindsMetadataCopy().description,
     badge: "Kakobuy finds",
-    h1: "Kakobuy Finds & Spreadsheet",
+    h1: "Kakobuy finds",
     intro:
       "Browse verified fashion and sneaker finds with support for LitBuy, Kakobuy, OopBuy, ACBuy, MuleBuy and HipoBuy. LitBuy is our recommended agent, but you can choose Kakobuy before checkout.",
     extraParagraph:
@@ -105,11 +110,10 @@ export const AGENT_LANDING_PAGES: Record<string, SeoLandingConfig> = {
   "oopbuy-finds": buildAgentLandingConfig({
     slug: "oopbuy-finds",
     agentName: "OopBuy",
-    title: "OopBuy Finds & Spreadsheet",
-    metaDescription:
-      "Discover QC-curated sneakers, jackets and streetwear finds. LitBuy recommended — or choose OopBuy and other agents before you buy.",
+    title: getOopbuyFindsMetadataCopy().title,
+    metaDescription: getOopbuyFindsMetadataCopy().description,
     badge: "OopBuy finds",
-    h1: "OopBuy Finds & Spreadsheet",
+    h1: "OopBuy finds",
     intro:
       "Explore verified finds from the LitBuy Finds catalog and open them on OopBuy when that is your preferred agent. LitBuy remains the recommended default for verified links and QC.",
     extraParagraph:
@@ -131,11 +135,10 @@ export const AGENT_LANDING_PAGES: Record<string, SeoLandingConfig> = {
   "acbuy-finds": buildAgentLandingConfig({
     slug: "acbuy-finds",
     agentName: "ACBuy",
-    title: "ACBuy Finds & Spreadsheet",
-    metaDescription:
-      "Verified streetwear and sneaker finds with LitBuy recommended. Choose ACBuy or another agent before buying.",
+    title: getAcbuyFindsMetadataCopy().title,
+    metaDescription: getAcbuyFindsMetadataCopy().description,
     badge: "ACBuy finds",
-    h1: "ACBuy Finds & Spreadsheet",
+    h1: "ACBuy finds",
     intro:
       "Browse the LitBuy Finds catalog and open products on ACBuy when that is your agent of choice. LitBuy stays the recommended default across the site.",
     extraParagraph:
@@ -144,11 +147,10 @@ export const AGENT_LANDING_PAGES: Record<string, SeoLandingConfig> = {
   "mulebuy-finds": buildAgentLandingConfig({
     slug: "mulebuy-finds",
     agentName: "MuleBuy",
-    title: "MuleBuy Finds & Spreadsheet",
-    metaDescription:
-      "Curated sneaker and fashion finds with LitBuy recommended. Select MuleBuy or another agent when you are ready to buy.",
+    title: getMulebuyFindsMetadataCopy().title,
+    metaDescription: getMulebuyFindsMetadataCopy().description,
     badge: "MuleBuy finds",
-    h1: "MuleBuy Finds & Spreadsheet",
+    h1: "MuleBuy finds",
     intro:
       "Discover verified finds and choose MuleBuy as your preferred agent, or stay with LitBuy — our recommended option for QC and verified links.",
     extraParagraph:
