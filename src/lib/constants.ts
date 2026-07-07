@@ -36,6 +36,18 @@ export const POPULAR_SEARCHES = [
   "Sneakers",
 ] as const;
 
+/** Compact SEO landing links — hero pill row, matches existing button style. */
+export const EXPLORE_FINDS_LINKS = [
+  { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
+  { href: "/kakobuy-spreadsheet", label: "Kakobuy Spreadsheet" },
+  { href: "/mulebuy-finds", label: "MuleBuy Finds" },
+  { href: "/qc-finds", label: "QC Finds" },
+  { href: "/weidian-finds", label: "Weidian Finds" },
+  { href: "/taobao-finds", label: "Taobao Finds" },
+  { href: "/sneaker-finds", label: "Sneaker Finds" },
+  { href: "/fashion-finds", label: "Fashion Finds" },
+] as const;
+
 /** Universal promotional banner — OG/social only (not homepage hero) */
 export const PROMO_BANNER_PROMO = "/banners/litbuy-finds-promo.webp";
 export const PROMO_BANNER_MODAL = "/banners/litbuy-finds-modal.webp";

@@ -37,9 +37,14 @@ const SECTIONS = [
   {
     title: "Guides & fresh finds",
     links: [
+      { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+      { href: "/kakobuy-spreadsheet", label: "Kakobuy spreadsheet" },
+      { href: "/qc-finds", label: "QC finds" },
+      { href: "/weidian-finds", label: "Weidian finds" },
+      { href: "/sneaker-finds", label: "Sneaker finds" },
+      { href: "/agent-spreadsheet", label: "Agent spreadsheet" },
       { href: "/guides/beginner-guide-to-litbuy", label: "Beginner guide" },
       { href: "/guides/how-to-check-qc-photos", label: "QC photos guide" },
-      { href: "/guides/litbuy-spreadsheet", label: "Spreadsheet guide" },
       { href: "/latest", label: "Latest finds" },
       { href: "/trending", label: "Trending" },
       { href: "/guides", label: "All guides" },

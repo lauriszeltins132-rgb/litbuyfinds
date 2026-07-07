@@ -43,11 +43,10 @@ export function truncateMetaTitle(text: string, max = TITLE_MAX): string {
 export function getHomepageMetadataCopy() {
   return {
     title: truncateMetaTitle(
-      `LitBuy Finds 2026 | ${META_SCALE} QC Photos, Spreadsheet Finds & Best Reps`,
-      72
+      "LitBuy Finds | QC Photos, Spreadsheet Finds, Weidian & Taobao Links"
     ),
     description: truncateMetaDescription(
-      `Browse ${META_SCALE} LitBuy finds with QC photos, spreadsheet-style product discovery, Weidian and Taobao links, sneaker finds, fashion finds, coupons and multi-agent support.`
+      `Search ${META_SCALE} LitBuy finds, QC photos, spreadsheet-style product links, Weidian finds, Taobao finds, sneaker finds, fashion finds, and agent shopping finds.`
     ),
   };
 }
@@ -102,10 +101,65 @@ export function getCollectionsHubMetadataCopy() {
 export function getSpreadsheetMetadataCopy() {
   return {
     title: truncateMetaTitle(
-      `LitBuy Spreadsheet | ${META_SCALE} QC Photos & Agent Links`
+      "LitBuy Spreadsheet | Verified QC Photos, Product Finds & Agent Links"
     ),
     description: truncateMetaDescription(
-      `Searchable LitBuy spreadsheet with ${META_SCALE} curated finds, QC photos, ${META_VALUE_STACK}. ${META_AGENTS}.`
+      "Browse a searchable LitBuy spreadsheet with QC photos, Weidian links, Taobao products, sneaker finds, fashion finds, bags, jackets, hoodies, and trending agent shopping finds."
+    ),
+  };
+}
+
+export function getKakobuySpreadsheetMetadataCopy() {
+  return {
+    title: truncateMetaTitle(
+      "Kakobuy Spreadsheet | QC Photos, Product Finds & Weidian Links"
+    ),
+    description: truncateMetaDescription(
+      "Explore Kakobuy spreadsheet-style finds with QC photos, Weidian products, Taobao links, sneaker finds, fashion items, budget picks, and trending product links."
+    ),
+  };
+}
+
+export function getMulebuyFindsMetadataCopy() {
+  return {
+    title: truncateMetaTitle(
+      "MuleBuy Finds | QC Photos, Spreadsheet Links & Fashion Finds"
+    ),
+    description: truncateMetaDescription(
+      "Find MuleBuy product links, QC photos, spreadsheet-style finds, Weidian items, Taobao products, sneakers, jackets, bags, hoodies, and fashion finds."
+    ),
+  };
+}
+
+export function getOopbuyFindsMetadataCopy() {
+  return {
+    title: truncateMetaTitle(
+      "OopBuy Finds | QC Photos, Spreadsheet Links & Sneaker Finds"
+    ),
+    description: truncateMetaDescription(
+      "Browse OopBuy product links, QC photos, spreadsheet-style finds, Weidian listings, Taobao products, sneakers, jackets, and streetwear picks."
+    ),
+  };
+}
+
+export function getAcbuyFindsMetadataCopy() {
+  return {
+    title: truncateMetaTitle(
+      "ACBuy Finds | QC Photos, Spreadsheet Links & Fashion Finds"
+    ),
+    description: truncateMetaDescription(
+      "Discover ACBuy product links, QC photos, spreadsheet-style finds, Weidian items, Taobao products, sneakers, bags, hoodies, and fashion finds."
+    ),
+  };
+}
+
+export function getKakobuyFindsMetadataCopy() {
+  return {
+    title: truncateMetaTitle(
+      "Kakobuy Finds | QC Photos, Spreadsheet Links & Sneaker Finds"
+    ),
+    description: truncateMetaDescription(
+      "Explore Kakobuy product links, QC photos, spreadsheet-style finds, Weidian listings, Taobao products, sneakers, jackets, and streetwear picks."
     ),
   };
 }

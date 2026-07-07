@@ -102,13 +102,37 @@ export function getProductSeoTitle(product: Product): string {
   return buildProductMetaTitle(getDisplayProductName(product));
 }
 
+function shortenProductLabel(name: string, brand: string | null): string {
+  const normalized = name.trim();
+  if (brand) {
+    const brandPrefix = new RegExp(`^${brand}\\s+`, "i");
+    const stripped = normalized.replace(brandPrefix, "").trim();
+    if (stripped.length > 0 && stripped.length <= 48) return stripped;
+  }
+  return normalized.length > 48 ? normalized.slice(0, 45).trimEnd() + "…" : normalized;
+}
+
+function includeSpreadsheetHint(productId: string): boolean {
+  let hash = 0;
+  for (let i = 0; i < productId.length; i++) {
+    hash = (hash + productId.charCodeAt(i)) % 4;
+  }
+  return hash === 0;
+}
+
 export function getProductImageAlt(product: Product): string {
   const brand = getDisplayBrand(product);
-  const name = getDisplayProductName(product);
+  const label = shortenProductLabel(getDisplayProductName(product), brand);
+  const source = getProductSource(product.affiliate_link);
+  const sourceLabel = source === "weidian" ? "Weidian" : source === "taobao" ? "Taobao" : "LitBuy";
+  const qcSuffix = product.qc_link ? " with QC photo" : "";
+  const spreadsheetHint = includeSpreadsheetHint(product.id) ? " spreadsheet" : "";
+
   if (brand) {
-    return `${brand} ${name} — ${product.category} find on LitBuy Finds`;
+    return `${brand} ${label} ${sourceLabel}${spreadsheetHint} find${qcSuffix}`;
   }
-  return `${name} — LitBuy Finds`;
+
+  return `${label} ${sourceLabel}${spreadsheetHint} find${qcSuffix}`;
 }
 
 export function getProductSeoDescription(product: Product): string {
