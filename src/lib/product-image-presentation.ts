@@ -7,6 +7,7 @@ import {
   needsWhiteKnockout,
   shouldEnhanceImage,
 } from "./image-quality";
+import damagedData from "@/data/damaged-processed-manifest.json";
 import {
   getProcessedApiSrc,
   getProductImagePlan,
@@ -14,19 +15,44 @@ import {
 } from "./processed-images";
 import type { Product } from "./types";
 
+type DamagedProcessedManifest = {
+  urls: string[];
+  paths: string[];
+};
+
+const damagedCatalog = damagedData as DamagedProcessedManifest;
+const damagedUrls = new Set(damagedCatalog.urls ?? []);
+const damagedPaths = new Set(damagedCatalog.paths ?? []);
+
+/** Pre-built cutouts that eat dark fabric or leave harsh white speckles. */
+function cutoutDisplayIsUnsafe(
+  sourceUrl: string,
+  processedPath?: string
+): boolean {
+  const details = getImageQualityDetails(sourceUrl);
+  if (details?.issues?.includes("damaged_cutout")) return true;
+  if (damagedUrls.has(sourceUrl)) return true;
+  if (processedPath && damagedPaths.has(processedPath)) return true;
+  return false;
+}
+
 /** True when the catalog original has a studio white / bright backdrop. */
 function imageHasBrightBackground(sourceUrl: string): boolean {
+  const details = getImageQualityDetails(sourceUrl);
+  const whiteBlank = details?.whiteBlankRatio ?? 0;
+  const border = details?.borderBrightRatio ?? 0;
+
+  // Dark product photos should stay on the original even if flagged for vignette.
+  if (details && whiteBlank < 0.08 && border < 0.12) return false;
+
   if (getCatalogBrightBgTreatment(sourceUrl) !== "none") return true;
   if (needsWhiteKnockout(sourceUrl)) return true;
 
-  const details = getImageQualityDetails(sourceUrl);
   if (!details) return false;
 
   if (details.issues?.includes("white_blank")) return true;
   if (details.issues?.includes("white_border")) return true;
 
-  const whiteBlank = details.whiteBlankRatio ?? 0;
-  const border = details.borderBrightRatio ?? 0;
   const empty = details.emptySpaceRatio ?? 0;
 
   return whiteBlank >= 0.12 || border >= 0.15 || empty >= 0.35;
@@ -37,8 +63,9 @@ function shouldPreferProcessedDisplay(
   plan: ProductImagePlan,
   catalogDead: boolean
 ): boolean {
-  if (catalogDead && plan.isProcessed) return true;
   if (!plan.isProcessed) return false;
+  if (cutoutDisplayIsUnsafe(sourceUrl, plan.src)) return false;
+  if (catalogDead) return true;
   return imageHasBrightBackground(sourceUrl);
 }
 
@@ -68,9 +95,12 @@ export function resolveProductDisplayImage(
   const useProcessed = shouldPreferProcessedDisplay(sourceUrl, plan, catalogDead);
   const hasBrightBg = imageHasBrightBackground(sourceUrl);
 
+  const canUseLiveProcessing =
+    hasBrightBg && !cutoutDisplayIsUnsafe(sourceUrl, plan.src);
+
   const displaySrc = useProcessed
     ? plan.src
-    : hasBrightBg
+    : canUseLiveProcessing
       ? getProcessedApiSrc(sourceUrl)
       : sourceUrl;
 
@@ -93,7 +123,7 @@ export function resolveProductDisplayImage(
       [
         sourceUrl,
         plan.isProcessed ? plan.src : null,
-        hasBrightBg ? getProcessedApiSrc(sourceUrl) : null,
+        canUseLiveProcessing ? getProcessedApiSrc(sourceUrl) : null,
         ...plan.fallbacks,
       ].filter((url): url is string => Boolean(url) && url !== displaySrc)
     ),
