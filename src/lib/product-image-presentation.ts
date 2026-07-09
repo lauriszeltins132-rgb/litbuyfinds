@@ -4,36 +4,22 @@ import {
   getImageFillClass,
   getImageQualityDetails,
   getImageQualityScore,
+  needsDarkBoost,
   needsWhiteKnockout,
   shouldEnhanceImage,
 } from "./image-quality";
-import damagedData from "@/data/damaged-processed-manifest.json";
 import {
   getProcessedApiSrc,
   getProductImagePlan,
+  isProcessedCutoutBlocked,
   type ProductImagePlan,
 } from "./processed-images";
 import type { Product } from "./types";
 
-type DamagedProcessedManifest = {
-  urls: string[];
-  paths: string[];
-};
-
-const damagedCatalog = damagedData as DamagedProcessedManifest;
-const damagedUrls = new Set(damagedCatalog.urls ?? []);
-const damagedPaths = new Set(damagedCatalog.paths ?? []);
-
-/** Pre-built cutouts that eat dark fabric or leave harsh white speckles. */
-function cutoutDisplayIsUnsafe(
-  sourceUrl: string,
-  processedPath?: string
-): boolean {
+function cutoutDisplayIsUnsafe(sourceUrl: string, processedPath?: string): boolean {
   const details = getImageQualityDetails(sourceUrl);
   if (details?.issues?.includes("damaged_cutout")) return true;
-  if (damagedUrls.has(sourceUrl)) return true;
-  if (processedPath && damagedPaths.has(processedPath)) return true;
-  return false;
+  return isProcessedCutoutBlocked(sourceUrl, processedPath);
 }
 
 /** True when the catalog original has a studio white / bright backdrop. */
@@ -58,13 +44,18 @@ function imageHasBrightBackground(sourceUrl: string): boolean {
   return whiteBlank >= 0.12 || border >= 0.15 || empty >= 0.35;
 }
 
-function shouldPreferProcessedDisplay(
+function staticProcessedPath(plan: ProductImagePlan): string | undefined {
+  return plan.isProcessed && plan.src.startsWith("/processed/") ? plan.src : undefined;
+}
+
+function shouldPreferStaticProcessed(
   sourceUrl: string,
   plan: ProductImagePlan,
   catalogDead: boolean
 ): boolean {
   if (!plan.isProcessed) return false;
-  if (cutoutDisplayIsUnsafe(sourceUrl, plan.src)) return false;
+  const processedPath = staticProcessedPath(plan);
+  if (cutoutDisplayIsUnsafe(sourceUrl, processedPath)) return false;
   if (catalogDead) return true;
   return imageHasBrightBackground(sourceUrl);
 }
@@ -77,6 +68,7 @@ export type ResolvedProductImage = {
   needsMatte: boolean;
   knockoutWhite: boolean;
   enhance: boolean;
+  darkBoost: boolean;
   isProcessed: boolean;
   fallbacks: string[];
 };
@@ -88,21 +80,22 @@ export function resolveProductDisplayImage(
 
   const sourceUrl = product.image;
   const plan = getProductImagePlan(sourceUrl);
+  const processedPath = staticProcessedPath(plan);
 
   if (isDeadImageUrl(sourceUrl) && !plan.isProcessed) return null;
 
   const catalogDead = isCatalogImageUrlDead(sourceUrl);
-  const useProcessed = shouldPreferProcessedDisplay(sourceUrl, plan, catalogDead);
   const hasBrightBg = imageHasBrightBackground(sourceUrl);
+  const cutoutUnsafe = cutoutDisplayIsUnsafe(sourceUrl, processedPath);
+  const useStaticProcessed = shouldPreferStaticProcessed(sourceUrl, plan, catalogDead);
+  const canUseLiveProcessing = hasBrightBg && !cutoutUnsafe;
 
-  const canUseLiveProcessing =
-    hasBrightBg && !cutoutDisplayIsUnsafe(sourceUrl, plan.src);
-
-  const displaySrc = useProcessed
-    ? plan.src
-    : canUseLiveProcessing
-      ? getProcessedApiSrc(sourceUrl)
-      : sourceUrl;
+  let displaySrc = sourceUrl;
+  if (useStaticProcessed) {
+    displaySrc = plan.src;
+  } else if (canUseLiveProcessing) {
+    displaySrc = getProcessedApiSrc(sourceUrl);
+  }
 
   const showingProcessed =
     displaySrc.startsWith("/processed/") ||
@@ -110,20 +103,25 @@ export function resolveProductDisplayImage(
 
   const knockoutWhite =
     !showingProcessed &&
+    hasBrightBg &&
     (plan.knockoutWhite || needsWhiteKnockout(sourceUrl));
+
+  const darkBoost = !showingProcessed && !hasBrightBg && needsDarkBoost(sourceUrl);
 
   const baseScore = getImageQualityScore(sourceUrl);
   const score =
-    plan.isProcessed && plan.src.startsWith("/processed/")
+    useStaticProcessed && plan.src.startsWith("/processed/")
       ? Math.max(58, baseScore + 12)
-      : baseScore + (plan.isProcessed ? 12 : 0);
+      : baseScore + (showingProcessed ? 12 : 0);
 
   const fallbacks = [
     ...new Set(
       [
         sourceUrl,
-        plan.isProcessed ? plan.src : null,
-        canUseLiveProcessing ? getProcessedApiSrc(sourceUrl) : null,
+        useStaticProcessed ? null : plan.isProcessed ? plan.src : null,
+        canUseLiveProcessing && displaySrc !== getProcessedApiSrc(sourceUrl)
+          ? getProcessedApiSrc(sourceUrl)
+          : null,
         ...plan.fallbacks,
       ].filter((url): url is string => Boolean(url) && url !== displaySrc)
     ),
@@ -138,8 +136,9 @@ export function resolveProductDisplayImage(
       : getImageFillClass(sourceUrl),
     needsMatte: false,
     knockoutWhite,
-    enhance: showingProcessed || shouldEnhanceImage(sourceUrl),
-    isProcessed: useProcessed,
+    enhance: showingProcessed || shouldEnhanceImage(sourceUrl) || darkBoost,
+    darkBoost,
+    isProcessed: showingProcessed,
     fallbacks,
   };
 }

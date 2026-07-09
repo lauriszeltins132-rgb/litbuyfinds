@@ -32,11 +32,19 @@ export function getProcessedApiSrc(sourceUrl: string): string {
   return `/api/processed-image?url=${encodeURIComponent(sourceUrl)}`;
 }
 
-function shouldUseOriginal(sourceUrl: string, staticPath?: string): boolean {
+/** Pre-built cutouts that corrupt the product or leave harsh artifacts. */
+export function isProcessedCutoutBlocked(
+  sourceUrl: string,
+  processedPath?: string
+): boolean {
   if (FORCE_ORIGINAL_URLS.has(sourceUrl)) return true;
   if (damagedUrls.has(sourceUrl)) return true;
-  if (staticPath && damagedPaths.has(staticPath)) return true;
+  if (processedPath && damagedPaths.has(processedPath)) return true;
   return false;
+}
+
+function shouldUseOriginal(sourceUrl: string, staticPath?: string): boolean {
+  return isProcessedCutoutBlocked(sourceUrl, staticPath);
 }
 
 /** Prefer pre-built matte PNGs when clean; otherwise catalog original. */

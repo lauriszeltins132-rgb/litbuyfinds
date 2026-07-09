@@ -54,6 +54,7 @@ export default function DailyDrop() {
                 fillClass={displayImage?.fillClass}
                 knockoutWhite={displayImage?.knockoutWhite}
                 enhance={displayImage?.enhance}
+                darkBoost={displayImage?.darkBoost}
                 alt={product.product_name}
                 productName={product.product_name}
                 priority

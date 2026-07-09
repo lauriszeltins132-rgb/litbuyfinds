@@ -1,5 +1,5 @@
 const MAX_DIMENSION = 900;
-const MATTE = { r: 20, g: 20, b: 24 };
+const MATTE = { r: 19, g: 19, b: 26 };
 
 function isBgPixel(r: number, g: number, b: number, threshold: number): boolean {
   const min = Math.min(r, g, b);
@@ -291,16 +291,6 @@ export async function removeWhiteBackgroundFromBuffer(
   const { width, height } = info;
   const pixels = new Uint8Array(data.buffer, data.byteOffset, data.byteLength);
 
-  const cutoutAttempts = [242, 228, 215];
-  for (const threshold of cutoutAttempts) {
-    const copy = new Uint8Array(pixels);
-    const removed = removeEdgeBg(copy, width, height, threshold);
-    const ratio = removed / (width * height);
-    if (ratio < 0.005 || ratio > 0.97) continue;
-    if (contentPixelRatio(copy, width, height) < 0.04) continue;
-    return toFlatPng(sharp, copy, width, height);
-  }
-
   const matteAttempts = [248, 242, 235, 228];
   for (const threshold of matteAttempts) {
     const copy = new Uint8Array(pixels);
@@ -309,6 +299,16 @@ export async function removeWhiteBackgroundFromBuffer(
     if (ratio < 0.008 || ratio > 0.98) continue;
     if (contentPixelRatio(copy, width, height) < 0.04) continue;
     return toOpaqueMattePng(sharp, copy, width, height);
+  }
+
+  const cutoutAttempts = [242, 228, 215];
+  for (const threshold of cutoutAttempts) {
+    const copy = new Uint8Array(pixels);
+    const removed = removeEdgeBg(copy, width, height, threshold);
+    const ratio = removed / (width * height);
+    if (ratio < 0.005 || ratio > 0.97) continue;
+    if (contentPixelRatio(copy, width, height) < 0.04) continue;
+    return toFlatPng(sharp, copy, width, height);
   }
 
   const aggressiveAttempts = [250, 245, 240, 235, 228, 220];

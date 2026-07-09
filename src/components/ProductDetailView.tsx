@@ -88,6 +88,7 @@ export default function ProductDetailView({
             fillClass={displayImage?.fillClass}
             knockoutWhite={displayImage?.knockoutWhite}
             enhance={displayImage?.enhance}
+            darkBoost={displayImage?.darkBoost}
             alt={imageAlt}
             productName={facts.displayName}
             priority

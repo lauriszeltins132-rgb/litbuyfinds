@@ -99,6 +99,7 @@ export default function ProductCard({
             fillClass={displayImage?.fillClass}
             knockoutWhite={displayImage?.knockoutWhite}
             enhance={displayImage?.enhance}
+            darkBoost={displayImage?.darkBoost}
             alt={imageAlt}
             productName={displayName}
             variant="card"

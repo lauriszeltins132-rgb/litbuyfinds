@@ -38,6 +38,7 @@ type ProductImageProps = {
   needsMatte?: boolean;
   knockoutWhite?: boolean;
   enhance?: boolean;
+  darkBoost?: boolean;
 };
 
 function buildCandidateList(
@@ -85,6 +86,7 @@ export default function ProductImage({
   fillClass,
   knockoutWhite = false,
   enhance,
+  darkBoost = false,
 }: ProductImageProps) {
   const validation = useMemo(() => validateImageUrl(src), [src]);
 
@@ -202,8 +204,11 @@ export default function ProductImage({
     "product-float-asset",
     resolvedFillClass,
     resolvedEnhance ? "product-float-asset--enhanced" : "",
+    darkBoost ? "product-float-asset--dark-boost" : "",
     knockoutWhite ? "product-float-asset--knockout-white" : "",
-    displaySrc.startsWith("/processed/") ? "product-float-asset--processed-fallback" : "",
+    displaySrc.startsWith("/processed/") || displaySrc.startsWith("/api/processed-image")
+      ? "product-float-asset--processed-matte"
+      : "",
     loaded ? "product-float-asset--ready" : "product-float-asset--loading",
   ]
     .filter(Boolean)

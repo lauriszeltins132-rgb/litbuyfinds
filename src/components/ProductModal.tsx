@@ -94,6 +94,7 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
                 fillClass={displayImage?.fillClass}
                 knockoutWhite={displayImage?.knockoutWhite}
                 enhance={displayImage?.enhance}
+                darkBoost={displayImage?.darkBoost}
                 alt={imageAlt}
                 productName={displayName}
                 variant="card"

@@ -69,6 +69,25 @@ export function shouldEnhanceImage(imageUrl: string): boolean {
   return entry.enhance === true;
 }
 
+/** Subtle lift for catalog photos that read too dark on card backgrounds. */
+export function needsDarkBoost(imageUrl: string): boolean {
+  const entry = catalog.urls[imageUrl];
+  if (!entry) return false;
+  if (entry.enhance === true) return true;
+
+  const whiteBlank = entry.whiteBlankRatio ?? 0;
+  const border = entry.borderBrightRatio ?? 0;
+  const fill = entry.contentFillRatio ?? 0;
+
+  return (
+    fill >= 0.42 &&
+    whiteBlank < 0.06 &&
+    border < 0.1 &&
+    entry.score >= 45 &&
+    entry.score < 72
+  );
+}
+
 /** Studio white backdrops that should be knocked out on dark cards. */
 export function needsWhiteKnockout(imageUrl: string): boolean {
   const entry = catalog.urls[imageUrl];
