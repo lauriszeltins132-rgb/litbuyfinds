@@ -9,7 +9,8 @@ import {
   SITE_ALTERNATE_NAMES,
   SITE_ENTITY_DESCRIPTION,
 } from "@/lib/brand-entity";
-import { getAllProducts, getCategories } from "@/lib/products";
+import { getCategories } from "@/lib/products";
+import { getActualCatalogCount } from "@/lib/catalog-count";
 import {
   CONTENT_TEAM_DESCRIPTION,
   CONTENT_TEAM_NAME,
@@ -20,7 +21,6 @@ import { SITE_URL } from "@/lib/site";
 import SchemaScript from "@/components/SchemaScript";
 
 export default function JsonLd() {
-  const products = getAllProducts();
   const categories = getCategories();
 
   const graph = [
@@ -82,7 +82,7 @@ export default function JsonLd() {
     {
       "@type": "ItemList",
       name: `${SITE_NAME} catalog`,
-      numberOfItems: products.length,
+      numberOfItems: getActualCatalogCount(),
       itemListElement: categories.slice(0, 12).map((category, index) => ({
         "@type": "ListItem",
         position: index + 1,

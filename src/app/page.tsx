@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import CatalogPanel from "@/components/CatalogPanel";
+import HomepageCatalogSection from "@/components/HomepageCatalogSection";
 import DataFreshness from "@/components/DataFreshness";
 import DiscoveryHero from "@/components/DiscoveryHero";
 import DiscoveryRail from "@/components/DiscoveryRail";
@@ -16,8 +16,7 @@ import ProductGridSkeleton from "@/components/ProductGridSkeleton";
 import SchemaScript from "@/components/SchemaScript";
 import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/constants";
 import { getHomepageRails } from "@/lib/homepage-rails";
-import { getBrandsFromProducts } from "@/lib/brands";
-import { getAllProducts, getCategories } from "@/lib/products";
+import { getCategories } from "@/lib/products";
 import { buildWebPageSchema } from "@/lib/schema";
 import { buildHomepageMetadata } from "@/lib/seo";
 
@@ -26,10 +25,12 @@ export const metadata: Metadata = buildHomepageMetadata();
 /** Refresh discovery rails hourly so rotation and dedupe stay current. */
 export const revalidate = 3600;
 
-export default function HomePage() {
-  const products = getAllProducts();
+export default async function HomePage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const categories = getCategories();
-  const brands = getBrandsFromProducts(products);
   const rails = getHomepageRails(12);
 
   return (
@@ -121,12 +122,7 @@ export default function HomePage() {
           </section>
         }
       >
-        <CatalogPanel
-          products={products}
-          categories={categories}
-          brands={brands}
-          basePath="/"
-        />
+        <HomepageCatalogSection searchParams={searchParams} />
       </Suspense>
     </>
   );

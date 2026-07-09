@@ -1,9 +1,8 @@
-import { getCatalogStats } from "@/lib/products";
+import { PUBLIC_CATALOG_COUNT } from "@/lib/constants";
 import { TRUST_FOOTER_SIGNALS } from "@/lib/trust";
 
 export default function FooterTrustBar() {
-  const stats = getCatalogStats();
-  const listingLabel = `${stats.total.toLocaleString()}+ product listings`;
+  const listingLabel = `${PUBLIC_CATALOG_COUNT} product listings`;
 
   const signals = TRUST_FOOTER_SIGNALS.map((signal) =>
     signal.includes("3,000+") ? listingLabel : signal

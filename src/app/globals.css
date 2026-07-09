@@ -461,7 +461,7 @@ body::before {
 
 .product-float-stage--card .product-float-asset--knockout-white {
   mix-blend-mode: normal;
-  filter: brightness(1.1) contrast(1.08) saturate(1.05);
+  filter: brightness(1.14) contrast(1.06) saturate(1.05);
 }
 
 .product-float-stage--featured .product-float-asset {

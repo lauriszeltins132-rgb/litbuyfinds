@@ -33,6 +33,12 @@ type CatalogPanelProps = {
   categories: CategoryInfo[];
   brands: BrandInfo[];
   basePath?: string;
+  /** Server-pre-filtered catalog slice (homepage performance). */
+  serverCatalog?: {
+    totalCount: number;
+    page: number;
+    pageSize: number;
+  };
 };
 
 function currentParams(searchParams: URLSearchParams) {
@@ -81,6 +87,7 @@ export default function CatalogPanel({
   categories,
   brands,
   basePath = "/",
+  serverCatalog,
 }: CatalogPanelProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -112,26 +119,42 @@ export default function CatalogPanel({
 
   const filtered = useMemo(
     () =>
-      filterProducts(products, {
-        search,
-        category: "",
-        brand,
-        minPrice,
-        maxPrice,
-        sort,
-        qcOnly,
-        savedOnly,
-        savedIds,
-      }),
-    [products, search, brand, minPrice, maxPrice, sort, qcOnly, savedOnly, savedIds]
+      serverCatalog
+        ? products
+        : filterProducts(products, {
+            search,
+            category: "",
+            brand,
+            minPrice,
+            maxPrice,
+            sort,
+            qcOnly,
+            savedOnly,
+            savedIds,
+          }),
+    [
+      products,
+      serverCatalog,
+      search,
+      brand,
+      minPrice,
+      maxPrice,
+      sort,
+      qcOnly,
+      savedOnly,
+      savedIds,
+    ]
   );
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-  const currentPage = Math.min(page, totalPages);
-  const paginated = filtered.slice(
-    (currentPage - 1) * PAGE_SIZE,
-    currentPage * PAGE_SIZE
-  );
+  const totalPages = serverCatalog
+    ? Math.max(1, Math.ceil(serverCatalog.totalCount / serverCatalog.pageSize))
+    : Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const currentPage = serverCatalog
+    ? Math.min(page, totalPages)
+    : Math.min(page, totalPages);
+  const paginated = serverCatalog
+    ? filtered
+    : filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
   useEffect(() => {
     if (prevPageRef.current === currentPage) return;

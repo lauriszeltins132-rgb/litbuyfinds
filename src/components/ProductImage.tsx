@@ -111,7 +111,7 @@ export default function ProductImage({
   const loggedRef = useRef(false);
 
   const displaySrc = candidates[srcIndex] ?? "";
-  const loadEager = priority || variant === "card";
+  const loadEager = priority;
 
   useEffect(() => {
     setSrcIndex(0);

@@ -1,3 +1,4 @@
+import searchIndexData from "@/data/search-index.json";
 import { getBrandsFromProducts, extractBrand } from "./brands";
 import { getCategories, getAllProducts, getTrendingProducts } from "./products";
 import { BEST_OF_PAGES, BEST_OF_SLUGS } from "./best-of-pages";
@@ -257,7 +258,15 @@ function buildIndex(): SearchSuggestion[] {
 
 let cachedIndex: SearchSuggestion[] | null = null;
 
+/** Lightweight index for client components — avoids bundling products.json. */
+export function getClientSearchIndex(): SearchSuggestion[] {
+  return (searchIndexData as { items: SearchSuggestion[] }).items;
+}
+
 export function getSearchIndex(): SearchSuggestion[] {
+  if (typeof window !== "undefined") {
+    return getClientSearchIndex();
+  }
   if (!cachedIndex) {
     cachedIndex = buildIndex();
   }

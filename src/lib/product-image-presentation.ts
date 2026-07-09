@@ -9,7 +9,6 @@ import {
   shouldEnhanceImage,
 } from "./image-quality";
 import {
-  getProcessedApiSrc,
   getProductImagePlan,
   isProcessedCutoutBlocked,
   type ProductImagePlan,
@@ -88,13 +87,10 @@ export function resolveProductDisplayImage(
   const hasBrightBg = imageHasBrightBackground(sourceUrl);
   const cutoutUnsafe = cutoutDisplayIsUnsafe(sourceUrl, processedPath);
   const useStaticProcessed = shouldPreferStaticProcessed(sourceUrl, plan, catalogDead);
-  const canUseLiveProcessing = hasBrightBg && !cutoutUnsafe;
 
   let displaySrc = sourceUrl;
   if (useStaticProcessed) {
     displaySrc = plan.src;
-  } else if (canUseLiveProcessing) {
-    displaySrc = getProcessedApiSrc(sourceUrl);
   }
 
   const showingProcessed =
@@ -119,9 +115,6 @@ export function resolveProductDisplayImage(
       [
         sourceUrl,
         useStaticProcessed ? null : plan.isProcessed ? plan.src : null,
-        canUseLiveProcessing && displaySrc !== getProcessedApiSrc(sourceUrl)
-          ? getProcessedApiSrc(sourceUrl)
-          : null,
         ...plan.fallbacks,
       ].filter((url): url is string => Boolean(url) && url !== displaySrc)
     ),

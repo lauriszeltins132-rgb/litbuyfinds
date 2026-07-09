@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import ControlButton from "@/components/ui/ControlButton";
 import TextInput from "@/components/ui/TextInput";
 import { POPULAR_SEARCHES } from "@/lib/constants";
-import { getSearchIndex } from "@/lib/search-suggestions";
+import { getClientSearchIndex } from "@/lib/search-suggestions";
 import { scrollToCatalogResults } from "@/lib/scroll-to-catalog";
 
 function SearchIcon({ className = "h-5 w-5" }: { className?: string }) {
@@ -39,7 +39,7 @@ export default function GlobalSearch({
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const searchIndex = useMemo(() => getSearchIndex(), []);
+  const searchIndex = useMemo(() => getClientSearchIndex(), []);
 
   const suggestions = useMemo(() => {
     const q = query.trim().toLowerCase();

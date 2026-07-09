@@ -12,8 +12,7 @@ import RegisterLink from "./RegisterLink";
 import CommunityLinks from "./CommunityLinks";
 import FooterTrustBar from "./FooterTrustBar";
 import TrustStrip from "./TrustStrip";
-import { getBrandsFromProducts } from "@/lib/brands";
-import { getCategories, getAllProducts } from "@/lib/products";
+import siteNavigation from "@/data/site-navigation.json";
 
 const GUIDE_LINKS = [
   { href: "/guides", label: "All guides" },
@@ -49,8 +48,8 @@ const AGENT_FINDS_LINKS = [
 ];
 
 export default function Footer() {
-  const categories = getCategories().filter((c) => c.group === "category");
-  const brands = getBrandsFromProducts(getAllProducts()).slice(0, 8);
+  const categories = siteNavigation.categories;
+  const brands = siteNavigation.footerBrands;
 
   return (
     <footer className="relative mt-auto border-t border-border bg-[#0a0a0c] px-4 py-16 sm:px-6">

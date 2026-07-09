@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import CatalogHero from "@/components/CatalogHero";
 import ProductGrid from "@/components/ProductGrid";
@@ -9,15 +9,30 @@ import RegisterLink from "@/components/RegisterLink";
 import { useWishlist } from "@/context/WishlistContext";
 import { WISHLIST_UNLOCK_THRESHOLD } from "@/lib/conversion";
 import { REGISTER_MODAL_CTA_LABEL } from "@/lib/constants";
-import { getAllProducts } from "@/lib/products";
+import type { Product } from "@/lib/types";
 
 export default function WishlistPage() {
   const { wishlist } = useWishlist();
+  const [savedProducts, setSavedProducts] = useState<Product[]>([]);
 
-  const savedProducts = useMemo(
-    () => getAllProducts().filter((product) => wishlist.includes(product.id)),
-    [wishlist]
-  );
+  useEffect(() => {
+    if (wishlist.length === 0) {
+      setSavedProducts([]);
+      return;
+    }
+
+    let cancelled = false;
+    void import("@/lib/products").then(({ getAllProducts }) => {
+      if (cancelled) return;
+      setSavedProducts(
+        getAllProducts().filter((product) => wishlist.includes(product.id))
+      );
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [wishlist]);
 
   return (
     <>

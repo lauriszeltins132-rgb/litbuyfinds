@@ -9,7 +9,6 @@ import {
   useState,
 } from "react";
 import type { Product } from "@/lib/types";
-import { getProductById } from "@/lib/products";
 
 const STORAGE_KEY = "litbuyfinds-recently-viewed";
 const MAX_ITEMS = 12;
@@ -23,12 +22,26 @@ const RecentlyViewedContext = createContext<RecentlyViewedContextValue | null>(
   null
 );
 
+type ProductLookup = (id: string) => Product | undefined;
+
+let productLookupPromise: Promise<ProductLookup> | null = null;
+
+function loadProductLookup(): Promise<ProductLookup> {
+  if (!productLookupPromise) {
+    productLookupPromise = import("@/lib/products").then((mod) =>
+      mod.getProductById.bind(mod)
+    );
+  }
+  return productLookupPromise;
+}
+
 export function RecentlyViewedProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const [ids, setIds] = useState<string[]>([]);
+  const [items, setItems] = useState<Product[]>([]);
 
   useEffect(() => {
     try {
@@ -39,31 +52,41 @@ export function RecentlyViewedProvider({
     }
   }, []);
 
-  const addViewed = useCallback(
-    (productId: string) => {
-      setIds((current) => {
-        const next = [productId, ...current.filter((id) => id !== productId)].slice(
-          0,
-          MAX_ITEMS
-        );
-        try {
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-        } catch {
-          // ignore
-        }
-        return next;
-      });
-    },
-    []
-  );
+  useEffect(() => {
+    if (ids.length === 0) {
+      setItems([]);
+      return;
+    }
 
-  const items = useMemo(
-    () =>
-      ids
-        .map((id) => getProductById(id))
-        .filter((product): product is Product => Boolean(product)),
-    [ids]
-  );
+    let cancelled = false;
+    void loadProductLookup().then((lookup) => {
+      if (cancelled) return;
+      setItems(
+        ids
+          .map((id) => lookup(id))
+          .filter((product): product is Product => Boolean(product))
+      );
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [ids]);
+
+  const addViewed = useCallback((productId: string) => {
+    setIds((current) => {
+      const next = [productId, ...current.filter((id) => id !== productId)].slice(
+        0,
+        MAX_ITEMS
+      );
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      } catch {
+        // ignore
+      }
+      return next;
+    });
+  }, []);
 
   const value = useMemo(
     () => ({ items, addViewed }),
