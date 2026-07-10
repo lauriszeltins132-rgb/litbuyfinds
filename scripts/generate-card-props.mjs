@@ -53,36 +53,43 @@ function getImageQualityScore(url) {
   return qualityUrls[url]?.score ?? 62;
 }
 
-function isProcessedCutoutBlocked(sourceUrl, processedPath) {
+function isProcessedCutoutBlocked(sourceUrl, processedPath, details) {
   if (FORCE_ORIGINAL.has(sourceUrl)) return true;
   if (damagedUrls.has(sourceUrl)) return true;
   if (processedPath && damagedPaths.has(processedPath)) return true;
+  if (details?.issues?.includes("damaged_cutout")) return true;
   return false;
 }
 
-function shouldSkipKnockout(_sourceUrl, details) {
+function isNaturalProductPhoto(sourceUrl, details) {
   if (!details) return false;
-  return details.isScreenshotStyle === true;
-}
-
-function imageNeedsKnockout(sourceUrl, details) {
-  if (shouldSkipKnockout(sourceUrl, details)) return false;
-  if (brightBgUrls[sourceUrl] && brightBgUrls[sourceUrl] !== "none") return true;
-  if (!details || details.issues?.includes("dead_url")) return true;
-  if (details.issues?.includes("white_blank")) return true;
-  if (details.issues?.includes("white_border")) return true;
-  const whiteBlank = details.whiteBlankRatio ?? 0;
-  const border = details.borderBrightRatio ?? 0;
-  const empty = details.emptySpaceRatio ?? 0;
-  if (whiteBlank >= 0.04 || border >= 0.08 || empty >= 0.2) return true;
-  return true;
+  if (details.issues?.includes("dead_url") && (details.score ?? 0) <= 0) {
+    return false;
+  }
+  if (details.isScreenshotStyle) return true;
+  if (details.isTransparent && (details.transparencyRatio ?? 0) > 0.15) {
+    return true;
+  }
+  if (brightBgUrls[sourceUrl] === "none") {
+    const whiteBlank = details.whiteBlankRatio ?? 0;
+    const border = details.borderBrightRatio ?? 0;
+    if (whiteBlank < 0.03 && border < 0.05) return true;
+  }
+  return false;
 }
 
 function resolveImage(sourceUrl) {
   const processedPath = processedUrls[sourceUrl];
-  const cutoutUnsafe = isProcessedCutoutBlocked(sourceUrl, processedPath);
   const details = getQualityDetails(sourceUrl);
-  const knockoutWhite = imageNeedsKnockout(sourceUrl, details);
+  const cutoutUnsafe = isProcessedCutoutBlocked(
+    sourceUrl,
+    processedPath,
+    details
+  );
+  const useProcessed =
+    processedPath &&
+    !cutoutUnsafe &&
+    !isNaturalProductPhoto(sourceUrl, details);
 
   const fill = details?.contentFillRatio;
   let fc = "b";
@@ -91,12 +98,21 @@ function resolveImage(sourceUrl) {
     else if (fill >= 0.52) fc = "d";
   }
 
+  let displaySrc = sourceUrl;
   const fallbacks = [];
-  if (processedPath && processedPath !== sourceUrl && !cutoutUnsafe) {
+  if (useProcessed) {
+    displaySrc = processedPath;
+    fallbacks.push(sourceUrl);
+  } else if (processedPath && !cutoutUnsafe) {
     fallbacks.push(processedPath);
   }
 
-  return { src: sourceUrl, fb: fallbacks, fc, ko: knockoutWhite ? 1 : 0 };
+  return {
+    src: displaySrc,
+    fb: fallbacks,
+    fc,
+    pm: displaySrc.startsWith("/processed/") ? 1 : 0,
+  };
 }
 
 function trendingScore(product, trendingIndex = 999) {
@@ -228,10 +244,12 @@ function main() {
   const ctx = { editorsPick, popular, recent, trendingIndex };
   const cardProps = {};
   let withQc = 0;
+  let processedCount = 0;
 
   for (const product of catalog) {
     if (product.qc_link) withQc += 1;
     const image = resolveImage(product.image);
+    if (image.pm === 1) processedCount += 1;
     const entry = { ...image };
 
     const b = buildBadges(product, ctx, 74);
@@ -300,7 +318,7 @@ function main() {
   fs.writeFileSync(navPath, JSON.stringify(nav));
 
   console.log(
-    `Card props → ${Object.keys(cardProps).length} products, popular rank → ${popularRank.length}, QC count → ${withQc}`
+    `Card props → ${Object.keys(cardProps).length} products, ${processedCount} processed cutouts, QC count → ${withQc}`
   );
 }
 

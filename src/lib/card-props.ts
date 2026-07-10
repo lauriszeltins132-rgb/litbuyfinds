@@ -6,7 +6,7 @@ type RawCardEntry = {
   src: string;
   fb?: string[];
   fc?: "s" | "b" | "d";
-  ko?: 0 | 1;
+  pm?: 0 | 1;
   b?: ProductBadgeKind[];
   bt?: ProductBadgeKind[];
   f?: "r" | "w" | "i";
@@ -34,7 +34,7 @@ export type CardDisplayProps = {
   displaySrc: string;
   fallbacks: string[];
   fillClass: string;
-  knockoutWhite: boolean;
+  isProcessedCutout: boolean;
   badges: { kind: ProductBadgeKind; label: string }[];
   badgesTrending: { kind: ProductBadgeKind; label: string }[];
   freshness: string | null;
@@ -51,12 +51,14 @@ export function getCardDisplayProps(productId: string): CardDisplayProps | null 
 
   const badges = expandBadges(raw.b);
   const badgesTrending = expandBadges(raw.bt ?? raw.b);
+  const isProcessedCutout =
+    raw.pm === 1 || raw.src.startsWith("/processed/");
 
   return {
     displaySrc: raw.src,
     fallbacks: raw.fb ?? [],
     fillClass: FILL_CLASSES[raw.fc ?? "b"],
-    knockoutWhite: raw.ko === 1,
+    isProcessedCutout,
     badges,
     badgesTrending,
     freshness: raw.f ? FRESHNESS_LABELS[raw.f] : null,

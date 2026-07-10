@@ -4,7 +4,6 @@ import {
   getImageFillClass,
   getImageQualityDetails,
   getImageQualityScore,
-  needsWhiteKnockout,
 } from "./image-quality";
 import {
   getProductImagePlan,
@@ -12,21 +11,24 @@ import {
 } from "./processed-images";
 import type { Product } from "./types";
 
-/** True when the catalog original has a studio white / bright backdrop. */
-function imageHasBrightBackground(sourceUrl: string): boolean {
-  const details = getImageQualityDetails(sourceUrl);
-  if (details?.isScreenshotStyle) return false;
-  if (!details || details.issues?.includes("dead_url")) return true;
-  if (getCatalogBrightBgTreatment(sourceUrl) !== "none") return true;
-  if (needsWhiteKnockout(sourceUrl)) return true;
-  if (details.issues?.includes("white_blank")) return true;
-  if (details.issues?.includes("white_border")) return true;
-
-  const whiteBlank = details.whiteBlankRatio ?? 0;
-  const border = details.borderBrightRatio ?? 0;
-  const empty = details.emptySpaceRatio ?? 0;
-  if (whiteBlank >= 0.04 || border >= 0.08 || empty >= 0.2) return true;
-  return true;
+function isNaturalProductPhoto(
+  sourceUrl: string,
+  details: ReturnType<typeof getImageQualityDetails>
+): boolean {
+  if (!details) return false;
+  if (details.issues?.includes("dead_url") && (details.score ?? 0) <= 0) {
+    return false;
+  }
+  if (details.isScreenshotStyle) return true;
+  if (details.isTransparent && (details.transparencyRatio ?? 0) > 0.15) {
+    return true;
+  }
+  if (getCatalogBrightBgTreatment(sourceUrl) === "none") {
+    const whiteBlank = details.whiteBlankRatio ?? 0;
+    const border = details.borderBrightRatio ?? 0;
+    if (whiteBlank < 0.03 && border < 0.05) return true;
+  }
+  return false;
 }
 
 export type ResolvedProductImage = {
@@ -43,9 +45,8 @@ export type ResolvedProductImage = {
 };
 
 /**
- * Card-safe image resolution: always prefer the catalog original so we avoid
- * broken transparent cutouts. White studio backgrounds are removed via CSS
- * blend mode instead of pre-processed PNGs.
+ * Prefer clean transparent cutouts for studio-white photos; keep originals
+ * for QC / carpet shots. No CSS white knockout — real alpha PNGs only.
  */
 export function resolveProductDisplayImage(
   product: Product
@@ -54,22 +55,28 @@ export function resolveProductDisplayImage(
 
   const sourceUrl = product.image;
   const plan = getProductImagePlan(sourceUrl);
+  const details = getImageQualityDetails(sourceUrl);
 
   if (isDeadImageUrl(sourceUrl) && !plan.isProcessed) return null;
 
   const processedPath =
     plan.isProcessed && plan.src.startsWith("/processed/") ? plan.src : undefined;
-  const cutoutUnsafe = isProcessedCutoutBlocked(sourceUrl, processedPath);
-  const hasBrightBg = imageHasBrightBackground(sourceUrl);
+  const cutoutUnsafe =
+    isProcessedCutoutBlocked(sourceUrl, processedPath) ||
+    details?.issues?.includes("damaged_cutout") === true;
 
-  const displaySrc = sourceUrl;
-  const showingProcessed = false;
-  const knockoutWhite = hasBrightBg;
+  const useProcessed =
+    Boolean(processedPath) &&
+    !cutoutUnsafe &&
+    !isNaturalProductPhoto(sourceUrl, details);
+
+  const displaySrc = useProcessed && processedPath ? processedPath : sourceUrl;
+  const showingProcessed = displaySrc.startsWith("/processed/");
 
   const fallbacks = [
     ...new Set(
       [
-        plan.isProcessed && !cutoutUnsafe ? plan.src : null,
+        showingProcessed ? sourceUrl : processedPath && !cutoutUnsafe ? processedPath : null,
         ...plan.fallbacks,
       ].filter((url): url is string => Boolean(url) && url !== displaySrc)
     ),
@@ -79,9 +86,11 @@ export function resolveProductDisplayImage(
     displaySrc,
     sourceUrl,
     score: getImageQualityScore(sourceUrl),
-    fillClass: getImageFillClass(sourceUrl),
+    fillClass: showingProcessed
+      ? "product-float-asset--fill-balanced"
+      : getImageFillClass(sourceUrl),
     needsMatte: false,
-    knockoutWhite,
+    knockoutWhite: false,
     enhance: false,
     darkBoost: false,
     isProcessed: showingProcessed,
