@@ -14,7 +14,7 @@ type ProductCardImageProps = {
   preferredSrc?: string;
   fallbacks?: string[];
   fillClass?: string;
-  knockoutWhite?: boolean;
+  isProcessedCutout?: boolean;
 };
 
 export default function ProductCardImage({
@@ -26,7 +26,7 @@ export default function ProductCardImage({
   preferredSrc,
   fallbacks = [],
   fillClass = "product-float-asset--fill-balanced",
-  knockoutWhite = false,
+  isProcessedCutout = false,
 }: ProductCardImageProps) {
   const validation = useMemo(() => validateImageUrl(src), [src]);
 
@@ -55,6 +55,8 @@ export default function ProductCardImage({
   const loggedRef = useRef(false);
 
   const displaySrc = candidates[srcIndex] ?? "";
+  const showingProcessed =
+    isProcessedCutout || displaySrc.startsWith("/processed/");
 
   useEffect(() => {
     setSrcIndex(0);
@@ -135,40 +137,32 @@ export default function ProductCardImage({
   const assetClass = [
     "product-float-asset",
     fillClass,
-    knockoutWhite ? "product-float-asset--knockout-white" : "",
+    showingProcessed ? "product-float-asset--processed-cutout" : "",
     loaded ? "product-float-asset--ready" : "product-float-asset--loading",
   ]
     .filter(Boolean)
     .join(" ");
 
-  const imageNode = (
-    /* eslint-disable-next-line @next/next/no-img-element */
-    <img
-      ref={imgRef}
-      key={displaySrc}
-      src={displaySrc}
-      alt={alt}
-      width={400}
-      height={400}
-      loading={priority ? "eager" : "lazy"}
-      fetchPriority={priority ? "high" : "auto"}
-      decoding="async"
-      referrerPolicy="no-referrer"
-      className={assetClass}
-      onLoad={(event) => confirmLoaded(event.currentTarget)}
-      onError={advanceOrFail}
-    />
-  );
-
   return (
     <div
       className={`product-float-stage product-float-stage--card ${className}`}
     >
-      {knockoutWhite ? (
-        <div className="product-float-knockout-backdrop">{imageNode}</div>
-      ) : (
-        imageNode
-      )}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        ref={imgRef}
+        key={displaySrc}
+        src={displaySrc}
+        alt={alt}
+        width={400}
+        height={400}
+        loading={priority ? "eager" : "lazy"}
+        fetchPriority={priority ? "high" : "auto"}
+        decoding="async"
+        referrerPolicy="no-referrer"
+        className={assetClass}
+        onLoad={(event) => confirmLoaded(event.currentTarget)}
+        onError={advanceOrFail}
+      />
     </div>
   );
 }

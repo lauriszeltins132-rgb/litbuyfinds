@@ -1,5 +1,6 @@
 import damagedData from "@/data/damaged-processed-manifest.json";
 import mapData from "@/data/processed-image-map.json";
+import { getImageQualityDetails } from "./image-quality";
 
 type ProcessedImageMap = {
   urls: Record<string, string>;
@@ -40,6 +41,9 @@ export function isProcessedCutoutBlocked(
   if (FORCE_ORIGINAL_URLS.has(sourceUrl)) return true;
   if (damagedUrls.has(sourceUrl)) return true;
   if (processedPath && damagedPaths.has(processedPath)) return true;
+  if (getImageQualityDetails(sourceUrl)?.issues?.includes("damaged_cutout")) {
+    return true;
+  }
   return false;
 }
 

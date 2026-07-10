@@ -103,7 +103,7 @@ export default function ProductCard({
             preferredSrc={cardProps?.displaySrc}
             fallbacks={cardProps?.fallbacks}
             fillClass={cardProps?.fillClass}
-            knockoutWhite={cardProps?.knockoutWhite}
+            isProcessedCutout={cardProps?.isProcessedCutout}
             alt={imageAlt}
             productHref={productHref}
             priority={priority}
