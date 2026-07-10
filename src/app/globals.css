@@ -304,6 +304,22 @@ body::before {
   filter: brightness(1.08) contrast(1.04) saturate(1.02);
 }
 
+.product-float-knockout-backdrop {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: var(--color-panel, #141416);
+  isolation: isolate;
+}
+
+.product-float-knockout-backdrop .product-float-asset {
+  filter: none;
+}
+
 .product-float-asset--processed-matte {
   filter: brightness(1.12) contrast(1.06) saturate(1.04) !important;
 }
@@ -462,12 +478,12 @@ body::before {
 }
 
 .product-float-asset--knockout-white {
-  mix-blend-mode: darken;
+  mix-blend-mode: multiply;
 }
 
 .product-float-stage--card .product-float-asset--knockout-white {
-  mix-blend-mode: darken;
-  filter: brightness(1.08) contrast(1.04) saturate(1.02);
+  mix-blend-mode: multiply;
+  filter: none;
 }
 
 .product-float-stage--featured .product-float-asset {

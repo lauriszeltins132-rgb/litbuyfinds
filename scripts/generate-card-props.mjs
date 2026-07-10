@@ -60,36 +60,31 @@ function isProcessedCutoutBlocked(sourceUrl, processedPath) {
   return false;
 }
 
-function imageHasBrightBackground(sourceUrl) {
-  const details = getQualityDetails(sourceUrl);
-  const whiteBlank = details?.whiteBlankRatio ?? 0;
-  const border = details?.borderBrightRatio ?? 0;
-
-  if (details && whiteBlank < 0.08 && border < 0.12) return false;
-  if (brightBgUrls[sourceUrl] && brightBgUrls[sourceUrl] !== "none") return true;
-  if ((details?.whiteBlankRatio ?? 0) >= 0.12) return true;
+function shouldSkipKnockout(_sourceUrl, details) {
   if (!details) return false;
+  return details.isScreenshotStyle === true;
+}
+
+function imageNeedsKnockout(sourceUrl, details) {
+  if (shouldSkipKnockout(sourceUrl, details)) return false;
+  if (brightBgUrls[sourceUrl] && brightBgUrls[sourceUrl] !== "none") return true;
+  if (!details || details.issues?.includes("dead_url")) return true;
   if (details.issues?.includes("white_blank")) return true;
   if (details.issues?.includes("white_border")) return true;
+  const whiteBlank = details.whiteBlankRatio ?? 0;
+  const border = details.borderBrightRatio ?? 0;
   const empty = details.emptySpaceRatio ?? 0;
-  return whiteBlank >= 0.12 || border >= 0.15 || empty >= 0.35;
+  if (whiteBlank >= 0.04 || border >= 0.08 || empty >= 0.2) return true;
+  return true;
 }
 
 function resolveImage(sourceUrl) {
   const processedPath = processedUrls[sourceUrl];
   const cutoutUnsafe = isProcessedCutoutBlocked(sourceUrl, processedPath);
-  const catalogDead = deadUrls.has(sourceUrl);
-  const hasBrightBg = imageHasBrightBackground(sourceUrl);
+  const details = getQualityDetails(sourceUrl);
+  const knockoutWhite = imageNeedsKnockout(sourceUrl, details);
 
-  let displaySrc = sourceUrl;
-  if (catalogDead && processedPath && !cutoutUnsafe) {
-    displaySrc = processedPath;
-  }
-
-  const showingProcessed = displaySrc.startsWith("/processed/");
-  const knockoutWhite = !showingProcessed && hasBrightBg;
-
-  const fill = qualityUrls[sourceUrl]?.contentFillRatio;
+  const fill = details?.contentFillRatio;
   let fc = "b";
   if (fill != null) {
     if (fill < 0.32) fc = "s";
@@ -97,12 +92,11 @@ function resolveImage(sourceUrl) {
   }
 
   const fallbacks = [];
-  if (catalogDead && sourceUrl !== displaySrc) fallbacks.push(sourceUrl);
-  if (processedPath && processedPath !== displaySrc && !cutoutUnsafe) {
+  if (processedPath && processedPath !== sourceUrl && !cutoutUnsafe) {
     fallbacks.push(processedPath);
   }
 
-  return { src: displaySrc, fb: fallbacks, fc, ko: knockoutWhite ? 1 : 0 };
+  return { src: sourceUrl, fb: fallbacks, fc, ko: knockoutWhite ? 1 : 0 };
 }
 
 function trendingScore(product, trendingIndex = 999) {
