@@ -57,10 +57,10 @@ function buildCandidateList(
     plan.originalSrc,
     ...extraFallbacks,
     ...plan.fallbacks,
-    plan.isProcessed ? plan.src : undefined,
   ];
 
   if (variant !== "card") {
+    if (plan.isProcessed) ordered.push(plan.src);
     ordered.push(getProcessedApiSrc(validation.normalized));
   }
 
@@ -200,15 +200,17 @@ export default function ProductImage({
     );
   }
 
+  const isProcessedSrc =
+    displaySrc.startsWith("/processed/") ||
+    displaySrc.startsWith("/api/processed-image");
+
   const assetClass = [
     "product-float-asset",
     resolvedFillClass,
-    resolvedEnhance ? "product-float-asset--enhanced" : "",
-    darkBoost ? "product-float-asset--dark-boost" : "",
+    variant !== "card" && resolvedEnhance ? "product-float-asset--enhanced" : "",
+    variant !== "card" && darkBoost ? "product-float-asset--dark-boost" : "",
     knockoutWhite ? "product-float-asset--knockout-white" : "",
-    displaySrc.startsWith("/processed/") || displaySrc.startsWith("/api/processed-image")
-      ? "product-float-asset--processed-matte"
-      : "",
+    variant !== "card" && isProcessedSrc ? "product-float-asset--processed-matte" : "",
     loaded ? "product-float-asset--ready" : "product-float-asset--loading",
   ]
     .filter(Boolean)
