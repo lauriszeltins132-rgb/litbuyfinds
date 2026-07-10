@@ -1,5 +1,5 @@
 import { getCatalogBrightBgTreatment } from "./bright-bg";
-import { isDeadImageUrl, isCatalogImageUrlDead } from "./dead-images";
+import { isDeadImageUrl } from "./dead-images";
 import {
   getImageFillClass,
   getImageQualityDetails,
@@ -15,22 +15,18 @@ import type { Product } from "./types";
 /** True when the catalog original has a studio white / bright backdrop. */
 function imageHasBrightBackground(sourceUrl: string): boolean {
   const details = getImageQualityDetails(sourceUrl);
-  const whiteBlank = details?.whiteBlankRatio ?? 0;
-  const border = details?.borderBrightRatio ?? 0;
-
-  if (details && whiteBlank < 0.08 && border < 0.12) return false;
-
+  if (details?.isScreenshotStyle) return false;
+  if (!details || details.issues?.includes("dead_url")) return true;
   if (getCatalogBrightBgTreatment(sourceUrl) !== "none") return true;
   if (needsWhiteKnockout(sourceUrl)) return true;
-
-  if (!details) return false;
-
   if (details.issues?.includes("white_blank")) return true;
   if (details.issues?.includes("white_border")) return true;
 
+  const whiteBlank = details.whiteBlankRatio ?? 0;
+  const border = details.borderBrightRatio ?? 0;
   const empty = details.emptySpaceRatio ?? 0;
-
-  return whiteBlank >= 0.12 || border >= 0.15 || empty >= 0.35;
+  if (whiteBlank >= 0.04 || border >= 0.08 || empty >= 0.2) return true;
+  return true;
 }
 
 export type ResolvedProductImage = {
@@ -61,27 +57,18 @@ export function resolveProductDisplayImage(
 
   if (isDeadImageUrl(sourceUrl) && !plan.isProcessed) return null;
 
-  const catalogDead = isCatalogImageUrlDead(sourceUrl);
   const processedPath =
     plan.isProcessed && plan.src.startsWith("/processed/") ? plan.src : undefined;
   const cutoutUnsafe = isProcessedCutoutBlocked(sourceUrl, processedPath);
   const hasBrightBg = imageHasBrightBackground(sourceUrl);
 
-  let displaySrc = sourceUrl;
-  if (catalogDead && plan.isProcessed && !cutoutUnsafe) {
-    displaySrc = plan.src;
-  }
-
-  const showingProcessed =
-    displaySrc.startsWith("/processed/") ||
-    displaySrc.startsWith("/api/processed-image");
-
-  const knockoutWhite = !showingProcessed && hasBrightBg;
+  const displaySrc = sourceUrl;
+  const showingProcessed = false;
+  const knockoutWhite = hasBrightBg;
 
   const fallbacks = [
     ...new Set(
       [
-        catalogDead ? sourceUrl : null,
         plan.isProcessed && !cutoutUnsafe ? plan.src : null,
         ...plan.fallbacks,
       ].filter((url): url is string => Boolean(url) && url !== displaySrc)

@@ -141,26 +141,34 @@ export default function ProductCardImage({
     .filter(Boolean)
     .join(" ");
 
+  const imageNode = (
+    /* eslint-disable-next-line @next/next/no-img-element */
+    <img
+      ref={imgRef}
+      key={displaySrc}
+      src={displaySrc}
+      alt={alt}
+      width={400}
+      height={400}
+      loading={priority ? "eager" : "lazy"}
+      fetchPriority={priority ? "high" : "auto"}
+      decoding="async"
+      referrerPolicy="no-referrer"
+      className={assetClass}
+      onLoad={(event) => confirmLoaded(event.currentTarget)}
+      onError={advanceOrFail}
+    />
+  );
+
   return (
     <div
       className={`product-float-stage product-float-stage--card ${className}`}
     >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        ref={imgRef}
-        key={displaySrc}
-        src={displaySrc}
-        alt={alt}
-        width={400}
-        height={400}
-        loading={priority ? "eager" : "lazy"}
-        fetchPriority={priority ? "high" : "auto"}
-        decoding="async"
-        referrerPolicy="no-referrer"
-        className={assetClass}
-        onLoad={(event) => confirmLoaded(event.currentTarget)}
-        onError={advanceOrFail}
-      />
+      {knockoutWhite ? (
+        <div className="product-float-knockout-backdrop">{imageNode}</div>
+      ) : (
+        imageNode
+      )}
     </div>
   );
 }
