@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import ControlButton from "@/components/ui/ControlButton";
 import TextInput from "@/components/ui/TextInput";
 import { POPULAR_SEARCHES } from "@/lib/constants";
-import { getClientSearchIndex } from "@/lib/search-suggestions";
+import { getClientSearchIndex } from "@/lib/search-suggestions-client";
 import { scrollToCatalogResults } from "@/lib/scroll-to-catalog";
 
 function SearchIcon({ className = "h-5 w-5" }: { className?: string }) {

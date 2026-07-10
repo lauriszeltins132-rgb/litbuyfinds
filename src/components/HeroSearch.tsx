@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { POPULAR_SEARCHES } from "@/lib/constants";
 import { trackSearchChipClick, trackSearchSubmit } from "@/lib/analytics-events";
 import { scrollToCatalogResults } from "@/lib/scroll-to-catalog";
-import type { SearchSuggestion } from "@/lib/search-suggestions";
+import type { SearchSuggestion } from "@/lib/search-suggestions-client";
 
 type HeroSearchProps = {
   searchIndex: SearchSuggestion[];

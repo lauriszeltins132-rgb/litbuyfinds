@@ -1,7 +1,7 @@
 import productsData from "@/data/products.json";
+import { PUBLIC_CATALOG_COUNT } from "./catalog-count-public";
 
-/** Public-facing catalog count for SEO, hero, and trust messaging */
-export const PUBLIC_CATALOG_COUNT = "10,000+";
+export { PUBLIC_CATALOG_COUNT };
 
 /** Actual indexed product count from dataset (internal stats) */
 export function getActualCatalogCount(): number {

@@ -1,20 +1,33 @@
 "use client";
 
 import { useEffect } from "react";
+import type { Product } from "@/lib/types";
 import { useRecentlyViewed } from "@/context/RecentlyViewedContext";
 
 type RecordRecentlyViewedProps = {
-  productId: string;
+  product: Pick<
+    Product,
+    | "id"
+    | "product_name"
+    | "category"
+    | "category_slug"
+    | "sheet"
+    | "price"
+    | "image"
+    | "affiliate_link"
+    | "qc_link"
+    | "group"
+  >;
 };
 
 export default function RecordRecentlyViewed({
-  productId,
+  product,
 }: RecordRecentlyViewedProps) {
   const { addViewed } = useRecentlyViewed();
 
   useEffect(() => {
-    addViewed(productId);
-  }, [addViewed, productId]);
+    addViewed(product);
+  }, [addViewed, product]);
 
   return null;
 }

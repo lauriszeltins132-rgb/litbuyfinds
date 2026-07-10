@@ -1,4 +1,4 @@
-import { PUBLIC_CATALOG_COUNT } from "./catalog-count";
+import { PUBLIC_CATALOG_COUNT } from "./catalog-count-public";
 import { getHomepageMetadataCopy } from "./metadata-copy";
 
 export const SITE_NAME = "LitBuy Finds";

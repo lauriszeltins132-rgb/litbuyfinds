@@ -1019,6 +1019,8 @@ body::before {
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-x: contain;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 320px;
 }
 
 .discovery-rail::-webkit-scrollbar {

@@ -4,12 +4,9 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import type { Product } from "@/lib/types";
 import { getDisplayProductName, getDisplayBrand } from "@/lib/product-validation";
-import { getProductImageAlt } from "@/lib/product-details";
 import { formatProductPrice, getPriceStatus } from "@/lib/pricing";
-import { getProductBadges } from "@/lib/product-badges";
-import { getProductFreshnessLabel } from "@/lib/product-freshness";
-import { resolveProductDisplayImage } from "@/lib/product-image-presentation";
-import { getProductSource } from "@/lib/filters";
+import { getCardDisplayProps } from "@/lib/card-props";
+import { getProductSource } from "@/lib/affiliate-source";
 import { getProductHref } from "@/lib/slugs";
 import BrandMark from "./BrandMark";
 import { usePreferences } from "@/context/PreferencesContext";
@@ -17,7 +14,7 @@ import { useWishlist } from "@/context/WishlistContext";
 import { trackProductContext, trackSaveClick } from "@/lib/analytics-events";
 import LitBuyMicroCta from "./LitBuyMicroCta";
 import ProductBadges from "./ProductBadges";
-import ProductImage from "./ProductImage";
+import ProductCardImage from "./ProductCardImage";
 import BuyWithAgentButton from "./agents/BuyWithAgentButton";
 
 type ProductCardProps = {
@@ -27,6 +24,15 @@ type ProductCardProps = {
   showTrendingScore?: boolean;
   priority?: boolean;
 };
+
+function getCardImageAlt(product: Product): string {
+  const brand = getDisplayBrand(product);
+  const name = getDisplayProductName(product);
+  if (brand) {
+    return `${brand} ${name} — ${product.category} find on LitBuy Finds`;
+  }
+  return `${name} — LitBuy Finds`;
+}
 
 async function shareProduct(product: Product, title: string) {
   const url = `${window.location.origin}${getProductHref(product)}`;
@@ -56,16 +62,16 @@ export default function ProductCard({
   const brand = getDisplayBrand(product);
   const source = getProductSource(product.affiliate_link);
   const productHref = getProductHref(product);
-  const imageAlt = getProductImageAlt(product);
+  const imageAlt = getCardImageAlt(product);
+  const cardProps = useMemo(() => getCardDisplayProps(product.id), [product.id]);
   const badges = useMemo(
-    () => getProductBadges(product, { showTrendingScore, maxBadges: 2 }),
-    [product, showTrendingScore]
+    () =>
+      showTrendingScore
+        ? (cardProps?.badgesTrending ?? [])
+        : (cardProps?.badges ?? []),
+    [cardProps, showTrendingScore]
   );
-  const freshness = useMemo(() => getProductFreshnessLabel(product), [product]);
-  const displayImage = useMemo(
-    () => resolveProductDisplayImage(product),
-    [product]
-  );
+  const freshness = cardProps?.freshness ?? null;
 
   async function handleCopy() {
     const url = `${window.location.origin}${productHref}`;
@@ -92,17 +98,13 @@ export default function ProductCard({
           href={productHref}
           className="product-image-shell product-image-shell--card product-image-hover relative block aspect-square overflow-hidden"
         >
-          <ProductImage
+          <ProductCardImage
             src={product.image}
-            preferredSrc={displayImage?.displaySrc}
-            fallbacks={displayImage?.fallbacks}
-            fillClass={displayImage?.fillClass}
-            knockoutWhite={displayImage?.knockoutWhite}
-            enhance={displayImage?.enhance}
-            darkBoost={displayImage?.darkBoost}
+            preferredSrc={cardProps?.displaySrc}
+            fallbacks={cardProps?.fallbacks}
+            fillClass={cardProps?.fillClass}
+            knockoutWhite={cardProps?.knockoutWhite}
             alt={imageAlt}
-            productName={displayName}
-            variant="card"
             productHref={productHref}
             priority={priority}
           />
