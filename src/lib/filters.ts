@@ -1,7 +1,10 @@
+import popularRankData from "@/data/popular-rank.json";
 import type { Product } from "./types";
 import { productMatchesBrand } from "./brands";
 import { getDisplayBrand } from "./product-validation";
-import { getTrendingScore } from "./discovery";
+import { getProductSource } from "./affiliate-source";
+
+export { getProductSource } from "./affiliate-source";
 
 export type FilterState = {
   search: string;
@@ -48,13 +51,10 @@ function matchesSearch(product: Product, search: string): boolean {
 
 let popularRankMap: Map<string, number> | null = null;
 
-function getPopularRankMap(products: Product[]): Map<string, number> {
+function getPopularRankMap(): Map<string, number> {
   if (!popularRankMap) {
     popularRankMap = new Map(
-      [...products]
-        .sort((a, b) => getTrendingScore(b) - getTrendingScore(a))
-        .slice(0, 120)
-        .map((product, index) => [product.id, index])
+      popularRankData.ids.map((id, index) => [id, index])
     );
   }
   return popularRankMap;
@@ -96,7 +96,7 @@ export function filterProducts(
     return true;
   });
 
-  const ranks = getPopularRankMap(products);
+  const ranks = getPopularRankMap();
 
   switch (filters.sort) {
     case "price-asc":
@@ -124,14 +124,14 @@ export function filterProducts(
         const aRank = ranks.get(a.id) ?? 999;
         const bRank = ranks.get(b.id) ?? 999;
         if (aRank !== bRank) return aRank - bRank;
-        return getTrendingScore(b) - getTrendingScore(a);
+        return Number(b.id) - Number(a.id);
       });
       break;
     case "qc":
       result = [...result].sort((a, b) => {
         const qcDiff = Number(Boolean(b.qc_link)) - Number(Boolean(a.qc_link));
         if (qcDiff !== 0) return qcDiff;
-        return getTrendingScore(b) - getTrendingScore(a);
+        return Number(b.id) - Number(a.id);
       });
       break;
     default:
@@ -139,11 +139,4 @@ export function filterProducts(
   }
 
   return result;
-}
-
-export function getProductSource(affiliateLink: string): string {
-  if (affiliateLink.includes("/weidian/")) return "weidian";
-  if (affiliateLink.includes("/taobao/")) return "taobao";
-  if (affiliateLink.includes("/1688/")) return "1688";
-  return "litbuy";
 }

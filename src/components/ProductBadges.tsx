@@ -1,8 +1,13 @@
-import type { ProductBadge } from "@/lib/product-badges";
-import { badgeClassName } from "@/lib/product-badges";
+import { badgeClassName } from "@/lib/product-badge-ui";
+import type { ProductBadgeKind } from "@/lib/types";
+
+type DisplayBadge = {
+  kind: ProductBadgeKind;
+  label: string;
+};
 
 type ProductBadgesProps = {
-  badges: ProductBadge[];
+  badges: DisplayBadge[];
   className?: string;
 };
 

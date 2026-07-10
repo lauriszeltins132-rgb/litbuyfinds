@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import type { Product } from "@/lib/types";
 import { dedupeListingRail } from "@/lib/listing-dedupe";
 import ProductCard from "./ProductCard";
-import ProductModal from "./ProductModal";
 import { useState } from "react";
+
+const ProductModal = dynamic(() => import("./ProductModal"), { ssr: false });
 
 type DiscoveryRailProps = {
   title: string;
@@ -13,6 +15,8 @@ type DiscoveryRailProps = {
   href: string;
   products: Product[];
   showTrendingScore?: boolean;
+  /** Only the first rail should preload card images. */
+  preloadImages?: boolean;
 };
 
 export default function DiscoveryRail({
@@ -21,6 +25,7 @@ export default function DiscoveryRail({
   href,
   products,
   showTrendingScore = false,
+  preloadImages = false,
 }: DiscoveryRailProps) {
   const [selected, setSelected] = useState<Product | null>(null);
   const railProducts = dedupeListingRail(products);
@@ -62,7 +67,7 @@ export default function DiscoveryRail({
                 onOpen={setSelected}
                 compact
                 showTrendingScore={showTrendingScore}
-                priority={index < 4}
+                priority={preloadImages && index < 2}
               />
             </div>
           ))}

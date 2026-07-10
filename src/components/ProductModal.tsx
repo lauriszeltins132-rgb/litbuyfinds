@@ -37,7 +37,7 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
   useEffect(() => {
     if (!product) return;
     recordProductView(product.id);
-    addViewed(product.id);
+    addViewed(product);
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     document.body.style.overflow = "hidden";
     window.addEventListener("keydown", onKey);

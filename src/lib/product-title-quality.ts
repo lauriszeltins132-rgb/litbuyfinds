@@ -1,4 +1,4 @@
-import productsData from "@/data/products.json";
+import batchMislabelData from "@/data/batch-mislabel-titles.json";
 import { extractAllBrands } from "./brands";
 import type { Product } from "./types";
 
@@ -14,36 +14,15 @@ export function isGenericTwoWordTitle(name: string): boolean {
   return GENERIC_TYPE_PATTERN.test(parts[1]);
 }
 
-function listingKey(product: Product): string {
-  return product.affiliate_link.trim().toLowerCase();
-}
-
-let batchMislabelTitles: Set<string> | null = null;
+const batchMislabelTitles = new Set(batchMislabelData.titles ?? []);
 
 /** Titles reused across multiple distinct LitBuy listings — likely batch mislabels. */
 export function getBatchMislabelTitles(): Set<string> {
-  if (batchMislabelTitles) return batchMislabelTitles;
-
-  const byTitle = new Map<string, Set<string>>();
-  for (const product of productsData as Product[]) {
-    const title = product.product_name.trim();
-    if (!isGenericTwoWordTitle(title)) continue;
-    const links = byTitle.get(title) ?? new Set<string>();
-    links.add(listingKey(product));
-    byTitle.set(title, links);
-  }
-
-  batchMislabelTitles = new Set(
-    [...byTitle.entries()]
-      .filter(([, links]) => links.size >= 2)
-      .map(([title]) => title)
-  );
-
   return batchMislabelTitles;
 }
 
 export function isBatchMislabelTitle(title: string): boolean {
-  return getBatchMislabelTitles().has(title.trim());
+  return batchMislabelTitles.has(title.trim());
 }
 
 export function extractMarketplaceListingId(
@@ -63,7 +42,6 @@ export function extractMarketplaceListingId(
  * Key: `weidian:ID` or `taobao:ID`
  */
 export const PRODUCT_NAME_OVERRIDES: Record<string, string> = {
-  // Nike Elite backpacks — spreadsheet labelled "Adidas Bag"
   "weidian:7625857897": "Nike Elite Backpack",
   "weidian:7629307178": "Nike Elite Backpack",
   "weidian:7625755537": "Nike Backpack",

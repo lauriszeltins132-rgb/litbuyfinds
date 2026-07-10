@@ -117,7 +117,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       <ProductJsonLd product={product} slug={slug} />
       <FloatingBackButton />
       <TrackProductView product={product} />
-      <RecordRecentlyViewed productId={product.id} />
+      <RecordRecentlyViewed product={product} />
       <Breadcrumbs
         items={[
           { label: "Home", href: "/" },

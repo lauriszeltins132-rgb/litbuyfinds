@@ -8,23 +8,9 @@ import { SEO_LANDING_SLUGS, SEO_LANDING_PAGES } from "./seo-landing-pages";
 import { POPULAR_SEARCHES } from "./constants";
 import { getProductHref } from "./slugs";
 
-export type SearchSuggestionType =
-  | "brand"
-  | "category"
-  | "guide"
-  | "best-of"
-  | "landing"
-  | "collection"
-  | "query"
-  | "product-type";
-
-export type SearchSuggestion = {
-  label: string;
-  href: string;
-  type: SearchSuggestionType;
-  keywords: string;
-  priority: number;
-};
+export type { SearchSuggestion, SearchSuggestionGroup, SearchSuggestionType } from "./search-suggestions-client";
+export { getClientSearchIndex } from "./search-suggestions-client";
+import type { SearchSuggestion, SearchSuggestionGroup } from "./search-suggestions-client";
 
 const BRAND_SUB_TYPES: Record<string, { label: string; query: string; priority: number }[]> = {
   nike: [
@@ -258,27 +244,12 @@ function buildIndex(): SearchSuggestion[] {
 
 let cachedIndex: SearchSuggestion[] | null = null;
 
-/** Lightweight index for client components — avoids bundling products.json. */
-export function getClientSearchIndex(): SearchSuggestion[] {
-  return (searchIndexData as { items: SearchSuggestion[] }).items;
-}
-
 export function getSearchIndex(): SearchSuggestion[] {
-  if (typeof window !== "undefined") {
-    return getClientSearchIndex();
-  }
   if (!cachedIndex) {
     cachedIndex = buildIndex();
   }
   return cachedIndex;
 }
-
-export type SearchSuggestionGroup = {
-  id: string;
-  label: string;
-  icon: string;
-  items: SearchSuggestion[];
-};
 
 export function getSearchSuggestions(query: string, limit = 12): SearchSuggestionGroup[] {
   const q = query.trim().toLowerCase();

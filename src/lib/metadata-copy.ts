@@ -1,4 +1,4 @@
-import { PUBLIC_CATALOG_COUNT } from "./catalog-count";
+import { PUBLIC_CATALOG_COUNT } from "./catalog-count-public";
 
 export const META_SCALE = PUBLIC_CATALOG_COUNT;
 

@@ -1,13 +1,11 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import SiteHeader from "@/components/SiteHeader";
 import Footer from "@/components/Footer";
 import FooterSignupStrip from "@/components/conversion/FooterSignupStrip";
-import ConversionLayer from "@/components/conversion/ConversionLayer";
-import CouponAutoOpen from "@/components/CouponAutoOpen";
-import CouponModal from "@/components/CouponModal";
+import DeferredClientChrome from "@/components/DeferredClientChrome";
+import DeferredSpeedInsights from "@/components/DeferredSpeedInsights";
 import MobileDock from "@/components/MobileDock";
 import PreferencesBar from "@/components/PreferencesBar";
 import AnimatedBackground from "@/components/AnimatedBackground";
@@ -32,6 +30,7 @@ import "./globals.css";
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
+  weight: ["400", "600", "700", "800"],
   variable: "--font-jakarta",
   display: "swap",
 });
@@ -121,12 +120,10 @@ export default function RootLayout({
                   <main className="site-main flex-1">{children}</main>
                   <FooterSignupStrip />
                   <Footer />
-                  <CouponModal />
-                  <CouponAutoOpen />
-                  <ConversionLayer />
+                  <DeferredClientChrome />
                   <MobileDock />
                   <Analytics />
-                  <SpeedInsights />
+                  <DeferredSpeedInsights />
                   </AgentModalProvider>
                 </ConversionProvider>
               </RecentlyViewedProvider>

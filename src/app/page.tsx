@@ -52,6 +52,7 @@ export default async function HomePage({
         href="/most-popular-finds-now"
         products={rails.popularToday}
         showTrendingScore
+        preloadImages
       />
 
       <DiscoveryRail

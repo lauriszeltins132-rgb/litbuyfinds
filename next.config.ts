@@ -103,6 +103,21 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "**.alicdn.com" },
       { protocol: "https", hostname: "**.geilicdn.com" },
     ],
+    formats: ["image/avif", "image/webp"],
+  },
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          {
+            key: "Link",
+            value:
+              "<https://i.postimg.cc>; rel=preconnect, <https://si.geilicdn.com>; rel=preconnect, <https://cbu01.alicdn.com>; rel=preconnect",
+          },
+        ],
+      },
+    ];
   },
 };
 

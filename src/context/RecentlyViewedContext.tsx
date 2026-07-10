@@ -13,26 +13,42 @@ import type { Product } from "@/lib/types";
 const STORAGE_KEY = "litbuyfinds-recently-viewed";
 const MAX_ITEMS = 12;
 
+type RecentlyViewedSnapshot = Pick<
+  Product,
+  | "id"
+  | "product_name"
+  | "category"
+  | "category_slug"
+  | "sheet"
+  | "price"
+  | "image"
+  | "affiliate_link"
+  | "qc_link"
+  | "group"
+>;
+
 type RecentlyViewedContextValue = {
   items: Product[];
-  addViewed: (productId: string) => void;
+  addViewed: (product: RecentlyViewedSnapshot) => void;
 };
 
 const RecentlyViewedContext = createContext<RecentlyViewedContextValue | null>(
   null
 );
 
-type ProductLookup = (id: string) => Product | undefined;
-
-let productLookupPromise: Promise<ProductLookup> | null = null;
-
-function loadProductLookup(): Promise<ProductLookup> {
-  if (!productLookupPromise) {
-    productLookupPromise = import("@/lib/products").then((mod) =>
-      mod.getProductById.bind(mod)
-    );
-  }
-  return productLookupPromise;
+function snapshotToProduct(snapshot: RecentlyViewedSnapshot): Product {
+  return {
+    id: snapshot.id,
+    product_name: snapshot.product_name,
+    category: snapshot.category,
+    category_slug: snapshot.category_slug,
+    sheet: snapshot.sheet,
+    price: snapshot.price,
+    image: snapshot.image,
+    affiliate_link: snapshot.affiliate_link,
+    qc_link: snapshot.qc_link,
+    group: snapshot.group,
+  };
 }
 
 export function RecentlyViewedProvider({
@@ -40,51 +56,52 @@ export function RecentlyViewedProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [ids, setIds] = useState<string[]>([]);
   const [items, setItems] = useState<Product[]>([]);
 
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) setIds(JSON.parse(raw) as string[]);
+      if (!raw) return;
+      const snapshots = JSON.parse(raw) as RecentlyViewedSnapshot[];
+      setItems(
+        snapshots
+          .map(snapshotToProduct)
+          .filter((product) => Boolean(product.id && product.image))
+      );
     } catch {
       // ignore
     }
   }, []);
 
-  useEffect(() => {
-    if (ids.length === 0) {
-      setItems([]);
-      return;
-    }
+  const addViewed = useCallback((product: RecentlyViewedSnapshot) => {
+    setItems((current) => {
+      const nextSnapshots = [
+        product,
+        ...current
+          .filter((item) => item.id !== product.id)
+          .map(
+            (item): RecentlyViewedSnapshot => ({
+              id: item.id,
+              product_name: item.product_name,
+              category: item.category,
+              category_slug: item.category_slug,
+              sheet: item.sheet,
+              price: item.price,
+              image: item.image,
+              affiliate_link: item.affiliate_link,
+              qc_link: item.qc_link,
+              group: item.group,
+            })
+          ),
+      ].slice(0, MAX_ITEMS);
 
-    let cancelled = false;
-    void loadProductLookup().then((lookup) => {
-      if (cancelled) return;
-      setItems(
-        ids
-          .map((id) => lookup(id))
-          .filter((product): product is Product => Boolean(product))
-      );
-    });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [ids]);
-
-  const addViewed = useCallback((productId: string) => {
-    setIds((current) => {
-      const next = [productId, ...current.filter((id) => id !== productId)].slice(
-        0,
-        MAX_ITEMS
-      );
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(nextSnapshots));
       } catch {
         // ignore
       }
-      return next;
+
+      return nextSnapshots.map(snapshotToProduct);
     });
   }, []);
 

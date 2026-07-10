@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { useState } from "react";
 import type { Product } from "@/lib/types";
 import ProductCard from "./ProductCard";
-import ProductModal from "./ProductModal";
+
+const ProductModal = dynamic(() => import("./ProductModal"), { ssr: false });
 
 type ProductGridProps = {
   products: Product[];
@@ -67,7 +69,7 @@ export default function ProductGrid({
             product={product}
             onOpen={setSelected}
             showTrendingScore
-            priority={index < 12}
+            priority={index < 4}
           />
         ))}
       </div>

@@ -1,5 +1,5 @@
-import { getCatalogStats } from "@/lib/products";
-import { PUBLIC_CATALOG_COUNT } from "@/lib/constants";
+import { PUBLIC_CATALOG_COUNT } from "@/lib/catalog-count-public";
+import siteNavigation from "@/data/site-navigation.json";
 
 const SIGNALS = [
   { key: "finds", label: "QC-curated finds" },
@@ -14,11 +14,11 @@ type TrustStripProps = {
 };
 
 export default function TrustStrip({ compact = false }: TrustStripProps) {
-  const stats = getCatalogStats();
+  const withQc = siteNavigation.catalogStats?.withQc ?? 0;
 
   const values: Record<string, string> = {
     finds: PUBLIC_CATALOG_COUNT,
-    qc: `${stats.withQc.toLocaleString()}+`,
+    qc: `${withQc.toLocaleString()}+`,
     updates: "Daily",
     community: "Active",
     litbuy: "Verified",
