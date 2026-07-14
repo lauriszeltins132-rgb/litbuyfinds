@@ -16,6 +16,10 @@ import {
 } from "@/lib/seo-landing-engine";
 import { AGENT_LANDING_SLUGS } from "@/lib/agent-landing-pages";
 import {
+  DISCORD_AGENT_LANDING_PAGES,
+  DISCORD_AGENT_LANDING_SLUGS,
+} from "@/lib/discord-agent-landing-pages";
+import {
   TELEGRAM_AGENT_LANDING_PAGES,
   TELEGRAM_AGENT_LANDING_SLUGS,
 } from "@/lib/telegram-agent-landing-pages";
@@ -88,6 +92,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${SITE_URL}/${slug}`,
       changeFrequency: "weekly",
       priority: 0.86,
+    });
+  }
+
+  for (const slug of DISCORD_AGENT_LANDING_SLUGS) {
+    const page = DISCORD_AGENT_LANDING_PAGES[slug];
+    routes.push({
+      url: `${SITE_URL}${page.path}`,
+      changeFrequency: "weekly",
+      priority: 0.9,
     });
   }
 
