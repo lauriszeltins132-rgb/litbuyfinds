@@ -206,11 +206,55 @@ export function buildTelegramAgentWebPageSchema({
   agentName: string;
   telegramUrl: string;
 }) {
+  return buildJoinAgentWebPageSchema({
+    name,
+    description,
+    path,
+    joinUrl: telegramUrl,
+    joinLabel: `Join ${agentName} Telegram`,
+  });
+}
+
+export function buildDiscordAgentWebPageSchema({
+  name,
+  description,
+  path,
+  agentName,
+  discordUrl,
+}: {
+  name: string;
+  description: string;
+  path: string;
+  agentName: string;
+  discordUrl: string;
+}) {
+  return buildJoinAgentWebPageSchema({
+    name,
+    description,
+    path,
+    joinUrl: discordUrl,
+    joinLabel: `Join ${agentName} Discord`,
+  });
+}
+
+function buildJoinAgentWebPageSchema({
+  name,
+  description,
+  path,
+  joinUrl,
+  joinLabel,
+}: {
+  name: string;
+  description: string;
+  path: string;
+  joinUrl: string;
+  joinLabel: string;
+}) {
   const url = `${SITE_URL}${path}`;
   const joinAction = {
     "@type": "JoinAction",
-    target: telegramUrl,
-    name: `Join ${agentName} Telegram`,
+    target: joinUrl,
+    name: joinLabel,
   };
 
   return {
