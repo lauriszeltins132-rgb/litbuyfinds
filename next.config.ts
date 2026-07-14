@@ -93,6 +93,10 @@ const nextConfig: NextConfig = {
       { source: "/collections/best-hoodie-finds", destination: "/collections/best-hoodies", permanent: true },
       { source: "/collections/best-bag-finds", destination: "/collections/best-bags", permanent: true },
       { source: "/collections/best-finds-under-50", destination: "/collections/best-under-50", permanent: true },
+      { source: "/litbuy-telegram", destination: "/telegram-litbuy", permanent: true },
+      { source: "/mulebuy-telegram", destination: "/telegram-mulebuy", permanent: true },
+      { source: "/oopbuy-telegram", destination: "/telegram-oopbuy", permanent: true },
+      { source: "/kakobuy-telegram", destination: "/telegram-kakobuy", permanent: true },
     ];
   },
   images: {
