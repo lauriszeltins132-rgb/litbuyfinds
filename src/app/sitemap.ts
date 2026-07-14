@@ -16,6 +16,10 @@ import {
 } from "@/lib/seo-landing-engine";
 import { AGENT_LANDING_SLUGS } from "@/lib/agent-landing-pages";
 import {
+  TELEGRAM_AGENT_LANDING_PAGES,
+  TELEGRAM_AGENT_LANDING_SLUGS,
+} from "@/lib/telegram-agent-landing-pages";
+import {
   TELEGRAM_SEO_PAGES,
   TELEGRAM_SEO_SLUGS,
 } from "@/lib/telegram-seo-pages";
@@ -84,6 +88,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${SITE_URL}/${slug}`,
       changeFrequency: "weekly",
       priority: 0.86,
+    });
+  }
+
+  for (const slug of TELEGRAM_AGENT_LANDING_SLUGS) {
+    const page = TELEGRAM_AGENT_LANDING_PAGES[slug];
+    routes.push({
+      url: `${SITE_URL}${page.path}`,
+      changeFrequency: "weekly",
+      priority: 0.9,
     });
   }
 

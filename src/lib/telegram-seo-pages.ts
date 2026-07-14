@@ -43,11 +43,12 @@ const HUB_LINKS = [
 ];
 
 const AGENT_TELEGRAM_LINKS = [
-  { href: "/litbuy-telegram", label: "LitBuy Telegram" },
-  { href: "/mulebuy-telegram", label: "MuleBuy Telegram" },
-  { href: "/oopbuy-telegram", label: "OopBuy Telegram" },
+  { href: "/telegram-litbuy", label: "LitBuy Telegram" },
+  { href: "/telegram-mulebuy", label: "MuleBuy Telegram" },
+  { href: "/telegram-hipobuy", label: "HipoBuy Telegram" },
+  { href: "/telegram-oopbuy", label: "OopBuy Telegram" },
   { href: "/acbuy-telegram", label: "ACBuy Telegram" },
-  { href: "/kakobuy-telegram", label: "Kakobuy Telegram" },
+  { href: "/telegram-kakobuy", label: "Kakobuy Telegram" },
 ];
 
 export const TELEGRAM_COMMUNITY_FOOTER_LINKS = [
@@ -434,8 +435,8 @@ const TOPIC_PAGES: Record<string, TelegramSeoPageConfig> = {
     faqs: baseFaqs(),
     relatedLinks: [
       { href: SOCIAL_LINKS.telegram, label: "Join for spreadsheet updates" },
-      { href: "/litbuy-telegram", label: "LitBuy spreadsheet Telegram" },
-      { href: "/mulebuy-telegram", label: "MuleBuy spreadsheet Telegram" },
+      { href: "/telegram-litbuy", label: "LitBuy spreadsheet Telegram" },
+      { href: "/telegram-mulebuy", label: "MuleBuy spreadsheet Telegram" },
       { href: "/telegram", label: "Telegram hub" },
     ],
   },
@@ -550,7 +551,7 @@ const TOPIC_PAGES: Record<string, TelegramSeoPageConfig> = {
     faqs: baseFaqs(),
     relatedLinks: [
       { href: SOCIAL_LINKS.telegram, label: "Join for sneaker drops" },
-      { href: "/litbuy-telegram", label: "LitBuy sneaker Telegram" },
+      { href: "/telegram-litbuy", label: "LitBuy sneaker Telegram" },
       { href: "/telegram", label: "Telegram hub" },
     ],
   },
@@ -616,33 +617,6 @@ const TOPIC_PAGES: Record<string, TelegramSeoPageConfig> = {
 export const TELEGRAM_SEO_PAGES: Record<string, TelegramSeoPageConfig> = {
   telegram: HUB_PAGE,
   "rn-finds": RN_FINDS_PAGE,
-  "litbuy-telegram": buildAgentPage(
-    "litbuy-telegram",
-    "LitBuy",
-    "/litbuy-finds",
-    "LitBuy is the recommended agent on this website for verified catalog links, and RN Finds frequently shares LitBuy rows with QC context.",
-    [
-      "LitBuy Telegram searches usually mean buyers want spreadsheet-style LitBuy finds with live discussion — not just a static invite link.",
-    ]
-  ),
-  "mulebuy-telegram": buildAgentPage(
-    "mulebuy-telegram",
-    "MuleBuy",
-    "/mulebuy-finds",
-    "MuleBuy is popular for consolidated hauls and straightforward link imports, and RN Finds includes MuleBuy product links when members share new picks.",
-    [
-      "MuleBuy Telegram interest often spikes around free-agent messaging and simple Weidian imports — RN Finds captures those links with community QC notes.",
-    ]
-  ),
-  "oopbuy-telegram": buildAgentPage(
-    "oopbuy-telegram",
-    "OopBuy",
-    "/oopbuy-finds",
-    "OopBuy users often search for OopBuy finds Telegram feeds to catch new Weidian and Taobao imports — RN Finds includes those links alongside other agents.",
-    [
-      "OopBuy spreadsheet Telegram queries are common because buyers want fast rows with agent-formatted URLs ready to paste.",
-    ]
-  ),
   "acbuy-telegram": buildAgentPage(
     "acbuy-telegram",
     "ACBuy",
@@ -650,15 +624,6 @@ export const TELEGRAM_SEO_PAGES: Record<string, TelegramSeoPageConfig> = {
     "ACBuy (formerly AllChinaBuy) buyers look for English-friendly community links — RN Finds shares ACBuy agent product links with QC and pricing discussion.",
     [
       "ACBuy Telegram searches often combine spreadsheet culture with newer buyers asking for QC help — RN Finds bridges both needs.",
-    ]
-  ),
-  "kakobuy-telegram": buildAgentPage(
-    "kakobuy-telegram",
-    "Kakobuy",
-    "/kakobuy-finds",
-    "Kakobuy is known for link-paste imports and detailed item pages — RN Finds shares Kakobuy finds with QC albums and batch commentary.",
-    [
-      "Kakobuy finds community posts frequently include QC photo finds because members document batches carefully before GL-ing.",
     ]
   ),
   ...TOPIC_PAGES,
