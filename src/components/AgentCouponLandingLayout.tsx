@@ -3,18 +3,18 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import RegisterLink from "@/components/RegisterLink";
 import SchemaScript from "@/components/SchemaScript";
 import {
+  buildAgentCouponWebPageSchema,
   buildBreadcrumbSchema,
-  buildLitbuyCouponWebPageSchema,
 } from "@/lib/schema";
-import type { LitbuyCouponLandingConfig } from "@/lib/litbuy-coupon-landing-pages";
+import type { AgentCouponLandingConfig } from "@/lib/agent-coupon-landing-pages";
 
-type LitbuyCouponLandingLayoutProps = {
-  config: LitbuyCouponLandingConfig;
+type AgentCouponLandingLayoutProps = {
+  config: AgentCouponLandingConfig;
 };
 
-export default function LitbuyCouponLandingLayout({
+export default function AgentCouponLandingLayout({
   config,
-}: LitbuyCouponLandingLayoutProps) {
+}: AgentCouponLandingLayoutProps) {
   const breadcrumbItems = [
     { label: "Home", href: "/" },
     { label: config.h1 },
@@ -23,7 +23,7 @@ export default function LitbuyCouponLandingLayout({
   return (
     <>
       <SchemaScript
-        data={buildLitbuyCouponWebPageSchema({
+        data={buildAgentCouponWebPageSchema({
           name: config.h1,
           description: config.metaDescription,
           path: config.path,
@@ -42,7 +42,7 @@ export default function LitbuyCouponLandingLayout({
         <div className="mx-auto max-w-2xl">
           <section className="overflow-hidden rounded-3xl border border-accent/20 bg-gradient-to-br from-accent/10 via-[#121214] to-[#0d1210] p-6 text-center sm:p-10">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
-              LitBuy · Coupons
+              {config.agent.name} · Coupons
             </p>
             <h1 className="mt-3 text-3xl font-black tracking-tight sm:text-4xl">
               {config.h1}
@@ -60,12 +60,23 @@ export default function LitbuyCouponLandingLayout({
               {config.offerDescription}
             </p>
             <div className="mt-8">
-              <RegisterLink
-                location={`litbuy_coupon_${config.slug}`}
-                className="inline-flex items-center justify-center rounded-full bg-accent px-8 py-4 text-sm font-black text-background transition-transform hover:scale-[1.02] hover:bg-accent-hover"
-              >
-                {config.ctaLabel}
-              </RegisterLink>
+              {config.agent.useRegisterLink ? (
+                <RegisterLink
+                  location={`agent_coupon_${config.slug}`}
+                  className="inline-flex items-center justify-center rounded-full bg-accent px-8 py-4 text-sm font-black text-background transition-transform hover:scale-[1.02] hover:bg-accent-hover"
+                >
+                  {config.ctaLabel}
+                </RegisterLink>
+              ) : (
+                <a
+                  href={config.couponUrl}
+                  target="_blank"
+                  rel="noopener noreferrer sponsored"
+                  className="inline-flex items-center justify-center rounded-full bg-accent px-8 py-4 text-sm font-black text-background transition-transform hover:scale-[1.02] hover:bg-accent-hover"
+                >
+                  {config.ctaLabel}
+                </a>
+              )}
             </div>
           </section>
 

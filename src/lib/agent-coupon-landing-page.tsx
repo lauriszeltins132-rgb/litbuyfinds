@@ -1,25 +1,23 @@
 import type { Metadata } from "next";
-import LitbuyCouponLandingLayout from "@/components/LitbuyCouponLandingLayout";
+import AgentCouponLandingLayout from "@/components/AgentCouponLandingLayout";
 import {
   PROMO_BANNER_ALT,
   PROMO_OG_IMAGE_URL,
   SITE_NAME,
 } from "@/lib/constants";
-import {
-  getLitbuyCouponLandingPage,
-} from "@/lib/litbuy-coupon-landing-pages";
+import { getAgentCouponLandingPage } from "@/lib/agent-coupon-landing-pages";
 import { SITE_URL } from "@/lib/site";
 
-function requireLitbuyCouponLandingPage(slug: string) {
-  const config = getLitbuyCouponLandingPage(slug);
+function requireAgentCouponLandingPage(slug: string) {
+  const config = getAgentCouponLandingPage(slug);
   if (!config) {
-    throw new Error(`Unknown LitBuy coupon landing page: ${slug}`);
+    throw new Error(`Unknown agent coupon landing page: ${slug}`);
   }
   return config;
 }
 
-function buildLitbuyCouponPageMetadata(
-  config: ReturnType<typeof requireLitbuyCouponLandingPage>
+function buildAgentCouponPageMetadata(
+  config: ReturnType<typeof requireAgentCouponLandingPage>
 ): Metadata {
   const url = `${SITE_URL}${config.path}`;
 
@@ -55,15 +53,15 @@ function buildLitbuyCouponPageMetadata(
   };
 }
 
-export function createLitbuyCouponLandingPage(slug: string) {
-  const config = requireLitbuyCouponLandingPage(slug);
+export function createAgentCouponLandingPage(slug: string) {
+  const config = requireAgentCouponLandingPage(slug);
 
   async function generateMetadata(): Promise<Metadata> {
-    return buildLitbuyCouponPageMetadata(config);
+    return buildAgentCouponPageMetadata(config);
   }
 
   function Page() {
-    return <LitbuyCouponLandingLayout config={config} />;
+    return <AgentCouponLandingLayout config={config} />;
   }
 
   return { generateMetadata, Page };

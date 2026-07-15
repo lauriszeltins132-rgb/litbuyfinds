@@ -1,3 +1,4 @@
+import { buildDiscordFooterLinks } from "./agent-seo-shared";
 import { SOCIAL_LINKS } from "./constants";
 
 export type DiscordAgentLandingConfig = {
@@ -27,6 +28,7 @@ function buildAgentConfig(
   agentName: string
 ): DiscordAgentLandingConfig {
   const agentLower = agentName.toLowerCase();
+  const agentSlug = slug.replace("discord-", "");
 
   return {
     slug,
@@ -43,13 +45,7 @@ function buildAgentConfig(
       `${agentLower} discord`,
       `${agentLower} finds discord`,
     ],
-    footerLinks: [
-      { href: "/", label: "LitBuy Finds homepage" },
-      ...AGENTS.filter((agent) => agent.slug !== slug).map((agent) => ({
-        href: `/${agent.slug}`,
-        label: `${agent.agentName} Discord`,
-      })),
-    ],
+    footerLinks: buildDiscordFooterLinks(agentSlug),
   };
 }
 

@@ -276,7 +276,7 @@ function buildJoinAgentWebPageSchema({
   };
 }
 
-export function buildLitbuyCouponWebPageSchema({
+export function buildAgentCouponWebPageSchema({
   name,
   description,
   path,

@@ -1,6 +1,6 @@
-import { createLitbuyCouponLandingPage } from "@/lib/litbuy-coupon-landing-page";
+import { createAgentCouponLandingPage } from "@/lib/agent-coupon-landing-page";
 
-const { generateMetadata, Page } = createLitbuyCouponLandingPage("litbuy-discount");
+const { generateMetadata, Page } = createAgentCouponLandingPage("litbuy-discount");
 
 export { generateMetadata };
 export default Page;

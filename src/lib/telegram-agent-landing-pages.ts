@@ -1,3 +1,4 @@
+import { buildTelegramFooterLinks } from "./agent-seo-shared";
 import { SOCIAL_LINKS } from "./constants";
 
 export type TelegramAgentLandingConfig = {
@@ -27,6 +28,7 @@ function buildAgentConfig(
   agentName: string
 ): TelegramAgentLandingConfig {
   const agentLower = agentName.toLowerCase();
+  const agentSlug = slug.replace("telegram-", "");
 
   return {
     slug,
@@ -43,14 +45,7 @@ function buildAgentConfig(
       `${agentLower} telegram`,
       `${agentLower} finds telegram`,
     ],
-    footerLinks: [
-      { href: "/", label: "LitBuy Finds homepage" },
-      ...AGENTS.filter((agent) => agent.slug !== slug).map((agent) => ({
-        href: `/${agent.slug}`,
-        label: `${agent.agentName} Telegram`,
-      })),
-      { href: "/telegram", label: "Telegram finds hub" },
-    ],
+    footerLinks: buildTelegramFooterLinks(agentSlug),
   };
 }
 
