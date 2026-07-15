@@ -20,6 +20,10 @@ import {
   DISCORD_AGENT_LANDING_SLUGS,
 } from "@/lib/discord-agent-landing-pages";
 import {
+  AGENT_COUPON_LANDING_PAGES,
+  AGENT_COUPON_LANDING_SLUGS,
+} from "@/lib/agent-coupon-landing-pages";
+import {
   TELEGRAM_AGENT_LANDING_PAGES,
   TELEGRAM_AGENT_LANDING_SLUGS,
 } from "@/lib/telegram-agent-landing-pages";
@@ -92,6 +96,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${SITE_URL}/${slug}`,
       changeFrequency: "weekly",
       priority: 0.86,
+    });
+  }
+
+  for (const slug of AGENT_COUPON_LANDING_SLUGS) {
+    const page = AGENT_COUPON_LANDING_PAGES[slug];
+    routes.push({
+      url: `${SITE_URL}${page.path}`,
+      changeFrequency: "weekly",
+      priority: slug.endsWith("-coupons") && !slug.startsWith("best-") ? 0.92 : 0.9,
     });
   }
 
