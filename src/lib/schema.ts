@@ -275,3 +275,54 @@ function buildJoinAgentWebPageSchema({
     publisher: { "@id": ORGANIZATION_SCHEMA_ID },
   };
 }
+
+export function buildLitbuyCouponWebPageSchema({
+  name,
+  description,
+  path,
+  couponUrl,
+  offerHeadline,
+  offerDescription,
+}: {
+  name: string;
+  description: string;
+  path: string;
+  couponUrl: string;
+  offerHeadline: string;
+  offerDescription: string;
+}) {
+  const url = `${SITE_URL}${path}`;
+  const claimAction = {
+    "@type": "ClaimAction",
+    target: couponUrl,
+    name: "Claim LitBuy Coupon",
+  };
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name,
+    description,
+    url,
+    mainEntityOfPage: { "@id": url },
+    isPartOf: {
+      "@type": "WebSite",
+      "@id": WEBSITE_SCHEMA_ID,
+      name: SITE_NAME,
+      url: SITE_URL,
+      potentialAction: claimAction,
+    },
+    potentialAction: claimAction,
+    mainEntity: {
+      "@type": "Offer",
+      name: offerHeadline,
+      description: offerDescription,
+      url: couponUrl,
+      price: "0",
+      priceCurrency: "USD",
+      availability: "https://schema.org/InStock",
+      seller: { "@id": ORGANIZATION_SCHEMA_ID },
+    },
+    publisher: { "@id": ORGANIZATION_SCHEMA_ID },
+  };
+}

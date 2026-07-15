@@ -20,6 +20,10 @@ import {
   DISCORD_AGENT_LANDING_SLUGS,
 } from "@/lib/discord-agent-landing-pages";
 import {
+  LITBUY_COUPON_LANDING_PAGES,
+  LITBUY_COUPON_LANDING_SLUGS,
+} from "@/lib/litbuy-coupon-landing-pages";
+import {
   TELEGRAM_AGENT_LANDING_PAGES,
   TELEGRAM_AGENT_LANDING_SLUGS,
 } from "@/lib/telegram-agent-landing-pages";
@@ -92,6 +96,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${SITE_URL}/${slug}`,
       changeFrequency: "weekly",
       priority: 0.86,
+    });
+  }
+
+  for (const slug of LITBUY_COUPON_LANDING_SLUGS) {
+    const page = LITBUY_COUPON_LANDING_PAGES[slug];
+    routes.push({
+      url: `${SITE_URL}${page.path}`,
+      changeFrequency: "weekly",
+      priority: slug === "litbuy-coupons" ? 0.92 : 0.9,
     });
   }
 
