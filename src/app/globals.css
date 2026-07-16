@@ -1,14 +1,14 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #EEF0E8;
-  --color-surface: #F6F7F2;
-  --color-panel: #FCFCFA;
-  --color-panel-hover: #F0F2EA;
-  --color-border: #D5D9CC;
-  --color-border-strong: #BFC5B4;
-  --color-muted: #646B5E;
-  --color-foreground: #1A1D16;
+  --color-background: #F2F1ED;
+  --color-surface: #F2F1ED;
+  --color-panel: #F2F1ED;
+  --color-panel-hover: #EAE9E5;
+  --color-border: #D8D6D0;
+  --color-border-strong: #C4C1B8;
+  --color-muted: #65635C;
+  --color-foreground: #1A1916;
   --color-accent: #7CB518;
   --color-accent-hover: #8FCC1F;
   --color-accent-soft: rgba(124, 181, 24, 0.12);
@@ -23,10 +23,7 @@ html {
 }
 
 body {
-  background:
-    radial-gradient(ellipse 85% 55% at 10% -5%, rgba(124, 181, 24, 0.08), transparent 52%),
-    radial-gradient(ellipse 70% 45% at 90% 105%, rgba(100, 120, 80, 0.06), transparent 48%),
-    var(--color-background);
+  background: var(--color-background);
   color: var(--color-foreground);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
@@ -45,8 +42,8 @@ body {
 }
 
 .site-header {
-  border-bottom: 1px solid rgba(26, 29, 22, 0.08);
-  background: rgba(238, 240, 232, 0.75);
+  border-bottom: 1px solid rgba(26, 25, 22, 0.08);
+  background: rgba(242, 241, 237, 0.88);
   backdrop-filter: blur(20px) saturate(1.2);
   -webkit-backdrop-filter: blur(20px) saturate(1.2);
   padding-top: env(safe-area-inset-top, 0px);
@@ -54,7 +51,7 @@ body {
 
 @media (min-width: 640px) {
   .site-header {
-    background: rgba(238, 240, 232, 0.92);
+    background: rgba(242, 241, 237, 0.95);
   }
 }
 
@@ -348,7 +345,7 @@ body::before {
   height: 100%;
   min-height: inherit;
   border-radius: 0.75rem;
-  background: linear-gradient(165deg, #EEF0E8 0%, #F6F7F2 42%, #EEF0E8 100%);
+  background: linear-gradient(165deg, #F2F1ED 0%, #F2F1ED 42%, #F2F1ED 100%);
   box-shadow: inset 0 0 0 1px rgba(26, 29, 22, 0.04);
 }
 
@@ -514,7 +511,7 @@ body::before {
   height: 100%;
   min-height: inherit;
   overflow: hidden;
-  background: linear-gradient(165deg, #EEF0E8 0%, #F6F7F2 45%, #EEF0E8 100%);
+  background: linear-gradient(165deg, #F2F1ED 0%, #F2F1ED 45%, #F2F1ED 100%);
 }
 
 .image-unavailable--card {
@@ -669,7 +666,7 @@ body::before {
   height: 8.5rem;
   border-radius: 1.25rem;
   border: 1px solid rgba(124, 181, 24, 0.14);
-  background: linear-gradient(160deg, #F6F7F2 0%, #FCFCFA 55%, #EEF0E8 100%);
+  background: linear-gradient(160deg, #F2F1ED 0%, #F2F1ED 55%, #F2F1ED 100%);
   overflow: hidden;
 }
 

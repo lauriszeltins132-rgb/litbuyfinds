@@ -1,12 +1,18 @@
 /** Opaque matte behind processed cutouts — must match --color-background in globals.css */
-export const CATALOG_MATTE = { r: 238, g: 240, b: 232 }; // #EEF0E8
-export const LEGACY_DARK_MATTE = { r: 20, g: 20, b: 24 }; // #141418
+export const CATALOG_MATTE = { r: 242, g: 241, b: 237 }; // #F2F1ED
 
-export function isLegacyMattePixel(r, g, b, tolerance = 8) {
-  return (
-    Math.abs(r - LEGACY_DARK_MATTE.r) <= tolerance &&
-    Math.abs(g - LEGACY_DARK_MATTE.g) <= tolerance &&
-    Math.abs(b - LEGACY_DARK_MATTE.b) <= tolerance
+export const KNOWN_MATTES = [
+  { r: 20, g: 20, b: 24 }, // legacy dark #141418
+  { r: 238, g: 240, b: 232 }, // previous sage #EEF0E8
+  CATALOG_MATTE,
+];
+
+export function isMattePixel(r, g, b, tolerance = 10) {
+  return KNOWN_MATTES.some(
+    (matte) =>
+      Math.abs(r - matte.r) <= tolerance &&
+      Math.abs(g - matte.g) <= tolerance &&
+      Math.abs(b - matte.b) <= tolerance
   );
 }
 
@@ -30,13 +36,13 @@ export function flattenPixelsOntoMatte(data, width, height, matte = CATALOG_MATT
   return out;
 }
 
-export function replaceLegacyMattePixels(data, matte = CATALOG_MATTE, tolerance = 8) {
+export function replaceMattePixels(data, matte = CATALOG_MATTE, tolerance = 10) {
   const out = Buffer.from(data);
   for (let i = 0; i < out.length; i += 4) {
     const r = out[i];
     const g = out[i + 1];
     const b = out[i + 2];
-    if (isLegacyMattePixel(r, g, b, tolerance)) {
+    if (isMattePixel(r, g, b, tolerance)) {
       out[i] = matte.r;
       out[i + 1] = matte.g;
       out[i + 2] = matte.b;

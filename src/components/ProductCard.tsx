@@ -89,7 +89,7 @@ export default function ProductCard({
 
   return (
     <article
-      className={`product-card group flex flex-col overflow-hidden rounded-xl border border-border bg-panel active:scale-[0.99] sm:rounded-2xl ${
+      className={`product-card group flex flex-col overflow-hidden rounded-xl border border-border/80 bg-background shadow-sm active:scale-[0.99] sm:rounded-2xl ${
         compact ? "text-[12px] sm:text-[13px]" : ""
       }`}
     >

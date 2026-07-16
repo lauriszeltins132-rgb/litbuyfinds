@@ -5,7 +5,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { CATALOG_MATTE, replaceLegacyMattePixels } from "./lib/catalog-matte.mjs";
+import { CATALOG_MATTE, replaceMattePixels } from "./lib/catalog-matte.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const processedDir = path.join(__dirname, "../public/processed");
@@ -23,7 +23,7 @@ async function main() {
       .raw()
       .toBuffer({ resolveWithObject: true });
 
-    const rematted = replaceLegacyMattePixels(data);
+    const rematted = replaceMattePixels(data);
     const diff = rematted.some((v, i) => v !== data[i]);
     if (diff) {
       await sharp(rematted, {

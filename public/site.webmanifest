@@ -4,7 +4,7 @@
   "description": "QC-approved Weidian, Taobao and LitBuy fashion finds with verified links and daily updates.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#EEF0E8",
+  "background_color": "#F2F1ED",
   "theme_color": "#7CB518",
   "icons": [
     {
