@@ -1,6 +1,7 @@
 import { getCatalogBrightBgTreatment } from "./bright-bg";
 import { isDeadImageUrl } from "./dead-images";
 import {
+  CARD_DISPLAY_MIN_SCORE,
   getImageFillClass,
   getImageQualityDetails,
   getImageQualityScore,
@@ -82,10 +83,16 @@ export function resolveProductDisplayImage(
     ),
   ];
 
+  const sourceScore = getImageQualityScore(sourceUrl);
+  const score =
+    showingProcessed
+      ? Math.max(sourceScore, CARD_DISPLAY_MIN_SCORE)
+      : sourceScore;
+
   return {
     displaySrc,
     sourceUrl,
-    score: getImageQualityScore(sourceUrl),
+    score,
     fillClass: showingProcessed
       ? "product-float-asset--fill-balanced"
       : getImageFillClass(sourceUrl),
@@ -104,7 +111,7 @@ export function passesCardDisplayGate(product: Product): boolean {
   if (isDeadImageUrl(product.image) && !plan.isProcessed) return false;
   const resolved = resolveProductDisplayImage(product);
   if (!resolved) return false;
-  return resolved.score >= 42;
+  return resolved.score >= CARD_DISPLAY_MIN_SCORE;
 }
 
 export function getProductVisualScore(product: Product): number {
