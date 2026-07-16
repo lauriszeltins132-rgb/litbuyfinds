@@ -39,10 +39,19 @@ export function computeImageQualityScore(product: Product): number {
 
   const details = getImageQualityDetails(product.image);
   const resolved = resolveProductDisplayImage(product);
+  const usingProcessed = Boolean(resolved?.isProcessed);
+
+  if (usingProcessed) {
+    const base = Math.max(
+      getImageQualityScore(product.image),
+      HOMEPAGE_MIN_SCORE - 4
+    );
+    return Math.max(0, Math.min(100, Math.round(base + 8)));
+  }
+
   let score = getImageQualityScore(product.image);
 
-  if (resolved?.isProcessed) score += 8;
-  else if ((details?.borderBrightRatio ?? 0) > 0.1) score -= 20;
+  if ((details?.borderBrightRatio ?? 0) > 0.1) score -= 20;
 
   if (details?.issues) {
     if (details.issues.includes("tiny_product")) score -= 35;
@@ -91,6 +100,19 @@ export function computeImageQualityScore(product: Product): number {
 
 /** Primary homepage ranking signal — visual appeal over engagement. */
 export function computeVisualAppealScore(product: Product): number {
+  const resolved = resolveProductDisplayImage(product);
+  if (resolved?.isProcessed) {
+    let score = 78;
+    if (VISUAL_CATEGORY_BOOST[product.category_slug]) {
+      score += VISUAL_CATEGORY_BOOST[product.category_slug];
+    }
+    score += getEditorialBrandBoost(product);
+    if (LOW_PRIORITY_PATTERN.test(product.product_name)) score -= 22;
+    if (isScreenshotStyleProduct(product)) score -= 50;
+    if (!isHomepageFashionProduct(product)) score -= 60;
+    return Math.max(0, Math.min(100, Math.round(score)));
+  }
+
   const details = getImageQualityDetails(product.image);
   if (!details) return 35;
 
@@ -99,7 +121,6 @@ export function computeVisualAppealScore(product: Product): number {
   const empty = details.emptySpaceRatio ?? 1 - fill;
   const whiteBlank = details.whiteBlankRatio ?? empty;
   const border = details.borderBrightRatio ?? 0;
-  const resolved = resolveProductDisplayImage(product);
 
   if (fill >= 0.6) score += 22;
   else if (fill >= 0.5) score += 12;
@@ -114,11 +135,7 @@ export function computeVisualAppealScore(product: Product): number {
   if (border > 0.25) score -= 30;
   else if (border > 0.15) score -= 20;
 
-  if ((details.transparencyRatio ?? 0) > 0.2 && !resolved?.isProcessed) {
-    score -= 22;
-  }
-
-  if (resolved?.isProcessed) score += 10;
+  if ((details.transparencyRatio ?? 0) > 0.2) score -= 22;
 
   if (VISUAL_CATEGORY_BOOST[product.category_slug]) {
     score += VISUAL_CATEGORY_BOOST[product.category_slug];

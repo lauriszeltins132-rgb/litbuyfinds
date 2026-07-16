@@ -7,6 +7,7 @@ import crypto from "crypto";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { isMattePixel } from "./lib/catalog-matte.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const productsPath = path.join(__dirname, "../src/data/products.json");
@@ -21,6 +22,7 @@ function hashUrl(url) {
 }
 
 function isBrightBorderPixel(r, g, b) {
+  if (isMattePixel(r, g, b)) return false;
   const min = Math.min(r, g, b);
   const max = Math.max(r, g, b);
   return min >= 200 && max - min <= 55;
@@ -73,7 +75,7 @@ function analyzePixels(data, width, height) {
         const r = data[i];
         const g = data[i + 1];
         const b = data[i + 2];
-        if (isBrightBorderPixel(r, g, b)) brightBlank++;
+        if (!isMattePixel(r, g, b) && isBrightBorderPixel(r, g, b)) brightBlank++;
         minX = Math.min(minX, x);
         minY = Math.min(minY, y);
         maxX = Math.max(maxX, x);

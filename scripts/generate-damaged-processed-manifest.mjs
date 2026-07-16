@@ -7,6 +7,7 @@ import fs from "fs";
 import path from "path";
 import sharp from "sharp";
 import { fileURLToPath } from "url";
+import { isMattePixel } from "./lib/catalog-matte.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
@@ -23,6 +24,7 @@ function analyzeProcessedPng(data, width, height) {
   let black = 0;
   let whiteEdge = 0;
   let darkEdge = 0;
+  let matteEdge = 0;
 
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
@@ -40,7 +42,8 @@ function analyzeProcessedPng(data, width, height) {
         y >= height - EDGE_BAND;
       if (!onEdge) continue;
 
-      if (r > 235 && g > 235 && b > 235) whiteEdge++;
+      if (isMattePixel(r, g, b)) matteEdge++;
+      else if (r > 235 && g > 235 && b > 235) whiteEdge++;
       if (r < 48 && g < 48 && b < 48) darkEdge++;
     }
   }
@@ -48,7 +51,10 @@ function analyzeProcessedPng(data, width, height) {
   const blackRatio = black / total;
   const whiteFringeRatio = whiteEdge / edgePixels;
   const edgeDarkRatio = darkEdge / edgePixels;
-  const intentionalMatte = edgeDarkRatio >= 0.88 && blackRatio >= 0.04;
+  const edgeMatteRatio = matteEdge / edgePixels;
+  const intentionalMatte =
+    edgeMatteRatio >= 0.75 ||
+    (edgeDarkRatio >= 0.88 && blackRatio >= 0.04);
 
   return {
     damaged:
@@ -56,6 +62,7 @@ function analyzeProcessedPng(data, width, height) {
       (blackRatio > 0.04 && !intentionalMatte),
     whiteFringeRatio,
     edgeDarkRatio,
+    edgeMatteRatio,
     blackRatio,
   };
 }
