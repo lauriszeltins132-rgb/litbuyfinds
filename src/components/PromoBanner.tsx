@@ -46,7 +46,7 @@ export default function PromoBanner({
 
   return (
     <div
-      className={`relative overflow-hidden rounded-2xl border border-border/60 bg-[#0a0a0b] ${className}`}
+      className={`relative overflow-hidden rounded-2xl border border-border/60 bg-panel ${className}`}
     >
       <Image
         src={config.src}
