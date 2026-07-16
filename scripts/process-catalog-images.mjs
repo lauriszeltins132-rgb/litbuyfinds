@@ -19,27 +19,7 @@ const THRESHOLD = 242;
 const MIN_REMOVED = 0.02;
 const MAX_REMOVED = 0.94;
 const TRIM_PAD = 0.03;
-const MATTE = { r: 20, g: 20, b: 24 };
-
-function flattenOntoMatte(data, width, height) {
-  const out = Buffer.alloc(width * height * 4);
-  for (let i = 0; i < width * height; i++) {
-    const si = i * 4;
-    const a = data[si + 3];
-    if (a >= 24) {
-      out[si] = data[si];
-      out[si + 1] = data[si + 1];
-      out[si + 2] = data[si + 2];
-      out[si + 3] = 255;
-    } else {
-      out[si] = MATTE.r;
-      out[si + 1] = MATTE.g;
-      out[si + 2] = MATTE.b;
-      out[si + 3] = 255;
-    }
-  }
-  return out;
-}
+import { flattenPixelsOntoMatte } from "./lib/catalog-matte.mjs";
 
 function isBackgroundPixel(r, g, b, threshold = THRESHOLD) {
   const min = Math.min(r, g, b);
@@ -222,7 +202,7 @@ async function processOne(url, sharp) {
     .raw()
     .toBuffer({ resolveWithObject: true });
 
-  const flat = flattenOntoMatte(
+  const flat = flattenPixelsOntoMatte(
     flattened.data,
     flattened.info.width,
     flattened.info.height

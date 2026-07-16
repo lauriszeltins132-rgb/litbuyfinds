@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Flattens transparent processed PNGs onto an opaque dark matte (#141418).
+ * Flattens transparent processed PNGs onto an opaque sage matte (#EEF0E8).
  * Run after process-catalog-images or to fix existing cutouts.
  */
 import fs from "fs";
@@ -9,27 +9,7 @@ import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const processedDir = path.join(__dirname, "../public/processed");
-const MATTE = { r: 20, g: 20, b: 24 };
-
-function flattenPixels(data, width, height) {
-  const out = Buffer.alloc(width * height * 4);
-  for (let i = 0; i < width * height; i++) {
-    const si = i * 4;
-    const a = data[si + 3];
-    if (a >= 24) {
-      out[si] = data[si];
-      out[si + 1] = data[si + 1];
-      out[si + 2] = data[si + 2];
-      out[si + 3] = 255;
-    } else {
-      out[si] = MATTE.r;
-      out[si + 1] = MATTE.g;
-      out[si + 2] = MATTE.b;
-      out[si + 3] = 255;
-    }
-  }
-  return out;
-}
+import { CATALOG_MATTE, flattenPixelsOntoMatte } from "./lib/catalog-matte.mjs";
 
 async function main() {
   const sharp = (await import("sharp")).default;
@@ -43,7 +23,7 @@ async function main() {
       .raw()
       .toBuffer({ resolveWithObject: true });
 
-    const flat = flattenPixels(data, info.width, info.height);
+    const flat = flattenPixelsOntoMatte(data, info.width, info.height);
     await sharp(flat, {
       raw: { width: info.width, height: info.height, channels: 4 },
     })
