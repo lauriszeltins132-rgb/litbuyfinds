@@ -93,7 +93,7 @@ export const metadata: Metadata = {
       {
         rel: "mask-icon",
         url: "/icon-source.svg",
-        color: "#C8761A",
+        color: "#D4FF3C",
       },
     ],
   },

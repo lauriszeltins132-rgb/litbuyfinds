@@ -5,7 +5,7 @@ import { BROWSE_FINDS_CTA_LABEL, REGISTER_MODAL_CTA_LABEL } from "@/lib/constant
 
 export default function FooterSignupStrip() {
   return (
-    <section className="border-t border-border/60 bg-surface px-4 py-10 sm:px-6 sm:py-12">
+    <section className="border-t border-border/60 bg-[#0c0c0e] px-4 py-10 sm:px-6 sm:py-12">
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(280px,420px)] lg:items-start">
           <div>

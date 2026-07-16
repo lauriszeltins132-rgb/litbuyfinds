@@ -38,7 +38,7 @@ export default function TelegramAgentLandingLayout({
 
       <article className="px-4 py-8 sm:px-6">
         <div className="mx-auto max-w-2xl">
-          <section className="overflow-hidden rounded-3xl border border-accent/20 bg-gradient-to-br from-accent/10 via-surface to-background p-6 text-center sm:p-10">
+          <section className="overflow-hidden rounded-3xl border border-accent/20 bg-gradient-to-br from-accent/10 via-[#121214] to-[#0d1210] p-6 text-center sm:p-10">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
               {config.agentName} · Telegram
             </p>

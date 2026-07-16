@@ -52,7 +52,7 @@ export default function Footer() {
   const brands = siteNavigation.footerBrands;
 
   return (
-    <footer className="relative mt-auto border-t border-border bg-surface px-4 py-16 sm:px-6">
+    <footer className="relative mt-auto border-t border-border bg-[#0a0a0c] px-4 py-16 sm:px-6">
       <div
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent"
         aria-hidden
@@ -60,7 +60,7 @@ export default function Footer() {
 
       <div className="mx-auto max-w-7xl">
         <TrustStrip compact />
-        <div className="mt-8 overflow-hidden rounded-3xl border border-accent/20 bg-gradient-to-br from-accent/10 via-surface to-background p-6 shadow-[0_12px_40px_rgba(28,25,20,0.08)] sm:p-8">
+        <div className="mt-8 overflow-hidden rounded-3xl border border-accent/20 bg-gradient-to-br from-accent/10 via-[#121214] to-[#0d1210] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.35)] sm:p-8">
           <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
             <div className="max-w-xl">
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
