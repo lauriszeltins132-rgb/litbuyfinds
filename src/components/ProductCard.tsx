@@ -108,7 +108,7 @@ export default function ProductCard({
             productHref={productHref}
             priority={priority}
           />
-          <div className="product-card-hover-hint bg-gradient-to-t from-background/50 to-transparent px-3 py-2 opacity-0 transition-opacity group-hover:opacity-100">
+          <div className="product-card-hover-hint bg-gradient-to-t from-white/85 to-transparent px-3 py-2 opacity-0 transition-opacity group-hover:opacity-100">
             <p className="text-[10px] font-bold uppercase tracking-wider text-accent">
               View details
             </p>

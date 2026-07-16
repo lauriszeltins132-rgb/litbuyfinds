@@ -49,7 +49,7 @@ export default function Pagination({
         </Link>
       )}
 
-      <span className="rounded-full border border-border bg-[#0f1117] px-4 py-2 text-sm font-semibold text-muted">
+      <span className="rounded-full border border-border bg-surface px-4 py-2 text-sm font-semibold text-muted">
         Page <span className="text-foreground">{currentPage}</span> of{" "}
         <span className="text-foreground">{totalPages}</span>
       </span>
