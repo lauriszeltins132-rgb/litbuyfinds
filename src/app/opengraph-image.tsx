@@ -21,8 +21,8 @@ export default async function OpenGraphImage() {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            background: "#0a0a0b",
-            color: "#D4FF3C",
+            background: "#FAF6ED",
+            color: "#C8761A",
             fontSize: 48,
             fontWeight: 700,
           }}

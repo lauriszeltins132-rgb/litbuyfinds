@@ -14,8 +14,8 @@ export function renderOgImage(title: string, subtitle: string) {
           alignItems: "center",
           justifyContent: "center",
           background:
-            "linear-gradient(135deg, #0a0a0b 0%, #141416 50%, #0f1a12 100%)",
-          color: "#f4f4f5",
+            "linear-gradient(135deg, #FAF6ED 0%, #FFFDF8 50%, #F5EDE0 100%)",
+          color: "#1A1712",
           fontFamily: "system-ui, sans-serif",
           padding: 60,
         }}
@@ -35,7 +35,7 @@ export function renderOgImage(title: string, subtitle: string) {
         <div
           style={{
             fontSize: 28,
-            color: "#4ade80",
+            color: "#C8761A",
             fontWeight: 600,
             marginTop: 20,
             textAlign: "center",
