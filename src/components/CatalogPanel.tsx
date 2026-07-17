@@ -211,28 +211,24 @@ export default function CatalogPanel({
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
-  const paginated = filtered.slice(
-    (currentPage - 1) * PAGE_SIZE,
-    currentPage * PAGE_SIZE
+  const paginated = useMemo(
+    () =>
+      filtered.slice(
+        (currentPage - 1) * PAGE_SIZE,
+        currentPage * PAGE_SIZE
+      ),
+    [filtered, currentPage]
   );
 
   function goToPage(nextPage: number) {
     const clamped = Math.max(1, Math.min(nextPage, totalPages));
-    startTransition(() => {
-      setPage(clamped);
-    });
+    if (clamped === currentPage) return;
+
+    setPage(clamped);
+    prevPageRef.current = clamped;
 
     const nextUrl = buildPageHref(basePath, params, clamped);
     window.history.pushState({ catalogPage: clamped }, "", nextUrl);
-
-    if (prevPageRef.current === clamped) return;
-    prevPageRef.current = clamped;
-
-    requestAnimationFrame(() => {
-      document
-        .getElementById("catalog-product-grid")
-        ?.scrollIntoView({ behavior: "auto", block: "start" });
-    });
   }
 
   useEffect(() => {
@@ -421,7 +417,7 @@ export default function CatalogPanel({
           ) : isPending ? (
             <ProductGridSkeleton count={8} />
           ) : paginated.length > 0 ? (
-            <ProductGrid products={paginated} />
+            <ProductGrid products={paginated} instant />
           ) : (
             <div className="rounded-2xl border border-border bg-surface/30 px-6 py-10 text-center">
               <p className="text-base font-bold text-foreground">No finds matched</p>
