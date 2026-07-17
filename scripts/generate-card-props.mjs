@@ -62,7 +62,7 @@ function isProcessedCutoutBlocked(sourceUrl, processedPath, details) {
   return false;
 }
 
-function isNaturalProductPhoto(sourceUrl, details) {
+function shouldPreferOriginalPhoto(sourceUrl, details) {
   if (deadUrls.has(sourceUrl)) return false;
   if (!details) return false;
   if (details.issues?.includes("dead_url") && (details.score ?? 0) <= 0) {
@@ -72,6 +72,9 @@ function isNaturalProductPhoto(sourceUrl, details) {
   if (details.isTransparent && (details.transparencyRatio ?? 0) > 0.15) {
     return true;
   }
+  if (details.issues?.includes("bad_cutout")) return true;
+  if (details.issues?.includes("hollow_cutout")) return true;
+  if (details.issues?.includes("damaged_cutout")) return true;
   if (brightBgUrls[sourceUrl] === "none") {
     const whiteBlank = details.whiteBlankRatio ?? 0;
     const border = details.borderBrightRatio ?? 0;
@@ -103,7 +106,7 @@ function resolveImage(sourceUrl) {
     processedPath &&
     (sourceIsDead
       ? !isProcessedAssetDamaged(processedPath)
-      : !cutoutUnsafe && !isNaturalProductPhoto(sourceUrl, details));
+      : !cutoutUnsafe && !shouldPreferOriginalPhoto(sourceUrl, details));
 
   const fill = details?.contentFillRatio;
   let fc = "b";
