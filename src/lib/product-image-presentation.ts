@@ -1,5 +1,4 @@
-import { getCatalogBrightBgTreatment } from "./bright-bg";
-import { isDeadImageUrl } from "./dead-images";
+import { isCatalogImageUrlDead, isDeadImageUrl } from "./dead-images";
 import {
   CARD_DISPLAY_MIN_SCORE,
   getImageFillClass,
@@ -8,6 +7,7 @@ import {
 } from "./image-quality";
 import {
   getProductImagePlan,
+  isProcessedAssetDamaged,
   isProcessedCutoutBlocked,
 } from "./processed-images";
 import type { Product } from "./types";
@@ -26,6 +26,7 @@ function shouldKeepOriginalPhoto(
   sourceUrl: string,
   details: ReturnType<typeof getImageQualityDetails>
 ): boolean {
+  if (isCatalogImageUrlDead(sourceUrl)) return false;
   if (!details) return false;
   if (details.issues?.includes("dead_url") && (details.score ?? 0) <= 0) {
     return false;
@@ -34,12 +35,7 @@ function shouldKeepOriginalPhoto(
   if (details.isTransparent && (details.transparencyRatio ?? 0) > 0.15) {
     return true;
   }
-  if (getCatalogBrightBgTreatment(sourceUrl) === "none") {
-    const whiteBlank = details.whiteBlankRatio ?? 0;
-    const border = details.borderBrightRatio ?? 0;
-    const fill = details.contentFillRatio ?? 0.5;
-    if (whiteBlank < 0.03 && border < 0.05 && fill >= 0.42) return true;
-  }
+  // Studio originals read as harsh white boxes on the light stone wallpaper.
   return false;
 }
 
@@ -73,17 +69,19 @@ export function resolveProductDisplayImage(
 
   const processedPath =
     plan.isProcessed && plan.src.startsWith("/processed/") ? plan.src : undefined;
+  const sourceIsDead = isCatalogImageUrlDead(sourceUrl);
   const cutoutUnsafe =
     isProcessedCutoutBlocked(sourceUrl, processedPath) ||
     details?.issues?.includes("damaged_cutout") === true;
 
   const useProcessed =
     Boolean(processedPath) &&
-    !cutoutUnsafe &&
-    !shouldKeepOriginalPhoto(sourceUrl, details);
+    (sourceIsDead
+      ? !isProcessedAssetDamaged(processedPath)
+      : !cutoutUnsafe && !shouldKeepOriginalPhoto(sourceUrl, details));
 
-  const displaySrc = useProcessed && processedPath ? processedPath : sourceUrl;
-  const showingProcessed = displaySrc.startsWith("/processed/");
+  let displaySrc = useProcessed && processedPath ? processedPath : sourceUrl;
+  let showingProcessed = displaySrc.startsWith("/processed/");
 
   const fallbacks = [
     ...new Set(
@@ -96,6 +94,14 @@ export function resolveProductDisplayImage(
       )
     ),
   ];
+
+  if (!showingProcessed && isCatalogImageUrlDead(displaySrc)) {
+    const rescue = fallbacks.find((url) => url.startsWith("/processed/"));
+    if (rescue) {
+      displaySrc = rescue;
+      showingProcessed = true;
+    }
+  }
 
   const sourceScore = getImageQualityScore(sourceUrl);
   const score =
@@ -125,6 +131,12 @@ export function passesCardDisplayGate(product: Product): boolean {
   if (isDeadImageUrl(product.image) && !plan.isProcessed) return false;
   const resolved = resolveProductDisplayImage(product);
   if (!resolved) return false;
+  if (
+    !resolved.isProcessed &&
+    isCatalogImageUrlDead(resolved.displaySrc)
+  ) {
+    return false;
+  }
   return resolved.score >= CARD_DISPLAY_MIN_SCORE;
 }
 

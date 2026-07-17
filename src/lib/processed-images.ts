@@ -1,6 +1,7 @@
 import damagedData from "@/data/damaged-processed-manifest.json";
 import mapData from "@/data/processed-image-map.json";
 import { getImageQualityDetails } from "./image-quality";
+import { isCatalogImageUrlDead } from "./dead-images";
 
 type ProcessedImageMap = {
   urls: Record<string, string>;
@@ -34,13 +35,19 @@ export function getProcessedApiSrc(sourceUrl: string): string {
 }
 
 /** Pre-built cutouts that corrupt the product or leave harsh artifacts. */
+export function isProcessedAssetDamaged(processedPath?: string): boolean {
+  return Boolean(processedPath && damagedPaths.has(processedPath));
+}
+
+/** Pre-built cutouts that corrupt the product or leave harsh artifacts. */
 export function isProcessedCutoutBlocked(
   sourceUrl: string,
   processedPath?: string
 ): boolean {
   if (FORCE_ORIGINAL_URLS.has(sourceUrl)) return true;
+  if (isProcessedAssetDamaged(processedPath)) return true;
   if (damagedUrls.has(sourceUrl)) return true;
-  if (processedPath && damagedPaths.has(processedPath)) return true;
+  if (isCatalogImageUrlDead(sourceUrl)) return false;
   if (getImageQualityDetails(sourceUrl)?.issues?.includes("damaged_cutout")) {
     return true;
   }
