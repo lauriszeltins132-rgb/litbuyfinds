@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { trackBrokenImage } from "@/lib/analytics-events";
+import { isDeadImageUrl } from "@/lib/dead-images";
 import {
   getImageFillClass,
   shouldEnhanceImage,
@@ -48,26 +49,28 @@ function buildCandidateList(
   variant: ProductImageVariant = "card"
 ): string[] {
   const validation = validateImageUrl(src);
-  if (!validation.valid) return [];
-
-  const plan = getProductImagePlan(validation.normalized);
+  const normalized = validation.valid ? validation.normalized : "";
+  const plan = normalized ? getProductImagePlan(normalized) : null;
   const ordered: (string | undefined)[] = [
     preferredSrc,
-    validation.normalized,
-    plan.originalSrc,
+    normalized || undefined,
+    plan?.originalSrc,
     ...extraFallbacks,
-    ...plan.fallbacks,
+    ...(plan?.fallbacks ?? []),
   ];
 
-  if (variant !== "card") {
-    if (plan.isProcessed) ordered.push(plan.src);
-    ordered.push(getProcessedApiSrc(validation.normalized));
+  if (variant !== "card" && normalized) {
+    if (plan?.isProcessed) ordered.push(plan.src);
+    ordered.push(getProcessedApiSrc(normalized));
   }
 
   const seen = new Set<string>();
   const unique: string[] = [];
   for (const url of ordered) {
     if (!url || seen.has(url)) continue;
+    if (!url.startsWith("/processed/") && !url.startsWith("/api/processed-image") && isDeadImageUrl(url)) {
+      continue;
+    }
     seen.add(url);
     unique.push(url);
   }

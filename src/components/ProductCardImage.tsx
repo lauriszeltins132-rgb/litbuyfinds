@@ -32,10 +32,9 @@ export default function ProductCardImage({
   const validation = useMemo(() => validateImageUrl(src), [src]);
 
   const candidates = useMemo(() => {
-    if (!validation.valid) return [];
     const ordered = [
       preferredSrc,
-      validation.normalized,
+      validation.valid ? validation.normalized : null,
       ...fallbacks,
     ].filter((url): url is string => Boolean(url));
     const seen = new Set<string>();

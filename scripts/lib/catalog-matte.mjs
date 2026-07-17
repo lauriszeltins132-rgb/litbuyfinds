@@ -1,10 +1,18 @@
-/** Opaque matte behind processed cutouts — must match --color-background in globals.css */
-export const CATALOG_MATTE = { r: 242, g: 241, b: 237 }; // #F2F1ED
+/** Page wallpaper — matches --color-background in globals.css */
+export const PAGE_MATTE = { r: 242, g: 241, b: 237 }; // #F2F1ED
+
+/** White card photo area — processed cutouts sit on this like BoonBuy */
+export const CARD_MATTE = { r: 255, g: 255, b: 255 }; // #FFFFFF
+
+/** Active matte baked into processed PNGs (must match card image shell) */
+export const CATALOG_MATTE = CARD_MATTE;
 
 export const KNOWN_MATTES = [
   { r: 20, g: 20, b: 24 }, // legacy dark #141418
   { r: 238, g: 240, b: 232 }, // previous sage #EEF0E8
-  CATALOG_MATTE,
+  PAGE_MATTE,
+  CARD_MATTE,
+  { r: 252, g: 252, b: 250 }, // off-white card variant
 ];
 
 export function isMattePixel(r, g, b, tolerance = 10) {
@@ -52,7 +60,7 @@ export function replaceMattePixels(data, matte = CATALOG_MATTE, tolerance = 10) 
   return out;
 }
 
-/** Studio sweep / catalog whites that read brighter than the page matte. */
+/** Studio sweep / catalog whites that read brighter than the card matte. */
 export function isStudioBackgroundPixel(r, g, b, a = 255) {
   if (a < 24) return true;
   if (isMattePixel(r, g, b, 14)) return true;

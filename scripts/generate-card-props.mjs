@@ -55,13 +55,15 @@ function getImageQualityScore(url) {
 
 function isProcessedCutoutBlocked(sourceUrl, processedPath, details) {
   if (FORCE_ORIGINAL.has(sourceUrl)) return true;
-  if (damagedUrls.has(sourceUrl)) return true;
   if (processedPath && damagedPaths.has(processedPath)) return true;
+  if (damagedUrls.has(sourceUrl)) return true;
+  if (deadUrls.has(sourceUrl)) return false;
   if (details?.issues?.includes("damaged_cutout")) return true;
   return false;
 }
 
-function shouldKeepOriginalPhoto(sourceUrl, details) {
+function isNaturalProductPhoto(sourceUrl, details) {
+  if (deadUrls.has(sourceUrl)) return false;
   if (!details) return false;
   if (details.issues?.includes("dead_url") && (details.score ?? 0) <= 0) {
     return false;
@@ -73,10 +75,13 @@ function shouldKeepOriginalPhoto(sourceUrl, details) {
   if (brightBgUrls[sourceUrl] === "none") {
     const whiteBlank = details.whiteBlankRatio ?? 0;
     const border = details.borderBrightRatio ?? 0;
-    const fill = details.contentFillRatio ?? 0.5;
-    if (whiteBlank < 0.03 && border < 0.05 && fill >= 0.42) return true;
+    if (whiteBlank < 0.03 && border < 0.05) return true;
   }
   return false;
+}
+
+function isProcessedAssetDamaged(processedPath) {
+  return Boolean(processedPath && damagedPaths.has(processedPath));
 }
 
 function usableFallbackUrl(url) {
@@ -88,6 +93,7 @@ function usableFallbackUrl(url) {
 function resolveImage(sourceUrl) {
   const processedPath = processedUrls[sourceUrl];
   const details = getQualityDetails(sourceUrl);
+  const sourceIsDead = deadUrls.has(sourceUrl);
   const cutoutUnsafe = isProcessedCutoutBlocked(
     sourceUrl,
     processedPath,
@@ -95,14 +101,13 @@ function resolveImage(sourceUrl) {
   );
   const useProcessed =
     processedPath &&
-    !cutoutUnsafe &&
-    !shouldKeepOriginalPhoto(sourceUrl, details);
+    (sourceIsDead
+      ? !isProcessedAssetDamaged(processedPath)
+      : !cutoutUnsafe && !isNaturalProductPhoto(sourceUrl, details));
 
   const fill = details?.contentFillRatio;
   let fc = "b";
-  if (useProcessed) {
-    fc = "p";
-  } else if (fill != null) {
+  if (fill != null) {
     if (fill < 0.32) fc = "s";
     else if (fill >= 0.52) fc = "d";
   }
@@ -112,15 +117,26 @@ function resolveImage(sourceUrl) {
   if (useProcessed) {
     displaySrc = processedPath;
     if (usableFallbackUrl(sourceUrl)) fallbacks.push(sourceUrl);
-  } else if (processedPath && !cutoutUnsafe) {
+  } else if (processedPath && !cutoutUnsafe && usableFallbackUrl(processedPath)) {
     fallbacks.push(processedPath);
   }
+
+  if (!displaySrc.startsWith("/processed/") && deadUrls.has(displaySrc)) {
+    const rescue = fallbacks.find((url) => url.startsWith("/processed/"));
+    if (rescue) {
+      displaySrc = rescue;
+      fallbacks.splice(fallbacks.indexOf(rescue), 1);
+      if (usableFallbackUrl(sourceUrl)) fallbacks.push(sourceUrl);
+    }
+  }
+
+  const showingProcessed = displaySrc.startsWith("/processed/");
 
   return {
     src: displaySrc,
     fb: fallbacks.filter(usableFallbackUrl),
     fc,
-    pm: displaySrc.startsWith("/processed/") ? 1 : 0,
+    pm: showingProcessed ? 1 : 0,
   };
 }
 
@@ -258,6 +274,7 @@ function main() {
   for (const product of catalog) {
     if (product.qc_link) withQc += 1;
     const image = resolveImage(product.image);
+    if (!image.src.startsWith("/processed/") && deadUrls.has(image.src)) continue;
     if (image.pm === 1) processedCount += 1;
     const entry = { ...image };
 

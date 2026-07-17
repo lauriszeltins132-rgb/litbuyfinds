@@ -3,8 +3,8 @@
 @theme {
   --color-background: #F2F1ED;
   --color-surface: #F2F1ED;
-  --color-panel: #F2F1ED;
-  --color-panel-hover: #EAE9E5;
+  --color-panel: #FFFFFF;
+  --color-panel-hover: #F7F7F5;
   --color-border: #D8D6D0;
   --color-border-strong: #C4C1B8;
   --color-muted: #65635C;
@@ -133,7 +133,7 @@ body::before {
 }
 
 .product-image-shell {
-  --thumb-bg: var(--color-background);
+  --thumb-bg: #ffffff;
   position: relative;
   overflow: hidden;
   isolation: isolate;
@@ -142,6 +142,7 @@ body::before {
 
 .product-image-shell--card {
   min-height: 0;
+  --thumb-bg: #ffffff;
 }
 
 .product-image-shell::before {
@@ -177,7 +178,7 @@ body::before {
 .product-card-media {
   position: relative;
   isolation: isolate;
-  background: var(--color-background);
+  background: #ffffff;
 }
 
 .product-card {
@@ -296,26 +297,18 @@ body::before {
 }
 
 .product-float-stage--card {
-  padding: 0;
+  padding: 3%;
 }
 
 .product-float-stage--card .product-float-asset {
   max-width: 94%;
   max-height: 94%;
-  filter: brightness(1.02) contrast(1.02) saturate(1.02);
+  filter: brightness(1.06) contrast(1.04) saturate(1.03);
 }
 
-.product-float-stage--card .product-float-asset--processed-fill,
 .product-float-stage--card .product-float-asset--processed-cutout {
-  width: 100%;
-  height: 100%;
-  min-width: 100%;
-  min-height: 100%;
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: cover;
-  object-position: center;
-  filter: none;
+  filter: brightness(1.08) contrast(1.06) saturate(1.04)
+    drop-shadow(0 6px 16px rgba(26, 29, 22, 0.14));
 }
 
 .product-float-asset--processed-matte {

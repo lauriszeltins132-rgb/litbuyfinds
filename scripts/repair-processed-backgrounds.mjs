@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Re-mats processed PNGs to the active catalog stone (#F2F1ED) and
+ * Re-mats processed PNGs to white card panels (#FFFFFF) and
  * flood-fills leftover studio whites from the edges.
  */
 import fs from "fs";

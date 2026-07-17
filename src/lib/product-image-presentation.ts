@@ -1,5 +1,5 @@
 import { getCatalogBrightBgTreatment } from "./bright-bg";
-import { isDeadImageUrl } from "./dead-images";
+import { isCatalogImageUrlDead, isDeadImageUrl } from "./dead-images";
 import {
   CARD_DISPLAY_MIN_SCORE,
   getImageFillClass,
@@ -8,6 +8,7 @@ import {
 } from "./image-quality";
 import {
   getProductImagePlan,
+  isProcessedAssetDamaged,
   isProcessedCutoutBlocked,
 } from "./processed-images";
 import type { Product } from "./types";
@@ -18,14 +19,12 @@ function usableFallbackUrl(url: string | null | undefined): url is string {
   return !isDeadImageUrl(url);
 }
 
-/**
- * Prefer processed cutouts for studio catalog shots.
- * Keep originals only for QC / carpet / screenshot references.
- */
-function shouldKeepOriginalPhoto(
+/** QC / carpet / transparent shots — keep the catalog original. */
+function isNaturalProductPhoto(
   sourceUrl: string,
   details: ReturnType<typeof getImageQualityDetails>
 ): boolean {
+  if (isCatalogImageUrlDead(sourceUrl)) return false;
   if (!details) return false;
   if (details.issues?.includes("dead_url") && (details.score ?? 0) <= 0) {
     return false;
@@ -37,8 +36,7 @@ function shouldKeepOriginalPhoto(
   if (getCatalogBrightBgTreatment(sourceUrl) === "none") {
     const whiteBlank = details.whiteBlankRatio ?? 0;
     const border = details.borderBrightRatio ?? 0;
-    const fill = details.contentFillRatio ?? 0.5;
-    if (whiteBlank < 0.03 && border < 0.05 && fill >= 0.42) return true;
+    if (whiteBlank < 0.03 && border < 0.05) return true;
   }
   return false;
 }
@@ -57,8 +55,8 @@ export type ResolvedProductImage = {
 };
 
 /**
- * Prefer clean transparent cutouts for studio-white photos; keep originals
- * for QC / carpet shots. No CSS white knockout — real alpha PNGs only.
+ * BoonBuy-style: prefer clean cutouts on white card panels; keep originals
+ * only for QC / carpet / transparent catalog shots.
  */
 export function resolveProductDisplayImage(
   product: Product
@@ -73,17 +71,19 @@ export function resolveProductDisplayImage(
 
   const processedPath =
     plan.isProcessed && plan.src.startsWith("/processed/") ? plan.src : undefined;
+  const sourceIsDead = isCatalogImageUrlDead(sourceUrl);
   const cutoutUnsafe =
     isProcessedCutoutBlocked(sourceUrl, processedPath) ||
     details?.issues?.includes("damaged_cutout") === true;
 
   const useProcessed =
     Boolean(processedPath) &&
-    !cutoutUnsafe &&
-    !shouldKeepOriginalPhoto(sourceUrl, details);
+    (sourceIsDead
+      ? !isProcessedAssetDamaged(processedPath)
+      : !cutoutUnsafe && !isNaturalProductPhoto(sourceUrl, details));
 
-  const displaySrc = useProcessed && processedPath ? processedPath : sourceUrl;
-  const showingProcessed = displaySrc.startsWith("/processed/");
+  let displaySrc = useProcessed && processedPath ? processedPath : sourceUrl;
+  let showingProcessed = displaySrc.startsWith("/processed/");
 
   const fallbacks = [
     ...new Set(
@@ -97,6 +97,14 @@ export function resolveProductDisplayImage(
     ),
   ];
 
+  if (!showingProcessed && isCatalogImageUrlDead(displaySrc)) {
+    const rescue = fallbacks.find((url) => url.startsWith("/processed/"));
+    if (rescue) {
+      displaySrc = rescue;
+      showingProcessed = true;
+    }
+  }
+
   const sourceScore = getImageQualityScore(sourceUrl);
   const score =
     showingProcessed
@@ -108,7 +116,7 @@ export function resolveProductDisplayImage(
     sourceUrl,
     score,
     fillClass: showingProcessed
-      ? "product-float-asset--processed-fill"
+      ? "product-float-asset--fill-balanced"
       : getImageFillClass(sourceUrl),
     needsMatte: false,
     knockoutWhite: false,
@@ -125,6 +133,12 @@ export function passesCardDisplayGate(product: Product): boolean {
   if (isDeadImageUrl(product.image) && !plan.isProcessed) return false;
   const resolved = resolveProductDisplayImage(product);
   if (!resolved) return false;
+  if (
+    !resolved.isProcessed &&
+    isCatalogImageUrlDead(resolved.displaySrc)
+  ) {
+    return false;
+  }
   return resolved.score >= CARD_DISPLAY_MIN_SCORE;
 }
 
