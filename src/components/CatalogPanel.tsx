@@ -157,6 +157,11 @@ export default function CatalogPanel({
     : filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
   useEffect(() => {
+    if (!serverCatalog || page === serverCatalog.page) return;
+    router.refresh();
+  }, [page, serverCatalog, router]);
+
+  useEffect(() => {
     if (prevPageRef.current === currentPage) return;
     prevPageRef.current = currentPage;
 
@@ -171,6 +176,9 @@ export default function CatalogPanel({
   function navigate(url: string) {
     startTransition(() => {
       router.push(url, { scroll: false });
+      if (serverCatalog) {
+        router.refresh();
+      }
     });
   }
 
@@ -388,6 +396,7 @@ export default function CatalogPanel({
           totalPages={totalPages}
           basePath={basePath}
           searchParams={params}
+          onNavigate={serverCatalog ? navigate : undefined}
         />
       </div>
     </section>

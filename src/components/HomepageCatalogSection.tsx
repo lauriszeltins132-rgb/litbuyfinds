@@ -1,3 +1,4 @@
+import { connection } from "next/server";
 import { getBrandsFromProducts } from "@/lib/brands";
 import { filterProducts } from "@/lib/filters";
 import { getAllProducts, getCategories } from "@/lib/products";
@@ -12,6 +13,7 @@ type HomepageCatalogSectionProps = {
 export default async function HomepageCatalogSection({
   searchParams,
 }: HomepageCatalogSectionProps) {
+  await connection();
   const params = await searchParams;
   const savedOnly = params.saved === "1";
   const allProducts = getAllProducts();
