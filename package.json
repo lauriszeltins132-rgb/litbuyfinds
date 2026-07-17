@@ -19,6 +19,7 @@
     "generate:bright-bg": "node scripts/generate-bright-bg-manifest.mjs",
     "process:images": "node scripts/generate-bright-bg-manifest.mjs && node scripts/process-catalog-images.mjs",
     "flatten:images": "node scripts/flatten-processed-images.mjs",
+    "repair:processed-backgrounds": "node scripts/repair-processed-backgrounds.mjs",
     "process:remaining": "node scripts/process-remaining-images.mjs",
     "generate:banner": "node scripts/generate-promo-banner.mjs",
     "generate:image-quality": "node scripts/generate-image-quality-manifest.mjs",

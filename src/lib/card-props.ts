@@ -5,7 +5,7 @@ import type { ProductBadgeKind } from "./types";
 type RawCardEntry = {
   src: string;
   fb?: string[];
-  fc?: "s" | "b" | "d";
+  fc?: "s" | "b" | "d" | "p";
   pm?: 0 | 1;
   b?: ProductBadgeKind[];
   bt?: ProductBadgeKind[];
@@ -18,10 +18,11 @@ type CardPropsManifest = {
 
 const manifest = cardPropsData as CardPropsManifest;
 
-const FILL_CLASSES: Record<"s" | "b" | "d", string> = {
+const FILL_CLASSES: Record<"s" | "b" | "d" | "p", string> = {
   s: "product-float-asset--fill-sparse",
   b: "product-float-asset--fill-balanced",
   d: "product-float-asset--fill-dense",
+  p: "product-float-asset--processed-fill",
 };
 
 const FRESHNESS_LABELS: Record<"r" | "w" | "i", string> = {

@@ -51,3 +51,79 @@ export function replaceMattePixels(data, matte = CATALOG_MATTE, tolerance = 10) 
   }
   return out;
 }
+
+/** Studio sweep / catalog whites that read brighter than the page matte. */
+export function isStudioBackgroundPixel(r, g, b, a = 255) {
+  if (a < 24) return true;
+  if (isMattePixel(r, g, b, 14)) return true;
+
+  const min = Math.min(r, g, b);
+  const max = Math.max(r, g, b);
+  if (max - min > 34) return false;
+  if (min >= 246) return true;
+  if (min >= 228 && max <= 252) return true;
+  return false;
+}
+
+/**
+ * Flood-fill studio whites from image edges onto the catalog matte.
+ * Keeps product pixels while removing leftover white boxes in cutouts.
+ */
+export function flattenStudioBackgroundToMatte(
+  data,
+  width,
+  height,
+  matte = CATALOG_MATTE
+) {
+  const out = Buffer.from(data);
+  const total = width * height;
+  const visited = new Uint8Array(total);
+  const queue = new Int32Array(total);
+  let head = 0;
+  let tail = 0;
+
+  const tryPush = (x, y) => {
+    if (x < 0 || y < 0 || x >= width || y >= height) return;
+    const idx = y * width + x;
+    if (visited[idx]) return;
+    const i = idx * 4;
+    if (!isStudioBackgroundPixel(out[i], out[i + 1], out[i + 2], out[i + 3])) {
+      return;
+    }
+    visited[idx] = 1;
+    queue[tail++] = idx;
+  };
+
+  for (let x = 0; x < width; x++) {
+    tryPush(x, 0);
+    tryPush(x, height - 1);
+  }
+  for (let y = 0; y < height; y++) {
+    tryPush(0, y);
+    tryPush(width - 1, y);
+  }
+
+  while (head < tail) {
+    const idx = queue[head++];
+    const i = idx * 4;
+    out[i] = matte.r;
+    out[i + 1] = matte.g;
+    out[i + 2] = matte.b;
+    out[i + 3] = 255;
+
+    const x = idx % width;
+    const y = (idx - x) / width;
+    tryPush(x - 1, y);
+    tryPush(x + 1, y);
+    tryPush(x, y - 1);
+    tryPush(x, y + 1);
+  }
+
+  return out;
+}
+
+/** Normalize legacy mattes and leftover studio whites to the active catalog matte. */
+export function normalizeProcessedBackground(data, width, height, matte = CATALOG_MATTE) {
+  const rematted = replaceMattePixels(data, matte, 14);
+  return flattenStudioBackgroundToMatte(rematted, width, height, matte);
+}

@@ -12,7 +12,17 @@ import {
 } from "./processed-images";
 import type { Product } from "./types";
 
-function isNaturalProductPhoto(
+function usableFallbackUrl(url: string | null | undefined): url is string {
+  if (!url) return false;
+  if (url.startsWith("/processed/")) return true;
+  return !isDeadImageUrl(url);
+}
+
+/**
+ * Prefer processed cutouts for studio catalog shots.
+ * Keep originals only for QC / carpet / screenshot references.
+ */
+function shouldKeepOriginalPhoto(
   sourceUrl: string,
   details: ReturnType<typeof getImageQualityDetails>
 ): boolean {
@@ -27,7 +37,8 @@ function isNaturalProductPhoto(
   if (getCatalogBrightBgTreatment(sourceUrl) === "none") {
     const whiteBlank = details.whiteBlankRatio ?? 0;
     const border = details.borderBrightRatio ?? 0;
-    if (whiteBlank < 0.03 && border < 0.05) return true;
+    const fill = details.contentFillRatio ?? 0.5;
+    if (whiteBlank < 0.03 && border < 0.05 && fill >= 0.42) return true;
   }
   return false;
 }
@@ -69,7 +80,7 @@ export function resolveProductDisplayImage(
   const useProcessed =
     Boolean(processedPath) &&
     !cutoutUnsafe &&
-    !isNaturalProductPhoto(sourceUrl, details);
+    !shouldKeepOriginalPhoto(sourceUrl, details);
 
   const displaySrc = useProcessed && processedPath ? processedPath : sourceUrl;
   const showingProcessed = displaySrc.startsWith("/processed/");
@@ -79,7 +90,10 @@ export function resolveProductDisplayImage(
       [
         showingProcessed ? sourceUrl : processedPath && !cutoutUnsafe ? processedPath : null,
         ...plan.fallbacks,
-      ].filter((url): url is string => Boolean(url) && url !== displaySrc)
+      ].filter(
+        (url): url is string =>
+          Boolean(url) && url !== displaySrc && usableFallbackUrl(url)
+      )
     ),
   ];
 
@@ -94,7 +108,7 @@ export function resolveProductDisplayImage(
     sourceUrl,
     score,
     fillClass: showingProcessed
-      ? "product-float-asset--fill-balanced"
+      ? "product-float-asset--processed-fill"
       : getImageFillClass(sourceUrl),
     needsMatte: false,
     knockoutWhite: false,

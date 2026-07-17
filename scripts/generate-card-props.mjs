@@ -61,7 +61,7 @@ function isProcessedCutoutBlocked(sourceUrl, processedPath, details) {
   return false;
 }
 
-function isNaturalProductPhoto(sourceUrl, details) {
+function shouldKeepOriginalPhoto(sourceUrl, details) {
   if (!details) return false;
   if (details.issues?.includes("dead_url") && (details.score ?? 0) <= 0) {
     return false;
@@ -73,9 +73,16 @@ function isNaturalProductPhoto(sourceUrl, details) {
   if (brightBgUrls[sourceUrl] === "none") {
     const whiteBlank = details.whiteBlankRatio ?? 0;
     const border = details.borderBrightRatio ?? 0;
-    if (whiteBlank < 0.03 && border < 0.05) return true;
+    const fill = details.contentFillRatio ?? 0.5;
+    if (whiteBlank < 0.03 && border < 0.05 && fill >= 0.42) return true;
   }
   return false;
+}
+
+function usableFallbackUrl(url) {
+  if (!url) return false;
+  if (url.startsWith("/processed/")) return true;
+  return !deadUrls.has(url);
 }
 
 function resolveImage(sourceUrl) {
@@ -89,11 +96,13 @@ function resolveImage(sourceUrl) {
   const useProcessed =
     processedPath &&
     !cutoutUnsafe &&
-    !isNaturalProductPhoto(sourceUrl, details);
+    !shouldKeepOriginalPhoto(sourceUrl, details);
 
   const fill = details?.contentFillRatio;
   let fc = "b";
-  if (fill != null) {
+  if (useProcessed) {
+    fc = "p";
+  } else if (fill != null) {
     if (fill < 0.32) fc = "s";
     else if (fill >= 0.52) fc = "d";
   }
@@ -102,14 +111,14 @@ function resolveImage(sourceUrl) {
   const fallbacks = [];
   if (useProcessed) {
     displaySrc = processedPath;
-    fallbacks.push(sourceUrl);
+    if (usableFallbackUrl(sourceUrl)) fallbacks.push(sourceUrl);
   } else if (processedPath && !cutoutUnsafe) {
     fallbacks.push(processedPath);
   }
 
   return {
     src: displaySrc,
-    fb: fallbacks,
+    fb: fallbacks.filter(usableFallbackUrl),
     fc,
     pm: displaySrc.startsWith("/processed/") ? 1 : 0,
   };

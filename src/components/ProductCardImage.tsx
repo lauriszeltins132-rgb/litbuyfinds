@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { trackBrokenImage } from "@/lib/analytics-events";
+import { isDeadImageUrl } from "@/lib/dead-images";
 import { validateImageUrl } from "@/lib/image-url";
 import ImageUnavailablePlaceholder from "./ImageUnavailablePlaceholder";
 
@@ -41,6 +42,7 @@ export default function ProductCardImage({
     const unique: string[] = [];
     for (const url of ordered) {
       if (seen.has(url)) continue;
+      if (!url.startsWith("/processed/") && isDeadImageUrl(url)) continue;
       seen.add(url);
       unique.push(url);
     }
