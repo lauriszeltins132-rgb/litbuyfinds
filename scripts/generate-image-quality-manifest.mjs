@@ -13,6 +13,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const productsPath = path.join(__dirname, "../src/data/products.json");
 const mapPath = path.join(__dirname, "../src/data/processed-image-map.json");
 const skipPath = path.join(__dirname, "../src/data/skip-cutout-urls.json");
+const damagedPath = path.join(__dirname, "../src/data/damaged-processed-manifest.json");
 const deadPath = path.join(__dirname, "../src/data/dead-image-urls.json");
 const processedDir = path.join(__dirname, "../public/processed");
 const outPath = path.join(__dirname, "../src/data/image-quality-manifest.json");
@@ -225,6 +226,9 @@ async function main() {
   const skip = new Set(
     (JSON.parse(fs.readFileSync(skipPath, "utf8")).urls ?? [])
   );
+  const damagedManifest = JSON.parse(fs.readFileSync(damagedPath, "utf8"));
+  const damagedUrlSet = new Set(damagedManifest.urls ?? []);
+  const hollowUrlSet = new Set(damagedManifest.hollowUrls ?? []);
   const dead = new Set(
     (JSON.parse(fs.readFileSync(deadPath, "utf8")).urls ?? [])
   );
@@ -246,9 +250,12 @@ async function main() {
 
     if (fs.existsSync(file)) {
       const processed = await scoreProcessedFile(sharp, file);
-      if (skip.has(url)) {
+      if (skip.has(url) || damagedUrlSet.has(url)) {
         processed.score = Math.max(0, processed.score - 20);
         processed.issues.push("damaged_cutout");
+      }
+      if (hollowUrlSet.has(url)) {
+        processed.issues.push("hollow_cutout");
       }
       scores[url] = processed;
     } else {
