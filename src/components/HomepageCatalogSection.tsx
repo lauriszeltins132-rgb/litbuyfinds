@@ -1,18 +1,12 @@
-import { getBrandsFromProducts } from "@/lib/brands";
-import { getAllProducts, getCategories } from "@/lib/products";
 import CatalogPanel from "@/components/CatalogPanel";
+import BrowseCatalogPrefetch from "@/components/BrowseCatalogPrefetch";
+import { BROWSE_CATALOG_URL } from "@/lib/browse-catalog";
 
-export default async function HomepageCatalogSection() {
-  const allProducts = getAllProducts();
-  const categories = getCategories();
-  const brands = getBrandsFromProducts(allProducts);
-
+export default function HomepageCatalogSection() {
   return (
-    <CatalogPanel
-      products={allProducts}
-      categories={categories}
-      brands={brands}
-      basePath="/"
-    />
+    <>
+      <BrowseCatalogPrefetch />
+      <CatalogPanel basePath="/" catalogSource={BROWSE_CATALOG_URL} />
+    </>
   );
 }

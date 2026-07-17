@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { memo, useMemo, useState } from "react";
 import type { Product } from "@/lib/types";
 import { getDisplayProductName, getDisplayBrand } from "@/lib/product-validation";
 import { formatProductPrice, getPriceStatus } from "@/lib/pricing";
@@ -47,7 +47,7 @@ async function shareProduct(product: Product, title: string) {
   await navigator.clipboard.writeText(url);
 }
 
-export default function ProductCard({
+function ProductCard({
   product,
   onOpen,
   compact = false,
@@ -220,3 +220,5 @@ export default function ProductCard({
     </article>
   );
 }
+
+export default memo(ProductCard);

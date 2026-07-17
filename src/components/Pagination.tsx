@@ -1,31 +1,15 @@
 "use client";
 
-import Link from "next/link";
-
 type PaginationProps = {
   currentPage: number;
   totalPages: number;
-  basePath: string;
-  searchParams: Record<string, string>;
+  onPageChange: (page: number) => void;
 };
-
-function buildHref(
-  basePath: string,
-  searchParams: Record<string, string>,
-  page: number
-) {
-  const params = new URLSearchParams(searchParams);
-  if (page <= 1) params.delete("page");
-  else params.set("page", String(page));
-  const query = params.toString();
-  return query ? `${basePath}?${query}` : basePath;
-}
 
 export default function Pagination({
   currentPage,
   totalPages,
-  basePath,
-  searchParams,
+  onPageChange,
 }: PaginationProps) {
   if (totalPages <= 1) return null;
 
@@ -40,13 +24,13 @@ export default function Pagination({
       {prevDisabled ? (
         <span className="control-btn pointer-events-none opacity-40">Previous</span>
       ) : (
-        <Link
-          href={buildHref(basePath, searchParams, currentPage - 1)}
-          scroll={false}
+        <button
+          type="button"
+          onClick={() => onPageChange(currentPage - 1)}
           className="control-btn"
         >
           Previous
-        </Link>
+        </button>
       )}
 
       <span className="rounded-full border border-border bg-surface px-4 py-2 text-sm font-semibold text-muted">
@@ -57,13 +41,13 @@ export default function Pagination({
       {nextDisabled ? (
         <span className="control-btn pointer-events-none opacity-40">Next</span>
       ) : (
-        <Link
-          href={buildHref(basePath, searchParams, currentPage + 1)}
-          scroll={false}
+        <button
+          type="button"
+          onClick={() => onPageChange(currentPage + 1)}
           className="control-btn"
         >
           Next
-        </Link>
+        </button>
       )}
     </nav>
   );
