@@ -5,8 +5,14 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { BrandInfo } from "@/lib/brands";
 import type { CategoryInfo, Product } from "@/lib/types";
+import { buildPageHref } from "@/lib/catalog-url";
 import { filterProducts } from "@/lib/filters";
 import { POPULAR_SEARCHES } from "@/lib/constants";
+import {
+  getBrowseCatalogCache,
+  loadBrowseCatalog,
+  type BrowseCatalogPayload,
+} from "@/lib/browse-catalog";
 import { useWishlist } from "@/context/WishlistContext";
 import ControlButton from "@/components/ui/ControlButton";
 import Select from "@/components/ui/Select";
@@ -29,16 +35,12 @@ const SORT_OPTIONS = [
 ];
 
 type CatalogPanelProps = {
-  products: Product[];
-  categories: CategoryInfo[];
-  brands: BrandInfo[];
+  products?: Product[];
+  categories?: CategoryInfo[];
+  brands?: BrandInfo[];
   basePath?: string;
-  /** Server-pre-filtered catalog slice (homepage performance). */
-  serverCatalog?: {
-    totalCount: number;
-    page: number;
-    pageSize: number;
-  };
+  /** Fetch the full browse catalog client-side (homepage performance). */
+  catalogSource?: string;
 };
 
 function currentParams(searchParams: URLSearchParams) {
@@ -83,11 +85,11 @@ function SearchIcon() {
 }
 
 export default function CatalogPanel({
-  products,
-  categories,
-  brands,
+  products: productsProp = [],
+  categories: categoriesProp = [],
+  brands: brandsProp = [],
   basePath = "/",
-  serverCatalog,
+  catalogSource,
 }: CatalogPanelProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -95,6 +97,18 @@ export default function CatalogPanel({
   const [isPending, startTransition] = useTransition();
   const params = currentParams(searchParams);
   const { wishlist } = useWishlist();
+  const [catalogData, setCatalogData] = useState<BrowseCatalogPayload | null>(
+    catalogSource ? getBrowseCatalogCache() : null
+  );
+  const [catalogLoading, setCatalogLoading] = useState(
+    Boolean(catalogSource && !getBrowseCatalogCache())
+  );
+
+  const products = catalogSource ? (catalogData?.products ?? []) : productsProp;
+  const categories = catalogSource
+    ? (catalogData?.categories ?? [])
+    : categoriesProp;
+  const brands = catalogSource ? (catalogData?.brands ?? []) : brandsProp;
 
   const search = searchParams.get("q") ?? "";
   const brand = searchParams.get("brand") ?? "";
@@ -103,7 +117,13 @@ export default function CatalogPanel({
   const sort = searchParams.get("sort") ?? "featured";
   const qcOnly = searchParams.get("qc") === "1";
   const savedOnly = searchParams.get("saved") === "1";
-  const page = Math.max(1, parseInt(searchParams.get("page") ?? "1", 10) || 1);
+  const urlPage = Math.max(
+    1,
+    parseInt(searchParams.get("page") ?? "1", 10) || 1
+  );
+  const filterKey = `${search}|${brand}|${minPrice}|${maxPrice}|${sort}|${qcOnly}|${savedOnly}`;
+  const [page, setPage] = useState(urlPage);
+  const prevFilterKeyRef = useRef(filterKey);
   const prevPageRef = useRef(page);
 
   const [query, setQuery] = useState(search);
@@ -115,26 +135,69 @@ export default function CatalogPanel({
     setQuery(search);
   }, [search]);
 
+  useEffect(() => {
+    if (!catalogSource) return;
+    if (getBrowseCatalogCache()) {
+      setCatalogData(getBrowseCatalogCache());
+      setCatalogLoading(false);
+      return;
+    }
+
+    let cancelled = false;
+    loadBrowseCatalog(catalogSource)
+      .then((payload) => {
+        if (cancelled) return;
+        setCatalogData(payload);
+        setCatalogLoading(false);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setCatalogLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [catalogSource]);
+
+  useEffect(() => {
+    if (prevFilterKeyRef.current !== filterKey) {
+      prevFilterKeyRef.current = filterKey;
+      setPage(1);
+    }
+  }, [filterKey]);
+
+  useEffect(() => {
+    const onPopState = () => {
+      const nextPage = Math.max(
+        1,
+        parseInt(new URLSearchParams(window.location.search).get("page") ?? "1", 10) ||
+          1
+      );
+      setPage(nextPage);
+    };
+
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
+
   const savedIds = useMemo(() => new Set(wishlist), [wishlist]);
 
   const filtered = useMemo(
     () =>
-      serverCatalog
-        ? products
-        : filterProducts(products, {
-            search,
-            category: "",
-            brand,
-            minPrice,
-            maxPrice,
-            sort,
-            qcOnly,
-            savedOnly,
-            savedIds,
-          }),
+      filterProducts(products, {
+        search,
+        category: "",
+        brand,
+        minPrice,
+        maxPrice,
+        sort,
+        qcOnly,
+        savedOnly,
+        savedIds,
+      }),
     [
       products,
-      serverCatalog,
       search,
       brand,
       minPrice,
@@ -146,26 +209,34 @@ export default function CatalogPanel({
     ]
   );
 
-  const totalPages = serverCatalog
-    ? Math.max(1, Math.ceil(serverCatalog.totalCount / serverCatalog.pageSize))
-    : Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-  const currentPage = serverCatalog
-    ? Math.min(page, totalPages)
-    : Math.min(page, totalPages);
-  const paginated = serverCatalog
-    ? filtered
-    : filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const paginated = filtered.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE
+  );
 
-  useEffect(() => {
-    if (prevPageRef.current === currentPage) return;
-    prevPageRef.current = currentPage;
+  function goToPage(nextPage: number) {
+    const clamped = Math.max(1, Math.min(nextPage, totalPages));
+    startTransition(() => {
+      setPage(clamped);
+    });
 
-    const grid = document.getElementById("catalog-product-grid");
-    if (!grid) return;
+    const nextUrl = buildPageHref(basePath, params, clamped);
+    window.history.pushState({ catalogPage: clamped }, "", nextUrl);
+
+    if (prevPageRef.current === clamped) return;
+    prevPageRef.current = clamped;
 
     requestAnimationFrame(() => {
-      grid.scrollIntoView({ behavior: "smooth", block: "start" });
+      document
+        .getElementById("catalog-product-grid")
+        ?.scrollIntoView({ behavior: "auto", block: "start" });
     });
+  }
+
+  useEffect(() => {
+    prevPageRef.current = currentPage;
   }, [currentPage]);
 
   function navigate(url: string) {
@@ -345,7 +416,9 @@ export default function CatalogPanel({
         </div>
 
         <div id="catalog-product-grid" className="catalog-product-grid mt-6 scroll-mt-24">
-          {isPending ? (
+          {catalogLoading ? (
+            <ProductGridSkeleton count={12} />
+          ) : isPending ? (
             <ProductGridSkeleton count={8} />
           ) : paginated.length > 0 ? (
             <ProductGrid products={paginated} />
@@ -386,8 +459,7 @@ export default function CatalogPanel({
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
-          basePath={basePath}
-          searchParams={params}
+          onPageChange={goToPage}
         />
       </div>
     </section>
