@@ -104,6 +104,7 @@ export default function ProductCard({
             fallbacks={cardProps?.fallbacks}
             fillClass={cardProps?.fillClass}
             isProcessedCutout={cardProps?.isProcessedCutout}
+            knockoutWhite={cardProps?.knockoutWhite}
             alt={imageAlt}
             productHref={productHref}
             priority={priority}

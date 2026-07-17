@@ -1,4 +1,6 @@
+import { getCatalogBrightBgTreatment } from "./bright-bg";
 import { isCatalogImageUrlDead, isDeadImageUrl } from "./dead-images";
+import skipCutoutData from "@/data/skip-cutout-urls.json";
 import {
   CARD_DISPLAY_MIN_SCORE,
   getImageFillClass,
@@ -12,6 +14,10 @@ import {
 } from "./processed-images";
 import type { Product } from "./types";
 
+const skipCutoutUrls = new Set(
+  (skipCutoutData as { urls?: string[] }).urls ?? []
+);
+
 function usableFallbackUrl(url: string | null | undefined): url is string {
   if (!url) return false;
   if (url.startsWith("/processed/")) return true;
@@ -19,14 +25,15 @@ function usableFallbackUrl(url: string | null | undefined): url is string {
 }
 
 /**
- * Prefer processed cutouts for studio catalog shots.
- * Keep originals only for QC / carpet / screenshot references.
+ * Prefer full-resolution catalog originals when the CDN photo is clean.
+ * Aggressive cutouts often destroy fabric detail on studio-white shots.
  */
 function shouldKeepOriginalPhoto(
   sourceUrl: string,
   details: ReturnType<typeof getImageQualityDetails>
 ): boolean {
   if (isCatalogImageUrlDead(sourceUrl)) return false;
+  if (skipCutoutUrls.has(sourceUrl)) return true;
   if (!details) return false;
   if (details.issues?.includes("dead_url") && (details.score ?? 0) <= 0) {
     return false;
@@ -35,8 +42,35 @@ function shouldKeepOriginalPhoto(
   if (details.isTransparent && (details.transparencyRatio ?? 0) > 0.15) {
     return true;
   }
-  // Studio originals read as harsh white boxes on the light stone wallpaper.
+
+  const whiteBlank = details.whiteBlankRatio ?? 0;
+  const border = details.borderBrightRatio ?? 0;
+  const fill = details.contentFillRatio ?? 0.5;
+  const score = details.score ?? 0;
+
+  if (getCatalogBrightBgTreatment(sourceUrl) === "none") {
+    if (whiteBlank < 0.08 && border < 0.12 && fill >= 0.35) return true;
+  }
+  if (fill >= 0.4 && whiteBlank < 0.14 && border < 0.18 && score >= 52) {
+    return true;
+  }
   return false;
+}
+
+function shouldKnockoutWhite(
+  sourceUrl: string,
+  details: ReturnType<typeof getImageQualityDetails>,
+  showingProcessed: boolean
+): boolean {
+  if (showingProcessed || isCatalogImageUrlDead(sourceUrl)) return false;
+  if (details?.isScreenshotStyle) return false;
+  if (
+    details?.isTransparent &&
+    (details.transparencyRatio ?? 0) > 0.15
+  ) {
+    return false;
+  }
+  return true;
 }
 
 export type ResolvedProductImage = {
@@ -113,11 +147,9 @@ export function resolveProductDisplayImage(
     displaySrc,
     sourceUrl,
     score,
-    fillClass: showingProcessed
-      ? "product-float-asset--processed-fill"
-      : getImageFillClass(sourceUrl),
+    fillClass: getImageFillClass(sourceUrl),
     needsMatte: false,
-    knockoutWhite: false,
+    knockoutWhite: shouldKnockoutWhite(sourceUrl, details, showingProcessed),
     enhance: false,
     darkBoost: false,
     isProcessed: showingProcessed,

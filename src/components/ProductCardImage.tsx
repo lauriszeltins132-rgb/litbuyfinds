@@ -16,6 +16,7 @@ type ProductCardImageProps = {
   fallbacks?: string[];
   fillClass?: string;
   isProcessedCutout?: boolean;
+  knockoutWhite?: boolean;
 };
 
 export default function ProductCardImage({
@@ -28,6 +29,7 @@ export default function ProductCardImage({
   fallbacks = [],
   fillClass = "product-float-asset--fill-balanced",
   isProcessedCutout = false,
+  knockoutWhite = false,
 }: ProductCardImageProps) {
   const validation = useMemo(() => validateImageUrl(src), [src]);
 
@@ -139,6 +141,7 @@ export default function ProductCardImage({
     "product-float-asset",
     fillClass,
     showingProcessed ? "product-float-asset--processed-cutout" : "",
+    knockoutWhite ? "product-float-asset--knockout-white" : "",
     loaded ? "product-float-asset--ready" : "product-float-asset--loading",
   ]
     .filter(Boolean)
