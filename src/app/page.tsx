@@ -25,11 +25,7 @@ export const metadata: Metadata = buildHomepageMetadata();
 /** Refresh discovery rails hourly so rotation and dedupe stay current. */
 export const revalidate = 3600;
 
-export default async function HomePage({
-  searchParams,
-}: {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-}) {
+export default async function HomePage() {
   const categories = getCategories();
   const rails = getHomepageRails(12);
 
@@ -123,7 +119,7 @@ export default async function HomePage({
           </section>
         }
       >
-        <HomepageCatalogSection searchParams={searchParams} />
+        <HomepageCatalogSection />
       </Suspense>
     </>
   );

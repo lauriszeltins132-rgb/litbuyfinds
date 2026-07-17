@@ -1,6 +1,5 @@
 "use client";
 
-import type { ReactNode } from "react";
 import Link from "next/link";
 
 type PaginationProps = {
@@ -8,8 +7,6 @@ type PaginationProps = {
   totalPages: number;
   basePath: string;
   searchParams: Record<string, string>;
-  /** Use programmatic navigation (with server refresh) instead of plain links. */
-  onNavigate?: (url: string) => void;
 };
 
 function buildHref(
@@ -24,48 +21,11 @@ function buildHref(
   return query ? `${basePath}?${query}` : basePath;
 }
 
-function PaginationControl({
-  href,
-  disabled,
-  onNavigate,
-  children,
-}: {
-  href: string;
-  disabled?: boolean;
-  onNavigate?: (url: string) => void;
-  children: ReactNode;
-}) {
-  if (disabled) {
-    return (
-      <span className="control-btn pointer-events-none opacity-40">{children}</span>
-    );
-  }
-
-  if (onNavigate) {
-    return (
-      <button
-        type="button"
-        onClick={() => onNavigate(href)}
-        className="control-btn"
-      >
-        {children}
-      </button>
-    );
-  }
-
-  return (
-    <Link href={href} scroll={false} className="control-btn">
-      {children}
-    </Link>
-  );
-}
-
 export default function Pagination({
   currentPage,
   totalPages,
   basePath,
   searchParams,
-  onNavigate,
 }: PaginationProps) {
   if (totalPages <= 1) return null;
 
@@ -77,26 +37,34 @@ export default function Pagination({
       aria-label="Pagination"
       className="catalog-pagination mt-8 flex items-center justify-center gap-3"
     >
-      <PaginationControl
-        href={buildHref(basePath, searchParams, currentPage - 1)}
-        disabled={prevDisabled}
-        onNavigate={onNavigate}
-      >
-        Previous
-      </PaginationControl>
+      {prevDisabled ? (
+        <span className="control-btn pointer-events-none opacity-40">Previous</span>
+      ) : (
+        <Link
+          href={buildHref(basePath, searchParams, currentPage - 1)}
+          scroll={false}
+          className="control-btn"
+        >
+          Previous
+        </Link>
+      )}
 
       <span className="rounded-full border border-border bg-surface px-4 py-2 text-sm font-semibold text-muted">
         Page <span className="text-foreground">{currentPage}</span> of{" "}
         <span className="text-foreground">{totalPages}</span>
       </span>
 
-      <PaginationControl
-        href={buildHref(basePath, searchParams, currentPage + 1)}
-        disabled={nextDisabled}
-        onNavigate={onNavigate}
-      >
-        Next
-      </PaginationControl>
+      {nextDisabled ? (
+        <span className="control-btn pointer-events-none opacity-40">Next</span>
+      ) : (
+        <Link
+          href={buildHref(basePath, searchParams, currentPage + 1)}
+          scroll={false}
+          className="control-btn"
+        >
+          Next
+        </Link>
+      )}
     </nav>
   );
 }
