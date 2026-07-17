@@ -89,7 +89,7 @@ export default function ProductCard({
 
   return (
     <article
-      className={`product-card group flex flex-col overflow-hidden rounded-xl border border-border/80 bg-background shadow-sm active:scale-[0.99] sm:rounded-2xl ${
+      className={`product-card group flex flex-col overflow-hidden rounded-xl border border-border/80 bg-panel shadow-sm active:scale-[0.99] sm:rounded-2xl ${
         compact ? "text-[12px] sm:text-[13px]" : ""
       }`}
     >
@@ -104,7 +104,6 @@ export default function ProductCard({
             fallbacks={cardProps?.fallbacks}
             fillClass={cardProps?.fillClass}
             isProcessedCutout={cardProps?.isProcessedCutout}
-            knockoutWhite={cardProps?.knockoutWhite}
             alt={imageAlt}
             productHref={productHref}
             priority={priority}

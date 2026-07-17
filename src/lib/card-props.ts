@@ -62,7 +62,7 @@ export function getCardDisplayProps(productId: string): CardDisplayProps | null 
     fallbacks: raw.fb ?? [],
     fillClass: FILL_CLASSES[raw.fc ?? "b"],
     isProcessedCutout,
-    knockoutWhite: raw.kw === 1,
+    knockoutWhite: false,
     badges,
     badgesTrending,
     freshness: raw.f ? FRESHNESS_LABELS[raw.f] : null,

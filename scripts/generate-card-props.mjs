@@ -35,11 +35,6 @@ const deadUrls = new Set(deadManifest.urls ?? []);
 const processedUrls = processedMap.urls ?? {};
 const qualityUrls = qualityManifest.urls ?? {};
 const brightBgUrls = brightBgManifest.urls ?? {};
-const skipCutoutUrls = new Set(
-  (JSON.parse(
-    fs.readFileSync(path.join(dataDir, "skip-cutout-urls.json"), "utf8")
-  ).urls ?? [])
-);
 
 const FORCE_ORIGINAL = new Set([
   "https://i.postimg.cc/zzMm64y4/1.png",
@@ -67,9 +62,8 @@ function isProcessedCutoutBlocked(sourceUrl, processedPath, details) {
   return false;
 }
 
-function shouldKeepOriginalPhoto(sourceUrl, details) {
+function isNaturalProductPhoto(sourceUrl, details) {
   if (deadUrls.has(sourceUrl)) return false;
-  if (skipCutoutUrls.has(sourceUrl)) return true;
   if (!details) return false;
   if (details.issues?.includes("dead_url") && (details.score ?? 0) <= 0) {
     return false;
@@ -78,28 +72,12 @@ function shouldKeepOriginalPhoto(sourceUrl, details) {
   if (details.isTransparent && (details.transparencyRatio ?? 0) > 0.15) {
     return true;
   }
-
-  const whiteBlank = details.whiteBlankRatio ?? 0;
-  const border = details.borderBrightRatio ?? 0;
-  const fill = details.contentFillRatio ?? 0.5;
-  const score = details.score ?? 0;
-
   if (brightBgUrls[sourceUrl] === "none") {
-    if (whiteBlank < 0.08 && border < 0.12 && fill >= 0.35) return true;
-  }
-  if (fill >= 0.4 && whiteBlank < 0.14 && border < 0.18 && score >= 52) {
-    return true;
+    const whiteBlank = details.whiteBlankRatio ?? 0;
+    const border = details.borderBrightRatio ?? 0;
+    if (whiteBlank < 0.03 && border < 0.05) return true;
   }
   return false;
-}
-
-function shouldKnockoutWhite(sourceUrl, details, showingProcessed) {
-  if (showingProcessed || deadUrls.has(sourceUrl)) return false;
-  if (details?.isScreenshotStyle) return false;
-  if (details?.isTransparent && (details.transparencyRatio ?? 0) > 0.15) {
-    return false;
-  }
-  return true;
 }
 
 function isProcessedAssetDamaged(processedPath) {
@@ -125,7 +103,7 @@ function resolveImage(sourceUrl) {
     processedPath &&
     (sourceIsDead
       ? !isProcessedAssetDamaged(processedPath)
-      : !cutoutUnsafe && !shouldKeepOriginalPhoto(sourceUrl, details));
+      : !cutoutUnsafe && !isNaturalProductPhoto(sourceUrl, details));
 
   const fill = details?.contentFillRatio;
   let fc = "b";
@@ -159,7 +137,6 @@ function resolveImage(sourceUrl) {
     fb: fallbacks.filter(usableFallbackUrl),
     fc,
     pm: showingProcessed ? 1 : 0,
-    kw: shouldKnockoutWhite(sourceUrl, details, showingProcessed) ? 1 : 0,
   };
 }
 
