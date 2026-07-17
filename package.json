@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "node scripts/generate-dataset-meta.mjs && next dev",
-    "build": "node scripts/generate-dataset-meta.mjs && node scripts/generate-search-index.mjs && node scripts/generate-site-navigation.mjs && node scripts/generate-damaged-processed-manifest.mjs && node scripts/generate-image-quality-manifest.mjs && node scripts/generate-card-props.mjs && node scripts/audit-prices.mjs --ci && node scripts/generate-seo-list-pages.mjs && node scripts/generate-seo-landing-pages.mjs && node scripts/generate-seo-landing-config-pages.mjs && node scripts/generate-best-of-pages.mjs && node scripts/generate-favicons.mjs && next build",
+    "build": "node scripts/generate-dataset-meta.mjs && node scripts/generate-search-index.mjs && node scripts/generate-site-navigation.mjs && node scripts/generate-dead-image-manifest.mjs && node scripts/generate-damaged-processed-manifest.mjs && node scripts/generate-image-quality-manifest.mjs && node scripts/generate-card-props.mjs && node scripts/audit-prices.mjs --ci && node scripts/generate-seo-list-pages.mjs && node scripts/generate-seo-landing-pages.mjs && node scripts/generate-seo-landing-config-pages.mjs && node scripts/generate-best-of-pages.mjs && node scripts/generate-favicons.mjs && next build",
     "generate:favicons": "node scripts/generate-favicons.mjs",
     "start": "next start",
     "lint": "next lint",

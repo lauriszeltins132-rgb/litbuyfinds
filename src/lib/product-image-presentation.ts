@@ -19,8 +19,11 @@ function usableFallbackUrl(url: string | null | undefined): url is string {
   return !isDeadImageUrl(url);
 }
 
-/** QC / carpet / transparent shots — keep the catalog original. */
-function isNaturalProductPhoto(
+/**
+ * Prefer full-resolution CDN originals when cutout quality fails.
+ * Studio originals on white card panels beat damaged processed cutouts.
+ */
+function shouldPreferOriginalPhoto(
   sourceUrl: string,
   details: ReturnType<typeof getImageQualityDetails>
 ): boolean {
@@ -33,6 +36,9 @@ function isNaturalProductPhoto(
   if (details.isTransparent && (details.transparencyRatio ?? 0) > 0.15) {
     return true;
   }
+  if (details.issues?.includes("bad_cutout")) return true;
+  if (details.issues?.includes("hollow_cutout")) return true;
+  if (details.issues?.includes("damaged_cutout")) return true;
   if (getCatalogBrightBgTreatment(sourceUrl) === "none") {
     const whiteBlank = details.whiteBlankRatio ?? 0;
     const border = details.borderBrightRatio ?? 0;
@@ -80,7 +86,7 @@ export function resolveProductDisplayImage(
     Boolean(processedPath) &&
     (sourceIsDead
       ? !isProcessedAssetDamaged(processedPath)
-      : !cutoutUnsafe && !isNaturalProductPhoto(sourceUrl, details));
+      : !cutoutUnsafe && !shouldPreferOriginalPhoto(sourceUrl, details));
 
   let displaySrc = useProcessed && processedPath ? processedPath : sourceUrl;
   let showingProcessed = displaySrc.startsWith("/processed/");

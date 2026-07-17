@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 /**
- * Flags processed matte PNGs with damaged cutouts (>4% near-black pixels)
- * and hollow white-garment cutouts (logo-only on white field).
- * Run: node scripts/generate-damaged-processed-manifest.mjs
+ * Flags processed cutouts that should not be shown — pixel damage, hollow
+ * white garments, thresholded/speckled artifacts. Alive CDN originals are
+ * preferred when a cutout fails quality checks.
  */
 import fs from "fs";
 import path from "path";
 import sharp from "sharp";
 import { fileURLToPath } from "url";
 import { isMattePixel } from "./lib/catalog-matte.mjs";
-import { isHollowWhiteGarmentCutout } from "./lib/hollow-cutout.mjs";
+import { scoreProcessedCutout } from "./lib/cutout-quality.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
@@ -20,7 +20,7 @@ const outPath = path.join(root, "src/data/damaged-processed-manifest.json");
 const EDGE_BAND = 3;
 const WHITE_FRINGE_LIMIT = 0.06;
 
-function analyzeProcessedPng(data, width, height) {
+function analyzePixelDamage(data, width, height) {
   const total = width * height;
   const edgePixels = Math.max(1, 2 * EDGE_BAND * (width + height) - 4 * EDGE_BAND * EDGE_BAND);
 
@@ -59,12 +59,13 @@ function analyzeProcessedPng(data, width, height) {
     edgeMatteRatio >= 0.75 ||
     (edgeDarkRatio >= 0.88 && blackRatio >= 0.04);
 
-  const pixelDamaged =
-    whiteFringeRatio >= WHITE_FRINGE_LIMIT ||
-    (blackRatio > 0.04 && !intentionalMatte);
-  const hollow = isHollowWhiteGarmentCutout(data, width, height);
-
-  return { pixelDamaged, hollow, whiteFringeRatio, blackRatio };
+  return {
+    pixelDamaged:
+      whiteFringeRatio >= WHITE_FRINGE_LIMIT ||
+      (blackRatio > 0.04 && !intentionalMatte),
+    whiteFringeRatio,
+    blackRatio,
+  };
 }
 
 async function main() {
@@ -75,8 +76,9 @@ async function main() {
 
   const damagedUrls = new Set();
   const damagedPaths = new Set();
-  const hollowUrls = new Set();
-  let hollowSkippedDead = 0;
+  const badCutoutUrls = new Set();
+  const reasonCounts = {};
+  let badWithAliveOriginal = 0;
 
   for (const [url, relPath] of Object.entries(map.urls ?? {})) {
     const filePath = path.join(root, "public", relPath);
@@ -86,23 +88,28 @@ async function main() {
       const { data, info } = await sharp(filePath)
         .raw()
         .toBuffer({ resolveWithObject: true });
-      const total = info.width * info.height;
-      if (total === 0) continue;
+      if (info.width * info.height === 0) continue;
 
-      const metrics = analyzeProcessedPng(data, info.width, info.height);
+      const pixel = analyzePixelDamage(data, info.width, info.height);
+      const quality = scoreProcessedCutout(data, info.width, info.height);
 
-      if (metrics.pixelDamaged) {
+      if (pixel.pixelDamaged) {
         damagedUrls.add(url);
         damagedPaths.add(relPath);
+        for (const reason of ["pixel_damage"]) {
+          reasonCounts[reason] = (reasonCounts[reason] ?? 0) + 1;
+        }
       }
 
-      if (metrics.hollow) {
-        hollowUrls.add(url);
-        if (deadUrls.has(url)) {
-          hollowSkippedDead++;
-          continue;
+      if (quality.bad) {
+        badCutoutUrls.add(url);
+        for (const reason of quality.reasons ?? []) {
+          reasonCounts[reason] = (reasonCounts[reason] ?? 0) + 1;
         }
-        damagedUrls.add(url);
+        if (!deadUrls.has(url)) {
+          damagedUrls.add(url);
+          badWithAliveOriginal++;
+        }
       }
     } catch {
       damagedUrls.add(url);
@@ -113,16 +120,17 @@ async function main() {
   const payload = {
     generatedAt: new Date().toISOString(),
     count: damagedUrls.size,
-    hollowCount: hollowUrls.size,
-    hollowWithAliveOriginal: hollowUrls.size - hollowSkippedDead,
+    badCutoutCount: badCutoutUrls.size,
+    badWithAliveOriginal,
+    reasonCounts,
     urls: [...damagedUrls],
     paths: [...damagedPaths],
-    hollowUrls: [...hollowUrls],
+    badCutoutUrls: [...badCutoutUrls],
   };
 
   fs.writeFileSync(outPath, JSON.stringify(payload, null, 2));
   console.log(
-    `Damaged processed manifest: ${payload.count} blocked URLs (${payload.hollowWithAliveOriginal} hollow w/ original) → ${outPath}`
+    `Damaged processed manifest: ${payload.count} blocked URLs (${badWithAliveOriginal} bad cutouts w/ live CDN) → ${outPath}`
   );
 }
 

@@ -228,7 +228,7 @@ async function main() {
   );
   const damagedManifest = JSON.parse(fs.readFileSync(damagedPath, "utf8"));
   const damagedUrlSet = new Set(damagedManifest.urls ?? []);
-  const hollowUrlSet = new Set(damagedManifest.hollowUrls ?? []);
+  const badCutoutUrlSet = new Set(damagedManifest.badCutoutUrls ?? []);
   const dead = new Set(
     (JSON.parse(fs.readFileSync(deadPath, "utf8")).urls ?? [])
   );
@@ -254,8 +254,8 @@ async function main() {
         processed.score = Math.max(0, processed.score - 20);
         processed.issues.push("damaged_cutout");
       }
-      if (hollowUrlSet.has(url)) {
-        processed.issues.push("hollow_cutout");
+      if (badCutoutUrlSet.has(url)) {
+        processed.issues.push("bad_cutout");
       }
       scores[url] = processed;
     } else {
