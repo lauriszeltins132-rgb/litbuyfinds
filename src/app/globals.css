@@ -356,6 +356,11 @@ body::before {
   box-shadow: none;
 }
 
+.catalog-product-grid .product-grid > article {
+  content-visibility: auto;
+  contain-intrinsic-size: 320px 420px;
+}
+
 .catalog-product-grid {
   scroll-margin-top: 6rem;
 }
@@ -631,8 +636,17 @@ body::before {
   animation: card-in 0.45s ease-out both;
 }
 
+.product-grid--instant > article {
+  animation: none;
+}
+
 .product-grid > article:nth-child(2n) { animation-delay: 0.04s; }
 .product-grid > article:nth-child(3n) { animation-delay: 0.08s; }
+
+.product-grid--instant > article:nth-child(2n),
+.product-grid--instant > article:nth-child(3n) {
+  animation-delay: 0s;
+}
 
 .accent-line {
   height: 2px;

@@ -60,10 +60,28 @@ function getPopularRankMap(): Map<string, number> {
   return popularRankMap;
 }
 
+export function hasActiveCatalogFilters(filters: FilterState): boolean {
+  return Boolean(
+    filters.search.trim() ||
+      filters.category ||
+      filters.brand ||
+      filters.minPrice ||
+      filters.maxPrice ||
+      filters.qcOnly ||
+      filters.savedOnly ||
+      filters.sort !== "featured"
+  );
+}
+
 export function filterProducts(
   products: Product[],
   filters: FilterState
 ): Product[] {
+  const needsSavedFilter = Boolean(filters.savedOnly && filters.savedIds);
+  if (!hasActiveCatalogFilters(filters) && !needsSavedFilter) {
+    return products;
+  }
+
   const search = filters.search.trim();
   const min = filters.minPrice ? parseFloat(filters.minPrice) : null;
   const max = filters.maxPrice ? parseFloat(filters.maxPrice) : null;

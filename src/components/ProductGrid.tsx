@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { useState } from "react";
+import { memo, useCallback, useState } from "react";
 import type { Product } from "@/lib/types";
 import ProductCard from "./ProductCard";
 
@@ -11,13 +11,18 @@ const ProductModal = dynamic(() => import("./ProductModal"), { ssr: false });
 type ProductGridProps = {
   products: Product[];
   emptyMessage?: string;
+  /** Skip enter animation — use for catalog paging. */
+  instant?: boolean;
 };
 
-export default function ProductGrid({
+export default memo(function ProductGrid({
   products,
   emptyMessage = "No products match your filters.",
+  instant = false,
 }: ProductGridProps) {
   const [selected, setSelected] = useState<Product | null>(null);
+  const handleOpen = useCallback((product: Product) => setSelected(product), []);
+  const handleClose = useCallback(() => setSelected(null), []);
 
   if (products.length === 0) {
     return (
@@ -62,19 +67,23 @@ export default function ProductGrid({
 
   return (
     <>
-      <div className="product-grid grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6">
+      <div
+        className={`product-grid grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6${
+          instant ? " product-grid--instant" : ""
+        }`}
+      >
         {products.map((product, index) => (
           <ProductCard
             key={product.id}
             product={product}
-            onOpen={setSelected}
+            onOpen={handleOpen}
             showTrendingScore
             priority={index < 4}
           />
         ))}
       </div>
 
-      <ProductModal product={selected} onClose={() => setSelected(null)} />
+      <ProductModal product={selected} onClose={handleClose} />
     </>
   );
-}
+});
