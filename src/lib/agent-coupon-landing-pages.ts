@@ -54,13 +54,23 @@ const EXTRA_LITBUY_VARIANTS: CouponPageVariant[] = [
 ];
 
 function buildVariants(agent: SeoAgentDefinition): CouponPageVariant[] {
+  const isLitBuy = agent.slug === "litbuy";
+
   return [
     {
       slug: `${agent.slug}-coupons`,
-      titleSuffix: `${agent.name} Coupons 2026 | Best Promo & Discount Codes`,
-      metaDescription: `Get the latest verified ${agent.name} coupons, promo codes, and discounts for 2026. Click below to claim your savings instantly.`,
-      intro: `Save money on verified ${agent.name} finds and spreadsheet products using the latest ${agent.name} coupons. Click below to claim your discount.`,
-      keywordLine: `Looking for ${agent.name} coupons, ${agent.name} coupon codes, or ${agent.name} savings? Start here.`,
+      titleSuffix: isLitBuy
+        ? "LitBuy Coupons 2026 – Verified Promo & Discount Codes"
+        : `${agent.name} Coupons 2026 | Best Promo & Discount Codes`,
+      metaDescription: isLitBuy
+        ? "Get the latest verified LitBuy coupons, promo codes, and discounts for 2026. Click below to claim instantly."
+        : `Get the latest verified ${agent.name} coupons, promo codes, and discounts for 2026. Click below to claim your savings instantly.`,
+      intro: isLitBuy
+        ? "Claim verified LitBuy coupons for shipping savings, spreadsheet finds, and QC-approved products. Click below to redeem your LitBuy promo code."
+        : `Save money on verified ${agent.name} finds and spreadsheet products using the latest ${agent.name} coupons. Click below to claim your discount.`,
+      keywordLine: isLitBuy
+        ? "Looking for LitBuy coupons, LitBuy promo codes, LitBuy discount codes, or LitBuy voucher deals? Claim the verified offer below."
+        : `Looking for ${agent.name} coupons, ${agent.name} coupon codes, or ${agent.name} savings? Start here.`,
     },
     {
       slug: `best-${agent.slug}-coupons`,
@@ -102,6 +112,7 @@ function buildPageConfig(
   siblingVariants: CouponPageVariant[]
 ): AgentCouponLandingConfig {
   const path = `/${variant.slug}`;
+  const isLitBuy = agent.slug === "litbuy";
 
   return {
     slug: variant.slug,
@@ -109,7 +120,7 @@ function buildPageConfig(
     agent,
     title: variant.titleSuffix,
     metaDescription: variant.metaDescription,
-    h1: `${agent.name} Coupons & Promo Codes`,
+    h1: isLitBuy ? "LitBuy Coupons & Promo Codes" : `${agent.name} Coupons & Promo Codes`,
     intro: variant.intro,
     keywordLine: variant.keywordLine,
     ctaLabel: `Claim ${agent.name} Coupon ✅`,

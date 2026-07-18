@@ -1,8 +1,10 @@
 import Link from "next/link";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import LitBuySeoHubLinks from "@/components/LitBuySeoHubLinks";
 import ProductGrid from "@/components/ProductGrid";
 import SchemaScript from "@/components/SchemaScript";
 import type { SeoLandingConfig } from "@/lib/seo-landing-pages";
+import { LITBUY_SPREADSHEET_CTA } from "@/lib/litbuy-seo-hub";
 import RelatedPages from "@/components/RelatedPages";
 import { buildCollectionPageSchema, buildFaqSchema } from "@/lib/schema";
 
@@ -36,13 +38,26 @@ export default function SeoLandingLayout({ config }: SeoLandingLayoutProps) {
 
       <article className="px-4 py-8 sm:px-6">
         <div className="mx-auto max-w-3xl">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
-            {config.badge}
-          </p>
-          <h1 className="mt-3 text-3xl font-black tracking-tight sm:text-4xl">
-            {config.h1}
-          </h1>
-          <p className="mt-5 text-base leading-relaxed text-muted">{config.intro}</p>
+          <section className="litbuy-seo-hub-card rounded-3xl border border-accent/25 p-6 sm:p-8">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
+              {config.badge}
+            </p>
+            <h1 className="mt-3 text-3xl font-black tracking-tight sm:text-4xl">
+              {config.h1}
+            </h1>
+            <p className="mt-5 text-base leading-relaxed text-[#d4d2ca]">{config.intro}</p>
+
+            {config.slug === "litbuy-spreadsheet" ? (
+              <div className="mt-8">
+                <Link
+                  href={LITBUY_SPREADSHEET_CTA.href}
+                  className="litbuy-seo-cta litbuy-seo-cta--accent inline-flex min-h-[2.75rem] items-center px-6 py-3 text-sm font-black"
+                >
+                  {LITBUY_SPREADSHEET_CTA.label}
+                </Link>
+              </div>
+            ) : null}
+          </section>
 
           <div className="mt-10 space-y-10">
             {config.sections.map((section) => {
@@ -117,6 +132,8 @@ export default function SeoLandingLayout({ config }: SeoLandingLayoutProps) {
               </ul>
             </section>
           ) : null}
+
+          <LitBuySeoHubLinks excludeHref={config.path} />
         </div>
       </article>
 

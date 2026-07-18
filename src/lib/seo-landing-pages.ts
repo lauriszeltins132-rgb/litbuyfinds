@@ -49,10 +49,10 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
     path: "/litbuy-spreadsheet",
     title: getSpreadsheetMetadataCopy().title,
     metaDescription: getSpreadsheetMetadataCopy().description,
-    badge: "LitBuy resource",
-    h1: "LitBuy spreadsheet guide",
+    badge: "LitBuy Spreadsheet",
+    h1: "LitBuy Spreadsheet – Top Verified Items",
     intro:
-      "LitBuy spreadsheets are how many buyers first discover products — rows of Weidian and Taobao links, prices, and QC notes. LitBuy Finds turns that same catalog into searchable pages with photos, filters, and verified agent links so you spend less time hunting and more time buying.",
+      "Access the LitBuy spreadsheet universe as a searchable catalog — over 3,000 verified QC items with photos, prices, filters, and LitBuy agent links. Browse daily spreadsheet finds without scrolling endless rows.",
     sections: [
       {
         heading: "What a LitBuy spreadsheet contains",

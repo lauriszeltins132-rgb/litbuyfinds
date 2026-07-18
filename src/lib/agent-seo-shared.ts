@@ -90,6 +90,7 @@ export function buildTelegramFooterLinks(currentSlug: string) {
     links.push(
       { href: paths.discord, label: `${agent.name} Discord` },
       { href: paths.coupons, label: `${agent.name} coupons` },
+      { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
       { href: paths.finds, label: `${agent.name} finds` }
     );
   }
@@ -114,6 +115,7 @@ export function buildDiscordFooterLinks(currentSlug: string) {
     links.push(
       { href: paths.telegram, label: `${agent.name} Telegram` },
       { href: paths.coupons, label: `${agent.name} coupons` },
+      { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
       { href: paths.finds, label: `${agent.name} finds` }
     );
   }
@@ -130,6 +132,7 @@ export function buildCouponFooterLinks(
 
   return [
     { href: "/", label: "LitBuy Finds homepage" },
+    { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
     { href: "/recently-added", label: "New finds" },
     { href: paths.finds, label: `${agent.name} finds` },
     { href: paths.telegram, label: `${agent.name} Telegram` },
