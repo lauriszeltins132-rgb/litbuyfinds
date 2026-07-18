@@ -9,7 +9,9 @@ import HomepageCategories from "@/components/HomepageCategories";
 import HomepageCollections from "@/components/HomepageCollections";
 import HomepageConversion from "@/components/HomepageConversion";
 import HomepageFaq from "@/components/HomepageFaq";
+import HomepageFeaturedFinds from "@/components/HomepageFeaturedFinds";
 import HomepageInternalLinks from "@/components/HomepageInternalLinks";
+import HomepageSeoHubFooter from "@/components/HomepageSeoHubFooter";
 import HomepageSeoContent from "@/components/HomepageSeoContent";
 import RecentlyViewedRail from "@/components/RecentlyViewedRail";
 import ProductGridSkeleton from "@/components/ProductGridSkeleton";
@@ -41,6 +43,15 @@ export default async function HomePage() {
       />
 
       <DiscoveryHero />
+
+      <HomepageFeaturedFinds
+        products={[...rails.editorsPicks, ...rails.popularToday]
+          .filter(
+            (product, index, list) =>
+              list.findIndex((entry) => entry.id === product.id) === index
+          )
+          .slice(0, 6)}
+      />
 
       <DiscoveryRail
         title="Trending Today"
@@ -92,6 +103,7 @@ export default async function HomePage() {
 
       <HomepageConversion />
       <HomepageInternalLinks />
+      <HomepageSeoHubFooter />
       <HomepageSeoContent />
       <HomepageFaq />
 

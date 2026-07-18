@@ -1,9 +1,11 @@
 import Link from "next/link";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import LitBuySeoHubLinks from "@/components/LitBuySeoHubLinks";
 import SchemaScript from "@/components/SchemaScript";
 import {
   buildBreadcrumbSchema,
   buildTelegramAgentWebPageSchema,
+  buildTelegramSearchWebPageSchema,
 } from "@/lib/schema";
 import type { TelegramAgentLandingConfig } from "@/lib/telegram-agent-landing-pages";
 
@@ -22,13 +24,22 @@ export default function TelegramAgentLandingLayout({
   return (
     <>
       <SchemaScript
-        data={buildTelegramAgentWebPageSchema({
-          name: config.h1,
-          description: config.metaDescription,
-          path: config.path,
-          agentName: config.agentName,
-          telegramUrl: config.telegramUrl,
-        })}
+        data={
+          config.useSearchActionSchema
+            ? buildTelegramSearchWebPageSchema({
+                name: config.h1,
+                description: config.metaDescription,
+                path: config.path,
+                telegramUrl: config.telegramUrl,
+              })
+            : buildTelegramAgentWebPageSchema({
+                name: config.h1,
+                description: config.metaDescription,
+                path: config.path,
+                agentName: config.agentName,
+                telegramUrl: config.telegramUrl,
+              })
+        }
       />
       <SchemaScript
         data={buildBreadcrumbSchema(breadcrumbItems, config.path)}
@@ -38,7 +49,7 @@ export default function TelegramAgentLandingLayout({
 
       <article className="px-4 py-8 sm:px-6">
         <div className="mx-auto max-w-2xl">
-          <section className="overflow-hidden rounded-3xl border border-accent/20 bg-gradient-to-br from-accent/10 via-surface to-background p-6 text-center sm:p-10">
+          <section className="litbuy-seo-hub-card overflow-hidden rounded-3xl border border-accent/25 p-6 text-center sm:p-10">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
               {config.agentName} · Telegram
             </p>
@@ -64,7 +75,9 @@ export default function TelegramAgentLandingLayout({
             </div>
           </section>
 
-          <footer className="mt-10 border-t border-border pt-8">
+          <LitBuySeoHubLinks excludeHref={config.path} />
+
+          <footer className="mt-10 border-t border-border/60 pt-8">
             <p className="text-sm font-bold uppercase tracking-[0.16em] text-muted">
               More Telegram guides
             </p>

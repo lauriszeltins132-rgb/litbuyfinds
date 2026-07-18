@@ -215,6 +215,46 @@ export function buildTelegramAgentWebPageSchema({
   });
 }
 
+export function buildTelegramSearchWebPageSchema({
+  name,
+  description,
+  path,
+  telegramUrl,
+}: {
+  name: string;
+  description: string;
+  path: string;
+  telegramUrl: string;
+}) {
+  const url = `${SITE_URL}${path}`;
+  const searchAction = {
+    "@type": "SearchAction",
+    target: {
+      "@type": "EntryPoint",
+      urlTemplate: telegramUrl,
+    },
+    "query-input": "required name=search_term_string",
+  };
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name,
+    description,
+    url,
+    mainEntityOfPage: { "@id": url },
+    isPartOf: {
+      "@type": "WebSite",
+      "@id": WEBSITE_SCHEMA_ID,
+      name: SITE_NAME,
+      url: SITE_URL,
+      potentialAction: searchAction,
+    },
+    potentialAction: searchAction,
+    publisher: { "@id": ORGANIZATION_SCHEMA_ID },
+  };
+}
+
 export function buildDiscordAgentWebPageSchema({
   name,
   description,

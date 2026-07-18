@@ -29,22 +29,37 @@ function buildAgentConfig(
 ): DiscordAgentLandingConfig {
   const agentLower = agentName.toLowerCase();
   const agentSlug = slug.replace("discord-", "");
+  const isLitBuy = agentSlug === "litbuy";
 
   return {
     slug,
     path: `/${slug}`,
     agentName,
-    title: `${agentName} Discord | Join ${agentName} Server`,
-    metaDescription: `Join the official ${agentName} Discord to get verified finds, QC photos, spreadsheet updates, and community discussion.`,
+    title: isLitBuy
+      ? "LitBuy Discord – Community & QC Updates"
+      : `${agentName} Discord | Join ${agentName} Server`,
+    metaDescription: isLitBuy
+      ? "Join the official LitBuy Discord server for verified finds, spreadsheet updates, and community discussions."
+      : `Join the official ${agentName} Discord to get verified finds, QC photos, spreadsheet updates, and community discussion.`,
     h1: `Join ${agentName} Discord`,
-    intro: `Stay updated with ${agentName} verified finds, QC photos, spreadsheet links, and chat with the community. Click below to join the official Discord.`,
+    intro: isLitBuy
+      ? "Chat with the LitBuy community, get spreadsheet updates, QC feedback, and verified find alerts on Discord. Join the official LitBuy Discord server below."
+      : `Stay updated with ${agentName} verified finds, QC photos, spreadsheet links, and chat with the community. Click below to join the official Discord.`,
     ctaLabel: `Join ${agentName} Discord ✅`,
     discordUrl: SOCIAL_LINKS.discord,
-    keywords: [
-      `discord ${agentLower}`,
-      `${agentLower} discord`,
-      `${agentLower} finds discord`,
-    ],
+    keywords: isLitBuy
+      ? [
+          "litbuy discord",
+          "discord litbuy",
+          "litbuy finds discord",
+          "litbuy spreadsheet discord",
+          "litbuy community discord",
+        ]
+      : [
+          `discord ${agentLower}`,
+          `${agentLower} discord`,
+          `${agentLower} finds discord`,
+        ],
     footerLinks: buildDiscordFooterLinks(agentSlug),
   };
 }

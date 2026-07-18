@@ -116,6 +116,67 @@ body::before {
   box-shadow: 0 4px 20px rgba(26, 29, 22, 0.05);
 }
 
+.litbuy-seo-hub-hero {
+  background:
+    radial-gradient(circle at 20% 0%, rgba(124, 181, 24, 0.14), transparent 42%),
+    linear-gradient(180deg, #0c0d10 0%, #12140f 55%, #0a0b0e 100%);
+}
+
+.litbuy-seo-hub-card {
+  background:
+    radial-gradient(circle at 80% 0%, rgba(124, 181, 24, 0.12), transparent 38%),
+    linear-gradient(145deg, #10120e 0%, #0c0d10 55%, #11140f 100%);
+  color: #f2f1ed;
+}
+
+.litbuy-seo-hub-card .text-muted,
+.litbuy-seo-hub-links .text-muted {
+  color: #b8b6ae;
+}
+
+.litbuy-seo-cta {
+  border-radius: 9999px;
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.litbuy-seo-cta--accent {
+  background: var(--color-accent);
+  color: #0c0d10;
+}
+
+.litbuy-seo-cta--accent:hover {
+  transform: translateY(-1px);
+  background: var(--color-accent-hover);
+}
+
+.litbuy-seo-cta--outline {
+  border: 1px solid rgba(124, 181, 24, 0.35);
+  background: rgba(124, 181, 24, 0.08);
+  color: #f2f1ed;
+}
+
+.litbuy-seo-cta--outline:hover {
+  border-color: rgba(124, 181, 24, 0.55);
+  background: rgba(124, 181, 24, 0.14);
+}
+
+.litbuy-seo-hub-footer .litbuy-seo-hub-links h2 {
+  color: #c8e86a;
+}
+
+.litbuy-seo-hub-footer .litbuy-seo-hub-links a {
+  border-color: rgba(124, 181, 24, 0.25);
+  color: #e8e6df;
+}
+
+.litbuy-seo-hub-footer .litbuy-seo-hub-links a:hover {
+  border-color: rgba(124, 181, 24, 0.55);
+  color: #c8e86a;
+}
+
 .chip-active {
   border-color: rgba(124, 181, 24, 0.4);
   background: rgba(124, 181, 24, 0.1);

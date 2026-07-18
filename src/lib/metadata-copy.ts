@@ -43,11 +43,11 @@ export function truncateMetaTitle(text: string, max = TITLE_MAX): string {
 export function getHomepageMetadataCopy() {
   return {
     title: truncateMetaTitle(
-      `LitBuy Finds 2026 | ${META_SCALE} QC Photos, Spreadsheet Finds & Best Reps`,
+      "LitBuy Finds – Verified QC Items & Top Spreadsheet Finds",
       72
     ),
     description: truncateMetaDescription(
-      `Browse ${META_SCALE} LitBuy finds with QC photos, spreadsheet-style product discovery, Weidian and Taobao links, sneaker finds, fashion finds, coupons and multi-agent support.`
+      `Browse ${META_SCALE} LitBuy Finds with QC photos, LitBuy spreadsheet picks, Telegram alerts, Discord community, coupons, Weidian and Taobao links, and multi-agent support.`
     ),
   };
 }
@@ -101,11 +101,9 @@ export function getCollectionsHubMetadataCopy() {
 
 export function getSpreadsheetMetadataCopy() {
   return {
-    title: truncateMetaTitle(
-      `LitBuy Spreadsheet | ${META_SCALE} QC Photos & Agent Links`
-    ),
+    title: truncateMetaTitle("LitBuy Spreadsheet – Daily QC Item Finds"),
     description: truncateMetaDescription(
-      `Searchable LitBuy spreadsheet with ${META_SCALE} curated finds, QC photos, ${META_VALUE_STACK}. ${META_AGENTS}.`
+      "Access the LitBuy spreadsheet with over 3000 verified QC items. Stay updated with daily finds from LitBuy, searchable photos, and agent links."
     ),
   };
 }
