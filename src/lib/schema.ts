@@ -192,3 +192,42 @@ export function buildWebPageSchema({
       : {}),
   };
 }
+
+export function buildTelegramJoinWebPageSchema({
+  name,
+  description,
+  path,
+  joinUrl,
+  joinLabel,
+}: {
+  name: string;
+  description: string;
+  path: string;
+  joinUrl: string;
+  joinLabel: string;
+}) {
+  const url = `${SITE_URL}${path}`;
+  const joinAction = {
+    "@type": "JoinAction",
+    target: joinUrl,
+    name: joinLabel,
+  };
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name,
+    description,
+    url,
+    mainEntityOfPage: { "@id": url },
+    isPartOf: {
+      "@type": "WebSite",
+      "@id": WEBSITE_SCHEMA_ID,
+      name: SITE_NAME,
+      url: SITE_URL,
+      potentialAction: joinAction,
+    },
+    potentialAction: joinAction,
+    publisher: { "@id": ORGANIZATION_SCHEMA_ID },
+  };
+}

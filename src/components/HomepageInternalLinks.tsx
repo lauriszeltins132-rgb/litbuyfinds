@@ -2,6 +2,15 @@ import Link from "next/link";
 
 const SECTIONS = [
   {
+    title: "LitBuy community",
+    links: [
+      { href: "/litbuy-telegram", label: "LitBuy Telegram" },
+      { href: "/telegram", label: "Telegram finds hub" },
+      { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
+      { href: "/litbuy-coupons", label: "LitBuy Coupons" },
+    ],
+  },
+  {
     title: "Top collections",
     links: [
       { href: "/collections/best-nike-finds", label: "Best Nike finds" },

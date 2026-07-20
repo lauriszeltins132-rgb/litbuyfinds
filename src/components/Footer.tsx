@@ -167,6 +167,11 @@ export default function Footer() {
                 </li>
               ))}
               <li>
+                <Link href="/litbuy-telegram" className="text-foreground/75 transition hover:text-accent">
+                  LitBuy Telegram
+                </Link>
+              </li>
+              <li>
                 <Link href="/telegram" className="text-foreground/75 transition hover:text-accent">
                   All Telegram guides
                 </Link>

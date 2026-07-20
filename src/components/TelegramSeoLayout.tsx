@@ -11,6 +11,7 @@ import {
 import {
   buildBreadcrumbSchema,
   buildFaqSchema,
+  buildTelegramJoinWebPageSchema,
   buildWebPageSchema,
 } from "@/lib/schema";
 import type { TelegramSeoPageConfig } from "@/lib/telegram-seo-pages";
@@ -41,15 +42,26 @@ export default function TelegramSeoLayout({ config }: TelegramSeoLayoutProps) {
     { label: "Telegram", href: "/telegram" },
     { label: config.h1 },
   ];
+  const joinLabel = config.joinCtaLabel ?? `Join ${TELEGRAM_CHANNEL_NAME} on Telegram`;
 
   return (
     <>
       <SchemaScript
-        data={buildWebPageSchema({
-          name: config.h1,
-          description: config.metaDescription,
-          path: config.path,
-        })}
+        data={
+          config.useJoinSchema
+            ? buildTelegramJoinWebPageSchema({
+                name: config.h1,
+                description: config.metaDescription,
+                path: config.path,
+                joinUrl: SOCIAL_LINKS.telegram,
+                joinLabel,
+              })
+            : buildWebPageSchema({
+                name: config.h1,
+                description: config.metaDescription,
+                path: config.path,
+              })
+        }
       />
       <SchemaScript
         data={buildBreadcrumbSchema(breadcrumbItems, config.path)}
@@ -73,12 +85,19 @@ export default function TelegramSeoLayout({ config }: TelegramSeoLayoutProps) {
             <p className="mt-4 text-base leading-relaxed text-muted">
               {config.intro}
             </p>
+            {config.slug === "litbuy-telegram" ? (
+              <p className="mt-3 text-sm leading-relaxed text-muted/90">
+                Searching <strong className="text-foreground">litbuy telegram</strong> or{" "}
+                <strong className="text-foreground">telegram litbuy</strong>? You are on the
+                official join page for the LitBuy Telegram community.
+              </p>
+            ) : null}
             <div className="mt-6 flex flex-wrap items-center gap-3">
               <CommunityButton
                 platform="telegram"
                 variant="cta"
                 location={`telegram_seo_${config.slug}`}
-                label={`Join ${TELEGRAM_CHANNEL_NAME} on Telegram`}
+                label={joinLabel}
               />
               <span className="text-xs font-bold uppercase tracking-[0.12em] text-muted">
                 {TELEGRAM_HANDLE} · {TELEGRAM_MEMBER_LABEL}
@@ -189,7 +208,7 @@ export default function TelegramSeoLayout({ config }: TelegramSeoLayoutProps) {
                 platform="telegram"
                 variant="cta"
                 location={`telegram_seo_cta_${config.slug}`}
-                label="View daily finds on Telegram"
+                label={config.joinCtaLabel ?? "View daily finds on Telegram"}
               />
               <a
                 href={SOCIAL_LINKS.telegram}

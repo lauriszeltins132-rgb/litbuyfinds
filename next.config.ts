@@ -84,6 +84,7 @@ const nextConfig: NextConfig = {
         destination: "/litbuy-spreadsheet",
         permanent: true,
       },
+      { source: "/telegram-litbuy", destination: "/litbuy-telegram", permanent: true },
       { source: "/collections/best-nike-litbuy-finds", destination: "/collections/best-nike-finds", permanent: true },
       { source: "/collections/best-jordan-litbuy-finds", destination: "/collections/best-jordan-finds", permanent: true },
       { source: "/collections/best-moncler-litbuy-finds", destination: "/collections/best-moncler-finds", permanent: true },

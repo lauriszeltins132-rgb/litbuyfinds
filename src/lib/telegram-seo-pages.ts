@@ -22,6 +22,10 @@ export type TelegramSeoPageConfig = {
   sections: StaticPageSection[];
   faqs: { question: string; answer: string }[];
   relatedLinks: { href: string; label: string }[];
+  /** Primary CTA button label (defaults to channel name). */
+  joinCtaLabel?: string;
+  /** Use JoinAction structured data for community join pages. */
+  useJoinSchema?: boolean;
 };
 
 export const TELEGRAM_SUPPORTED_AGENTS = [
@@ -184,6 +188,115 @@ function buildAgentPage(
   };
 }
 
+const LITBUY_TELEGRAM_PAGE: TelegramSeoPageConfig = {
+  slug: "litbuy-telegram",
+  path: "/litbuy-telegram",
+  title: "LitBuy Telegram – Daily QC Photos & Spreadsheet Finds",
+  metaDescription:
+    "LitBuy Telegram is the official RN Finds channel for daily QC photos, spreadsheet updates, and verified LitBuy finds. Join LitBuy Telegram free — 40,000+ members.",
+  badge: "LitBuy · Telegram",
+  h1: "LitBuy Telegram",
+  intro: `LitBuy Telegram is the fastest way to get daily QC photos, spreadsheet row updates, and verified LitBuy agent links without refreshing static files. ${TELEGRAM_CHANNEL_NAME} (${TELEGRAM_HANDLE}) is the official LitBuy Telegram community with ${TELEGRAM_MEMBER_LABEL} sharing sneaker drops, fashion finds, and QC references every day. Tap below to join LitBuy Telegram.`,
+  focus: "agent",
+  focusAgent: "LitBuy",
+  joinCtaLabel: "Join LitBuy Telegram",
+  useJoinSchema: true,
+  keywords: [
+    "litbuy telegram",
+    "join litbuy telegram",
+    "litbuy telegram group",
+    "litbuy telegram channel",
+    "litbuy telegram finds",
+    "litbuy spreadsheet telegram",
+    "litbuy qc telegram",
+    "litbuy telegram community",
+    "official litbuy telegram",
+    "telegram litbuy",
+    "litbuy finds telegram",
+    "litbuy agent telegram",
+    "daily litbuy telegram",
+  ],
+  sections: [
+    {
+      heading: "What is LitBuy Telegram?",
+      paragraphs: [
+        `LitBuy Telegram is the RN Finds channel on Telegram where buyers share LitBuy spreadsheet rows, QC warehouse photos, sneaker finds, and verified LitBuy agent product links. If you searched "litbuy telegram", this page is the official join link for the community feed.`,
+        `Unlike a static spreadsheet, LitBuy Telegram pushes new rows and QC updates in real time so you can react before popular batches sell out.`,
+      ],
+      links: [
+        { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet catalog" },
+        { href: "/litbuy-finds", label: "Browse LitBuy finds" },
+      ],
+    },
+    {
+      heading: "Why buyers join LitBuy Telegram",
+      paragraphs: [
+        "LitBuy Telegram is useful when you want community QC context, haul discussion, and same-day spreadsheet drops. Members post LitBuy links with notes on batch quality, sizing, and price changes that are hard to capture in a Google Sheet alone.",
+        "The channel also covers other agents occasionally, but LitBuy links are highlighted because they are verified on LitBuy Finds — making LitBuy Telegram the best feed for LitBuy-first buyers.",
+      ],
+      links: [
+        { href: "/qc-finds-telegram", label: "QC finds on Telegram" },
+        { href: "/spreadsheet-telegram", label: "Spreadsheet Telegram guide" },
+      ],
+    },
+    {
+      heading: "LitBuy Telegram vs LitBuy Finds website",
+      paragraphs: [
+        "LitBuy Finds is the searchable product catalog on this website — filters, photos, categories, and stable product URLs. LitBuy Telegram is the live community layer where members post fresh rows before they are indexed here.",
+        "Use LitBuy Telegram to discover heat quickly, then save products on LitBuy Finds when you want a permanent link to revisit before checkout.",
+      ],
+      links: [
+        { href: "/", label: "LitBuy Finds homepage" },
+        { href: "/trending", label: "Trending catalog" },
+      ],
+    },
+    {
+      heading: "How to join LitBuy Telegram",
+      paragraphs: [
+        `Tap the join button above to open ${TELEGRAM_HANDLE} in Telegram. LitBuy Telegram is free to join. Enable notifications if you want instant alerts when new LitBuy spreadsheet rows or QC photo threads are posted.`,
+        "After joining, search product names on LitBuy Finds to open verified buy links and compare related picks in the catalog.",
+      ],
+      links: [{ href: SOCIAL_LINKS.telegram, label: "Open LitBuy Telegram" }],
+    },
+    ...agentSections(
+      "LitBuy",
+      "/litbuy-finds",
+      [
+        "LitBuy Telegram searches usually mean buyers want spreadsheet-style LitBuy finds with live discussion — not just a static invite link.",
+      ]
+    ).slice(1),
+  ],
+  faqs: [
+    {
+      question: "What is LitBuy Telegram?",
+      answer: `LitBuy Telegram is ${TELEGRAM_CHANNEL_NAME} (${TELEGRAM_HANDLE}) — a ${TELEGRAM_MEMBER_LABEL} Telegram channel for daily LitBuy finds, QC photos, spreadsheet updates, and verified agent links.`,
+    },
+    {
+      question: "How do I join LitBuy Telegram?",
+      answer:
+        "Tap the Join LitBuy Telegram button on this page. It opens the official RN Finds channel in the Telegram app. Joining is free and takes a few seconds.",
+    },
+    {
+      question: "Is LitBuy Telegram official?",
+      answer: `Yes. This page links to the official ${TELEGRAM_CHANNEL_NAME} channel (${TELEGRAM_HANDLE}) used by the LitBuy Finds community for daily updates.`,
+    },
+    {
+      question: "Is LitBuy Telegram the same as LitBuy Finds?",
+      answer:
+        "No. LitBuy Telegram is the live community feed on Telegram. LitBuy Finds is the searchable product catalog on this website with photos, filters, and buy links.",
+    },
+    ...baseFaqs("LitBuy").slice(1),
+  ],
+  relatedLinks: [
+    { href: SOCIAL_LINKS.telegram, label: "Join LitBuy Telegram" },
+    { href: "/telegram", label: "Telegram finds hub" },
+    { href: "/spreadsheet-telegram", label: "Spreadsheet Telegram" },
+    { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
+    { href: "/litbuy-finds", label: "LitBuy finds catalog" },
+    ...AGENT_TELEGRAM_LINKS.filter((l) => l.href !== "/litbuy-telegram"),
+  ],
+};
+
 const HUB_PAGE: TelegramSeoPageConfig = {
   slug: "telegram",
   path: "/telegram",
@@ -194,7 +307,9 @@ const HUB_PAGE: TelegramSeoPageConfig = {
   intro: `Looking for a LitBuy Telegram group, agent finds Telegram channel, or spreadsheet Telegram feed? ${TELEGRAM_CHANNEL_NAME} (${TELEGRAM_HANDLE}) is a ${TELEGRAM_MEMBER_LABEL} community for daily finds, QC-approved references, sneaker drops, and fashion picks across LitBuy, MuleBuy, OopBuy, ACBuy, and Kakobuy. This page is a dedicated guide — the main LitBuy Finds site stays focused on products and buying.`,
   focus: "hub",
   keywords: [
-    "litbuy telegram",
+    "telegram litbuy",
+    "telegram litbuy finds",
+    "telegram litbuy group",
     "litbuy finds telegram",
     "litbuy spreadsheet telegram",
     "best agent telegram",
@@ -228,9 +343,12 @@ const HUB_PAGE: TelegramSeoPageConfig = {
       heading: "Agent-specific Telegram guides",
       paragraphs: [
         "Each supported agent has its own landing page explaining how RN Finds covers that platform — from MuleBuy spreadsheet Telegram searches to Kakobuy QC photo threads.",
-        "Use these pages if you arrived from a specific search like OopBuy finds Telegram or ACBuy sneaker finds rather than a generic community query.",
+        "If you searched specifically for LitBuy Telegram, use the dedicated LitBuy Telegram page for the fastest join link and QC spreadsheet updates.",
       ],
-      links: AGENT_TELEGRAM_LINKS,
+      links: [
+        { href: "/litbuy-telegram", label: "LitBuy Telegram" },
+        ...AGENT_TELEGRAM_LINKS,
+      ],
     },
     {
       heading: "Best practices before you join",
@@ -264,7 +382,7 @@ const RN_FINDS_PAGE: TelegramSeoPageConfig = {
   keywords: [
     "rn finds telegram",
     "rn finds",
-    "litbuy telegram community",
+    "telegram litbuy community",
     "best finds telegram",
     "shopping agent telegram community",
     "qc finds telegram",
@@ -616,15 +734,7 @@ const TOPIC_PAGES: Record<string, TelegramSeoPageConfig> = {
 export const TELEGRAM_SEO_PAGES: Record<string, TelegramSeoPageConfig> = {
   telegram: HUB_PAGE,
   "rn-finds": RN_FINDS_PAGE,
-  "litbuy-telegram": buildAgentPage(
-    "litbuy-telegram",
-    "LitBuy",
-    "/litbuy-finds",
-    "LitBuy is the recommended agent on this website for verified catalog links, and RN Finds frequently shares LitBuy rows with QC context.",
-    [
-      "LitBuy Telegram searches usually mean buyers want spreadsheet-style LitBuy finds with live discussion — not just a static invite link.",
-    ]
-  ),
+  "litbuy-telegram": LITBUY_TELEGRAM_PAGE,
   "mulebuy-telegram": buildAgentPage(
     "mulebuy-telegram",
     "MuleBuy",

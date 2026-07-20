@@ -91,8 +91,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     const page = TELEGRAM_SEO_PAGES[slug];
     routes.push({
       url: `${SITE_URL}${page.path}`,
-      changeFrequency: "weekly",
-      priority: 0.82,
+      changeFrequency: slug === "litbuy-telegram" ? "daily" : "weekly",
+      priority: slug === "litbuy-telegram" ? 0.94 : 0.82,
     });
   }
 

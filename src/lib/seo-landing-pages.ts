@@ -38,6 +38,7 @@ function withQc(limit = 72) {
 
 const RESOURCE_LINKS = [
   { href: "/litbuy-finds", label: "LitBuy finds" },
+  { href: "/litbuy-telegram", label: "LitBuy Telegram" },
   { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
   { href: "/litbuy-qc", label: "LitBuy QC" },
   { href: "/guides", label: "All guides" },
