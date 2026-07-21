@@ -20,7 +20,7 @@ import { useConversion } from "@/context/ConversionContext";
 import { trackProductContext, trackSaveClick } from "@/lib/analytics-events";
 import { resolveProductDisplayImage } from "@/lib/product-image-presentation";
 import ProductBadges from "./ProductBadges";
-import LitbuyProductImage from "./LitbuyProductImage";
+import ProductImage from "./ProductImage";
 import BuyWithAgentButton from "./agents/BuyWithAgentButton";
 
 type ProductModalProps = {
@@ -87,14 +87,11 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
         <div className="grid flex-1 overflow-y-auto lg:grid-cols-2">
           <div className="border-b border-border p-5 lg:border-b-0 lg:border-r">
             <div className="product-image-shell product-image-hover relative aspect-square overflow-hidden rounded-2xl">
-              <LitbuyProductImage
+              <ProductImage
                 src={product.image}
                 preferredSrc={displayImage?.displaySrc}
                 fallbacks={displayImage?.fallbacks}
                 fillClass={displayImage?.fillClass}
-                surfaceClass={displayImage?.surfaceClass}
-                isProcessedCutout={displayImage?.isProcessed}
-                category={product.category_slug}
                 alt={imageAlt}
                 variant="card"
                 productHref={getProductHref(product)}

@@ -22,7 +22,7 @@ import { useWishlist } from "@/context/WishlistContext";
 import { trackProductContext, trackSaveClick } from "@/lib/analytics-events";
 import { resolveProductDisplayImage } from "@/lib/product-image-presentation";
 import HowToBuySteps from "./HowToBuySteps";
-import LitbuyProductImage from "./LitbuyProductImage";
+import ProductImage from "./ProductImage";
 import BuyWithAgentButton, {
   BuyingAgentPanel,
 } from "./agents/BuyWithAgentButton";
@@ -81,14 +81,11 @@ export default function ProductDetailView({
     <section className="product-detail-hero px-4 pb-6 pt-2 sm:px-6 sm:pt-3">
       <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-2 lg:gap-12">
         <div className="product-image-shell product-image-shell--featured product-image-hover relative overflow-hidden rounded-3xl border border-border lg:sticky lg:top-[4.75rem] lg:self-start">
-          <LitbuyProductImage
+          <ProductImage
             src={product.image}
             preferredSrc={displayImage?.displaySrc}
             fallbacks={displayImage?.fallbacks}
             fillClass={displayImage?.fillClass}
-            surfaceClass={displayImage?.surfaceClass}
-            isProcessedCutout={displayImage?.isProcessed}
-            category={product.category_slug}
             alt={imageAlt}
             priority
             variant="featured"
