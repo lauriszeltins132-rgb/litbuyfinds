@@ -93,36 +93,8 @@ function usableFallbackUrl(url) {
   return !deadUrls.has(url);
 }
 
-function classifySurface(sourceUrl, details, showingProcessed) {
-  if (showingProcessed) return "t";
-  if (!details) return "n";
-  if (details.isTransparent && (details.transparencyRatio ?? 0) > 0.12) return "t";
-  const whiteBlank = details.whiteBlankRatio ?? 0;
-  const borderBright = details.borderBrightRatio ?? 0;
-  const emptySpace = details.emptySpaceRatio ?? 0;
-  if (whiteBlank >= 0.18 || borderBright >= 0.22 || emptySpace >= 0.42) return "l";
-  if (details.issues?.includes("dark_border")) return "d";
-  if (brightBgUrls[sourceUrl] === "matte" || brightBgUrls[sourceUrl] === "vignette") {
-    return "l";
-  }
-  return "n";
-}
-
 function resolveImage(sourceUrl) {
-  const processedPath = processedUrls[sourceUrl];
   const details = getQualityDetails(sourceUrl);
-  const sourceIsDead = deadUrls.has(sourceUrl);
-  const cutoutUnsafe = isProcessedCutoutBlocked(
-    sourceUrl,
-    processedPath,
-    details
-  );
-  const useProcessed =
-    processedPath &&
-    (sourceIsDead
-      ? !isProcessedAssetDamaged(processedPath)
-      : !cutoutUnsafe && !shouldPreferOriginalPhoto(sourceUrl, details));
-
   const fill = details?.contentFillRatio;
   let fc = "b";
   if (fill != null) {
@@ -130,32 +102,22 @@ function resolveImage(sourceUrl) {
     else if (fill >= 0.52) fc = "d";
   }
 
-  let displaySrc = sourceUrl;
   const fallbacks = [];
-  if (useProcessed) {
-    displaySrc = processedPath;
-    if (usableFallbackUrl(sourceUrl)) fallbacks.push(sourceUrl);
-  } else if (processedPath && !cutoutUnsafe && usableFallbackUrl(processedPath)) {
-    fallbacks.push(processedPath);
-  }
-
-  if (!displaySrc.startsWith("/processed/") && deadUrls.has(displaySrc)) {
-    const rescue = fallbacks.find((url) => url.startsWith("/processed/"));
-    if (rescue) {
-      displaySrc = rescue;
-      fallbacks.splice(fallbacks.indexOf(rescue), 1);
-      if (usableFallbackUrl(sourceUrl)) fallbacks.push(sourceUrl);
+  if (deadUrls.has(sourceUrl)) {
+    const processedPath = processedUrls[sourceUrl];
+    if (processedPath && usableFallbackUrl(processedPath)) {
+      return {
+        src: processedPath,
+        fb: [],
+        fc,
+      };
     }
   }
 
-  const showingProcessed = displaySrc.startsWith("/processed/");
-
   return {
-    src: displaySrc,
-    fb: fallbacks.filter(usableFallbackUrl),
+    src: sourceUrl,
+    fb: fallbacks,
     fc,
-    pm: showingProcessed ? 1 : 0,
-    sf: classifySurface(sourceUrl, details, showingProcessed),
   };
 }
 
@@ -288,13 +250,11 @@ function main() {
   const ctx = { editorsPick, popular, recent, trendingIndex };
   const cardProps = {};
   let withQc = 0;
-  let processedCount = 0;
 
   for (const product of catalog) {
     if (product.qc_link) withQc += 1;
     const image = resolveImage(product.image);
     if (!image.src.startsWith("/processed/") && deadUrls.has(image.src)) continue;
-    if (image.pm === 1) processedCount += 1;
     const entry = { ...image };
 
     const b = buildBadges(product, ctx, 74);
@@ -363,7 +323,7 @@ function main() {
   fs.writeFileSync(navPath, JSON.stringify(nav));
 
   console.log(
-    `Card props → ${Object.keys(cardProps).length} products, ${processedCount} processed cutouts, QC count → ${withQc}`
+    `Card props → ${Object.keys(cardProps).length} products (original URLs), QC count → ${withQc}`
   );
 }
 

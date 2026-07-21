@@ -14,7 +14,7 @@ import { useWishlist } from "@/context/WishlistContext";
 import { trackProductContext, trackSaveClick } from "@/lib/analytics-events";
 import LitBuyMicroCta from "./LitBuyMicroCta";
 import ProductBadges from "./ProductBadges";
-import LitbuyProductImage from "./LitbuyProductImage";
+import ProductCardImage from "./ProductCardImage";
 import BuyWithAgentButton from "./agents/BuyWithAgentButton";
 
 type ProductCardProps = {
@@ -98,18 +98,14 @@ function ProductCard({
           href={productHref}
           className="product-image-shell product-image-shell--card product-image-hover relative block aspect-square overflow-hidden"
         >
-          <LitbuyProductImage
+          <ProductCardImage
             src={product.image}
             preferredSrc={cardProps?.displaySrc}
             fallbacks={cardProps?.fallbacks}
             fillClass={cardProps?.fillClass}
-            surfaceClass={cardProps?.surfaceClass}
-            isProcessedCutout={cardProps?.isProcessedCutout}
-            category={product.category_slug}
             alt={imageAlt}
             productHref={productHref}
             priority={priority}
-            variant="card"
           />
           <div className="product-card-hover-hint bg-gradient-to-t from-background/80 to-transparent px-3 py-2 opacity-0 transition-opacity group-hover:opacity-100">
             <p className="text-[10px] font-bold uppercase tracking-wider text-accent">
