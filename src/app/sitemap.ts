@@ -40,6 +40,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const productSlugs = getAllProductSlugs();
 
   const routes: MetadataRoute.Sitemap = [
+    { url: `${SITE_URL}/ai`, changeFrequency: "weekly", priority: 0.9 },
     { url: SITE_URL, changeFrequency: "daily", priority: 1 },
     { url: `${SITE_URL}/trending`, changeFrequency: "daily", priority: 0.9 },
     { url: `${SITE_URL}/latest`, changeFrequency: "daily", priority: 0.9 },

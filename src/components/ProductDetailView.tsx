@@ -23,6 +23,7 @@ import { trackProductContext, trackSaveClick } from "@/lib/analytics-events";
 import { resolveProductDisplayImage } from "@/lib/product-image-presentation";
 import HowToBuySteps from "./HowToBuySteps";
 import ProductImage from "./ProductImage";
+import ProductAiActions from "./ai/ProductAiActions";
 import BuyWithAgentButton, {
   BuyingAgentPanel,
 } from "./agents/BuyWithAgentButton";
@@ -208,6 +209,12 @@ export default function ProductDetailView({
               />
             ) : null}
           </div>
+
+          <ProductAiActions
+            productName={facts.displayName}
+            productId={product.id}
+            price={product.price}
+          />
 
           <div className="mt-8">
             <MemberBenefitsStrip location="product_page_benefits" compact />

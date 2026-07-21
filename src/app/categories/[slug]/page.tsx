@@ -10,6 +10,7 @@ import RelatedPages from "@/components/RelatedPages";
 import RelatedSeoLinks from "@/components/RelatedSeoLinks";
 import { getRelatedGuidesForCategory } from "@/lib/related-guides";
 import CategorySeoBlock from "@/components/seo/CategorySeoBlock";
+import CollectionAiRefine from "@/components/ai/CollectionAiRefine";
 import SchemaScript from "@/components/SchemaScript";
 import { buildCollectionPageSchema } from "@/lib/schema";
 import { getBrandsFromProducts } from "@/lib/brands";
@@ -114,6 +115,12 @@ export default async function CategoryLandingPage({ params }: CategoryPageProps)
       <RelatedPages currentPath={pagePath} categorySlug={resolved.slug} />
 
       <Suspense fallback={<div className="py-24 text-center text-muted">Loading...</div>}>
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <CollectionAiRefine
+            categoryName={resolved.name}
+            categorySlug={resolved.slug}
+          />
+        </div>
         <CatalogPanel
           products={resolved.products}
           categories={allCategories}

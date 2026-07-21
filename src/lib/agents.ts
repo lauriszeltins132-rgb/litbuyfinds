@@ -217,6 +217,16 @@ export function buildAgentSearchUrl(agentId: AgentId, query: string): string {
   return AGENT_URL_BUILDERS[agentId].search(query);
 }
 
+/** Keep stored catalog links on the current invite even if JSON still has an old code. */
+export function withCurrentLitBuyInvite(url: string): string {
+  if (/inviteCode=/i.test(url)) {
+    return url.replace(/inviteCode=[^&]+/i, `inviteCode=${LITBUY_INVITE_CODE}`);
+  }
+  return url.includes("?")
+    ? `${url}&inviteCode=${LITBUY_INVITE_CODE}`
+    : `${url}?inviteCode=${LITBUY_INVITE_CODE}`;
+}
+
 /** @deprecated Use BUYING_AGENTS — kept for PreferencesContext compatibility */
 export const AGENTS = BUYING_AGENTS.map((agent) => ({
   id: agent.id,
