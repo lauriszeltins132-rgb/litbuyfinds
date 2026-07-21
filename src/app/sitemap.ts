@@ -35,6 +35,15 @@ import { ADVERTISE_PAGE_PATH } from "@/lib/advertise-page";
 import { AUTHORITY_PAGE_SLUGS, AUTHORITY_PAGES } from "@/lib/litbuy-authority-pages";
 import { SITE_URL } from "@/lib/site";
 
+/** Guides that 301/308 to root authority pages — omit from sitemap to avoid duplicate URLs. */
+const SITEMAP_EXCLUDED_GUIDE_SLUGS = new Set([
+  "what-is-litbuy",
+  "litbuy-finds",
+  "litbuy-qc-photos",
+  "how-to-use-litbuy",
+  "litbuy-spreadsheet",
+]);
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const categories = getCategories();
   const brands = getBrandsFromProducts(getAllProducts());
@@ -69,6 +78,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }
 
   for (const slug of GUIDE_SLUGS) {
+    if (SITEMAP_EXCLUDED_GUIDE_SLUGS.has(slug)) continue;
     const guide = GUIDE_PAGES[slug];
     routes.push({
       url: `${SITE_URL}${guide.path}`,

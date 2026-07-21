@@ -125,55 +125,80 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
     path: "/what-is-litbuy-finds",
     title: "What Is LitBuy Finds? Searchable Catalog Explained",
     metaDescription:
-      "LitBuy Finds is a searchable catalog of products sourced from the LitBuy spreadsheet. Browse sneakers, jackets, bags, and accessories with images, prices, QC links, and LitBuy buy buttons.",
+      "LitBuy Finds is a searchable catalog of products sourced from the LitBuy spreadsheet. Browse sneakers, jackets, bags, and accessories with images, prices, QC links, categories, and LitBuy AI search.",
     badge: "LitBuy Finds",
-    h1: "What is LitBuy Finds?",
+    h1: "What Is LitBuy Finds?",
     directAnswer:
       "LitBuy Finds is a searchable catalog of products sourced from the LitBuy spreadsheet and related find lists. It helps shoppers browse clothing, sneakers, bags, accessories, and other finds using product images, prices, categories, QC links, and direct LitBuy purchase links.",
     summary:
       "We turn spreadsheet rows into product pages you can search, filter, and share. LitBuy Finds is for discovery — checkout and shipping happen on LitBuy.",
     sections: [
       {
-        heading: "What the catalog includes",
+        heading: "The LitBuy Finds catalog",
         paragraphs: [
-          "Each listing shows a product name, category, image, price when available, seller source (Weidian, Taobao, etc.), QC reference when the source row includes one, and a LitBuy affiliate link to open the live listing.",
-          "The catalog syncs regularly as underlying spreadsheets update. New finds appear in Latest and Recently Added after each sync.",
+          "LitBuy Finds indexes thousands of listings from public spreadsheet imports into searchable product pages. Each entry includes a product name, category, image, price when available, seller source, and a LitBuy buy link.",
+          "Browse the full grid on the homepage, filter by category or brand, or open collection pages for sneakers, jackets, bags, and budget tiers.",
         ],
         links: [
-          { href: "/litbuy-finds", label: "Browse LitBuy Finds" },
-          { href: "/recently-added", label: "Recently added" },
+          { href: "/", label: "Homepage catalog" },
+          { href: "/litbuy-finds", label: "LitBuy Finds landing" },
+          { href: "/categories", label: "All categories" },
         ],
       },
       {
-        heading: "How LitBuy Finds differs from a spreadsheet",
+        heading: "LitBuy spreadsheet connection",
         paragraphs: [
-          "Spreadsheets are powerful for bulk data but hard to search on mobile and awkward to share one product at a time. LitBuy Finds adds filters, brand pages, category browsing, collection pages, and LitBuy AI search on top of the same product universe.",
-          "Many buyers keep a spreadsheet for reference and use LitBuy Finds for daily discovery and sharing links in Discord or Telegram.",
+          "Community LitBuy spreadsheets list Weidian and Taobao URLs with prices and QC notes in rows. LitBuy Finds maps those rows to individual pages so you can search on mobile, share one link, and filter without scrolling a 3,000-line sheet.",
+          "The catalog syncs daily — new spreadsheet rows surface in Latest and Recently Added after each import.",
         ],
         links: [
           { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet guide" },
           { href: "/litbuy-spreadsheet-2026", label: "Spreadsheet 2026" },
+          { href: "/guides/litbuy-spreadsheet-guide", label: "Extended spreadsheet guide" },
         ],
       },
       {
-        heading: "QC references and buy links",
+        heading: "Product search and LitBuy AI",
         paragraphs: [
-          "When a source row includes a QC link, we surface it on the product page. These are community or batch reference photos — not a guarantee of what you will receive. Request warehouse QC on LitBuy before international shipping.",
-          "Buy buttons open LitBuy product pages. Always confirm live price, size, and batch notes on LitBuy before paying.",
-        ],
-        links: [
-          { href: "/litbuy-qc-photos", label: "LitBuy QC photos" },
-          { href: "/collections/best-qc-approved-finds", label: "QC-approved finds" },
-        ],
-      },
-      {
-        heading: "Tools beyond the grid",
-        paragraphs: [
-          "LitBuy AI lets you describe what you want in plain language and returns real catalog products — similar items, cheaper alternatives, haul builders, and comparisons. Category pages include Refine with AI for in-context search.",
-          "Guides cover beginners, QC, shipping, brands, and budget shopping without replacing the live catalog.",
+          "Use the homepage search bar for brands, categories, and keywords. LitBuy AI goes further — describe what you want in plain language (budget, color, haul) and get real catalog products with validated prices and links.",
+          "Category pages include Refine with AI for in-context search. Search-only mode works even when conversational AI is offline.",
         ],
         links: [
           { href: "/ai", label: "LitBuy AI" },
+          { href: "/guides/how-to-use-litbuy-finds", label: "How to search finds" },
+        ],
+      },
+      {
+        heading: "QC links on find pages",
+        paragraphs: [
+          "When a spreadsheet row includes a QC reference, we show it on the product page. These are batch or community examples — not photos of your exact order. Request warehouse QC on LitBuy before international shipping.",
+        ],
+        links: [
+          { href: "/litbuy-qc-photos", label: "LitBuy QC photos" },
+          { href: "/litbuy-qc", label: "LitBuy QC hub" },
+          { href: "/guides/how-to-check-qc-photos", label: "How to check QC" },
+        ],
+      },
+      {
+        heading: "Prices and categories",
+        paragraphs: [
+          "Prices come from catalog import data in USD. High or missing prices show as unavailable or check-latest — always confirm the live LitBuy total at checkout. Categories include shoes, hoodies, jackets, t-shirts, accessories, and electronics.",
+          "Deals and under-$30 collections help budget shoppers without mixing currencies or inventing discounts.",
+        ],
+        links: [
+          { href: "/deals", label: "Deals under $30" },
+          { href: "/categories/shoes", label: "Shoes category" },
+          { href: "/litbuy-finds-under-30", label: "Finds under $30" },
+        ],
+      },
+      {
+        heading: "From browsing to buying",
+        paragraphs: [
+          "LitBuy Finds does not process payments. When you are ready, open the LitBuy link on a product page, confirm size and batch, pay on LitBuy, review warehouse QC, then ship your haul.",
+        ],
+        links: [
+          { href: "/how-to-use-litbuy", label: "How to use LitBuy" },
+          { href: "/guides/beginner-guide-to-litbuy", label: "Beginner guide" },
           { href: "/guides", label: "All guides" },
         ],
       },
@@ -195,7 +220,16 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
           "Catalog data syncs from spreadsheet imports. Product counts, prices, and images reflect the latest import — confirm live LitBuy checkout totals before paying.",
       },
     ],
-    relatedLinks: CORE_RELATED,
+    relatedLinks: [
+      { href: "/", label: "Homepage" },
+      { href: "/ai", label: "LitBuy AI" },
+      { href: "/litbuy-finds", label: "LitBuy Finds catalog" },
+      { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+      { href: "/categories", label: "Categories" },
+      { href: "/guides", label: "All guides" },
+      { href: "/how-to-use-litbuy", label: "How to use LitBuy" },
+      { href: "/litbuy-qc-photos", label: "QC photos" },
+    ],
     publishedTime: PUBLISHED,
     modifiedTime: MODIFIED,
   },
