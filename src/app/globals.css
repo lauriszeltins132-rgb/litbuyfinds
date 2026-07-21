@@ -133,7 +133,8 @@ body::before {
 }
 
 .product-image-shell {
-  --thumb-bg: #ffffff;
+  --litbuy-image-surface: #eef1ea;
+  --thumb-bg: var(--litbuy-image-surface);
   position: relative;
   overflow: hidden;
   isolation: isolate;
@@ -142,7 +143,7 @@ body::before {
 
 .product-image-shell--card {
   min-height: 0;
-  --thumb-bg: #ffffff;
+  --thumb-bg: var(--litbuy-image-surface);
 }
 
 .product-image-shell::before {
@@ -178,7 +179,7 @@ body::before {
 .product-card-media {
   position: relative;
   isolation: isolate;
-  background: #ffffff;
+  background: var(--litbuy-image-surface, #eef1ea);
 }
 
 .product-card {
@@ -254,6 +255,19 @@ body::before {
 
 .product-card .product-image-shell {
   aspect-ratio: 1 / 1;
+  min-height: 200px;
+}
+
+@media (min-width: 640px) {
+  .product-card .product-image-shell {
+    min-height: 220px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .product-card .product-image-shell {
+    min-height: 240px;
+  }
 }
 
 .product-image-shell--featured {
@@ -297,37 +311,40 @@ body::before {
 }
 
 .product-float-stage--card {
-  padding: 3%;
+  padding: 4%;
+}
+
+.product-image-surface--neutral {
+  background: linear-gradient(165deg, #eef1ea 0%, #e8ebe4 100%);
+}
+
+.product-image-surface--light {
+  background: linear-gradient(165deg, #e4e8df 0%, #dde2d6 100%);
+}
+
+.product-image-surface--dark {
+  background: linear-gradient(165deg, #e8ebe4 0%, #e2e6de 100%);
+}
+
+.product-image-surface--transparent {
+  background: linear-gradient(165deg, #eef1ea 0%, #e6eae2 100%);
 }
 
 .product-float-stage--card .product-float-asset {
-  max-width: 94%;
-  max-height: 94%;
-  filter: brightness(1.06) contrast(1.04) saturate(1.03);
+  max-width: 92%;
+  max-height: 92%;
 }
 
 .product-float-stage--card .product-float-asset--processed-cutout {
-  filter: brightness(1.08) contrast(1.06) saturate(1.04)
-    drop-shadow(0 6px 16px rgba(26, 29, 22, 0.14));
+  filter: drop-shadow(0 4px 14px rgba(26, 29, 22, 0.12));
 }
 
-.product-float-asset--processed-matte {
-  filter: brightness(1.12) contrast(1.06) saturate(1.04) !important;
+.product-float-asset--separated {
+  filter: drop-shadow(0 2px 8px rgba(26, 29, 22, 0.08));
 }
 
-.product-float-asset--dark-boost {
-  filter: brightness(1.14) contrast(1.06) saturate(1.04);
-}
-
-.product-float-asset--processed-matte.product-float-asset--dark-boost,
-.product-float-asset--processed-matte.product-float-asset--enhanced {
-  filter: brightness(1.12) contrast(1.06) saturate(1.04) !important;
-}
-
-.product-float-stage--card .product-float-asset--enhanced,
-.product-float-stage--card .product-float-asset--dark-boost,
-.product-float-stage--card .product-float-asset--processed-matte {
-  filter: brightness(1.02) contrast(1.02) saturate(1.02) !important;
+.product-float-stage--card .product-float-asset--processed-cutout.product-float-asset--separated {
+  filter: drop-shadow(0 4px 14px rgba(26, 29, 22, 0.14));
 }
 
 .product-float-stage > .image-unavailable {
@@ -469,17 +486,43 @@ body::before {
   max-height: 82%;
 }
 
-.product-float-asset--enhanced {
-  filter: contrast(1.06) brightness(1.1) saturate(1.05);
+.product-float-asset--processed-fill {
+  min-width: 70%;
+  min-height: 70%;
+  max-width: 86%;
+  max-height: 86%;
 }
 
-.product-float-asset--knockout-white {
-  mix-blend-mode: multiply;
+.product-float-asset--fill-shoes {
+  min-width: 74%;
+  min-height: 68%;
+  max-width: 90%;
+  max-height: 84%;
 }
 
-.product-float-stage--card .product-float-asset--knockout-white {
-  mix-blend-mode: multiply;
-  filter: none;
+.product-float-asset--fill-bags {
+  min-width: 70%;
+  min-height: 72%;
+  max-width: 86%;
+  max-height: 88%;
+}
+
+.product-float-asset--fill-apparel {
+  min-width: 68%;
+  min-height: 74%;
+  max-width: 84%;
+  max-height: 90%;
+}
+
+.product-float-asset--fill-accessory {
+  min-width: 62%;
+  min-height: 62%;
+  max-width: 78%;
+  max-height: 78%;
+}
+
+.product-float-asset--loading {
+  opacity: 0.85;
 }
 
 .product-float-stage--featured .product-float-asset {
@@ -490,10 +533,6 @@ body::before {
 .product-float-stage--hero .product-float-asset {
   max-width: min(99%, 600px);
   max-height: min(98%, 560px);
-}
-
-.product-float-asset--loading {
-  opacity: 0.72;
 }
 
 .product-float-asset--ready {
