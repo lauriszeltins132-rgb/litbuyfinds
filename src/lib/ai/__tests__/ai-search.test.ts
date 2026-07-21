@@ -134,6 +134,24 @@ describe("catalog search grounding", () => {
     const result = findSimilarProducts({ productId: seed.id, limit: 6 });
     assert.ok(result.products.every((p) => p.id !== seed.id));
   });
+
+  it("uses original catalog image URLs for AI product cards", () => {
+    const sample = getAllProducts().find((p) => p.image && p.image.length > 0);
+    assert.ok(sample);
+    const publicProduct = toPublicProduct(sample);
+    assert.equal(publicProduct.imageUrl, sample.image);
+    assert.ok(!publicProduct.imageUrl.includes("processed"));
+  });
+
+  it("never surfaces BoonBuy domains or invented catalog entries", () => {
+    const result = searchCatalog(parseSearchIntent("best sneakers", 12));
+    for (const product of result.products) {
+      assert.ok(product.productUrl.includes("litbuyfinds.io") || product.productUrl.startsWith("/find/"));
+      assert.ok(!product.productUrl.includes("boonbuy"));
+      assert.ok(!product.affiliateUrl.includes("boonbuy"));
+      assert.ok(getAllProducts().some((p) => p.id === product.id));
+    }
+  });
 });
 
 describe("config and API guards", () => {
