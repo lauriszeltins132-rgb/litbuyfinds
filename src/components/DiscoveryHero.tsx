@@ -1,6 +1,7 @@
 import HeroSearch from "@/components/HeroSearch";
 import LiveSiteSignals from "@/components/LiveSiteSignals";
 import TrustStrip from "@/components/TrustStrip";
+import AiHeroEntry from "@/components/ai/AiHeroEntry";
 import { HERO_HEADLINE, HERO_SUBHEADLINE } from "@/lib/constants";
 import { HERO_ENTITY_LINE } from "@/lib/brand-entity";
 import { getSearchIndex } from "@/lib/search-suggestions";
@@ -35,6 +36,10 @@ export default function DiscoveryHero() {
         <LiveSiteSignals />
 
         <div className="mx-auto mt-6 max-w-[700px] sm:mt-7">
+          <AiHeroEntry />
+        </div>
+
+        <div className="mx-auto mt-4 max-w-[700px]">
           <HeroSearch searchIndex={searchIndex} />
         </div>
       </div>
