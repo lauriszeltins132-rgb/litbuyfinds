@@ -35,11 +35,22 @@ const SECTIONS = [
     ],
   },
   {
+    title: "LitBuy authority",
+    links: [
+      { href: "/what-is-litbuy", label: "What is LitBuy" },
+      { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+      { href: "/how-to-use-litbuy", label: "How to use LitBuy" },
+      { href: "/ai", label: "LitBuy AI" },
+      { href: "/is-litbuy-legit", label: "Is LitBuy legit" },
+      { href: "/litbuy-coupons", label: "LitBuy coupons" },
+    ],
+  },
+  {
     title: "Guides & fresh finds",
     links: [
       { href: "/guides/beginner-guide-to-litbuy", label: "Beginner guide" },
-      { href: "/guides/how-to-check-qc-photos", label: "QC photos guide" },
-      { href: "/guides/litbuy-spreadsheet", label: "Spreadsheet guide" },
+      { href: "/litbuy-qc-photos", label: "LitBuy QC photos" },
+      { href: "/litbuy-spreadsheet", label: "Spreadsheet guide" },
       { href: "/latest", label: "Latest finds" },
       { href: "/trending", label: "Trending" },
       { href: "/guides", label: "All guides" },
@@ -55,7 +66,7 @@ export default function HomepageInternalLinks() {
         <p className="mt-1 text-sm text-muted">
           Jump to collections, brands, categories, and guides — all indexable landing pages.
         </p>
-        <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           {SECTIONS.map((section) => (
             <div key={section.title}>
               <h3 className="text-xs font-bold uppercase tracking-[0.16em] text-accent">

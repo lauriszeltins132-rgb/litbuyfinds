@@ -32,6 +32,7 @@ import {
   TELEGRAM_SEO_SLUGS,
 } from "@/lib/telegram-seo-pages";
 import { ADVERTISE_PAGE_PATH } from "@/lib/advertise-page";
+import { AUTHORITY_PAGE_SLUGS, AUTHORITY_PAGES } from "@/lib/litbuy-authority-pages";
 import { SITE_URL } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -56,6 +57,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     { url: `${SITE_URL}${GUIDES_HUB.path}`, changeFrequency: "weekly", priority: 0.9 },
   ];
+
+  for (const slug of AUTHORITY_PAGE_SLUGS) {
+    const page = AUTHORITY_PAGES[slug];
+    routes.push({
+      url: `${SITE_URL}${page.path}`,
+      changeFrequency: "weekly",
+      priority: 0.93,
+      lastModified: page.modifiedTime,
+    });
+  }
 
   for (const slug of GUIDE_SLUGS) {
     const guide = GUIDE_PAGES[slug];

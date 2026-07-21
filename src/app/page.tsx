@@ -4,6 +4,7 @@ import HomepageCatalogSection from "@/components/HomepageCatalogSection";
 import DataFreshness from "@/components/DataFreshness";
 import DiscoveryHero from "@/components/DiscoveryHero";
 import DiscoveryRail from "@/components/DiscoveryRail";
+import HomepageAuthorityHub from "@/components/HomepageAuthorityHub";
 import HomepageBrands from "@/components/HomepageBrands";
 import HomepageCategories from "@/components/HomepageCategories";
 import HomepageCollections from "@/components/HomepageCollections";
@@ -91,6 +92,7 @@ export default async function HomePage() {
       <RecentlyViewedRail />
 
       <HomepageConversion />
+      <HomepageAuthorityHub />
       <HomepageInternalLinks />
       <HomepageSeoContent />
       <HomepageFaq />
