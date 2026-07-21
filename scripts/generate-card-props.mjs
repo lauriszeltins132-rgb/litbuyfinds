@@ -93,6 +93,21 @@ function usableFallbackUrl(url) {
   return !deadUrls.has(url);
 }
 
+function classifySurface(sourceUrl, details, showingProcessed) {
+  if (showingProcessed) return "t";
+  if (!details) return "n";
+  if (details.isTransparent && (details.transparencyRatio ?? 0) > 0.12) return "t";
+  const whiteBlank = details.whiteBlankRatio ?? 0;
+  const borderBright = details.borderBrightRatio ?? 0;
+  const emptySpace = details.emptySpaceRatio ?? 0;
+  if (whiteBlank >= 0.18 || borderBright >= 0.22 || emptySpace >= 0.42) return "l";
+  if (details.issues?.includes("dark_border")) return "d";
+  if (brightBgUrls[sourceUrl] === "matte" || brightBgUrls[sourceUrl] === "vignette") {
+    return "l";
+  }
+  return "n";
+}
+
 function resolveImage(sourceUrl) {
   const processedPath = processedUrls[sourceUrl];
   const details = getQualityDetails(sourceUrl);
@@ -140,6 +155,7 @@ function resolveImage(sourceUrl) {
     fb: fallbacks.filter(usableFallbackUrl),
     fc,
     pm: showingProcessed ? 1 : 0,
+    sf: classifySurface(sourceUrl, details, showingProcessed),
   };
 }
 

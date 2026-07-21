@@ -1,8 +1,9 @@
 import { getCatalogBrightBgTreatment } from "./bright-bg";
 import { isCatalogImageUrlDead, isDeadImageUrl } from "./dead-images";
+import { classifyImageBackground } from "./image-background-analysis";
+import { getCategoryFillClass } from "./image-presentation-presets";
 import {
   CARD_DISPLAY_MIN_SCORE,
-  getImageFillClass,
   getImageQualityDetails,
   getImageQualityScore,
 } from "./image-quality";
@@ -52,10 +53,7 @@ export type ResolvedProductImage = {
   sourceUrl: string;
   score: number;
   fillClass: string;
-  needsMatte: boolean;
-  knockoutWhite: boolean;
-  enhance: boolean;
-  darkBoost: boolean;
+  surfaceClass: string;
   isProcessed: boolean;
   fallbacks: string[];
 };
@@ -117,17 +115,20 @@ export function resolveProductDisplayImage(
       ? Math.max(sourceScore, CARD_DISPLAY_MIN_SCORE)
       : sourceScore;
 
+  const background = classifyImageBackground(sourceUrl, {
+    isProcessedCutout: showingProcessed,
+  });
+
   return {
     displaySrc,
     sourceUrl,
     score,
-    fillClass: showingProcessed
-      ? "product-float-asset--fill-balanced"
-      : getImageFillClass(sourceUrl),
-    needsMatte: false,
-    knockoutWhite: false,
-    enhance: false,
-    darkBoost: false,
+    fillClass: getCategoryFillClass(
+      product.category_slug,
+      sourceUrl,
+      showingProcessed
+    ),
+    surfaceClass: background.surfaceClass,
     isProcessed: showingProcessed,
     fallbacks,
   };

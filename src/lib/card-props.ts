@@ -7,7 +7,7 @@ type RawCardEntry = {
   fb?: string[];
   fc?: "s" | "b" | "d" | "p";
   pm?: 0 | 1;
-  kw?: 0 | 1;
+  sf?: "n" | "l" | "d" | "t";
   b?: ProductBadgeKind[];
   bt?: ProductBadgeKind[];
   f?: "r" | "w" | "i";
@@ -32,12 +32,19 @@ const FRESHNESS_LABELS: Record<"r" | "w" | "i", string> = {
   i: "Recently indexed",
 };
 
+const SURFACE_CLASSES: Record<"n" | "l" | "d" | "t", string> = {
+  n: "product-image-surface--neutral",
+  l: "product-image-surface--light",
+  d: "product-image-surface--dark",
+  t: "product-image-surface--transparent",
+};
+
 export type CardDisplayProps = {
   displaySrc: string;
   fallbacks: string[];
   fillClass: string;
+  surfaceClass: string;
   isProcessedCutout: boolean;
-  knockoutWhite: boolean;
   badges: { kind: ProductBadgeKind; label: string }[];
   badgesTrending: { kind: ProductBadgeKind; label: string }[];
   freshness: string | null;
@@ -61,8 +68,8 @@ export function getCardDisplayProps(productId: string): CardDisplayProps | null 
     displaySrc: raw.src,
     fallbacks: raw.fb ?? [],
     fillClass: FILL_CLASSES[raw.fc ?? "b"],
+    surfaceClass: SURFACE_CLASSES[raw.sf ?? (isProcessedCutout ? "t" : "n")],
     isProcessedCutout,
-    knockoutWhite: false,
     badges,
     badgesTrending,
     freshness: raw.f ? FRESHNESS_LABELS[raw.f] : null,

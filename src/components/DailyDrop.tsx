@@ -6,7 +6,7 @@ import type { Product } from "@/lib/types";
 import { formatProductPrice } from "@/lib/pricing";
 import { getProductHref } from "@/lib/slugs";
 import { resolveProductDisplayImage } from "@/lib/product-image-presentation";
-import ProductImage from "./ProductImage";
+import LitbuyProductImage from "./LitbuyProductImage";
 import BuyWithAgentButton from "./agents/BuyWithAgentButton";
 
 export default function DailyDrop() {
@@ -47,16 +47,15 @@ export default function DailyDrop() {
         <div className="panel-shell overflow-hidden rounded-3xl border border-border-strong">
           <div className="grid lg:grid-cols-2">
             <div className="product-image-shell product-image-shell--hero">
-              <ProductImage
+              <LitbuyProductImage
                 src={product.image}
                 preferredSrc={displayImage?.displaySrc}
                 fallbacks={displayImage?.fallbacks}
                 fillClass={displayImage?.fillClass}
-                knockoutWhite={displayImage?.knockoutWhite}
-                enhance={displayImage?.enhance}
-                darkBoost={displayImage?.darkBoost}
+                surfaceClass={displayImage?.surfaceClass}
+                isProcessedCutout={displayImage?.isProcessed}
+                category={product.category_slug}
                 alt={product.product_name}
-                productName={product.product_name}
                 priority
                 variant="hero"
               />
