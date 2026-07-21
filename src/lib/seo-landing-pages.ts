@@ -36,6 +36,29 @@ function withQc(limit = 72) {
   ).slice(0, limit);
 }
 
+function byKeyword(...terms: string[]) {
+  const lower = terms.map((t) => t.toLowerCase());
+  return priced(
+    getAllProducts().filter((p) =>
+      lower.some((t) => p.product_name.toLowerCase().includes(t))
+    )
+  );
+}
+
+function byMaxPrice(max: number, limit = 96) {
+  return filterFeaturedEligible(
+    priced(getAllProducts().filter((p) => (p.price ?? Infinity) <= max))
+  ).slice(0, limit);
+}
+
+function latestFinds(limit = 96) {
+  return filterFeaturedEligible(
+    priced(
+      getAllProducts().filter((p) => p.category_slug === "latest-finds")
+    )
+  ).slice(0, limit);
+}
+
 const RESOURCE_LINKS = [
   { href: "/litbuy-finds", label: "LitBuy finds" },
   { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
@@ -52,7 +75,7 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
     badge: "LitBuy resource",
     h1: "LitBuy spreadsheet guide",
     intro:
-      "LitBuy spreadsheets are how many buyers first discover products — rows of Weidian and Taobao links, prices, and QC notes. LitBuy Finds turns that same catalog into searchable pages with photos, filters, and verified agent links so you spend less time hunting and more time buying.",
+      "The LitBuy spreadsheet lists thousands of Weidian and Taobao finds with prices and QC notes. LitBuy Finds turns that same catalog into searchable product pages with photos, filters, categories, and LitBuy buy buttons — so you spend less time scrolling rows and more time shortlisting real products.",
     sections: [
       {
         heading: "What a LitBuy spreadsheet contains",
@@ -242,7 +265,7 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
     badge: "LitBuy Finds",
     h1: "LitBuy finds",
     intro:
-      "LitBuy Finds is a curated discovery catalog for fashion and sneaker products. LitBuy is our recommended agent, but you can choose Kakobuy, OopBuy, HipoBuy, ACBuy or MuleBuy before checkout. Search by brand or category, save favorites, and open verified links when you are ready to order.",
+      "LitBuy Finds is a searchable catalog of products sourced from the LitBuy spreadsheet. Browse clothing, sneakers, bags, accessories, and other finds using product images, prices, categories, QC links, and direct LitBuy purchase links — updated daily from live catalog imports.",
     sections: [
       {
         heading: "What makes LitBuy Finds different",
@@ -1086,6 +1109,276 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
     ],
     getProducts: () => getEditorsPicks(96),
     productSectionTitle: "Best finds 2026",
+  },
+
+  "litbuy-shoes": {
+    slug: "litbuy-shoes",
+    path: "/litbuy-shoes",
+    title: "LitBuy Shoes – Sneakers & Footwear Catalog",
+    metaDescription:
+      "Browse LitBuy shoes — sneakers, runners, and footwear from the LitBuy Finds catalog with images, prices, QC links, and verified buy buttons.",
+    badge: "LitBuy shoes",
+    h1: "LitBuy shoes",
+    intro:
+      "LitBuy shoes covers the full footwear category on LitBuy Finds — sneakers, runners, and casual pairs from Nike, Jordan, Adidas, New Balance, and more. Each listing links to a live LitBuy product page with price and QC references when available.",
+    sections: [
+      {
+        heading: "Shoes vs sneakers on LitBuy Finds",
+        paragraphs: [
+          "The shoes category includes all footwear in the catalog. For sneaker-focused picks, see the LitBuy sneakers page. Use LitBuy AI to search by color, brand, and budget.",
+        ],
+        links: [
+          { href: "/litbuy-sneakers", label: "LitBuy sneakers" },
+          { href: "/categories/shoes", label: "Shoes category" },
+          { href: "/ai", label: "LitBuy AI" },
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: "Are LitBuy shoe prices final?",
+        answer: "Confirm live price on LitBuy checkout — catalog prices can lag seller updates.",
+      },
+    ],
+    relatedLinks: [
+      { href: "/litbuy-finds", label: "LitBuy Finds" },
+      { href: "/litbuy-sneakers", label: "Sneakers" },
+    ],
+    getProducts: () => byCategory("shoes").slice(0, 96),
+    productSectionTitle: "LitBuy shoes",
+  },
+
+  "litbuy-hoodies": {
+    slug: "litbuy-hoodies",
+    path: "/litbuy-hoodies",
+    title: "LitBuy Hoodies – Streetwear & Sweats Catalog",
+    metaDescription:
+      "Browse LitBuy hoodies and sweats from the LitBuy Finds catalog — Nike, Stussy, Essentials, and budget picks with QC links.",
+    badge: "LitBuy hoodies",
+    h1: "LitBuy hoodies",
+    intro:
+      "LitBuy hoodies and sweatsets from the LitBuy Finds catalog — browse hoodies, zip-ups, and crewnecks with photos, prices, and LitBuy buy links. Filter by brand on category pages or search with LitBuy AI.",
+    sections: [
+      {
+        heading: "Finding the right hoodie",
+        paragraphs: [
+          "Check fabric weight in listing notes, compare QC for logo embroidery, and start with lower-cost pieces if you are new to a seller.",
+        ],
+        links: [
+          { href: "/best-litbuy-hoodies", label: "Best hoodies list" },
+          { href: "/categories/hoodies-and-pants", label: "Hoodies category" },
+        ],
+      },
+    ],
+    faqs: [],
+    relatedLinks: [{ href: "/litbuy-finds", label: "LitBuy Finds" }],
+    getProducts: () =>
+      byKeyword("hoodie", "hoodies", "sweatshirt", "zip-up").slice(0, 96),
+    productSectionTitle: "LitBuy hoodies",
+  },
+
+  "litbuy-bags": {
+    slug: "litbuy-bags",
+    path: "/litbuy-bags",
+    title: "LitBuy Bags – Designer & Street Bags Catalog",
+    metaDescription:
+      "Browse LitBuy bags — Louis Vuitton, Gucci, Goyard, and streetwear bags with images, prices, and verified LitBuy links.",
+    badge: "LitBuy bags",
+    h1: "LitBuy bags",
+    intro:
+      "LitBuy bags from the LitBuy Finds catalog — crossbody, tote, and designer styles with product images, prices, and LitBuy purchase links. QC references help compare hardware and stitching before you buy.",
+    sections: [
+      {
+        heading: "Popular bag searches",
+        paragraphs: [
+          "Louis Vuitton, Gucci, and Goyard lead bag searches. Use brand pages for focused browsing and request warehouse QC for hardware and lining.",
+        ],
+        links: [
+          { href: "/best-litbuy-bags-2026", label: "Best bags 2026" },
+          { href: "/collections/best-bags", label: "Bag collection" },
+        ],
+      },
+    ],
+    faqs: [],
+    relatedLinks: [{ href: "/litbuy-finds", label: "LitBuy Finds" }],
+    getProducts: () => byKeyword("bag", "tote", "crossbody", "backpack").slice(0, 96),
+    productSectionTitle: "LitBuy bags",
+  },
+
+  "litbuy-jerseys": {
+    slug: "litbuy-jerseys",
+    path: "/litbuy-jerseys",
+    title: "LitBuy Jerseys – Football & Soccer Kits",
+    metaDescription:
+      "Browse LitBuy football and soccer jerseys from the catalog — club kits, national shirts, and budget jerseys with LitBuy buy links.",
+    badge: "LitBuy jerseys",
+    h1: "LitBuy jerseys",
+    intro:
+      "LitBuy jerseys and football kits from the LitBuy Finds catalog — club shirts, national team styles, and budget soccer jerseys with images, prices, and LitBuy links. Check sizing charts on LitBuy before ordering.",
+    sections: [
+      {
+        heading: "Jersey buying tips",
+        paragraphs: [
+          "Compare collar stitching, badge quality, and name/number printing in QC photos. Jerseys often run slim — read size charts on the LitBuy listing.",
+        ],
+        links: [
+          { href: "/categories/tshirts-and-shorts", label: "Tees category" },
+          { href: "/ai", label: "Search jerseys with LitBuy AI" },
+        ],
+      },
+    ],
+    faqs: [],
+    relatedLinks: [{ href: "/litbuy-finds", label: "LitBuy Finds" }],
+    getProducts: () => byKeyword("jersey", "football").slice(0, 96),
+    productSectionTitle: "LitBuy jerseys",
+  },
+
+  "litbuy-accessories": {
+    slug: "litbuy-accessories",
+    path: "/litbuy-accessories",
+    title: "LitBuy Accessories – Hats, Belts, Watches & More",
+    metaDescription:
+      "Browse LitBuy accessories — hats, belts, watches, socks, and small goods from the LitBuy Finds catalog.",
+    badge: "LitBuy accessories",
+    h1: "LitBuy accessories",
+    intro:
+      "LitBuy accessories from the LitBuy Finds catalog — hats, belts, watches, socks, and add-on pieces that complete a haul. Lower risk than jackets or bags but still worth a quick warehouse QC check.",
+    sections: [
+      {
+        heading: "Accessory categories",
+        paragraphs: [
+          "Browse the accessories category for the full grid or use this curated page for popular picks with photos and LitBuy links.",
+        ],
+        links: [
+          { href: "/best-litbuy-accessories-2026", label: "Best accessories 2026" },
+          { href: "/categories/accessories", label: "Accessories category" },
+        ],
+      },
+    ],
+    faqs: [],
+    relatedLinks: [{ href: "/litbuy-finds", label: "LitBuy Finds" }],
+    getProducts: () => byCategory("accessories").slice(0, 96),
+    productSectionTitle: "LitBuy accessories",
+  },
+
+  "latest-litbuy-finds": {
+    slug: "latest-litbuy-finds",
+    path: "/latest-litbuy-finds",
+    title: "Latest LitBuy Finds – Newest Catalog Additions",
+    metaDescription:
+      "Latest LitBuy finds added to the catalog — newest sneakers, jackets, and streetwear with verified LitBuy links, updated daily.",
+    badge: "Latest",
+    h1: "Latest LitBuy finds",
+    intro:
+      "The newest rows synced from LitBuy spreadsheet imports — latest LitBuy finds with images, prices, and buy links. Check here after each catalog sync for fresh drops.",
+    sections: [
+      {
+        heading: "How latest finds are selected",
+        paragraphs: [
+          "Products tagged in the latest-finds import lane surface here first, then roll into category and brand pages. Prices and images reflect the most recent sync.",
+        ],
+        links: [
+          { href: "/latest", label: "Latest page" },
+          { href: "/recently-added", label: "Recently added" },
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: "How often do latest finds update?",
+        answer: "The catalog syncs daily. New items appear after each import cycle.",
+      },
+    ],
+    relatedLinks: [
+      { href: "/trending-litbuy-finds", label: "Trending" },
+      { href: "/best-litbuy-finds", label: "Best finds" },
+    ],
+    getProducts: latestFinds,
+    productSectionTitle: "Latest additions",
+  },
+
+  "litbuy-finds-under-20": {
+    slug: "litbuy-finds-under-20",
+    path: "/litbuy-finds-under-20",
+    title: "LitBuy Finds Under $20 – Budget Picks",
+    metaDescription:
+      "LitBuy finds under $20 — budget sneakers, tees, and accessories with verified LitBuy links from the live catalog.",
+    badge: "Under $20",
+    h1: "LitBuy finds under $20",
+    intro:
+      "Budget LitBuy finds at or below $20 in catalog data — low-risk test pieces, basics, and accessories. Confirm live LitBuy checkout price before paying; shipping is separate.",
+    sections: [
+      {
+        heading: "Best uses for sub-$20 finds",
+        paragraphs: [
+          "Great for first haul tests, sock/tee fillers, and trying a new seller. Do not expect premium materials at this tier.",
+        ],
+        links: [
+          { href: "/best-litbuy-under-20", label: "Best under $20 list" },
+          { href: "/deals", label: "Deals page" },
+        ],
+      },
+    ],
+    faqs: [],
+    relatedLinks: [{ href: "/litbuy-finds-under-30", label: "Under $30" }],
+    getProducts: () => byMaxPrice(20),
+    productSectionTitle: "Under $20",
+  },
+
+  "litbuy-finds-under-30": {
+    slug: "litbuy-finds-under-30",
+    path: "/litbuy-finds-under-30",
+    title: "LitBuy Finds Under $30 – Budget Collection",
+    metaDescription:
+      "LitBuy finds under $30 — hoodies, tees, sneakers, and accessories with verified LitBuy buy links.",
+    badge: "Under $30",
+    h1: "LitBuy finds under $30",
+    intro:
+      "LitBuy finds at or below $30 in catalog data — the sweet spot for hoodies, basic sneakers, and haul fillers. Shipping not included; confirm live LitBuy totals at checkout.",
+    sections: [
+      {
+        heading: "Shopping under $30",
+        paragraphs: [
+          "This band covers most budget hoodies and tees in the catalog. Pair one mid-tier main piece with several sub-$30 fillers for a balanced haul.",
+        ],
+        links: [
+          { href: "/collections/best-under-30", label: "Under $30 collection" },
+          { href: "/deals", label: "Deals" },
+        ],
+      },
+    ],
+    faqs: [],
+    relatedLinks: [{ href: "/litbuy-finds-under-50", label: "Under $50" }],
+    getProducts: () => byMaxPrice(30),
+    productSectionTitle: "Under $30",
+  },
+
+  "litbuy-finds-under-50": {
+    slug: "litbuy-finds-under-50",
+    path: "/litbuy-finds-under-50",
+    title: "LitBuy Finds Under $50 – Mid-Budget Picks",
+    metaDescription:
+      "LitBuy finds under $50 — sneakers, jackets, and streetwear with QC links and LitBuy buy buttons.",
+    badge: "Under $50",
+    h1: "LitBuy finds under $50",
+    intro:
+      "LitBuy finds at or below $50 in catalog data — mid-budget sneakers, outerwear starters, and popular streetwear. Always confirm live LitBuy price and request QC before shipping.",
+    sections: [
+      {
+        heading: "What $50 usually covers",
+        paragraphs: [
+          "Many popular sneakers and light jackets sit in this band. Heavier designer outerwear often costs more — use LitBuy AI to search within your budget.",
+        ],
+        links: [
+          { href: "/best-litbuy-finds-under-50", label: "Best under $50" },
+          { href: "/ai", label: "LitBuy AI budget search" },
+        ],
+      },
+    ],
+    faqs: [],
+    relatedLinks: [{ href: "/litbuy-finds-under-30", label: "Under $30" }],
+    getProducts: () => byMaxPrice(50),
+    productSectionTitle: "Under $50",
   },
 };
 

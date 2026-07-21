@@ -46,7 +46,11 @@ const nextConfig: NextConfig = {
       { source: "/best-litbuy-bags", destination: "/best-litbuy-bags-2026", permanent: true },
       { source: "/best-litbuy-under-50", destination: "/best-under-50", permanent: true },
       { source: "/best-qc-finds", destination: "/top-qc-finds", permanent: true },
-      { source: "/guides/how-to-use-litbuy", destination: "/guides/how-to-use-litbuy-finds", permanent: true },
+      {
+        source: "/guides/how-to-use-litbuy",
+        destination: "/how-to-use-litbuy",
+        permanent: true,
+      },
       {
         source: "/guides/how-to-qc-photos-work",
         destination: "/guides/how-to-check-qc-photos",
@@ -94,6 +98,25 @@ const nextConfig: NextConfig = {
       { source: "/collections/best-bag-finds", destination: "/collections/best-bags", permanent: true },
       { source: "/collections/best-finds-under-50", destination: "/collections/best-under-50", permanent: true },
       { source: "/litbuy-telegram", destination: "/telegram-litbuy", permanent: true },
+      { source: "/litbuy-discord", destination: "/discord-litbuy", permanent: true },
+      { source: "/litbuy-ai", destination: "/ai", permanent: true },
+      { source: "/litbuy-coupon", destination: "/litbuy-coupons", permanent: true },
+      { source: "/litbuy-discount-code", destination: "/litbuy-discount", permanent: true },
+      {
+        source: "/guides/what-is-litbuy",
+        destination: "/what-is-litbuy",
+        permanent: true,
+      },
+      {
+        source: "/guides/litbuy-finds",
+        destination: "/what-is-litbuy-finds",
+        permanent: true,
+      },
+      {
+        source: "/guides/litbuy-qc-photos",
+        destination: "/litbuy-qc-photos",
+        permanent: true,
+      },
       { source: "/mulebuy-telegram", destination: "/telegram-mulebuy", permanent: true },
       { source: "/oopbuy-telegram", destination: "/telegram-oopbuy", permanent: true },
       { source: "/kakobuy-telegram", destination: "/telegram-kakobuy", permanent: true },
