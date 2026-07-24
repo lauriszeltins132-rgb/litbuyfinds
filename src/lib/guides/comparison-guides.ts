@@ -74,7 +74,10 @@ export const COMPARISON_GUIDES: Record<string, GuidePage> = {
         paragraphs: [
           "Both agents offer warehouse QC and international lines. Compare current shipping promotions and QC photo policies at checkout.",
         ],
-        links: [{ href: "/guides/how-shipping-works-with-agents", label: "Shipping guide" }],
+        links: [
+          { href: "/guides/how-shipping-works-with-agents", label: "Shipping guide" },
+          { href: "/litbuy-coupons", label: "LitBuy coupons" },
+        ],
       },
     ],
     faqs: [],

@@ -49,6 +49,10 @@ export default function GuidesHubPage() {
             <Link href="/about" className="font-bold text-accent hover:underline">
               Our mission
             </Link>
+            {" · "}
+            <Link href="/litbuy-coupons" className="font-bold text-accent hover:underline">
+              LitBuy coupons
+            </Link>
           </p>
         </div>
       </section>

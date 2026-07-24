@@ -414,6 +414,7 @@ export const SHARE_COLLECTIONS: Record<string, SeoListConfig> = {
     relatedLinks: [
       { href: "/most-popular-finds-now", label: "Popular today" },
       { href: "/collections/trending-this-week", label: "Trending week" },
+      { href: "/litbuy-coupons", label: "LitBuy coupons" },
     ],
     clusterLinks: [
       { href: "/collections/best-nike-finds", label: "Nike finds" },

@@ -32,6 +32,11 @@ import {
   TELEGRAM_SEO_SLUGS,
 } from "@/lib/telegram-seo-pages";
 import { ADVERTISE_PAGE_PATH } from "@/lib/advertise-page";
+import {
+  LITBUY_COUPON_REDIRECT_SLUGS,
+  LITBUY_COUPONS_PATH,
+} from "@/lib/litbuy-coupons-page";
+import { getDatasetSyncedIso } from "@/lib/catalog-meta";
 import { AUTHORITY_PAGE_SLUGS, AUTHORITY_PAGES } from "@/lib/litbuy-authority-pages";
 import { SITE_URL } from "@/lib/site";
 
@@ -65,6 +70,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.85,
     },
     { url: `${SITE_URL}${GUIDES_HUB.path}`, changeFrequency: "weekly", priority: 0.9 },
+    {
+      url: `${SITE_URL}${LITBUY_COUPONS_PATH}`,
+      changeFrequency: "daily",
+      priority: 0.95,
+      lastModified: getDatasetSyncedIso(),
+    },
   ];
 
   for (const slug of AUTHORITY_PAGE_SLUGS) {
@@ -121,7 +132,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     });
   }
 
+  const couponRedirectSlugs = new Set<string>(LITBUY_COUPON_REDIRECT_SLUGS);
+
   for (const slug of AGENT_COUPON_LANDING_SLUGS) {
+    if (slug === "litbuy-coupons" || couponRedirectSlugs.has(slug)) continue;
     const page = AGENT_COUPON_LANDING_PAGES[slug];
     routes.push({
       url: `${SITE_URL}${page.path}`,
