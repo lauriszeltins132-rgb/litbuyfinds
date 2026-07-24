@@ -63,6 +63,13 @@ export default function CouponModal() {
           </RegisterLink>
 
           <Link
+            href="/litbuy-coupons"
+            onClick={closeCoupon}
+            className="inline-flex w-full items-center justify-center rounded-full border border-border-strong py-3 text-sm font-bold text-foreground transition hover:border-accent/40 hover:text-accent"
+          >
+            All LitBuy coupons
+          </Link>
+          <Link
             href="/#browse"
             onClick={closeCoupon}
             className="inline-flex w-full items-center justify-center rounded-full border border-border-strong py-3 text-sm font-bold text-foreground transition hover:border-accent/40 hover:text-accent"

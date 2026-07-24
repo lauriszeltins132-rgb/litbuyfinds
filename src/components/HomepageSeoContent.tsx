@@ -43,6 +43,12 @@ export default function HomepageSeoContent() {
 
             <div className="flex flex-wrap gap-2 pt-2">
               <Link
+                href="/litbuy-coupons"
+                className="rounded-full border border-border px-3 py-1.5 text-xs font-bold hover:border-accent/40 hover:text-accent"
+              >
+                LitBuy coupons
+              </Link>
+              <Link
                 href="/guides/litbuy-finds"
                 className="rounded-full border border-border px-3 py-1.5 text-xs font-bold hover:border-accent/40 hover:text-accent"
               >

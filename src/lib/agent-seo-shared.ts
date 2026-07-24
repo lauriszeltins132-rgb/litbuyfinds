@@ -69,7 +69,7 @@ export function getAgentPlatformPaths(agent: SeoAgentDefinition) {
   return {
     telegram: `/telegram-${agent.slug}`,
     discord: `/discord-${agent.slug}`,
-    coupons: `/${agent.slug}-coupons`,
+    coupons: agent.id === "litbuy" ? "/litbuy-coupons" : `/${agent.slug}-coupons`,
     finds: agent.findsPath,
   };
 }

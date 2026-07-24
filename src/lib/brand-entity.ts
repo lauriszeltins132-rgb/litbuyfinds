@@ -103,6 +103,8 @@ export function getOrganizationKnowsAbout(): string[] {
     "sneaker finds",
     "fashion finds",
     "multi-agent shopping links",
+    "LitBuy coupons",
+    "LitBuy promo codes",
     TELEGRAM_CHANNEL_NAME,
   ];
 }

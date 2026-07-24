@@ -16,6 +16,7 @@ import siteNavigation from "@/data/site-navigation.json";
 
 const GUIDE_LINKS = [
   { href: "/guides", label: "All guides" },
+  { href: "/litbuy-coupons", label: "LitBuy coupons" },
   { href: "/guides/litbuy-finds", label: "LitBuy finds" },
   { href: "/guides/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
   { href: "/guides/litbuy-qc-photos", label: "LitBuy QC photos" },

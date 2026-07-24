@@ -295,6 +295,7 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
           "Prices on find pages can lag behind seller updates. Always confirm the live LitBuy price before paying.",
         ],
         links: [
+          { href: "/litbuy-coupons", label: "LitBuy coupons" },
           { href: "/deals", label: "Deals under $30" },
           { href: "/new-user-guide", label: "New user guide" },
         ],
@@ -685,7 +686,7 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
         ],
         links: [
           { href: "/litbuy-coupons", label: "LitBuy coupons" },
-          { href: "/best-litbuy-coupons", label: "Best LitBuy coupons" },
+          { href: "/litbuy-coupons", label: "LitBuy coupons" },
           { href: "/how-to-buy", label: "How to buy" },
         ],
       },
@@ -705,7 +706,7 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
           "Coupon text on find sites can lag behind LitBuy updates. The checkout screen is the source of truth for whether a shipping discount applies to your cart and destination.",
         ],
         links: [
-          { href: "/litbuy-discount", label: "LitBuy discount" },
+          { href: "/litbuy-coupons", label: "LitBuy coupons" },
           { href: "/is-litbuy-safe", label: "Safety tips" },
         ],
       },
@@ -724,7 +725,6 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
     ],
     relatedLinks: [
       { href: "/litbuy-coupons", label: "All LitBuy coupons" },
-      { href: "/litbuy-coupon", label: "LitBuy coupon" },
       ...CORE_RELATED.slice(0, 8),
     ],
     publishedTime: PUBLISHED,

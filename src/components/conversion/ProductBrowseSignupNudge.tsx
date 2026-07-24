@@ -34,8 +34,11 @@ export default function ProductBrowseSignupNudge() {
           &amp; QC photos
         </p>
         <p className="mt-1.5 text-xs leading-relaxed text-muted">
-          LitBuy accounts get warehouse QC, order tracking, shipping discounts,
-          and saved favorites.
+          LitBuy accounts get warehouse QC, order tracking,{" "}
+          <Link href="/litbuy-coupons" className="font-semibold text-accent hover:underline">
+            shipping discounts
+          </Link>
+          , and saved favorites.
         </p>
         <div className="mt-3 flex flex-wrap gap-2">
           <RegisterLink
