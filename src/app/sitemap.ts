@@ -19,6 +19,14 @@ import {
   TELEGRAM_SEO_PAGES,
   TELEGRAM_SEO_SLUGS,
 } from "@/lib/telegram-seo-pages";
+import {
+  DISCORD_SEO_PAGES,
+  DISCORD_SEO_SLUGS,
+} from "@/lib/discord-seo-pages";
+import {
+  COUPON_SEO_PAGES,
+  COUPON_SEO_SLUGS,
+} from "@/lib/coupon-seo-pages";
 import { ADVERTISE_PAGE_PATH } from "@/lib/advertise-page";
 import { SITE_URL } from "@/lib/site";
 
@@ -93,6 +101,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${SITE_URL}${page.path}`,
       changeFrequency: "weekly",
       priority: 0.82,
+    });
+  }
+
+  for (const slug of DISCORD_SEO_SLUGS) {
+    const page = DISCORD_SEO_PAGES[slug];
+    routes.push({
+      url: `${SITE_URL}${page.path}`,
+      changeFrequency: "weekly",
+      priority: 0.82,
+    });
+  }
+
+  for (const slug of COUPON_SEO_SLUGS) {
+    const page = COUPON_SEO_PAGES[slug];
+    routes.push({
+      url: `${SITE_URL}${page.path}`,
+      changeFrequency: "weekly",
+      priority: 0.83,
     });
   }
 

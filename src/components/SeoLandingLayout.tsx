@@ -1,10 +1,12 @@
 import Link from "next/link";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import CouponClaimLink from "@/components/CouponClaimLink";
 import ProductGrid from "@/components/ProductGrid";
 import SchemaScript from "@/components/SchemaScript";
 import type { SeoLandingConfig } from "@/lib/seo-landing-pages";
 import RelatedPages from "@/components/RelatedPages";
 import { buildCollectionPageSchema, buildFaqSchema } from "@/lib/schema";
+import { getSeoAgentBySlug } from "@/lib/seo-agents";
 
 type SeoLandingLayoutProps = {
   config: SeoLandingConfig;
@@ -13,6 +15,9 @@ type SeoLandingLayoutProps = {
 export default function SeoLandingLayout({ config }: SeoLandingLayoutProps) {
   const products = config.getProducts();
   const faqs = config.faqs.length > 0 ? config.faqs : undefined;
+  const spreadsheetAgent = config.slug.endsWith("-spreadsheet")
+    ? getSeoAgentBySlug(config.slug.replace(/-spreadsheet$/, ""))
+    : undefined;
 
   return (
     <>
@@ -43,6 +48,18 @@ export default function SeoLandingLayout({ config }: SeoLandingLayoutProps) {
             {config.h1}
           </h1>
           <p className="mt-5 text-base leading-relaxed text-muted">{config.intro}</p>
+
+          {spreadsheetAgent ? (
+            <div className="mt-6">
+              <CouponClaimLink
+                href={spreadsheetAgent.signupUrl}
+                location={`spreadsheet_seo_${config.slug}`}
+                className="inline-flex items-center rounded-full bg-accent px-5 py-3 text-sm font-black text-background transition hover:bg-accent-hover"
+              >
+                Open {spreadsheetAgent.name} & Save
+              </CouponClaimLink>
+            </div>
+          ) : null}
 
           <div className="mt-10 space-y-10">
             {config.sections.map((section) => {

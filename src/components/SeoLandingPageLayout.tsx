@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import CouponClaimLink from "@/components/CouponClaimLink";
 import ProductGrid from "@/components/ProductGrid";
 import SchemaScript from "@/components/SchemaScript";
 import RelatedPages from "@/components/RelatedPages";
@@ -18,6 +19,7 @@ import {
   buildWebPageSchema,
 } from "@/lib/schema";
 import { getProductHref } from "@/lib/slugs";
+import { getSeoAgentBySlug } from "@/lib/seo-agents";
 import type { Product } from "@/lib/types";
 
 type SeoLandingPageLayoutProps = {
@@ -52,6 +54,10 @@ export default function SeoLandingPageLayout({ entry }: SeoLandingPageLayoutProp
       : [];
   const faqs = entry.faqs.length > 0 ? entry.faqs : undefined;
   const sections = entry.sections ?? [];
+  const spreadsheetAgent =
+    entry.type === "spreadsheet"
+      ? getSeoAgentBySlug(entry.slug.replace(/-spreadsheet$/, ""))
+      : undefined;
 
   const breadcrumbItems = [
     { label: "Home", href: "/" },
@@ -126,6 +132,18 @@ export default function SeoLandingPageLayout({ entry }: SeoLandingPageLayoutProp
               {products.length.toLocaleString()} curated picks · Updated{" "}
               {formatDatasetAge()}
             </p>
+          ) : null}
+
+          {spreadsheetAgent ? (
+            <div className="mt-6">
+              <CouponClaimLink
+                href={spreadsheetAgent.signupUrl}
+                location={`spreadsheet_seo_${entry.slug}`}
+                className="inline-flex items-center rounded-full bg-accent px-5 py-3 text-sm font-black text-background transition hover:bg-accent-hover"
+              >
+                Open {spreadsheetAgent.name} & Save
+              </CouponClaimLink>
+            </div>
           ) : null}
 
           {sections.length > 0 ? (

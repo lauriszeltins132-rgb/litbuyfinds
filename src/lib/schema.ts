@@ -192,3 +192,63 @@ export function buildWebPageSchema({
       : {}),
   };
 }
+
+/**
+ * WebPage + WebSite schema with an embedded JoinAction pointing at a
+ * Discord invite. Combine with buildBreadcrumbSchema + buildFaqSchema
+ * on Discord SEO pages.
+ */
+export function buildDiscordJoinSchema({
+  name,
+  description,
+  path,
+  discordUrl,
+}: {
+  name: string;
+  description: string;
+  path: string;
+  discordUrl: string;
+}) {
+  return {
+    ...buildWebPageSchema({ name, description, path }),
+    potentialAction: {
+      "@type": "JoinAction",
+      name: `Join ${name}`,
+      target: discordUrl,
+    },
+  };
+}
+
+/**
+ * Offer schema for agent coupon/promo-code landing pages. Deliberately
+ * omits `price`/`priceSpecification` — we do not advertise invented
+ * discount percentages.
+ */
+export function buildCouponOfferSchema({
+  name,
+  description,
+  path,
+  agentName,
+  agentUrl,
+}: {
+  name: string;
+  description: string;
+  path: string;
+  agentName: string;
+  agentUrl: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Offer",
+    name,
+    description,
+    category: "Coupon",
+    url: `${SITE_URL}${path}`,
+    availability: "https://schema.org/InStock",
+    seller: {
+      "@type": "Organization",
+      name: agentName,
+      url: agentUrl,
+    },
+  };
+}

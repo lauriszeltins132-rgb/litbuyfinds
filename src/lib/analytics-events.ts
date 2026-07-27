@@ -11,6 +11,7 @@ export type ConversionEvent =
   | "qc_click"
   | "discord_click"
   | "telegram_click"
+  | "coupon_click"
   | "broken_image"
   | "search_submit"
   | "search_chip_click"
@@ -138,6 +139,10 @@ export function trackDiscordClick(location: string) {
 
 export function trackTelegramClick(location: string) {
   trackConversion("telegram_click", { location });
+}
+
+export function trackCouponClick(location: string, href?: string) {
+  trackConversion("coupon_click", { location, href });
 }
 
 export function trackBrokenImage(imageUrl: string, location: string) {

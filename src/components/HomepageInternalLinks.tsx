@@ -45,6 +45,17 @@ const SECTIONS = [
       { href: "/guides", label: "All guides" },
     ],
   },
+  {
+    title: "Discord, coupons & sheets",
+    links: [
+      { href: "/discord-litbuy", label: "LitBuy Discord" },
+      { href: "/discord-kakobuy", label: "Kakobuy Discord" },
+      { href: "/litbuy-coupons", label: "LitBuy coupons" },
+      { href: "/mulebuy-coupons", label: "MuleBuy coupons" },
+      { href: "/hipobuy-spreadsheet", label: "HipoBuy spreadsheet" },
+      { href: "/oopbuy-coupons", label: "OopBuy coupons" },
+    ],
+  },
 ] as const;
 
 export default function HomepageInternalLinks() {

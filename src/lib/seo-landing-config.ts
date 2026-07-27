@@ -322,10 +322,10 @@ export const SEO_LANDING_CONFIG: Record<string, SeoLandingPageEntry> = {
   "mulebuy-spreadsheet": {
     slug: "mulebuy-spreadsheet",
     type: "spreadsheet",
-    title: "MuleBuy Spreadsheet Finds",
+    title: "MuleBuy Spreadsheet – Daily QC Item Finds",
     description:
-      "Browse spreadsheet-style finds and open them on MuleBuy or LitBuy — QC photos, verified links, and daily catalog updates.",
-    h1: "MuleBuy spreadsheet finds",
+      "Access the MuleBuy spreadsheet with verified QC items. Stay updated with daily finds.",
+    h1: "MuleBuy Spreadsheet – Top Verified Items",
     intro:
       "MuleBuy shoppers often start from community spreadsheets. LitBuy Finds indexes the same product universe — set MuleBuy as your preferred agent in the header, then browse normally.",
     badge: "Agent spreadsheet",
@@ -350,10 +350,10 @@ export const SEO_LANDING_CONFIG: Record<string, SeoLandingPageEntry> = {
   "kakobuy-spreadsheet": {
     slug: "kakobuy-spreadsheet",
     type: "spreadsheet",
-    title: "Kakobuy Spreadsheet Finds",
+    title: "Kakobuy Spreadsheet – Daily QC Item Finds",
     description:
-      "Kakobuy spreadsheet-style discovery on LitBuy Finds — searchable catalog with QC references and agent choice at checkout.",
-    h1: "Kakobuy spreadsheet finds",
+      "Access the Kakobuy spreadsheet with verified QC items. Stay updated with daily finds.",
+    h1: "Kakobuy Spreadsheet – Top Verified Items",
     intro:
       "Use this page like a Kakobuy-friendly spreadsheet view: curated rows become product cards with photos, filters, and your saved agent preference.",
     badge: "Agent spreadsheet",
@@ -377,10 +377,10 @@ export const SEO_LANDING_CONFIG: Record<string, SeoLandingPageEntry> = {
   "oopbuy-spreadsheet": {
     slug: "oopbuy-spreadsheet",
     type: "spreadsheet",
-    title: "OopBuy Spreadsheet Finds",
+    title: "OopBuy Spreadsheet – Daily QC Item Finds",
     description:
-      "OopBuy spreadsheet finds on LitBuy Finds — browse QC-curated products and open them on OopBuy or LitBuy.",
-    h1: "OopBuy spreadsheet finds",
+      "Access the OopBuy spreadsheet with verified QC items. Stay updated with daily finds.",
+    h1: "OopBuy Spreadsheet – Top Verified Items",
     intro:
       "OopBuy users can treat this as a cleaner spreadsheet front-end: same catalog data, better photos, and agent switching without leaving the site.",
     badge: "Agent spreadsheet",
@@ -398,6 +398,38 @@ export const SEO_LANDING_CONFIG: Record<string, SeoLandingPageEntry> = {
       },
     ],
     productSectionTitle: "Trending finds for OopBuy shoppers",
+  },
+
+  "hipobuy-spreadsheet": {
+    slug: "hipobuy-spreadsheet",
+    type: "spreadsheet",
+    title: "HipoBuy Spreadsheet – Daily QC Item Finds",
+    description:
+      "Access the HipoBuy spreadsheet with verified QC items. Stay updated with daily finds.",
+    h1: "HipoBuy Spreadsheet – Top Verified Items",
+    intro:
+      "HipoBuy shoppers can browse the same indexed catalog as everyone else on LitBuy Finds. Filter by brand, compare QC-linked listings, then route purchases through HipoBuy if that is your preference.",
+    badge: "Agent spreadsheet",
+    keywords: ["hipobuy spreadsheet", "hipobuy finds", "hipobuy finds sheet"],
+    updateFrequency: "weekly",
+    filter: { trending: true },
+    relatedLinks: [
+      { href: "/hipobuy-finds", label: "HipoBuy finds hub" },
+      { href: "/discord-hipobuy", label: "HipoBuy Discord" },
+      { href: "/hipobuy-coupons", label: "HipoBuy coupons" },
+    ],
+    faqs: [
+      {
+        question: "Which agent is default?",
+        answer: "LitBuy is recommended site-wide, but HipoBuy can be selected anytime.",
+      },
+      {
+        question: "Is this an official HipoBuy spreadsheet?",
+        answer:
+          "This is an independent curated finds directory. It helps you discover products and open them on HipoBuy — not a replacement for HipoBuy's own tools.",
+      },
+    ],
+    productSectionTitle: "Trending finds for HipoBuy shoppers",
   },
 
   "acbuy-spreadsheet": {

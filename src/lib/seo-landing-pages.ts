@@ -1,6 +1,5 @@
 import type { StaticPageSection } from "./static-pages";
 import { getEditorsPicks } from "./discovery";
-import { getSpreadsheetMetadataCopy } from "./metadata-copy";
 import { filterFeaturedEligible } from "./product-media";
 import { hasExactPrice } from "./pricing";
 import { getAllProducts, getTrendingProducts } from "./products";
@@ -47,10 +46,11 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
   "litbuy-spreadsheet": {
     slug: "litbuy-spreadsheet",
     path: "/litbuy-spreadsheet",
-    title: getSpreadsheetMetadataCopy().title,
-    metaDescription: getSpreadsheetMetadataCopy().description,
+    title: "LitBuy Spreadsheet – Daily QC Item Finds",
+    metaDescription:
+      "Access the LitBuy spreadsheet with verified QC items. Stay updated with daily finds.",
     badge: "LitBuy resource",
-    h1: "LitBuy spreadsheet guide",
+    h1: "LitBuy Spreadsheet – Top Verified Items",
     intro:
       "LitBuy spreadsheets are how many buyers first discover products — rows of Weidian and Taobao links, prices, and QC notes. LitBuy Finds turns that same catalog into searchable pages with photos, filters, and verified agent links so you spend less time hunting and more time buying.",
     sections: [
