@@ -84,7 +84,15 @@ function parsePrice(value, formatted = "") {
     return null;
   }
 
-  const source = hasCurrency ? display : text;
+  let source = hasCurrency ? display : text;
+
+  // Spreadsheet exports sometimes use European decimals: "100,72$" not "100.72$".
+  if (hasCurrency && /\d,\d{1,2}(?:\s*\$|$)/.test(source)) {
+    source = source.replace(/(\d),(\d{1,2})/g, "$1.$2");
+  } else if (typeof value === "string" && /\d,\d{1,2}/.test(value)) {
+    source = String(value).replace(/(\d),(\d{1,2})/g, "$1.$2");
+  }
+
   const cleaned = source.replace(/[^0-9.]/g, "");
   if (!cleaned) return null;
 
@@ -115,53 +123,48 @@ function isValidProductName(name) {
   return name.length > 1;
 }
 
-function findProductName(rows, row, linkCol) {
+function findProductName(sheet, row, linkCol) {
   for (let col = linkCol - 1; col >= Math.max(0, linkCol - 4); col--) {
-    const name = normalize(rows[row]?.[col]);
+    const cell = getCell(sheet, row, col);
+    const name = normalize(cell?.v);
     if (isValidProductName(name)) return name;
   }
   return "";
 }
 
-function findUsdPrice(sheet, rows, row, linkCol) {
-  let dollarPrice = null;
-  const numericUsd = [];
+function findUsdPrice(sheet, row, linkCol) {
+  const MIN_USD = 3;
+  const MAX_USD = 350;
 
-  for (let col = linkCol + 1; col <= linkCol + 8; col++) {
+  for (let col = linkCol + 1; col <= linkCol + 6; col++) {
     const cell = getCell(sheet, row, col);
-    const raw = rows[row]?.[col];
-    const formatted = cell?.w ?? "";
-    const formula = cell?.f ?? "";
+    if (!cell) continue;
 
-    if (normalize(raw) === "QC") continue;
-    if (extractImage(cell)) continue;
-    if (extractLink(cell) && normalize(raw) === "LINK") continue;
+    const raw = cell.v;
+    const formatted = String(cell.w ?? "");
+    const formula = String(cell.f ?? "");
+    const display = normalize(raw);
+
+    // Stop at the next product block on the same row.
+    if (extractLink(cell) && display === "LINK") break;
+    if (formula.includes("IMAGE")) break;
+
+    if (display === "QC") continue;
+    if (extractLink(cell) && display !== "LINK") continue;
 
     const price = parsePrice(raw, formatted);
     if (price === null) continue;
 
+    // Use this product's USD column only — never min() across neighbors.
     if (formatted.includes("$") || formula.includes("/$")) {
-      if (price >= 5 && price <= 350) {
-        dollarPrice =
-          dollarPrice === null ? price : Math.min(dollarPrice, price);
-      }
-      continue;
-    }
-
-    // Large integers near links are usually CNY wholesale, not USD.
-    if (typeof raw === "number" && raw > 350) continue;
-
-    if (price >= 5 && price <= 350) {
-      numericUsd.push(price);
+      if (price >= MIN_USD && price <= MAX_USD) return price;
     }
   }
 
-  if (dollarPrice !== null) return dollarPrice;
-  if (numericUsd.length > 0) return Math.min(...numericUsd);
   return null;
 }
 
-function findImageAndQc(sheet, rows, row, linkCol) {
+function findImageAndQc(sheet, row, linkCol) {
   let image = "";
   let qc_link = "";
 
@@ -196,17 +199,17 @@ function parseSheet(sheet, sheetName) {
       const cell = getCell(sheet, row, col);
       const affiliate_link = extractLink(cell);
 
-      if (!affiliate_link.includes("litbuy.com")) continue;
+      if (!affiliate_link.includes("litbuy.com/product")) continue;
 
-      const product_name = findProductName(rows, row, col);
+      const product_name = findProductName(sheet, row, col);
       if (!product_name) continue;
 
       const dedupeKey = `${row}:${col}:${affiliate_link}`;
       if (seenInSheet.has(dedupeKey)) continue;
       seenInSheet.add(dedupeKey);
 
-      const price = findUsdPrice(sheet, rows, row, col);
-      const { image, qc_link } = findImageAndQc(sheet, rows, row, col);
+      const price = findUsdPrice(sheet, row, col);
+      const { image, qc_link } = findImageAndQc(sheet, row, col);
 
       products.push({
         product_name,

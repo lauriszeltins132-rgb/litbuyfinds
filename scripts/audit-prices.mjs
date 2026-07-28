@@ -13,7 +13,7 @@ const products = JSON.parse(
   fs.readFileSync(path.join(__dirname, "../src/data/products.json"), "utf8")
 );
 
-const MIN_TRUSTED = 5;
+const MIN_TRUSTED = 3;
 const MAX_VERIFIED = 400;
 const MAX_AUDIT = 5000;
 
