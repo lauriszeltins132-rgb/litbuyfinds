@@ -3,7 +3,7 @@ import { convertFromUsd, formatPrice } from "./currency";
 import type { Product } from "./types";
 
 /** Below this USD value prices are treated as bad data (e.g. parsed from "Jordan 1"). */
-export const MIN_TRUSTED_PRICE_USD = 5;
+export const MIN_TRUSTED_PRICE_USD = 3;
 
 /** Above this USD value we show "Check latest price" (likely CNY or data errors). */
 export const MAX_VERIFIED_PRICE_USD = 400;
