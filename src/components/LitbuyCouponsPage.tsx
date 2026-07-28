@@ -7,6 +7,7 @@ import {
   LITBUY_COUPONS_FAQS,
   LITBUY_COUPONS_INTERNAL_LINKS,
   LITBUY_COUPONS_METADATA,
+  LITBUY_COUPONS_OFFER,
   LITBUY_COUPONS_PATH,
   LITBUY_COUPONS_TRUST_SIGNALS,
   getLitbuyCouponRows,
@@ -56,6 +57,29 @@ export default function LitbuyCouponsPage() {
             <p className="mt-5 text-base leading-relaxed text-foreground">
               {LITBUY_COUPONS_METADATA.heroIntro}
             </p>
+
+            <div className="mt-6 grid gap-3 sm:grid-cols-2">
+              <div className="rounded-2xl border border-accent/35 bg-background/70 px-5 py-4 text-center">
+                <p className="text-3xl font-black tracking-tight text-accent sm:text-4xl">
+                  {LITBUY_COUPONS_OFFER.welcomePack}
+                </p>
+                <p className="mt-1 text-xs font-bold uppercase tracking-wide text-muted">
+                  {LITBUY_COUPONS_OFFER.welcomePackLabel}
+                </p>
+              </div>
+              <div className="rounded-2xl border border-accent/35 bg-background/70 px-5 py-4 text-center">
+                <p className="text-3xl font-black tracking-tight text-accent sm:text-4xl">
+                  {LITBUY_COUPONS_OFFER.shippingDiscount}
+                </p>
+                <p className="mt-1 text-xs font-bold uppercase tracking-wide text-muted">
+                  {LITBUY_COUPONS_OFFER.shippingDiscountLabel}
+                </p>
+              </div>
+            </div>
+            <p className="mt-4 text-sm font-semibold text-foreground">
+              {LITBUY_COUPONS_OFFER.headline}
+            </p>
+            <p className="mt-1 text-xs text-muted">{LITBUY_COUPONS_OFFER.disclaimer}</p>
             <p className="mt-3 text-sm text-muted">
               Last updated:{" "}
               <time dateTime={lastUpdated}>{lastUpdated}</time>
@@ -91,12 +115,24 @@ export default function LitbuyCouponsPage() {
               Current working LitBuy coupon
             </h2>
             <p className="mt-3 text-base leading-relaxed text-muted">
-              Register a new LitBuy account through the button below to unlock the
-              current new-user shipping discount. This is the same referral offer
-              we verify on LitBuy checkout — not a third-party code generator.
+              Register a new LitBuy account through the button below to claim the
+              working LitBuy coupon — up to{" "}
+              <strong className="text-foreground">$500 in welcome coupons</strong>{" "}
+              plus{" "}
+              <strong className="text-foreground">40% off international shipping</strong>.
+              This is the verified referral offer we check on LitBuy checkout, not a
+              third-party code generator.
             </p>
             <div className="mt-5 rounded-2xl border border-accent/30 bg-accent/5 p-5">
-              <p className="text-lg font-black text-foreground">
+              <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                <p className="text-2xl font-black text-accent sm:text-3xl">
+                  {LITBUY_COUPONS_OFFER.welcomePack}
+                </p>
+                <p className="text-2xl font-black text-accent sm:text-3xl">
+                  {LITBUY_COUPONS_OFFER.shippingDiscount}
+                </p>
+              </div>
+              <p className="mt-2 text-lg font-black text-foreground">
                 {LITBUY_COUPONS_CTA.headline}
               </p>
               <p className="mt-2 text-sm text-muted">
@@ -167,8 +203,10 @@ export default function LitbuyCouponsPage() {
                 .
               </li>
               <li>
-                Add items to your cart and confirm the shipping discount or
-                promotion appears at checkout before you pay.
+                Add items to your cart and confirm the{" "}
+                <strong className="text-foreground">$500 coupon pack</strong> and{" "}
+                <strong className="text-foreground">40% shipping discount</strong>{" "}
+                appear at checkout before you pay.
               </li>
             </ol>
           </section>
@@ -177,7 +215,14 @@ export default function LitbuyCouponsPage() {
           <section className="mt-12">
             <h2 className="text-xl font-black text-foreground">Coupon benefits</h2>
             <ul className="mt-4 space-y-2 text-base leading-relaxed text-muted">
-              <li>Lower international shipping on eligible new-user promotions</li>
+              <li>
+                Up to <strong className="text-foreground">$500 in LitBuy welcome coupons</strong>{" "}
+                on eligible new accounts
+              </li>
+              <li>
+                Up to <strong className="text-foreground">40% off international shipping</strong>{" "}
+                when you register through this LitBuy coupon link
+              </li>
               <li>Full warehouse QC photo access after you order</li>
               <li>Verified buy links from the LitBuy Finds catalog</li>
               <li>Order tracking and saved finds across devices</li>
@@ -219,12 +264,11 @@ export default function LitbuyCouponsPage() {
               How much can you save?
             </h2>
             <p className="mt-3 text-base leading-relaxed text-muted">
-              Product prices on LitBuy Finds are separate from shipping. For many
-              hauls, international freight is a significant line item — a
-              shipping discount on registration can reduce that cost on your
-              first parcel. Savings vary by weight, destination, and shipping
-              line. We do not guarantee a fixed dollar amount; confirm totals on
-              LitBuy before paying.
+              Product prices on LitBuy Finds are separate from coupons. For many
+              hauls, international freight is a significant line item — the LitBuy
+              shipping coupon (up to 40% off) plus the welcome coupon pack (up to
+              $500) can reduce your first haul cost. Savings vary by weight,
+              destination, and shipping line. Confirm totals on LitBuy before paying.
             </p>
           </section>
 
@@ -234,11 +278,27 @@ export default function LitbuyCouponsPage() {
               Why use LitBuy Finds coupons?
             </h2>
             <p className="mt-3 text-base leading-relaxed text-muted">
-              LitBuy Finds pairs verified coupon links with a searchable catalog
+              LitBuy Finds pairs verified LitBuy coupon links with a searchable catalog
               of real products — spreadsheet finds, QC references, category
-              browsing, and LitBuy AI. You claim the offer once, then discover
-              items worth buying without hunting expired codes on random blogs.
+              browsing, and LitBuy AI. Claim the $500 welcome coupons and shipping
+              discount once, then discover items worth buying without hunting expired
+              LitBuy promo codes on random blogs.
             </p>
+            <div className="mt-6 rounded-2xl border border-accent/25 bg-accent/5 p-5">
+              <p className="text-sm font-bold text-foreground">
+                Ready to claim your LitBuy coupon?
+              </p>
+              <p className="mt-1 text-sm text-muted">
+                {LITBUY_COUPONS_OFFER.headline} — free registration through our
+                verified link.
+              </p>
+              <RegisterLink
+                location="litbuy_coupons_footer"
+                className="mt-4 inline-flex rounded-full bg-accent px-6 py-3 text-sm font-bold text-background hover:opacity-90"
+              >
+                {LITBUY_COUPONS_CTA.label}
+              </RegisterLink>
+            </div>
             <ul className="mt-4 flex flex-wrap gap-2">
               {LITBUY_COUPONS_INTERNAL_LINKS.map((link) => (
                 <li key={link.href}>
