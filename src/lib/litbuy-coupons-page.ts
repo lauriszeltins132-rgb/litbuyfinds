@@ -1,9 +1,5 @@
 import { getDatasetSyncedIso } from "./catalog-meta";
-import {
-  LITBUY_OFFER_DESCRIPTION,
-  LITBUY_OFFER_HEADLINE,
-  LITBUY_SIGNUP_URL,
-} from "./constants";
+import { LITBUY_SIGNUP_URL } from "./constants";
 import { formatContentDate } from "./content-dates";
 
 export const LITBUY_COUPONS_PATH = "/litbuy-coupons";
@@ -23,6 +19,19 @@ export const LITBUY_COUPON_REDIRECT_SLUGS = [
   "best-litbuy-coupons",
 ] as const;
 
+/** Primary registration offer shown on the canonical LitBuy coupon page */
+export const LITBUY_COUPONS_OFFER = {
+  welcomePack: "$500",
+  welcomePackLabel: "Welcome coupon pack",
+  shippingDiscount: "40% OFF",
+  shippingDiscountLabel: "International shipping",
+  headline: "$500 Coupon Pack + 40% Off Shipping",
+  subline:
+    "Register through our verified LitBuy coupon link to unlock the new-user welcome pack and shipping discount.",
+  disclaimer:
+    "Offers apply to eligible new LitBuy accounts. Confirm the live coupon total on LitBuy checkout before paying.",
+} as const;
+
 export type LitbuyCouponRow = {
   coupon: string;
   discount: string;
@@ -38,13 +47,25 @@ export function getLitbuyCouponRows(): LitbuyCouponRow[] {
   const updated = getLitbuyCouponsLastUpdated();
   return [
     {
-      coupon: "New user shipping discount (referral link)",
-      discount: "Up to 30% off international shipping",
+      coupon: "LitBuy new-user coupon pack (registration)",
+      discount: "Up to $500 in welcome coupons",
       status: "Active",
       updated,
     },
     {
-      coupon: "Free LitBuy registration",
+      coupon: "LitBuy shipping coupon (referral link)",
+      discount: "Up to 40% off international shipping",
+      status: "Active",
+      updated,
+    },
+    {
+      coupon: "LitBuy referral / invite code (SMKS)",
+      discount: "Bundles welcome coupons + shipping discount",
+      status: "Active",
+      updated,
+    },
+    {
+      coupon: "Free LitBuy account",
       discount: "QC photos, order tracking, verified buy links",
       status: "Active",
       updated,
@@ -53,44 +74,49 @@ export function getLitbuyCouponRows(): LitbuyCouponRow[] {
 }
 
 export const LITBUY_COUPONS_METADATA = {
-  title: "Best LitBuy Coupon Codes (2026) | Working Promo Codes",
+  title: "Best LitBuy Coupon Codes (2026) | $500 + 40% Off Promo",
   description:
-    "Get the latest verified LitBuy coupon codes and promo offers. Save on shipping, unlock discounts and find the best LitBuy coupons updated regularly.",
+    "Claim the working LitBuy coupon for 2026 — up to $500 in welcome coupons plus 40% off shipping when you register. Verified LitBuy coupon codes, promo offers and referral bonuses updated regularly.",
   h1: "Best LitBuy Coupon Codes",
   heroIntro:
-    "LitBuy Finds tracks the current working LitBuy coupon and referral offer for new accounts — including the shipping discount available when you register through our verified referral link. Confirm the live total on LitBuy checkout before paying.",
+    "This is the canonical LitBuy coupon page for litbuyfinds.io. New users who register through our verified link can unlock up to $500 in LitBuy welcome coupons plus up to 40% off international shipping. We track working LitBuy coupon codes and promo offers here — confirm the live discount on LitBuy checkout before paying.",
 };
 
 export const LITBUY_COUPONS_FAQS = [
   {
     question: "What is the best LitBuy coupon code in 2026?",
     answer:
-      "The primary offer promoted on LitBuy Finds is a new-user shipping discount when you register through our referral link. LitBuy may run additional promotions at checkout — always verify the live offer on litbuy.com before paying.",
+      "The best working LitBuy coupon on LitBuy Finds bundles a new-user welcome pack (up to $500 in coupons) with up to 40% off international shipping when you register through our verified referral link. LitBuy may show additional promo codes at checkout — always verify the live offer on litbuy.com.",
   },
   {
     question: "Is there a working LitBuy promo code?",
     answer:
-      "Yes. New users can claim the current shipping discount by registering through the verified link on this page. We remove offers from this page when they stop working at checkout.",
+      "Yes. New users can claim the current LitBuy coupon by registering through the verified link on this page. The offer includes welcome coupons and a shipping discount — we remove codes from this page when they stop working at checkout.",
+  },
+  {
+    question: "Does LitBuy give $500 in coupons when you register?",
+    answer:
+      "Eligible new accounts can receive up to $500 in LitBuy welcome coupons through the registration promotion linked on this page, plus shipping savings. The exact coupon breakdown appears in your LitBuy account after signup — confirm before your first haul.",
   },
   {
     question: "What is the difference between a LitBuy coupon and referral code?",
     answer:
-      "A referral code (invite code) is tied to registration — it can unlock welcome shipping credits or account benefits. A coupon is usually applied at checkout for shipping or fees. On LitBuy, registration through a referral link often combines both.",
+      "A referral code (invite code) is tied to registration — it can unlock welcome coupon packs and account credits. A coupon is usually applied at checkout for shipping or fees. On LitBuy, registration through a referral link often combines both into one working LitBuy coupon offer.",
   },
   {
     question: "Do LitBuy coupons expire?",
     answer:
-      "Promotions can change without notice. The table on this page is updated when we re-verify offers. If a discount does not apply at checkout, check LitBuy's promotions page directly.",
+      "LitBuy coupon and promo offers can change by season, region, and account type. We update the comparison table when we re-verify offers. If checkout does not show the expected $500 pack or shipping discount, check LitBuy's live promotions page.",
   },
   {
     question: "How much can I save with a LitBuy coupon?",
     answer:
-      "Savings depend on your haul weight, shipping line, and whether you are a new user. Shipping is often a large share of total cost — a shipping discount on registration can materially reduce your first international parcel fee, but product prices are separate.",
+      "New users may save with up to $500 in welcome coupons plus up to 40% off international shipping on registration. Product prices are separate — shipping is often the largest haul cost, so the shipping coupon alone can materially reduce your first parcel fee.",
   },
   {
     question: "Why use LitBuy Finds for coupon links?",
     answer:
-      "We manually verify that registration links open the correct LitBuy signup flow, update this page when offers change, and pair coupons with a searchable catalog of real finds, QC references, and LitBuy AI search.",
+      "We manually verify that LitBuy coupon links open the correct signup flow, update this page when offers change, and pair coupons with a searchable catalog of real finds, QC references, and LitBuy AI search.",
   },
 ] as const;
 
@@ -106,15 +132,15 @@ export const LITBUY_COUPONS_INTERNAL_LINKS = [
 ] as const;
 
 export const LITBUY_COUPONS_TRUST_SIGNALS = [
-  "Coupons manually verified before listing",
+  "LitBuy coupons manually verified before listing",
   "Updated when catalog sync runs",
   "Community-tested registration flow",
-  "No expired codes shown as active",
+  "No expired LitBuy coupon codes shown as active",
 ] as const;
 
 export const LITBUY_COUPONS_CTA = {
-  label: "Claim LitBuy Coupon",
+  label: "Claim $500 Coupon + 40% Off",
   url: LITBUY_SIGNUP_URL,
-  headline: LITBUY_OFFER_HEADLINE,
-  description: LITBUY_OFFER_DESCRIPTION,
+  headline: LITBUY_COUPONS_OFFER.headline,
+  description: LITBUY_COUPONS_OFFER.subline,
 };
