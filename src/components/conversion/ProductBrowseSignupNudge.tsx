@@ -7,7 +7,7 @@ import {
   CONVERSION_DISMISS_KEYS,
   PRODUCT_VIEW_NUDGE_THRESHOLD,
 } from "@/lib/conversion";
-import { BROWSE_FINDS_CTA_LABEL, REGISTER_MODAL_CTA_LABEL } from "@/lib/constants";
+import { BROWSE_FINDS_CTA_LABEL, LITBUY_SIGNUP_URL, REGISTER_MODAL_CTA_LABEL } from "@/lib/constants";
 
 export default function ProductBrowseSignupNudge() {
   const { uniqueProductViews, isNudgeDismissed, dismissNudge } = useConversion();
@@ -35,9 +35,14 @@ export default function ProductBrowseSignupNudge() {
         </p>
         <p className="mt-1.5 text-xs leading-relaxed text-muted">
           LitBuy accounts get warehouse QC, order tracking,{" "}
-          <Link href="/litbuy-coupons" className="font-semibold text-accent hover:underline">
+          <a
+            href={LITBUY_SIGNUP_URL}
+            target="_blank"
+            rel="noopener noreferrer sponsored"
+            className="font-semibold text-accent hover:underline"
+          >
             shipping discounts
-          </Link>
+          </a>
           , and saved favorites.
         </p>
         <div className="mt-3 flex flex-wrap gap-2">

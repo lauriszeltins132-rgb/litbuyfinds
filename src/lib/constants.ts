@@ -45,8 +45,9 @@ export const PROMO_BANNER_ALT =
 
 export const PROMO_OG_IMAGE_URL = `https://litbuyfinds.io${PROMO_BANNER_OG}`;
 
-export const LITBUY_SIGNUP_URL =
-  "https://litbuy.com/register?inviteCode=SMKS";
+export const LITBUY_INVITE_CODE = "SMKS";
+
+export const LITBUY_SIGNUP_URL = `https://litbuy.com/register?inviteCode=${LITBUY_INVITE_CODE}`;
 
 /** Benefit-driven CTAs site-wide */
 export const REGISTER_CTA_LABEL = "Register & Get Shipping Discount";

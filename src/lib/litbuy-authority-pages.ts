@@ -1,4 +1,5 @@
 import type { StaticPageSection } from "./static-pages";
+import { LITBUY_SIGNUP_URL } from "./constants";
 import {
   LITBUY_AUTHORITY_LINKS,
   LITBUY_HUB_FOOTER_LINKS,
@@ -264,7 +265,7 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
           "Keep multiple items in the warehouse until you are ready to ship internationally — this is how hauls save on freight per piece.",
         ],
         links: [
-          { href: "/litbuy-coupons", label: "LitBuy coupons" },
+          { href: LITBUY_SIGNUP_URL, label: "LitBuy coupons" },
           { href: "/guides/how-to-order-from-litbuy", label: "Order guide" },
         ],
       },
@@ -295,7 +296,7 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
           "Prices on find pages can lag behind seller updates. Always confirm the live LitBuy price before paying.",
         ],
         links: [
-          { href: "/litbuy-coupons", label: "LitBuy coupons" },
+          { href: LITBUY_SIGNUP_URL, label: "LitBuy coupons" },
           { href: "/deals", label: "Deals under $30" },
           { href: "/new-user-guide", label: "New user guide" },
         ],
@@ -411,7 +412,7 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
         ],
         links: [
           { href: "/how-to-use-litbuy", label: "How to use LitBuy" },
-          { href: "/litbuy-coupons", label: "Coupons" },
+          { href: LITBUY_SIGNUP_URL, label: "Coupons" },
         ],
       },
       {
@@ -549,7 +550,7 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
           "Coupon links on LitBuy Finds point to documented offers — still verify terms on LitBuy before paying.",
         ],
         links: [
-          { href: "/litbuy-coupons", label: "LitBuy coupons" },
+          { href: LITBUY_SIGNUP_URL, label: "LitBuy coupons" },
           { href: "/contact", label: "Report a bad link" },
         ],
       },
@@ -685,8 +686,8 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
           "Check the main LitBuy coupons page for registration and seasonal promos. New-user guides sometimes include shipping credit — confirm on LitBuy's site, not third-party reposts.",
         ],
         links: [
-          { href: "/litbuy-coupons", label: "LitBuy coupons" },
-          { href: "/litbuy-coupons", label: "LitBuy coupons" },
+          { href: LITBUY_SIGNUP_URL, label: "LitBuy coupons" },
+          { href: LITBUY_SIGNUP_URL, label: "LitBuy coupons" },
           { href: "/how-to-buy", label: "How to buy" },
         ],
       },
@@ -706,7 +707,7 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
           "Coupon text on find sites can lag behind LitBuy updates. The checkout screen is the source of truth for whether a shipping discount applies to your cart and destination.",
         ],
         links: [
-          { href: "/litbuy-coupons", label: "LitBuy coupons" },
+          { href: LITBUY_SIGNUP_URL, label: "LitBuy coupons" },
           { href: "/is-litbuy-safe", label: "Safety tips" },
         ],
       },
@@ -724,7 +725,7 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
       },
     ],
     relatedLinks: [
-      { href: "/litbuy-coupons", label: "All LitBuy coupons" },
+      { href: LITBUY_SIGNUP_URL, label: "All LitBuy coupons" },
       ...CORE_RELATED.slice(0, 8),
     ],
     publishedTime: PUBLISHED,

@@ -1,4 +1,5 @@
 import { buildGuide } from "./build";
+import { LITBUY_SIGNUP_URL } from "../constants";
 import { CORE_LINKS } from "./shared";
 import type { GuidePage } from "./types";
 
@@ -76,7 +77,7 @@ export const COMPARISON_GUIDES: Record<string, GuidePage> = {
         ],
         links: [
           { href: "/guides/how-shipping-works-with-agents", label: "Shipping guide" },
-          { href: "/litbuy-coupons", label: "LitBuy coupons" },
+          { href: LITBUY_SIGNUP_URL, label: "LitBuy coupons" },
         ],
       },
     ],
