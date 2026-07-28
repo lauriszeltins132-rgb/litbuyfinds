@@ -197,7 +197,7 @@ export function buildAgentProductUrl(
   if (!affiliateLink) return null;
 
   if (agent.affiliateEnabled && /litbuy\.com/i.test(affiliateLink)) {
-    return affiliateLink;
+    return withCurrentLitBuyInvite(affiliateLink);
   }
 
   const listing = extractListingFromAffiliateLink(affiliateLink);

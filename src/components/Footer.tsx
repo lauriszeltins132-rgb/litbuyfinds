@@ -3,12 +3,14 @@
 import Link from "next/link";
 import {
   CONTACT_EMAIL,
+  LITBUY_SIGNUP_URL,
   REGISTER_CTA_LABEL,
   SITE_NAME,
   SOCIAL_LINKS,
 } from "@/lib/constants";
 import { TELEGRAM_COMMUNITY_FOOTER_LINKS } from "@/lib/telegram-seo-pages";
 import RegisterLink from "./RegisterLink";
+import SmartLink from "./SmartLink";
 import CommunityLinks from "./CommunityLinks";
 import FooterTrustBar from "./FooterTrustBar";
 import TrustStrip from "./TrustStrip";
@@ -16,7 +18,7 @@ import siteNavigation from "@/data/site-navigation.json";
 
 const GUIDE_LINKS = [
   { href: "/guides", label: "All guides" },
-  { href: "/litbuy-coupons", label: "LitBuy coupons" },
+  { href: LITBUY_SIGNUP_URL, label: "LitBuy coupons" },
   { href: "/guides/litbuy-finds", label: "LitBuy finds" },
   { href: "/guides/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
   { href: "/guides/litbuy-qc-photos", label: "LitBuy QC photos" },
@@ -186,9 +188,9 @@ export default function Footer() {
             <ul className="mt-4 space-y-2.5 text-sm">
               {GUIDE_LINKS.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-foreground/75 transition hover:text-accent">
+                  <SmartLink href={link.href} className="text-foreground/75 transition hover:text-accent">
                     {link.label}
-                  </Link>
+                  </SmartLink>
                 </li>
               ))}
               {COLLECTION_LINKS.map((link) => (

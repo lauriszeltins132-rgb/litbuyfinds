@@ -1,4 +1,5 @@
 import Link from "next/link";
+import SmartLink from "@/components/SmartLink";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import SchemaScript from "@/components/SchemaScript";
 import {
@@ -86,12 +87,12 @@ export default function AuthorityPageLayout({ page }: AuthorityPageLayoutProps) 
                     <ul className="mt-4 flex flex-wrap gap-2">
                       {section.links.map((link) => (
                         <li key={link.href}>
-                          <Link
+                          <SmartLink
                             href={link.href}
                             className="inline-flex rounded-full border border-border bg-panel px-3 py-1.5 text-xs font-semibold text-foreground hover:border-accent hover:text-accent"
                           >
                             {link.label}
-                          </Link>
+                          </SmartLink>
                         </li>
                       ))}
                     </ul>
@@ -122,12 +123,12 @@ export default function AuthorityPageLayout({ page }: AuthorityPageLayoutProps) 
             <ul className="mt-4 flex flex-wrap gap-2">
               {(page.relatedLinks ?? LITBUY_AUTHORITY_LINKS).map((link) => (
                 <li key={link.href}>
-                  <Link
+                  <SmartLink
                     href={link.href}
                     className="inline-flex rounded-full border border-border bg-panel px-3 py-1.5 text-xs font-semibold text-foreground hover:border-accent hover:text-accent"
                   >
                     {link.label}
-                  </Link>
+                  </SmartLink>
                 </li>
               ))}
             </ul>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import SmartLink from "@/components/SmartLink";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import SchemaScript from "@/components/SchemaScript";
 import {
@@ -71,12 +72,12 @@ export default function TelegramAgentLandingLayout({
             <ul className="mt-4 flex flex-wrap gap-2">
               {config.footerLinks.map((link) => (
                 <li key={link.href}>
-                  <Link
+                  <SmartLink
                     href={link.href}
                     className="rounded-full border border-border px-3 py-1.5 text-xs font-bold text-foreground/80 hover:border-accent/40 hover:text-accent"
                   >
                     {link.label}
-                  </Link>
+                  </SmartLink>
                 </li>
               ))}
             </ul>

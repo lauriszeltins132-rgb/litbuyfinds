@@ -1,4 +1,6 @@
 import Link from "next/link";
+import SmartLink from "@/components/SmartLink";
+import { LITBUY_SIGNUP_URL } from "@/lib/constants";
 
 const SECTIONS = [
   {
@@ -42,7 +44,7 @@ const SECTIONS = [
       { href: "/how-to-use-litbuy", label: "How to use LitBuy" },
       { href: "/ai", label: "LitBuy AI" },
       { href: "/is-litbuy-legit", label: "Is LitBuy legit" },
-      { href: "/litbuy-coupons", label: "LitBuy coupons" },
+      { href: LITBUY_SIGNUP_URL, label: "LitBuy coupons" },
     ],
   },
   {
@@ -75,12 +77,12 @@ export default function HomepageInternalLinks() {
               <ul className="mt-3 space-y-2">
                 {section.links.map((link) => (
                   <li key={link.href}>
-                    <Link
+                    <SmartLink
                       href={link.href}
                       className="text-sm font-semibold text-muted hover:text-accent"
                     >
                       {link.label}
-                    </Link>
+                    </SmartLink>
                   </li>
                 ))}
               </ul>

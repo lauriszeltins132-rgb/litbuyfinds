@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import SmartLink from "@/components/SmartLink";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import SchemaScript from "@/components/SchemaScript";
 import { AI_PROMPT_CHIPS } from "@/lib/ai/prompt-chips";
+import { LITBUY_SIGNUP_URL } from "@/lib/constants";
 import { buildFaqSchema, buildWebPageSchema } from "@/lib/schema";
 import { buildPageMetadata } from "@/lib/seo";
 
@@ -135,16 +137,16 @@ export default async function AiPage({ searchParams }: AiPageProps) {
                 { href: "/categories", label: "Categories" },
                 { href: "/guides", label: "Guides" },
                 { href: "/telegram-litbuy", label: "Telegram" },
-                { href: "/litbuy-coupons", label: "Coupons" },
+                { href: LITBUY_SIGNUP_URL, label: "Coupons" },
                 { href: "/best-shoes", label: "Best shoes" },
               ].map((link) => (
                 <li key={link.href}>
-                  <Link
+                  <SmartLink
                     href={link.href}
                     className="rounded-full border border-border px-3 py-1.5 text-xs font-bold hover:border-accent hover:text-accent"
                   >
                     {link.label}
-                  </Link>
+                  </SmartLink>
                 </li>
               ))}
             </ul>

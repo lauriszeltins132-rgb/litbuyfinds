@@ -1,4 +1,5 @@
 import Link from "next/link";
+import SmartLink from "@/components/SmartLink";
 import { LITBUY_AUTHORITY_LINKS } from "@/lib/litbuy-authority-hub";
 
 export default function HomepageAuthorityHub() {
@@ -19,12 +20,12 @@ export default function HomepageAuthorityHub() {
         <ul className="mt-5 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
           {LITBUY_AUTHORITY_LINKS.map((link) => (
             <li key={link.href}>
-              <Link
+              <SmartLink
                 href={link.href}
                 className="block rounded-xl border border-border/70 bg-background/50 px-4 py-3 text-sm font-semibold text-foreground transition hover:border-accent hover:text-accent"
               >
                 {link.label}
-              </Link>
+              </SmartLink>
             </li>
           ))}
         </ul>

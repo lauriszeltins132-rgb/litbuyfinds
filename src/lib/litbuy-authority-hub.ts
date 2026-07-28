@@ -1,4 +1,6 @@
 /** Core LitBuy authority URLs — single source for internal linking. */
+import { LITBUY_SIGNUP_URL } from "./constants";
+
 export const LITBUY_AUTHORITY_LINKS = [
   { href: "/litbuy-finds", label: "LitBuy Finds catalog" },
   { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
@@ -6,7 +8,7 @@ export const LITBUY_AUTHORITY_LINKS = [
   { href: "/what-is-litbuy-finds", label: "What is LitBuy Finds" },
   { href: "/how-to-use-litbuy", label: "How to use LitBuy" },
   { href: "/litbuy-qc-photos", label: "LitBuy QC photos" },
-  { href: "/litbuy-coupons", label: "LitBuy coupons" },
+  { href: LITBUY_SIGNUP_URL, label: "LitBuy coupons" },
   { href: "/telegram-litbuy", label: "LitBuy Telegram" },
   { href: "/discord-litbuy", label: "LitBuy Discord" },
   { href: "/ai", label: "LitBuy AI" },

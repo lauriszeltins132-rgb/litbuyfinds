@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { PUBLIC_CATALOG_COUNT } from "@/lib/constants";
+import SmartLink from "@/components/SmartLink";
+import { LITBUY_SIGNUP_URL, PUBLIC_CATALOG_COUNT } from "@/lib/constants";
 
 const PARAGRAPHS = [
   `LitBuy Finds is the largest searchable catalog of LitBuy spreadsheet products on the web. Instead of scrolling endless rows in a shared Google Sheet, you get ${PUBLIC_CATALOG_COUNT} indexed finds with photos, prices, QC references, and one-click agent links. Whether you are hunting sneaker finds, fashion finds, or rep finds for your next haul, everything is organized by brand, category, and collection.`,
@@ -42,12 +43,12 @@ export default function HomepageSeoContent() {
             ))}
 
             <div className="flex flex-wrap gap-2 pt-2">
-              <Link
-                href="/litbuy-coupons"
+              <SmartLink
+                href={LITBUY_SIGNUP_URL}
                 className="rounded-full border border-border px-3 py-1.5 text-xs font-bold hover:border-accent/40 hover:text-accent"
               >
                 LitBuy coupons
-              </Link>
+              </SmartLink>
               <Link
                 href="/guides/litbuy-finds"
                 className="rounded-full border border-border px-3 py-1.5 text-xs font-bold hover:border-accent/40 hover:text-accent"

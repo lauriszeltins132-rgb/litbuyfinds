@@ -1,4 +1,5 @@
 import Link from "next/link";
+import SmartLink from "@/components/SmartLink";
 import Breadcrumbs, { type BreadcrumbItem } from "@/components/Breadcrumbs";
 import ContentAuthorMeta from "@/components/ContentAuthorMeta";
 import SchemaScript from "@/components/SchemaScript";
@@ -99,12 +100,12 @@ export default function ContentPageLayout({
                     <ul className="mt-4 flex flex-wrap gap-2">
                       {section.links.map((link) => (
                         <li key={link.href}>
-                          <Link
+                          <SmartLink
                             href={link.href}
                             className="rounded-full border border-border px-3 py-1.5 text-xs font-bold text-foreground/80 hover:border-accent/40 hover:text-accent"
                           >
                             {link.label}
-                          </Link>
+                          </SmartLink>
                         </li>
                       ))}
                     </ul>
@@ -148,12 +149,12 @@ export default function ContentPageLayout({
               <ul className="mt-4 flex flex-wrap gap-2">
                 {relatedLinks.map((link) => (
                   <li key={link.href}>
-                    <Link
+                    <SmartLink
                       href={link.href}
                       className="rounded-full border border-border px-3 py-1.5 text-xs font-bold text-foreground/80 hover:border-accent/40 hover:text-accent"
                     >
                       {link.label}
-                    </Link>
+                    </SmartLink>
                   </li>
                 ))}
               </ul>

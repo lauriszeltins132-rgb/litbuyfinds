@@ -2,6 +2,7 @@ import { BUYING_AGENTS } from "./agents";
 import {
   LITBUY_OFFER_DESCRIPTION,
   LITBUY_OFFER_HEADLINE,
+  LITBUY_SIGNUP_URL,
 } from "./constants";
 
 export const SEO_AGENT_IDS = [
@@ -69,7 +70,7 @@ export function getAgentPlatformPaths(agent: SeoAgentDefinition) {
   return {
     telegram: `/telegram-${agent.slug}`,
     discord: `/discord-${agent.slug}`,
-    coupons: agent.id === "litbuy" ? "/litbuy-coupons" : `/${agent.slug}-coupons`,
+    coupons: agent.id === "litbuy" ? LITBUY_SIGNUP_URL : `/${agent.slug}-coupons`,
     finds: agent.findsPath,
   };
 }

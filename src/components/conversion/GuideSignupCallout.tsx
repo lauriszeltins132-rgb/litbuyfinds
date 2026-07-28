@@ -1,6 +1,5 @@
-import Link from "next/link";
 import RegisterLink from "@/components/RegisterLink";
-import { REGISTER_MODAL_CTA_LABEL } from "@/lib/constants";
+import { LITBUY_SIGNUP_URL, REGISTER_MODAL_CTA_LABEL } from "@/lib/constants";
 
 type GuideSignupCalloutProps = {
   variant?: "inline" | "panel";
@@ -34,9 +33,14 @@ export default function GuideSignupCallout({ variant = "panel" }: GuideSignupCal
       <p className="mt-2 text-sm leading-relaxed text-muted">
         Guides help you research. A LitBuy account unlocks QC photos, verified
         buy links, order tracking, and{" "}
-        <Link href="/litbuy-coupons" className="font-semibold text-accent hover:underline">
+        <a
+          href={LITBUY_SIGNUP_URL}
+          target="_blank"
+          rel="noopener noreferrer sponsored"
+          className="font-semibold text-accent hover:underline"
+        >
           shipping discounts
-        </Link>
+        </a>
         .
       </p>
       <RegisterLink

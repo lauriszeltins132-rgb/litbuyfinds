@@ -1,8 +1,10 @@
 import { getDatasetSyncedIso } from "./catalog-meta";
-import { LITBUY_SIGNUP_URL } from "./constants";
+import { LITBUY_INVITE_CODE, LITBUY_SIGNUP_URL } from "./constants";
 import { formatContentDate } from "./content-dates";
 
 export const LITBUY_COUPONS_PATH = "/litbuy-coupons";
+export const LITBUY_COUPON_SIGNUP_URL = LITBUY_SIGNUP_URL;
+export { LITBUY_INVITE_CODE };
 
 /** LitBuy coupon URL variants — all 301 to /litbuy-coupons */
 export const LITBUY_COUPON_REDIRECT_SLUGS = [

@@ -3,6 +3,7 @@ import Link from "next/link";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import GuidesHubGrid from "@/components/guides/GuidesHubGrid";
 import SchemaScript from "@/components/SchemaScript";
+import { LITBUY_SIGNUP_URL } from "@/lib/constants";
 import { GUIDES_HUB, getAllGuides } from "@/lib/guides";
 import { buildCollectionPageSchema } from "@/lib/schema";
 import { buildPageMetadata } from "@/lib/seo";
@@ -50,9 +51,14 @@ export default function GuidesHubPage() {
               Our mission
             </Link>
             {" · "}
-            <Link href="/litbuy-coupons" className="font-bold text-accent hover:underline">
+            <a
+              href={LITBUY_SIGNUP_URL}
+              target="_blank"
+              rel="noopener noreferrer sponsored"
+              className="font-bold text-accent hover:underline"
+            >
               LitBuy coupons
-            </Link>
+            </a>
           </p>
         </div>
       </section>

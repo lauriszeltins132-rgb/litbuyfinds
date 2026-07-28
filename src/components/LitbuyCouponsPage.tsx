@@ -10,6 +10,7 @@ import {
   LITBUY_COUPONS_OFFER,
   LITBUY_COUPONS_PATH,
   LITBUY_COUPONS_TRUST_SIGNALS,
+  LITBUY_INVITE_CODE,
   getLitbuyCouponRows,
   getLitbuyCouponsLastUpdated,
 } from "@/lib/litbuy-coupons-page";
@@ -80,6 +81,12 @@ export default function LitbuyCouponsPage() {
               {LITBUY_COUPONS_OFFER.headline}
             </p>
             <p className="mt-1 text-xs text-muted">{LITBUY_COUPONS_OFFER.disclaimer}</p>
+            <p className="mt-3 text-sm font-bold text-foreground">
+              LitBuy coupon / invite code:{" "}
+              <span className="rounded-md bg-accent/15 px-2 py-0.5 font-black text-accent">
+                {LITBUY_INVITE_CODE}
+              </span>
+            </p>
             <p className="mt-3 text-sm text-muted">
               Last updated:{" "}
               <time dateTime={lastUpdated}>{lastUpdated}</time>

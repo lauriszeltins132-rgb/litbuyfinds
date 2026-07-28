@@ -2,11 +2,7 @@
 
 import Link from "next/link";
 import { useCoupon } from "@/context/CouponContext";
-import {
-  BROWSE_FINDS_CTA_LABEL,
-  LITBUY_ACCOUNT_BENEFITS,
-  REGISTER_MODAL_CTA_LABEL,
-} from "@/lib/constants";
+import { BROWSE_FINDS_CTA_LABEL, LITBUY_SIGNUP_URL, LITBUY_ACCOUNT_BENEFITS, REGISTER_MODAL_CTA_LABEL } from "@/lib/constants";
 import RegisterLink from "./RegisterLink";
 
 export default function CouponModal() {
@@ -62,13 +58,15 @@ export default function CouponModal() {
             {REGISTER_MODAL_CTA_LABEL}
           </RegisterLink>
 
-          <Link
-            href="/litbuy-coupons"
+          <a
+            href={LITBUY_SIGNUP_URL}
+            target="_blank"
+            rel="noopener noreferrer sponsored"
             onClick={closeCoupon}
             className="inline-flex w-full items-center justify-center rounded-full border border-border-strong py-3 text-sm font-bold text-foreground transition hover:border-accent/40 hover:text-accent"
           >
-            All LitBuy coupons
-          </Link>
+            Claim LitBuy coupon (SMKS)
+          </a>
           <Link
             href="/#browse"
             onClick={closeCoupon}
