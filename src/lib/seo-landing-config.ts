@@ -1,4 +1,5 @@
 import type { StaticPageSection } from "./static-pages";
+import { SEO_EXPANSION_PAGES } from "./seo-expansion-config";
 import { TOP_LISTS } from "./top-lists";
 import type { Product } from "./types";
 
@@ -335,6 +336,8 @@ export const SEO_LANDING_CONFIG: Record<string, SeoLandingPageEntry> = {
     relatedLinks: [
       { href: "/mulebuy-finds", label: "MuleBuy finds hub" },
       { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+      { href: "/kakobuy-spreadsheet", label: "Kakobuy spreadsheet" },
+      { href: "/rep-agent-spreadsheets", label: "Agent spreadsheets hub" },
       { href: "/litbuy-vs-mulebuy", label: "LitBuy vs MuleBuy" },
     ],
     faqs: [
@@ -363,6 +366,8 @@ export const SEO_LANDING_CONFIG: Record<string, SeoLandingPageEntry> = {
     relatedLinks: [
       { href: "/kakobuy-finds", label: "Kakobuy finds hub" },
       { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+      { href: "/mulebuy-spreadsheet", label: "MuleBuy spreadsheet" },
+      { href: "/rep-agent-spreadsheets", label: "Agent spreadsheets hub" },
     ],
     faqs: [
       {
@@ -666,6 +671,8 @@ export const SEO_LANDING_CONFIG: Record<string, SeoLandingPageEntry> = {
     ],
     productSectionTitle: "Best value picks",
   },
+
+  ...SEO_EXPANSION_PAGES,
 };
 
 export const SEO_LANDING_CONFIG_SLUGS = Object.keys(SEO_LANDING_CONFIG);
