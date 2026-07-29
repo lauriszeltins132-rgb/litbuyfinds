@@ -1,4 +1,5 @@
 import type { StaticPageSection } from "./static-pages";
+import { PUBLIC_CATALOG_COUNT } from "./catalog-count-public";
 import { getEditorsPicks } from "./discovery";
 import { getSpreadsheetMetadataCopy } from "./metadata-copy";
 import { filterFeaturedEligible } from "./product-media";
@@ -75,8 +76,21 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
     badge: "LitBuy resource",
     h1: "LitBuy spreadsheet guide",
     intro:
-      "The LitBuy spreadsheet lists thousands of Weidian and Taobao finds with prices and QC notes. LitBuy Finds turns that same catalog into searchable product pages with photos, filters, categories, and LitBuy buy buttons — so you spend less time scrolling rows and more time shortlisting real products.",
+      "LitBuy spreadsheet contains thousands of curated products with QC photos, prices, and agent links. LitBuy Finds turns that same catalog into " +
+      `${PUBLIC_CATALOG_COUNT} searchable pages — updated daily with verified buy buttons for LitBuy, MuleBuy, Kakobuy, HipoBuy, OopBuy, and ACBuy.`,
     sections: [
+      {
+        heading: "Quick answer",
+        paragraphs: [
+          `The LitBuy spreadsheet lists Weidian and Taobao finds with prices and QC notes. LitBuy Finds indexes ${PUBLIC_CATALOG_COUNT} curated products with daily syncs, mobile search, filters, and multi-agent checkout — the same spreadsheet universe without scrolling endless rows.`,
+        ],
+        links: [
+          { href: "/rep-agent-spreadsheets", label: "Agent spreadsheets hub" },
+          { href: "/best-rep-spreadsheets", label: "Best rep spreadsheets" },
+          { href: "/kakobuy-spreadsheet", label: "Kakobuy spreadsheet" },
+          { href: "/mulebuy-spreadsheet", label: "MuleBuy spreadsheet" },
+        ],
+      },
       {
         heading: "What a LitBuy spreadsheet contains",
         paragraphs: [
@@ -144,6 +158,20 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
     ],
     faqs: [
       {
+        question: "How many products are in the LitBuy spreadsheet catalog?",
+        answer: `LitBuy Finds indexes ${PUBLIC_CATALOG_COUNT} curated finds with daily catalog syncs. The underlying spreadsheet universe is larger, but we filter broken images and missing prices before publishing.`,
+      },
+      {
+        question: "How often is the LitBuy spreadsheet updated?",
+        answer:
+          "The catalog syncs daily. New finds appear in Latest Finds, Recently Added, and collection pages after each import.",
+      },
+      {
+        question: "Which agents work with spreadsheet finds?",
+        answer:
+          "LitBuy, MuleBuy, Kakobuy, HipoBuy, OopBuy, and ACBuy — switch agents in the site header or per product page.",
+      },
+      {
         question: "Is LitBuy Finds the same as a LitBuy spreadsheet?",
         answer:
           "They share the same product universe. LitBuy Finds is a searchable catalog built on spreadsheet and agent data — not a replacement for your LitBuy account.",
@@ -153,16 +181,15 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
         answer:
           "Yes. Many buyers use both — spreadsheets for raw data and LitBuy Finds for faster discovery and sharing.",
       },
-      {
-        question: "How often is the catalog updated?",
-        answer:
-          "The dataset syncs daily. New finds appear in Recently Added and collection pages after each sync.",
-      },
     ],
     relatedLinks: [
       { href: "/litbuy-finds", label: "LitBuy finds" },
       { href: "/litbuy-guide", label: "LitBuy guide hub" },
-      ...RESOURCE_LINKS,
+      { href: "/litbuy-discord", label: "LitBuy Discord" },
+      { href: "/kakobuy-spreadsheet", label: "Kakobuy spreadsheet" },
+      { href: "/mulebuy-spreadsheet", label: "MuleBuy spreadsheet" },
+      { href: "/rep-agent-spreadsheets", label: "Agent spreadsheets" },
+      ...RESOURCE_LINKS.filter((l) => l.href !== "/litbuy-finds"),
     ],
     getProducts: () => getEditorsPicks(48),
     productSectionTitle: "Featured LitBuy spreadsheet picks",

@@ -64,6 +64,19 @@ export default function AuthorityPageLayout({ page }: AuthorityPageLayoutProps) 
             <p className="mt-2 text-sm leading-relaxed text-muted">{page.summary}</p>
           </aside>
 
+          {page.primaryCta ? (
+            <div className="mt-6">
+              <a
+                href={page.primaryCta.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="community-btn community-btn--discord inline-flex items-center justify-center rounded-2xl px-6 py-3 text-sm font-bold text-white"
+              >
+                {page.primaryCta.label}
+              </a>
+            </div>
+          ) : null}
+
           <div className="mt-10 space-y-10">
             {page.sections.map((section) => {
               const Heading = section.level === 3 ? "h3" : "h2";

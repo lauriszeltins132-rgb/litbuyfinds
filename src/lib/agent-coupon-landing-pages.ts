@@ -32,6 +32,26 @@ type CouponPageVariant = {
 
 const EXTRA_LITBUY_VARIANTS: CouponPageVariant[] = [
   {
+    slug: "litbuy-coupon-code",
+    titleSuffix: "LitBuy Coupon Code 2026 | Working Promo & Referral Codes",
+    metaDescription:
+      "Get a working LitBuy coupon code for 2026 — welcome coupons, shipping discounts, and verified referral codes. Claim your LitBuy coupon code in one click.",
+    intro:
+      "Redeem the latest LitBuy coupon code on verified finds and spreadsheet products. Register through our link to unlock welcome coupons and shipping savings.",
+    keywordLine:
+      "Searching for a LitBuy coupon code, LitBuy promo code, or LitBuy referral code? Claim the verified offer below.",
+  },
+  {
+    slug: "litbuy-discount-code",
+    titleSuffix: "LitBuy Discount Code 2026 | Coupons & Shipping Savings",
+    metaDescription:
+      "Claim a LitBuy discount code for shipping and checkout savings in 2026. Verified coupons, promo offers, and new-user welcome packs.",
+    intro:
+      "Use the current LitBuy discount code to save on international shipping and welcome coupons when you register. Always confirm the live offer on LitBuy checkout.",
+    keywordLine:
+      "Looking for a LitBuy discount code, LitBuy discount, or LitBuy savings code? Start with the verified registration link below.",
+  },
+  {
     slug: "litbuy-discount",
     titleSuffix: "LitBuy Discount 2026 | Coupons, Promo Codes & Savings",
     metaDescription:

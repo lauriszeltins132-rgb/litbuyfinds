@@ -4,6 +4,7 @@ import Link from "next/link";
 import { memo, useMemo, useState } from "react";
 import type { Product } from "@/lib/types";
 import { getDisplayProductName, getDisplayBrand } from "@/lib/product-validation";
+import { getProductImageAlt } from "@/lib/product-details";
 import { formatProductPrice, getPriceStatus } from "@/lib/pricing";
 import { getCardDisplayProps } from "@/lib/card-props";
 import { getProductSource } from "@/lib/affiliate-source";
@@ -24,15 +25,6 @@ type ProductCardProps = {
   showTrendingScore?: boolean;
   priority?: boolean;
 };
-
-function getCardImageAlt(product: Product): string {
-  const brand = getDisplayBrand(product);
-  const name = getDisplayProductName(product);
-  if (brand) {
-    return `${brand} ${name} — ${product.category} find on LitBuy Finds`;
-  }
-  return `${name} — LitBuy Finds`;
-}
 
 async function shareProduct(product: Product, title: string) {
   const url = `${window.location.origin}${getProductHref(product)}`;
@@ -62,7 +54,7 @@ function ProductCard({
   const brand = getDisplayBrand(product);
   const source = getProductSource(product.affiliate_link);
   const productHref = getProductHref(product);
-  const imageAlt = getCardImageAlt(product);
+  const imageAlt = getProductImageAlt(product);
   const cardProps = useMemo(() => getCardDisplayProps(product.id), [product.id]);
   const badges = useMemo(
     () =>

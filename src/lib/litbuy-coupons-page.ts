@@ -6,19 +6,15 @@ export const LITBUY_COUPONS_PATH = "/litbuy-coupons";
 export const LITBUY_COUPON_SIGNUP_URL = LITBUY_SIGNUP_URL;
 export { LITBUY_INVITE_CODE };
 
-/** LitBuy coupon URL variants — all 301 to /litbuy-coupons */
+/** LitBuy coupon URL variants — thin aliases still 301 to /litbuy-coupons */
 export const LITBUY_COUPON_REDIRECT_SLUGS = [
   "litbuy-coupon",
-  "litbuy-coupon-code",
   "litbuy-promo-code",
   "litbuy-referral-code",
   "litbuy-referral-bonus",
   "litbuy-discount",
-  "litbuy-discount-code",
   "litbuy-promo",
-  "litbuy-coupons-2026",
   "best-litbuy-coupon",
-  "best-litbuy-coupons",
 ] as const;
 
 /** Primary registration offer shown on the canonical LitBuy coupon page */
@@ -124,13 +120,19 @@ export const LITBUY_COUPONS_FAQS = [
 
 export const LITBUY_COUPONS_INTERNAL_LINKS = [
   { href: "/", label: "Homepage" },
-  { href: "/ai", label: "LitBuy AI" },
+  { href: "/litbuy-finds", label: "LitBuy finds" },
   { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+  { href: LITBUY_SIGNUP_URL, label: "LitBuy coupons" },
+  { href: "/litbuy-discord", label: "LitBuy Discord" },
+  { href: "/telegram-litbuy", label: "LitBuy Telegram" },
+  { href: "/litbuy-shipping-coupon", label: "Shipping coupon guide" },
+  { href: "/litbuy-coupon-code", label: "LitBuy coupon code" },
+  { href: "/best-litbuy-coupons", label: "Best LitBuy coupons" },
+  { href: "/ai", label: "LitBuy AI" },
   { href: "/latest", label: "Latest finds" },
   { href: "/guides", label: "Guides" },
   { href: "/litbuy-qc-photos", label: "QC photos guide" },
   { href: "/how-to-use-litbuy", label: "How to use LitBuy" },
-  { href: "/litbuy-finds", label: "LitBuy Finds catalog" },
 ] as const;
 
 export const LITBUY_COUPONS_TRUST_SIGNALS = [

@@ -45,6 +45,9 @@ const SECTIONS = [
       { href: "/ai", label: "LitBuy AI" },
       { href: "/is-litbuy-legit", label: "Is LitBuy legit" },
       { href: LITBUY_SIGNUP_URL, label: "LitBuy coupons" },
+      { href: "/litbuy-discord", label: "LitBuy Discord" },
+      { href: "/sneaker-finds", label: "Sneaker finds" },
+      { href: "/best-rep-finds", label: "Rep finds" },
     ],
   },
   {

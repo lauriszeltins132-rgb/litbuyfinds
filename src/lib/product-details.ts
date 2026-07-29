@@ -98,17 +98,37 @@ export function getProductHighlights(product: Product): string[] {
   return highlights;
 }
 
+const CATEGORY_ALT_LABELS: Record<string, string> = {
+  shoes: "sneaker find",
+  "hoodies-and-pants": "streetwear clothing find",
+  "coats-and-jackets": "jacket find",
+  "tshirts-and-shorts": "clothing find",
+  accessories: "accessory find",
+  electronics: "electronics find",
+};
+
+function getCategoryAltLabel(categorySlug: string, categoryName: string): string {
+  return CATEGORY_ALT_LABELS[categorySlug] ?? `${categoryName.toLowerCase()} find`;
+}
+
 export function getProductSeoTitle(product: Product): string {
-  return buildProductMetaTitle(getDisplayProductName(product));
+  const name = getDisplayProductName(product);
+  const brand = getDisplayBrand(product);
+  const titled =
+    brand && !name.toLowerCase().includes(brand.toLowerCase())
+      ? `${brand} ${name}`
+      : name;
+  return buildProductMetaTitle(titled);
 }
 
 export function getProductImageAlt(product: Product): string {
   const brand = getDisplayBrand(product);
   const name = getDisplayProductName(product);
+  const categoryLabel = getCategoryAltLabel(product.category_slug, product.category);
   if (brand) {
-    return `${brand} ${name} — ${product.category} find on LitBuy Finds`;
+    return `${brand} ${name} — ${categoryLabel} with QC photos on LitBuy Finds`;
   }
-  return `${name} — LitBuy Finds`;
+  return `${name} — ${categoryLabel} on LitBuy Finds`;
 }
 
 export function getProductSeoDescription(product: Product): string {
