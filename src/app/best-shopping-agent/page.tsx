@@ -1,6 +1,6 @@
 import { createSeoLandingConfigPage } from "@/lib/seo-landing-config-page";
 
-const { generateMetadata, Page } = createSeoLandingConfigPage("best-shopping-agent");
+const page = createSeoLandingConfigPage("best-shopping-agent");
 
-export { generateMetadata };
-export default Page;
+export const { generateMetadata, revalidate } = page;
+export default page.Page;

@@ -1,10 +1,11 @@
 import Link from "next/link";
 import SmartLink from "@/components/SmartLink";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import ContentFreshness from "@/components/ContentFreshness";
 import ProductGrid from "@/components/ProductGrid";
 import SchemaScript from "@/components/SchemaScript";
-import { formatDatasetAge, formatSyncedTimestamp } from "@/lib/catalog-meta";
 import { PUBLIC_CATALOG_COUNT } from "@/lib/constants";
+import { getCatalogFreshnessSchemaDates } from "@/lib/freshness-dates";
 import {
   FINDS_HUB_CATEGORY_LINKS,
   FINDS_HUB_FAQS,
@@ -23,6 +24,7 @@ import {
 export default function FindsHubPage() {
   const sections = getFindsHubSections();
   const catalogCount = getAllProducts().length;
+  const freshnessDates = getCatalogFreshnessSchemaDates();
   const breadcrumbs = [
     { label: "Home", href: "/" },
     { label: FINDS_HUB_METADATA.h1 },
@@ -35,6 +37,8 @@ export default function FindsHubPage() {
           name: FINDS_HUB_METADATA.h1,
           description: FINDS_HUB_METADATA.description,
           path: FINDS_HUB_PATH,
+          datePublished: freshnessDates.datePublished,
+          dateModified: freshnessDates.dateModified,
         })}
       />
       <SchemaScript data={buildBreadcrumbSchema(breadcrumbs, FINDS_HUB_PATH)} />
@@ -45,6 +49,8 @@ export default function FindsHubPage() {
           description: FINDS_HUB_METADATA.description,
           path: FINDS_HUB_PATH,
           numberOfItems: catalogCount,
+          datePublished: freshnessDates.datePublished,
+          dateModified: freshnessDates.dateModified,
         })}
       />
 
@@ -63,11 +69,9 @@ export default function FindsHubPage() {
           </p>
 
           <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-semibold text-muted">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/25 bg-accent/8 px-2.5 py-1 text-accent">
-              Updated {formatDatasetAge()}
-            </span>
+            <ContentFreshness variant="updated-daily" display="badge" />
             <span>{PUBLIC_CATALOG_COUNT} finds indexed</span>
-            <span>Latest sync: {formatSyncedTimestamp()}</span>
+            <ContentFreshness variant="catalog-sync" />
           </div>
 
           <div className="mt-8 flex flex-wrap gap-2">
@@ -97,6 +101,11 @@ export default function FindsHubPage() {
                       <p className="mt-1 max-w-2xl text-sm leading-relaxed text-muted">
                         {section.description}
                       </p>
+                      {section.freshness ? (
+                        <div className="mt-2">
+                          <ContentFreshness variant={section.freshness} />
+                        </div>
+                      ) : null}
                     </div>
                     <Link
                       href={section.href}

@@ -4,6 +4,8 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import type { Product } from "@/lib/types";
 import { dedupeListingRail } from "@/lib/listing-dedupe";
+import ContentFreshness from "@/components/ContentFreshness";
+import type { ContentFreshnessVariant } from "@/lib/freshness-dates";
 import ProductCard from "./ProductCard";
 import { useState } from "react";
 
@@ -17,6 +19,7 @@ type DiscoveryRailProps = {
   showTrendingScore?: boolean;
   /** Only the first rail should preload card images. */
   preloadImages?: boolean;
+  freshness?: ContentFreshnessVariant;
 };
 
 export default function DiscoveryRail({
@@ -26,6 +29,7 @@ export default function DiscoveryRail({
   products,
   showTrendingScore = false,
   preloadImages = false,
+  freshness,
 }: DiscoveryRailProps) {
   const [selected, setSelected] = useState<Product | null>(null);
   const railProducts = dedupeListingRail(products);
@@ -46,6 +50,11 @@ export default function DiscoveryRail({
                   {subtitle}
                 </p>
               )}
+              {freshness ? (
+                <div className="mt-1 hidden sm:block">
+                  <ContentFreshness variant={freshness} />
+                </div>
+              ) : null}
             </div>
             <Link
               href={href}

@@ -1,6 +1,6 @@
 import { createSeoLandingConfigPage } from "@/lib/seo-landing-config-page";
 
-const { generateMetadata, Page } = createSeoLandingConfigPage("chrome-hearts-finds");
+const page = createSeoLandingConfigPage("chrome-hearts-finds");
 
-export { generateMetadata };
-export default Page;
+export const { generateMetadata, revalidate } = page;
+export default page.Page;

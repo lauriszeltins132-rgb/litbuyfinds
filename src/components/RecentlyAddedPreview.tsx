@@ -1,5 +1,5 @@
 import Link from "next/link";
-import DataFreshness from "@/components/DataFreshness";
+import ContentFreshness from "@/components/ContentFreshness";
 import { getRecencyCounts } from "@/lib/recency";
 
 const BUCKETS = [
@@ -32,7 +32,7 @@ const BUCKETS = [
     label: "New This Week",
     description: "Fresh products added this week.",
     cta: "View Weekly Finds",
-    href: "/recently-added#week",
+    href: "/trending-this-week",
     icon: (
       <svg
         className="h-11 w-11"
@@ -94,7 +94,7 @@ export default function RecentlyAddedPreview() {
               the dataset changes.
             </p>
             <p className="mt-2">
-              <DataFreshness label="Last synced" />
+              <ContentFreshness variant="catalog-sync" />
             </p>
           </div>
           <Link
@@ -130,6 +130,11 @@ export default function RecentlyAddedPreview() {
                 <p className="mt-4 flex-1 text-sm leading-relaxed text-muted">
                   {bucket.description}
                 </p>
+                {bucket.id === "week" ? (
+                  <p className="mt-2">
+                    <ContentFreshness variant="weekly-added" />
+                  </p>
+                ) : null}
 
                 <Link
                   href={bucket.href}
