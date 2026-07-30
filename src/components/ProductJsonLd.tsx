@@ -1,8 +1,11 @@
 import type { Product } from "@/lib/types";
-import { SITE_NAME } from "@/lib/constants";
-import { extractBrand } from "@/lib/brands";
 import { hasExactPrice } from "@/lib/pricing";
 import { SITE_URL } from "@/lib/site";
+import {
+  getDisplayBrand,
+  getDisplayProductName,
+} from "@/lib/product-validation";
+import { getProductSeoDescription } from "@/lib/product-details";
 import SchemaScript from "@/components/SchemaScript";
 
 type ProductJsonLdProps = {
@@ -11,14 +14,15 @@ type ProductJsonLdProps = {
 };
 
 export default function ProductJsonLd({ product, slug }: ProductJsonLdProps) {
-  const brand = extractBrand(product.product_name);
+  const brand = getDisplayBrand(product);
+  const displayName = getDisplayProductName(product);
   const url = `${SITE_URL}/find/${slug}`;
 
   const schema = {
     "@context": "https://schema.org",
     "@type": "Product",
-    name: product.product_name,
-    description: `${product.product_name} — curated on ${SITE_NAME}`,
+    name: brand ? `${brand} ${displayName}` : displayName,
+    description: getProductSeoDescription(product),
     image: product.image ? [product.image] : undefined,
     category: product.category,
     url,

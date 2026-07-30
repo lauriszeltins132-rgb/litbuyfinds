@@ -26,6 +26,7 @@ import { getLatestProducts, getTrendingProducts } from "@/lib/products";
 import { buildPageMetadata } from "@/lib/seo";
 import FloatingBackButton from "@/components/FloatingBackButton";
 import ProductJsonLd from "@/components/ProductJsonLd";
+import SchemaScript from "@/components/SchemaScript";
 import BestOfLinks from "@/components/BestOfLinks";
 import RelatedGuides from "@/components/RelatedGuides";
 import RecordRecentlyViewed from "@/components/RecordRecentlyViewed";
@@ -34,6 +35,8 @@ import TrackProductView from "@/components/TrackProductView";
 import RelatedPages from "@/components/RelatedPages";
 import TelegramDailyFindsCta from "@/components/TelegramDailyFindsCta";
 import { getRelatedGuidesForProduct } from "@/lib/related-guides";
+import { LITBUY_SIGNUP_URL } from "@/lib/constants";
+import { buildBreadcrumbSchema } from "@/lib/schema";
 
 type ProductPageProps = {
   params: Promise<{ slug: string }>;
@@ -112,18 +115,24 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const engagement = getProductEngagementStats(product.id);
   const showTrending = isProductTrending(product.id);
 
+  const breadcrumbItems = [
+    { label: "Home", href: "/" },
+    { label: "Finds", href: "/finds" },
+    { label: product.category, href: categoryHref },
+    { label: facts.displayName },
+  ];
+
   return (
     <>
       <ProductJsonLd product={product} slug={slug} />
+      <SchemaScript
+        data={buildBreadcrumbSchema(breadcrumbItems, `/find/${slug}`)}
+      />
       <FloatingBackButton />
       <TrackProductView product={product} />
       <RecordRecentlyViewed product={product} />
       <Breadcrumbs
-        items={[
-          { label: "Home", href: "/" },
-          { label: product.category, href: categoryHref },
-          { label: facts.displayName },
-        ]}
+        items={breadcrumbItems}
         currentPath={`/find/${slug}`}
         compact
       />
@@ -201,6 +210,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
       <section className="px-4 pb-16 pt-4 sm:px-6">
         <div className="mx-auto flex max-w-7xl flex-wrap justify-center gap-4 text-center">
+          <Link href="/finds" className="text-sm font-bold text-accent hover:underline">
+            Finds hub →
+          </Link>
           <Link href={categoryHref} className="text-sm font-bold text-accent hover:underline">
             Browse more in {product.category} →
           </Link>
@@ -212,20 +224,31 @@ export default async function ProductPage({ params }: ProductPageProps) {
               More {brand} finds →
             </Link>
           ) : null}
+          <Link href="/litbuy-spreadsheet" className="text-sm font-bold text-muted hover:text-accent">
+            Spreadsheet →
+          </Link>
+          <a
+            href={LITBUY_SIGNUP_URL}
+            target="_blank"
+            rel="noopener noreferrer sponsored"
+            className="text-sm font-bold text-muted hover:text-accent"
+          >
+            Coupons →
+          </a>
+          <Link href="/litbuy-discord" className="text-sm font-bold text-muted hover:text-accent">
+            Discord →
+          </Link>
           <Link href="/trending" className="text-sm font-bold text-muted hover:text-accent">
             Trending finds →
           </Link>
-          <Link href="/recently-added" className="text-sm font-bold text-muted hover:text-accent">
-            Recently added →
+          <Link href="/latest-finds" className="text-sm font-bold text-muted hover:text-accent">
+            Latest finds →
+          </Link>
+          <Link href="/litbuy-qc" className="text-sm font-bold text-muted hover:text-accent">
+            QC photos →
           </Link>
           <Link href="/guides/beginner-guide-to-litbuy" className="text-sm font-bold text-muted hover:text-accent">
-            New to LitBuy? Beginner guide →
-          </Link>
-          <Link href="/guides/how-to-check-qc-photos" className="text-sm font-bold text-muted hover:text-accent">
-            How to check QC →
-          </Link>
-          <Link href="/how-to-buy" className="text-sm font-bold text-muted hover:text-accent">
-            How to buy →
+            Beginner guide →
           </Link>
         </div>
       </section>

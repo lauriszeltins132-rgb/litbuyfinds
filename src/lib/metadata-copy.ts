@@ -179,6 +179,21 @@ export function buildProductMetaTitle(productName: string): string {
   );
 }
 
+/** SEO title for product detail pages — rep-find focused. */
+export function buildProductRepFindTitle(options: {
+  name: string;
+  brand: string | null;
+  hasQc: boolean;
+}): string {
+  const { name, brand, hasQc } = options;
+  const lead =
+    brand && !name.toLowerCase().includes(brand.toLowerCase())
+      ? `${brand} ${name}`
+      : name;
+  const qcBit = hasQc ? " - QC Photos" : "";
+  return truncateMetaTitle(`${lead} Rep Find${qcBit} & Agent Link`);
+}
+
 export function buildProductMetaDescription(options: {
   name: string;
   brand: string | null;

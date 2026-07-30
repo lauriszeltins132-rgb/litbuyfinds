@@ -39,6 +39,7 @@ const SECTIONS = [
   {
     title: "LitBuy authority",
     links: [
+      { href: "/finds", label: "Finds hub" },
       { href: "/what-is-litbuy", label: "What is LitBuy" },
       { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
       { href: "/how-to-use-litbuy", label: "How to use LitBuy" },

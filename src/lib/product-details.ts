@@ -1,6 +1,6 @@
 import {
   buildProductMetaDescription,
-  buildProductMetaTitle,
+  buildProductRepFindTitle,
 } from "./metadata-copy";
 import type { Product } from "./types";
 import { formatPrice } from "./currency";
@@ -114,11 +114,11 @@ function getCategoryAltLabel(categorySlug: string, categoryName: string): string
 export function getProductSeoTitle(product: Product): string {
   const name = getDisplayProductName(product);
   const brand = getDisplayBrand(product);
-  const titled =
-    brand && !name.toLowerCase().includes(brand.toLowerCase())
-      ? `${brand} ${name}`
-      : name;
-  return buildProductMetaTitle(titled);
+  return buildProductRepFindTitle({
+    name,
+    brand,
+    hasQc: Boolean(product.qc_link),
+  });
 }
 
 export function getProductImageAlt(product: Product): string {

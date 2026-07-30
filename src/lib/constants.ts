@@ -29,11 +29,13 @@ export const POPULAR_SEARCHES = [
   "Nike",
   "Jordan",
   "Moncler",
+  "Stussy",
   "Canada Goose",
   "Stone Island",
-  "Bags",
-  "Jackets",
+  "Hoodies",
   "Sneakers",
+  "Jackets",
+  "Bags",
 ] as const;
 
 /** Universal promotional banner — OG/social only (not homepage hero) */

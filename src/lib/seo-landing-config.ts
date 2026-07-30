@@ -672,6 +672,125 @@ export const SEO_LANDING_CONFIG: Record<string, SeoLandingPageEntry> = {
     productSectionTitle: "Best value picks",
   },
 
+  "litbuy-vs-kakobuy": {
+    slug: "litbuy-vs-kakobuy",
+    type: "comparison",
+    title: "LitBuy vs Kakobuy — Which Agent?",
+    description:
+      "Balanced comparison of LitBuy and Kakobuy for Weidian and Taobao finds — QC workflow, spreadsheets, community, and when each may fit your haul.",
+    h1: "LitBuy vs Kakobuy",
+    intro:
+      "Both agents can purchase from Chinese marketplaces. LitBuy is our recommended default on LitBuy Finds, but Kakobuy is a supported alternative. Compare live fees, shipping lines, and coupons in each dashboard — not marketing claims.",
+    badge: "Comparison",
+    keywords: ["litbuy vs kakobuy", "kakobuy or litbuy"],
+    updateFrequency: "monthly",
+    sections: [
+      {
+        heading: "What is similar",
+        paragraphs: [
+          "Both offer warehouse storage, QC photos, and international shipping. Both open the same Weidian and Taobao listings indexed on LitBuy Finds.",
+        ],
+      },
+      {
+        heading: "Spreadsheets and finds",
+        paragraphs: [
+          "Browse the same catalog on LitBuy Finds regardless of agent. Kakobuy spreadsheet-style discovery is available at /kakobuy-spreadsheet — LitBuy at /litbuy-spreadsheet.",
+        ],
+        links: [
+          { href: "/kakobuy-spreadsheet", label: "Kakobuy spreadsheet" },
+          { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+          { href: "/finds", label: "Finds hub" },
+        ],
+      },
+      {
+        heading: "Community and coupons",
+        paragraphs: [
+          "Join LitBuy Discord for QC threads and find alerts. Coupon offers change seasonally — verify registration promos on each agent's site before paying.",
+        ],
+        links: [
+          { href: "/litbuy-discord", label: "LitBuy Discord" },
+          { href: "/litbuy-coupons", label: "LitBuy coupons" },
+        ],
+      },
+    ],
+    compareGroups: [
+      { label: "Trending this week", filter: { freshness: "popularWeek" } },
+      { label: "QC-linked picks", filter: { requireQc: true } },
+    ],
+    relatedLinks: [
+      { href: "/kakobuy-finds", label: "Kakobuy finds" },
+      { href: "/litbuy-finds", label: "LitBuy finds" },
+      { href: "/litbuy-vs-mulebuy", label: "LitBuy vs MuleBuy" },
+      { href: "/best-shopping-agent", label: "Agent overview" },
+    ],
+    faqs: [
+      {
+        question: "Can I use Kakobuy with LitBuy Finds?",
+        answer:
+          "Yes. Set Kakobuy as your preferred agent in the header or open listings through Kakobuy buy buttons.",
+      },
+      {
+        question: "Which agent has better QC?",
+        answer:
+          "Both offer warehouse photos — workflow and optional services differ. Check each agent's order panel for your item type.",
+      },
+    ],
+    productSectionTitle: "Sample finds to compare",
+  },
+
+  "litbuy-vs-hipobuy": {
+    slug: "litbuy-vs-hipobuy",
+    type: "comparison",
+    title: "LitBuy vs HipoBuy — Which Agent?",
+    description:
+      "Balanced comparison of LitBuy and HipoBuy for marketplace finds — supported features, spreadsheets, community links, and coupons.",
+    h1: "LitBuy vs HipoBuy",
+    intro:
+      "HipoBuy is a supported alternative to LitBuy on this site. LitBuy Finds indexes one catalog — you choose the agent at checkout. Compare shipping routes and promotions for your country before committing to a large haul.",
+    badge: "Comparison",
+    keywords: ["litbuy vs hipobuy", "hipobuy or litbuy"],
+    updateFrequency: "monthly",
+    sections: [
+      {
+        heading: "Shared catalog",
+        paragraphs: [
+          "Every product on LitBuy Finds supports LitBuy and HipoBuy links. Discovery, QC references, and category pages are identical — only checkout differs.",
+        ],
+        links: [
+          { href: "/hipobuy-finds", label: "HipoBuy finds" },
+          { href: "/finds", label: "Finds hub" },
+        ],
+      },
+      {
+        heading: "When buyers choose HipoBuy",
+        paragraphs: [
+          "Some buyers already have HipoBuy accounts, preferred shipping lines, or active coupons. You can switch agents per product without leaving the catalog.",
+        ],
+        links: [
+          { href: "/best-shopping-agent", label: "Agent guide" },
+          { href: "/telegram-hipobuy", label: "HipoBuy Telegram" },
+        ],
+      },
+    ],
+    compareGroups: [
+      { label: "Editor picks", filter: { freshness: "editorsPicks" } },
+      { label: "Budget under $30", filter: { maxPrice: 30 } },
+    ],
+    relatedLinks: [
+      { href: "/hipobuy-finds", label: "HipoBuy finds" },
+      { href: "/litbuy-finds", label: "LitBuy finds" },
+      { href: "/litbuy-vs-kakobuy", label: "LitBuy vs Kakobuy" },
+    ],
+    faqs: [
+      {
+        question: "Is HipoBuy supported on every product?",
+        answer:
+          "Yes. Use the agent selector in the site header or open HipoBuy from each product page.",
+      },
+    ],
+    productSectionTitle: "Sample finds to compare",
+  },
+
   ...SEO_EXPANSION_PAGES,
 };
 

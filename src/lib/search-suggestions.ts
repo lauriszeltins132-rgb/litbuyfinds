@@ -5,6 +5,7 @@ import { BEST_OF_PAGES, BEST_OF_SLUGS } from "./best-of-pages";
 import { GUIDE_PAGES } from "./guides";
 import { SHARE_COLLECTION_SLUGS, SHARE_COLLECTIONS } from "./share-collections";
 import { SEO_LANDING_SLUGS, SEO_LANDING_PAGES } from "./seo-landing-pages";
+import { getPublishedSeoLandingSlugs } from "./seo-landing-engine";
 import { POPULAR_SEARCHES } from "./constants";
 import { getProductHref } from "./slugs";
 
@@ -111,6 +112,34 @@ function buildIndex(): SearchSuggestion[] {
     });
   }
 
+  const hubPages = [
+    { label: "Finds hub", href: "/finds", keywords: "finds hub rep finds", priority: 98 },
+    { label: "Latest finds", href: "/latest-finds", keywords: "latest rep finds", priority: 96 },
+    { label: "Sneaker finds", href: "/sneaker-finds", keywords: "sneaker finds", priority: 95 },
+    { label: "Clothing finds", href: "/clothing-finds", keywords: "clothing finds", priority: 94 },
+    { label: "QC photos", href: "/litbuy-qc", keywords: "litbuy qc photos", priority: 93 },
+    { label: "Spreadsheet", href: "/litbuy-spreadsheet", keywords: "litbuy spreadsheet", priority: 92 },
+  ];
+  for (const hub of hubPages) {
+    items.push({
+      label: hub.label,
+      href: hub.href,
+      type: "landing",
+      keywords: hub.keywords,
+      priority: hub.priority,
+    });
+  }
+
+  const brandFindPages: Record<string, string> = {
+    nike: "nike-finds",
+    jordan: "jordan-finds",
+    stussy: "stussy-finds",
+    moncler: "moncler-finds",
+    prada: "prada-finds",
+    "stone-island": "stone-island-finds",
+    "chrome-hearts": "chrome-hearts-finds",
+  };
+
   for (const brand of brands) {
     const boost = topBrandNames.has(brand.name.toLowerCase()) ? 20 : 0;
     items.push({
@@ -120,6 +149,17 @@ function buildIndex(): SearchSuggestion[] {
       keywords: `${brand.name} ${brand.slug}`.toLowerCase(),
       priority: 70 + Math.min(brand.count, 30) + boost,
     });
+
+    const brandFindSlug = brandFindPages[brand.slug];
+    if (brandFindSlug) {
+      items.push({
+        label: `${brand.name} finds`,
+        href: `/${brandFindSlug}`,
+        type: "collection",
+        keywords: `${brand.name} finds rep`.toLowerCase(),
+        priority: 93 + boost,
+      });
+    }
 
     const subs = BRAND_SUB_TYPES[brand.slug];
     if (subs) {
@@ -202,6 +242,17 @@ function buildIndex(): SearchSuggestion[] {
       type: "landing",
       keywords: `${page.title} ${page.slug} litbuy`.toLowerCase(),
       priority: 72,
+    });
+  }
+
+  for (const slug of getPublishedSeoLandingSlugs()) {
+    if (items.some((item) => item.href === `/${slug}`)) continue;
+    items.push({
+      label: slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
+      href: `/${slug}`,
+      type: "landing",
+      keywords: `${slug} litbuy finds`.toLowerCase(),
+      priority: 80,
     });
   }
 
