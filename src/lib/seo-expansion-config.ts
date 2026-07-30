@@ -607,4 +607,292 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
     ],
     productSectionTitle: "Top spreadsheet finds",
   },
+
+  "latest-finds": {
+    slug: "latest-finds",
+    type: "freshness",
+    title: "Latest Rep Finds 2026 | New QC Photos & Agent Links",
+    description:
+      "Latest rep finds added to LitBuy Finds — new sneakers, clothing, and accessories with QC photos, prices, and verified agent links updated daily.",
+    h1: "Latest rep finds",
+    intro:
+      "Fresh catalog additions land here first after each daily sync. Browse the newest rep finds with photos, prices, and buy-ready agent links — updated today from community spreadsheets.",
+    badge: "Fresh finds",
+    keywords: ["latest rep finds", "latest rep finds 2026", "new litbuy finds"],
+    updateFrequency: "daily",
+    filter: { freshness: "addedToday" },
+    productLimit: 48,
+    sections: [
+      {
+        heading: "Freshness signals",
+        paragraphs: [
+          "The catalog syncs daily. This page highlights products added in the most recent import — check the timestamp on the Finds hub for the exact sync time.",
+          "Pair latest finds with QC references when available, and join Discord for same-day drop alerts between syncs.",
+        ],
+        links: [
+          { href: "/finds", label: "Finds hub" },
+          { href: "/recently-added", label: "Recently added" },
+          { href: "/litbuy-discord", label: "LitBuy Discord" },
+        ],
+      },
+    ],
+    relatedLinks: [
+      { href: "/finds", label: "Finds hub" },
+      { href: "/trending", label: "Trending finds" },
+      { href: "/latest", label: "Latest catalog" },
+      { href: "/litbuy-qc", label: "QC photos" },
+      ...HUB.slice(0, 4),
+    ],
+    faqs: [
+      {
+        question: "How often are latest finds updated?",
+        answer:
+          "The catalog syncs daily. New products appear on this page after each import completes.",
+      },
+      {
+        question: "Are these the same as spreadsheet rows?",
+        answer:
+          "They come from the same product universe — LitBuy Finds filters broken images and surfaces shareable product pages.",
+      },
+    ],
+    productSectionTitle: "New finds today",
+  },
+
+  "nike-finds": {
+    slug: "nike-finds",
+    type: "collection",
+    title: "Nike Finds | Best Nike Rep Products with QC Photos",
+    description:
+      "Find the best Nike rep products with QC photos, prices, and agent links — Dunks, Air Force, Tech Fleece, and more on LitBuy Finds.",
+    h1: "Nike finds",
+    intro:
+      "Find the best Nike rep products with QC photos, prices, and agent links. Browse Dunks, Air Force 1, Travis Scott collabs, and Tech Fleece from verified Weidian and Taobao listings.",
+    badge: "Nike finds",
+    keywords: ["nike finds", "nike rep finds", "nike litbuy"],
+    updateFrequency: "weekly",
+    getProducts: TOP_LISTS["top-nike-finds"].getProducts,
+    brandLinks: ["nike"],
+    categoryLinks: ["shoes"],
+    relatedLinks: [
+      { href: "/best-nike-finds", label: "Best Nike finds" },
+      { href: "/nike-spreadsheet", label: "Nike spreadsheet" },
+      { href: "/sneaker-finds", label: "Sneaker finds" },
+      { href: "/finds", label: "Finds hub" },
+    ],
+    faqs: [
+      {
+        question: "How do I find Nike batches with QC?",
+        answer:
+          "Filter Nike finds with QC badges on product pages, or browse the QC-approved collection for reference photos.",
+      },
+    ],
+    productSectionTitle: "Top Nike picks",
+  },
+
+  "jordan-finds": {
+    slug: "jordan-finds",
+    type: "collection",
+    title: "Jordan Finds | Best Jordan Rep Sneakers & QC Photos",
+    description:
+      "Find the best Jordan rep sneakers with QC photos, prices, and agent links — retros, collabs, and grails on LitBuy Finds.",
+    h1: "Jordan finds",
+    intro:
+      "Find the best Jordan rep products with QC photos, prices, and agent links. Browse Jordan 1, Jordan 4, and retro collabs from verified marketplace listings.",
+    badge: "Jordan finds",
+    keywords: ["jordan finds", "jordan rep finds", "air jordan finds"],
+    updateFrequency: "weekly",
+    getProducts: TOP_LISTS["best-jordan-finds-2026"].getProducts,
+    brandLinks: ["jordan", "nike"],
+    categoryLinks: ["shoes"],
+    relatedLinks: [
+      { href: "/best-jordan-finds", label: "Best Jordan finds" },
+      { href: "/nike-finds", label: "Nike finds" },
+      { href: "/sneaker-finds", label: "Sneaker finds" },
+      { href: "/finds", label: "Finds hub" },
+    ],
+    faqs: [
+      {
+        question: "Are Jordan and Nike finds separate?",
+        answer:
+          "Jordan is a Nike sub-brand in the catalog — browse both brand pages when hunting specific silhouettes.",
+      },
+    ],
+    productSectionTitle: "Top Jordan picks",
+  },
+
+  "stussy-finds": {
+    slug: "stussy-finds",
+    type: "collection",
+    title: "Stussy Finds | Streetwear Reps with QC Photos",
+    description:
+      "Find the best Stussy rep products with QC photos, prices, and agent links — hoodies, tees, and streetwear on LitBuy Finds.",
+    h1: "Stussy finds",
+    intro:
+      "Find the best Stussy rep products with QC photos, prices, and agent links. UK streetwear staples with verified buy buttons and daily catalog updates.",
+    badge: "Stussy finds",
+    keywords: ["stussy finds", "stussy rep", "stussy litbuy"],
+    updateFrequency: "weekly",
+    filter: { keywords: ["stussy"] },
+    brandLinks: ["stussy"],
+    relatedLinks: [
+      { href: "/best-stussy-finds", label: "Best Stussy finds" },
+      { href: "/streetwear-finds", label: "Streetwear finds" },
+      { href: "/hoodie-finds", label: "Hoodie finds" },
+      { href: "/finds", label: "Finds hub" },
+    ],
+    faqs: [
+      {
+        question: "What Stussy items are most popular?",
+        answer:
+          "Hoodies and graphic tees lead search volume — check QC references before shipping.",
+      },
+    ],
+    productSectionTitle: "Top Stussy picks",
+  },
+
+  "moncler-finds": {
+    slug: "moncler-finds",
+    type: "collection",
+    title: "Moncler Finds | Puffer Jackets & QC Photos",
+    description:
+      "Find the best Moncler rep jackets with QC photos, prices, and agent links — puffers, vests, and outerwear on LitBuy Finds.",
+    h1: "Moncler finds",
+    intro:
+      "Find the best Moncler rep products with QC photos, prices, and agent links. Puffer jackets and vests with reference QC where available — always request warehouse QC before shipping.",
+    badge: "Moncler finds",
+    keywords: ["moncler finds", "moncler rep", "moncler jacket finds"],
+    updateFrequency: "weekly",
+    filter: { keywords: ["moncler"] },
+    brandLinks: ["moncler"],
+    categoryLinks: ["coats-and-jackets"],
+    relatedLinks: [
+      { href: "/collections/best-moncler-finds", label: "Moncler collection" },
+      { href: "/jacket-finds", label: "Jacket finds" },
+      { href: "/finds", label: "Finds hub" },
+    ],
+    faqs: [
+      {
+        question: "Should I QC Moncler jackets?",
+        answer:
+          "Yes. Outerwear batches vary — use reference QC and warehouse photos before approving shipment.",
+      },
+    ],
+    productSectionTitle: "Top Moncler picks",
+  },
+
+  "chrome-hearts-finds": {
+    slug: "chrome-hearts-finds",
+    type: "collection",
+    title: "Chrome Hearts Finds | Jewelry & Streetwear Reps",
+    description:
+      "Find Chrome Hearts rep products with QC photos, prices, and agent links — jewelry, hoodies, and accessories on LitBuy Finds.",
+    h1: "Chrome Hearts finds",
+    intro:
+      "Find the best Chrome Hearts rep products with QC photos, prices, and agent links. Jewelry, hoodies, and cross-style accessories from verified listings.",
+    badge: "Chrome Hearts finds",
+    keywords: ["chrome hearts finds", "chrome hearts rep"],
+    updateFrequency: "weekly",
+    filter: { keywords: ["chrome hearts", "chrome"] },
+    brandLinks: ["chrome-hearts"],
+    relatedLinks: [
+      { href: "/streetwear-finds", label: "Streetwear finds" },
+      { href: "/categories/accessories", label: "Accessories" },
+      { href: "/finds", label: "Finds hub" },
+    ],
+    faqs: [
+      {
+        question: "What Chrome Hearts items have QC?",
+        answer:
+          "Rings, pendants, and hoodies with community QC threads appear most often — check each product page.",
+      },
+    ],
+    productSectionTitle: "Top Chrome Hearts picks",
+  },
+
+  "prada-finds": {
+    slug: "prada-finds",
+    type: "collection",
+    title: "Prada Finds | Bags, Clothing & QC Photos",
+    description:
+      "Find the best Prada rep products with QC photos, prices, and agent links — bags, tees, and accessories on LitBuy Finds.",
+    h1: "Prada finds",
+    intro:
+      "Find the best Prada rep products with QC photos, prices, and agent links. Bags, nylon accessories, and clothing from verified Weidian and Taobao sellers.",
+    badge: "Prada finds",
+    keywords: ["prada finds", "prada rep", "prada bag finds"],
+    updateFrequency: "weekly",
+    filter: { keywords: ["prada"] },
+    brandLinks: ["prada"],
+    relatedLinks: [
+      { href: "/bag-finds", label: "Bag finds" },
+      { href: "/best-rep-finds", label: "Designer finds" },
+      { href: "/finds", label: "Finds hub" },
+    ],
+    faqs: [
+      {
+        question: "Are Prada bags worth QC?",
+        answer:
+          "Yes — verify hardware, lining, and logo placement on warehouse QC before shipping.",
+      },
+    ],
+    productSectionTitle: "Top Prada picks",
+  },
+
+  "stone-island-finds": {
+    slug: "stone-island-finds",
+    type: "collection",
+    title: "Stone Island Finds | Jackets & QC Photos",
+    description:
+      "Find Stone Island rep products with QC photos, prices, and agent links — badges, jackets, and knitwear on LitBuy Finds.",
+    h1: "Stone Island finds",
+    intro:
+      "Find the best Stone Island rep products with QC photos, prices, and agent links. Compass-badge jackets and knitwear from verified marketplace listings.",
+    badge: "Stone Island finds",
+    keywords: ["stone island finds", "stone island rep"],
+    updateFrequency: "weekly",
+    filter: { keywords: ["stone island"] },
+    brandLinks: ["stone-island"],
+    categoryLinks: ["coats-and-jackets"],
+    relatedLinks: [
+      { href: "/jacket-finds", label: "Jacket finds" },
+      { href: "/brands/stone-island", label: "Stone Island brand hub" },
+      { href: "/finds", label: "Finds hub" },
+    ],
+    faqs: [
+      {
+        question: "What should I check on Stone Island QC?",
+        answer:
+          "Badge placement, arm patch quality, and zipper hardware — compare reference QC on the product page.",
+      },
+    ],
+    productSectionTitle: "Top Stone Island picks",
+  },
+
+  "canada-goose-finds": {
+    slug: "canada-goose-finds",
+    type: "collection",
+    title: "Canada Goose Finds | Parkas & QC Photos",
+    description:
+      "Find Canada Goose rep parkas with QC photos, prices, and agent links — winter outerwear on LitBuy Finds.",
+    h1: "Canada Goose finds",
+    intro:
+      "Find the best Canada Goose rep products with QC photos, prices, and agent links. Parkas and winter jackets — always compare batch QC before international shipping.",
+    badge: "Canada Goose finds",
+    keywords: ["canada goose finds", "canada goose rep", "goose jacket finds"],
+    updateFrequency: "weekly",
+    filter: { keywords: ["canada goose", "goose"] },
+    relatedLinks: [
+      { href: "/jacket-finds", label: "Jacket finds" },
+      { href: "/moncler-finds", label: "Moncler finds" },
+      { href: "/finds", label: "Finds hub" },
+    ],
+    faqs: [
+      {
+        question: "Are Canada Goose reps heavy to ship?",
+        answer:
+          "Yes — parkas add weight. Consider rehearsal packing and consolidate with lighter items.",
+      },
+    ],
+    productSectionTitle: "Top Canada Goose picks",
+  },
 };

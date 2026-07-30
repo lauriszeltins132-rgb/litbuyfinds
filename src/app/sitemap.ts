@@ -32,6 +32,7 @@ import {
   TELEGRAM_SEO_SLUGS,
 } from "@/lib/telegram-seo-pages";
 import { ADVERTISE_PAGE_PATH } from "@/lib/advertise-page";
+import { FINDS_HUB_PATH } from "@/lib/finds-hub";
 import {
   LITBUY_COUPON_REDIRECT_SLUGS,
   LITBUY_COUPONS_PATH,
@@ -59,6 +60,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: SITE_URL, changeFrequency: "daily", priority: 1 },
     { url: `${SITE_URL}/trending`, changeFrequency: "daily", priority: 0.9 },
     { url: `${SITE_URL}/latest`, changeFrequency: "daily", priority: 0.9 },
+    { url: `${SITE_URL}${FINDS_HUB_PATH}`, changeFrequency: "daily", priority: 0.98 },
     { url: `${SITE_URL}/deals`, changeFrequency: "daily", priority: 0.9 },
     { url: `${SITE_URL}/recently-added`, changeFrequency: "daily", priority: 0.92 },
     { url: `${SITE_URL}/brands`, changeFrequency: "weekly", priority: 0.8 },

@@ -1,17 +1,14 @@
-import { permanentRedirect } from "next/navigation";
+import type { Metadata } from "next";
+import FindsHubPage from "@/components/FindsHubPage";
+import { FINDS_HUB_METADATA, FINDS_HUB_PATH } from "@/lib/finds-hub";
+import { buildPageMetadata } from "@/lib/seo";
 
-type FindsPageProps = {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-};
+export const metadata: Metadata = buildPageMetadata({
+  title: FINDS_HUB_METADATA.title,
+  description: FINDS_HUB_METADATA.description,
+  path: FINDS_HUB_PATH,
+});
 
-export default async function FindsPage({ searchParams }: FindsPageProps) {
-  const params = await searchParams;
-  const query = new URLSearchParams();
-
-  for (const [key, value] of Object.entries(params)) {
-    if (typeof value === "string") query.set(key, value);
-  }
-
-  const qs = query.toString();
-  permanentRedirect(qs ? `/?${qs}` : "/");
+export default function FindsPage() {
+  return <FindsHubPage />;
 }

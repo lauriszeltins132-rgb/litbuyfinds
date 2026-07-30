@@ -198,14 +198,24 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
   "litbuy-qc": {
     slug: "litbuy-qc",
     path: "/litbuy-qc",
-    title: "LitBuy QC Photos Guide",
+    title: "LitBuy QC Photos | Rep QC Guide & Product Finder",
     metaDescription:
-      "LitBuy QC explained — reference photos, warehouse QC, what to check before shipping, and where to find QC-approved finds on LitBuy Finds.",
+      "LitBuy QC photos explained — what rep QC is, how to use reference and warehouse QC, and where to find QC-linked products on LitBuy Finds.",
     badge: "LitBuy QC",
     h1: "LitBuy QC photos",
     intro:
-      "QC (quality control) photos are the safety net of agent buying. LitBuy Finds links to QC references where available, and LitBuy lets you request warehouse photos of your exact item before you ship your haul.",
+      "LitBuy QC photos help you verify rep finds before shipping. Reference QC on product pages shows batch examples; warehouse QC on LitBuy photographs your exact item after purchase. This guide explains both — and links to QC-approved products in the catalog.",
     sections: [
+      {
+        heading: "Quick answer",
+        paragraphs: [
+          "QC (quality control) photos show what a product looks like in hand. Reference QC links on find pages come from other buyers' warehouse photos. Your own warehouse QC is taken after you order — that is the check that matters before international shipping.",
+        ],
+        links: [
+          { href: "/litbuy-qc-photos", label: "QC authority guide" },
+          { href: "/finds", label: "Browse finds" },
+        ],
+      },
       {
         heading: "Reference QC vs warehouse QC",
         paragraphs: [
@@ -237,6 +247,8 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
         links: [
           { href: "/collections/best-qc-approved-finds", label: "QC collection" },
           { href: "/litbuy-sneakers", label: "Sneaker finds" },
+          { href: "/top-qc-finds", label: "Top QC finds" },
+          { href: "/sneaker-finds", label: "Sneaker finds hub" },
         ],
       },
       {
@@ -275,9 +287,11 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
       },
     ],
     relatedLinks: [
+      { href: "/finds", label: "Finds hub" },
       { href: "/litbuy-finds", label: "LitBuy finds" },
       { href: "/litbuy-spreadsheet", label: "Spreadsheet guide" },
-      ...RESOURCE_LINKS,
+      { href: "/litbuy-discord", label: "LitBuy Discord" },
+      ...RESOURCE_LINKS.filter((l) => l.href !== "/litbuy-finds"),
     ],
     getProducts: withQc,
     productSectionTitle: "QC-approved LitBuy finds",

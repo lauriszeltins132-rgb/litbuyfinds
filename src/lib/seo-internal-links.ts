@@ -3,6 +3,7 @@ import { LITBUY_SIGNUP_URL } from "./constants";
 /** Cross-site SEO hub links — use in relatedLinks and contextual sections. */
 export const SEO_HUB_LINKS = [
   { href: "/", label: "Homepage" },
+  { href: "/finds", label: "Finds hub" },
   { href: "/litbuy-finds", label: "LitBuy finds" },
   { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
   { href: LITBUY_SIGNUP_URL, label: "LitBuy coupons" },

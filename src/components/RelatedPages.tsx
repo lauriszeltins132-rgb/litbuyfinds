@@ -28,10 +28,14 @@ const FEATURED_CATEGORY_SLUGS = [
 ];
 
 const FEATURED_GUIDE_PATHS = [
+  "/finds",
   "/guides/beginner-guide-to-litbuy",
   "/guides/how-to-use-litbuy-finds",
   "/litbuy-qc",
   "/litbuy-spreadsheet",
+  "/latest-finds",
+  "/sneaker-finds",
+  "/litbuy-discord",
   "/guides/how-to-buy-from-weidian",
   "/guides/how-to-find-good-reps",
   "/guides/litbuy-vs-allchinabuy",
@@ -55,6 +59,14 @@ const FEATURED_COLLECTION_SLUGS = [
   "trending-this-week",
   "most-saved-finds",
   "best-under-50",
+];
+
+const FEATURED_HUB_PATHS = [
+  { href: "/finds", label: "Finds hub" },
+  { href: "/nike-finds", label: "Nike finds" },
+  { href: "/jordan-finds", label: "Jordan finds" },
+  { href: "/latest-finds", label: "Latest finds" },
+  { href: "/litbuy-qc", label: "QC photos" },
 ];
 
 type RelatedPagesProps = {
@@ -115,6 +127,18 @@ export default function RelatedPages({
         <h2 className="text-sm font-bold uppercase tracking-[0.16em] text-muted">
           Related pages
         </h2>
+        <ul className="mt-3 flex flex-wrap gap-2">
+          {FEATURED_HUB_PATHS.filter((link) => link.href !== currentPath).map((link) => (
+            <li key={link.href}>
+              <Link
+                href={link.href}
+                className="rounded-full border border-accent/30 bg-accent/5 px-3 py-1 text-xs font-bold text-accent hover:border-accent"
+              >
+                {link.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
         <div className="mt-4 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.14em] text-muted">Brands</p>
