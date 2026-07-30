@@ -59,6 +59,237 @@ const SPREADSHEET_FAQS = [
 ] as const;
 
 export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
+  "best-sneaker-finds": {
+    slug: "best-sneaker-finds",
+    type: "collection",
+    title: "Best Sneaker Finds 2026 | Nike, Jordan & QC Photos",
+    description:
+      "Best sneaker finds on LitBuy Finds — editor-ranked Nike, Jordan, Adidas, and designer runners with QC photos, spreadsheet links, and verified agent buy buttons.",
+    h1: "Best sneaker finds",
+    intro:
+      "This page ranks the strongest sneaker listings in the LitBuy Finds catalog — not every spreadsheet row, but picks with clear photos, exact prices, and QC references where buyers need them most. Use it when you want a curated shortlist before opening agent checkout.",
+    badge: "Best sneakers",
+    keywords: [
+      "best sneaker finds",
+      "best rep sneakers 2026",
+      "litbuy best sneakers",
+    ],
+    updateFrequency: "weekly",
+    getProducts: TOP_LISTS["top-rep-sneakers"].getProducts,
+    brandLinks: ["nike", "jordan", "adidas", "new-balance"],
+    categoryLinks: ["shoes"],
+    sections: [
+      {
+        heading: "How we rank best sneaker finds",
+        paragraphs: [
+          "Sneakers are sorted for listing quality — processed product images, exact USD prices, QC link availability, and engagement signals from the catalog. Nike Dunks, Jordan retros, and Adidas campus styles dominate clicks, but budget runners under $50 also appear when photos hold up.",
+          "This is different from the full sneaker category page, which shows a broader filter of every shoe listing. Use both: browse the category for depth, use this page for a ranked starting point.",
+        ],
+        links: [
+          { href: "/sneaker-finds", label: "All sneaker finds" },
+          { href: "/nike-finds", label: "Nike finds" },
+          { href: "/jordan-finds", label: "Jordan finds" },
+          { href: "/top-rep-sneakers", label: "Top rep sneakers list" },
+        ],
+      },
+      {
+        heading: "QC and agent links",
+        paragraphs: [
+          "Every pick links to LitBuy, Kakobuy, MuleBuy, or your preferred agent. Reference QC on a product page shows batch examples — warehouse QC on LitBuy is the final check before you ship.",
+        ],
+        links: [
+          { href: "/what-are-qc-photos", label: "What are QC photos" },
+          { href: "/litbuy-qc-photos", label: "LitBuy QC guide" },
+          { href: "/how-to-use-litbuy", label: "How to use LitBuy" },
+        ],
+      },
+    ],
+    relatedLinks: [
+      { href: "/finds", label: "Finds hub" },
+      { href: "/sneaker-finds", label: "Sneaker category" },
+      { href: "/shoe-spreadsheet", label: "Shoe spreadsheet" },
+      { href: "/guides/best-rep-sneakers", label: "Sneaker buying guide" },
+      ...HUB.slice(0, 3),
+    ],
+    faqs: [
+      {
+        question: "Is this the same as sneaker-finds?",
+        answer:
+          "No. Sneaker-finds shows the full shoes category. Best sneaker finds is an editor-ranked shortlist of the highest-quality listings in that lane.",
+      },
+      {
+        question: "How often does this page update?",
+        answer:
+          "The product grid refreshes weekly as the catalog syncs and engagement signals shift. Check Latest Finds for brand-new imports.",
+      },
+      {
+        question: "Do I need QC for sneakers?",
+        answer:
+          "Highly recommended. Soles, stitching, and logo placement vary by batch. Use reference QC on the find page, then request warehouse QC on LitBuy before shipping.",
+      },
+    ],
+    productSectionTitle: "Editor-ranked sneaker picks",
+  },
+
+  "best-clothing-finds": {
+    slug: "best-clothing-finds",
+    type: "collection",
+    title: "Best Clothing Finds 2026 | Streetwear & Fashion Reps",
+    description:
+      "Best clothing finds on LitBuy Finds — hoodies, jackets, tees, and fashion layers ranked for photos, QC, and verified agent links.",
+    h1: "Best clothing finds",
+    intro:
+      "Clothing spans hoodies, puffers, graphic tees, cargos, and designer layers. This page surfaces the best-presented listings across those categories — ideal when you are building a haul and want reliable photos and prices without scrolling thousands of spreadsheet rows.",
+    badge: "Best clothing",
+    keywords: [
+      "best clothing finds",
+      "best rep clothing 2026",
+      "litbuy fashion finds",
+    ],
+    updateFrequency: "weekly",
+    filter: {
+      categories: ["hoodies-and-pants", "coats-and-jackets", "tshirts-and-shorts"],
+    },
+    sections: [
+      {
+        heading: "What counts as best clothing",
+        paragraphs: [
+          "We prioritize listings with exact prices, clean product images, and QC references for outerwear and branded pieces. Streetwear staples — Stussy, Essentials, Chrome Hearts-style graphics — sit alongside Moncler and Stone Island jackets when batch photos are strong.",
+        ],
+        links: [
+          { href: "/clothing-finds", label: "All clothing finds" },
+          { href: "/hoodie-finds", label: "Hoodie finds" },
+          { href: "/jacket-finds", label: "Jacket finds" },
+          { href: "/streetwear-finds", label: "Streetwear finds" },
+        ],
+      },
+      {
+        heading: "Buying clothing through agents",
+        paragraphs: [
+          "Always check seller size charts on Weidian or Taobao before ordering. Clothing batches vary in fit and material — QC photos help you catch wrong colors or bad embroidery before international freight.",
+        ],
+        links: [
+          { href: "/how-to-buy-reps", label: "How to buy reps" },
+          { href: "/guides/qc-checklist-for-clothing", label: "Clothing QC checklist" },
+          { href: "/guides", label: "All guides" },
+        ],
+      },
+    ],
+    relatedLinks: [
+      { href: "/finds", label: "Finds hub" },
+      { href: "/clothing-finds", label: "Clothing category" },
+      { href: "/cheap-finds", label: "Budget finds" },
+      { href: "/guides/best-streetwear-finds", label: "Streetwear guide" },
+      ...CATEGORIES.filter((l) => l.href !== "/clothing-finds").slice(0, 3),
+    ],
+    faqs: [
+      {
+        question: "How is this different from clothing-finds?",
+        answer:
+          "Clothing-finds is the full category browse. Best clothing finds ranks the top-presented listings across hoodies, jackets, and tees.",
+      },
+      {
+        question: "Which clothing brands are most popular?",
+        answer:
+          "Moncler, Stone Island, Stussy, Ralph Lauren, and Essentials lead search volume. Use brand find pages when you know the label you want.",
+      },
+      {
+        question: "Can I mix clothing and sneakers in one haul?",
+        answer:
+          "Yes. Agents consolidate warehouse items — adding lighter tees or accessories often improves shipping cost per piece.",
+      },
+    ],
+    productSectionTitle: "Top clothing picks",
+  },
+
+  "best-designer-finds": {
+    slug: "best-designer-finds",
+    type: "collection",
+    title: "Best Designer Finds 2026 | Moncler, Prada & Luxury Reps",
+    description:
+      "Best designer finds on LitBuy Finds — Moncler, Prada, Gucci, Louis Vuitton, Chrome Hearts, and luxury reps with QC photos and agent links.",
+    h1: "Best designer finds",
+    intro:
+      "Designer finds carry higher price points and batch risk — QC matters more here. This page highlights luxury and designer-leaning listings with strong presentation: puffers, bags, jewelry, and logo-heavy streetwear from verified marketplace sellers.",
+    badge: "Designer finds",
+    keywords: [
+      "best designer finds",
+      "designer rep finds 2026",
+      "luxury litbuy finds",
+    ],
+    updateFrequency: "weekly",
+    filter: {
+      keywords: [
+        "moncler",
+        "prada",
+        "gucci",
+        "louis vuitton",
+        "chrome hearts",
+        "balenciaga",
+        "dior",
+        "stone island",
+      ],
+    },
+    brandLinks: [
+      "moncler",
+      "prada",
+      "gucci",
+      "louis-vuitton",
+      "chrome-hearts",
+      "stone-island",
+    ],
+    sections: [
+      {
+        heading: "Designer categories on LitBuy Finds",
+        paragraphs: [
+          "Outerwear from Moncler and Stone Island, bags from Prada and Louis Vuitton, and Chrome Hearts jewelry each have dedicated brand find pages. This hub ranks cross-brand designer picks when you want a single starting point.",
+        ],
+        links: [
+          { href: "/moncler-finds", label: "Moncler finds" },
+          { href: "/prada-finds", label: "Prada finds" },
+          { href: "/chrome-hearts-finds", label: "Chrome Hearts finds" },
+          { href: "/stone-island-finds", label: "Stone Island finds" },
+        ],
+      },
+      {
+        heading: "QC for designer items",
+        paragraphs: [
+          "Hardware, badges, and logo embroidery are the usual failure points. Compare reference QC on LitBuy Finds with warehouse photos on LitBuy before approving shipment — designer batches are not interchangeable.",
+        ],
+        links: [
+          { href: "/what-are-qc-photos", label: "What are QC photos" },
+          { href: "/litbuy-qc", label: "QC authority page" },
+          { href: "/guides/qc-checklist-for-bags", label: "Bag QC checklist" },
+        ],
+      },
+    ],
+    relatedLinks: [
+      { href: "/finds", label: "Finds hub" },
+      { href: "/best-rep-finds", label: "Best rep finds" },
+      { href: "/top-designer-bags", label: "Designer bags list" },
+      { href: "/guides/best-moncler-finds", label: "Moncler guide" },
+      { href: "/guides/best-prada-finds", label: "Prada guide" },
+    ],
+    faqs: [
+      {
+        question: "Are designer finds worth the price?",
+        answer:
+          "It depends on batch and use case. Outerwear and bags benefit most from QC — compare multiple listings and reference photos before ordering.",
+      },
+      {
+        question: "Where do designer listings come from?",
+        answer:
+          "Most originate from Weidian and Taobao sellers indexed in community spreadsheets. LitBuy Finds normalizes them into searchable pages with agent links.",
+      },
+      {
+        question: "Which designer brand has the most QC?",
+        answer:
+          "Moncler jackets and popular bag batches tend to have the most community QC threads — check each product page for reference links.",
+      },
+    ],
+    productSectionTitle: "Top designer picks",
+  },
+
   "sneaker-finds": {
     slug: "sneaker-finds",
     type: "collection",
@@ -83,6 +314,7 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
         links: [
           { href: "/brands/nike", label: "Nike finds" },
           { href: "/brands/jordan", label: "Jordan finds" },
+          { href: "/best-sneaker-finds", label: "Best sneaker finds" },
           { href: "/best-nike-finds", label: "Best Nike" },
           { href: "/top-rep-sneakers", label: "Top rep sneakers" },
         ],
@@ -99,6 +331,7 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
       },
     ],
     relatedLinks: [
+      { href: "/best-sneaker-finds", label: "Best sneaker finds" },
       { href: "/litbuy-sneakers", label: "LitBuy sneakers hub" },
       { href: "/shoe-spreadsheet", label: "Shoe spreadsheet" },
       { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
@@ -144,10 +377,12 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
           { href: "/streetwear-finds", label: "Streetwear finds" },
           { href: "/hoodie-finds", label: "Hoodie finds" },
           { href: "/jacket-finds", label: "Jacket finds" },
+          { href: "/best-clothing-finds", label: "Best clothing finds" },
         ],
       },
     ],
     relatedLinks: [
+      { href: "/best-clothing-finds", label: "Best clothing finds" },
       { href: "/litbuy-finds", label: "LitBuy finds catalog" },
       { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
       { href: "/litbuy-discord", label: "LitBuy Discord" },
@@ -675,10 +910,25 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
     brandLinks: ["nike"],
     categoryLinks: ["shoes"],
     relatedLinks: [
+      { href: "/best-sneaker-finds", label: "Best sneaker finds" },
       { href: "/best-nike-finds", label: "Best Nike finds" },
       { href: "/nike-spreadsheet", label: "Nike spreadsheet" },
       { href: "/sneaker-finds", label: "Sneaker finds" },
       { href: "/finds", label: "Finds hub" },
+      { href: "/guides/best-nike-finds", label: "Nike buying guide" },
+    ],
+    sections: [
+      {
+        heading: "Popular Nike silhouettes",
+        paragraphs: [
+          "Dunks and Air Force 1 lead daily clicks. Travis Scott collabs and Tech Fleece sets are strong seasonal picks. Use the Nike brand hub for the full inventory when you know the exact model.",
+        ],
+        links: [
+          { href: "/brands/nike", label: "Nike brand hub" },
+          { href: "/jordan-finds", label: "Jordan finds" },
+          { href: "/how-to-buy-reps", label: "How to buy reps" },
+        ],
+      },
     ],
     faqs: [
       {
@@ -706,10 +956,24 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
     brandLinks: ["jordan", "nike"],
     categoryLinks: ["shoes"],
     relatedLinks: [
+      { href: "/best-sneaker-finds", label: "Best sneaker finds" },
       { href: "/best-jordan-finds", label: "Best Jordan finds" },
       { href: "/nike-finds", label: "Nike finds" },
       { href: "/sneaker-finds", label: "Sneaker finds" },
       { href: "/finds", label: "Finds hub" },
+      { href: "/guides/best-jordan-finds", label: "Jordan buying guide" },
+    ],
+    sections: [
+      {
+        heading: "Jordan silhouettes to browse",
+        paragraphs: [
+          "Jordan 1 and Jordan 4 retros dominate search volume. Collab colorways often have the most QC threads — compare reference photos before warehouse approval.",
+        ],
+        links: [
+          { href: "/brands/jordan", label: "Jordan brand hub" },
+          { href: "/what-are-qc-photos", label: "What are QC photos" },
+        ],
+      },
     ],
     faqs: [
       {
@@ -736,10 +1000,24 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
     filter: { keywords: ["stussy"] },
     brandLinks: ["stussy"],
     relatedLinks: [
+      { href: "/best-clothing-finds", label: "Best clothing finds" },
       { href: "/best-stussy-finds", label: "Best Stussy finds" },
       { href: "/streetwear-finds", label: "Streetwear finds" },
       { href: "/hoodie-finds", label: "Hoodie finds" },
       { href: "/finds", label: "Finds hub" },
+      { href: "/guides/best-streetwear-finds", label: "Streetwear guide" },
+    ],
+    sections: [
+      {
+        heading: "Stussy buying tips",
+        paragraphs: [
+          "Hoodies and graphic tees are the most ordered Stussy categories. Check embroidery and tag photos on warehouse QC — streetwear batches vary on logo size and placement.",
+        ],
+        links: [
+          { href: "/brands/stussy", label: "Stussy brand hub" },
+          { href: "/how-to-buy-reps", label: "How to buy reps" },
+        ],
+      },
     ],
     faqs: [
       {
@@ -767,9 +1045,23 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
     brandLinks: ["moncler"],
     categoryLinks: ["coats-and-jackets"],
     relatedLinks: [
+      { href: "/best-designer-finds", label: "Best designer finds" },
       { href: "/collections/best-moncler-finds", label: "Moncler collection" },
       { href: "/jacket-finds", label: "Jacket finds" },
       { href: "/finds", label: "Finds hub" },
+      { href: "/guides/best-moncler-finds", label: "Moncler guide" },
+    ],
+    sections: [
+      {
+        heading: "Moncler QC checklist",
+        paragraphs: [
+          "Puffer shape, badge alignment, and zipper hardware are the usual QC focus points. Compare reference QC on the product page with warehouse photos before approving international freight.",
+        ],
+        links: [
+          { href: "/what-are-qc-photos", label: "What are QC photos" },
+          { href: "/guides/qc-checklist-for-clothing", label: "Clothing QC checklist" },
+        ],
+      },
     ],
     faqs: [
       {
@@ -796,9 +1088,23 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
     filter: { keywords: ["chrome hearts", "chrome"] },
     brandLinks: ["chrome-hearts"],
     relatedLinks: [
+      { href: "/best-designer-finds", label: "Best designer finds" },
       { href: "/streetwear-finds", label: "Streetwear finds" },
       { href: "/categories/accessories", label: "Accessories" },
       { href: "/finds", label: "Finds hub" },
+      { href: "/guides/best-chrome-hearts-finds", label: "Chrome Hearts guide" },
+    ],
+    sections: [
+      {
+        heading: "Chrome Hearts categories",
+        paragraphs: [
+          "Jewelry, hoodies, and cross-motif accessories each have different batch quality. Rings and pendants benefit most from macro QC shots — request close-ups on LitBuy if details matter.",
+        ],
+        links: [
+          { href: "/brands/chrome-hearts", label: "Chrome Hearts brand hub" },
+          { href: "/litbuy-qc-photos", label: "LitBuy QC photos" },
+        ],
+      },
     ],
     faqs: [
       {
@@ -855,9 +1161,22 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
     brandLinks: ["stone-island"],
     categoryLinks: ["coats-and-jackets"],
     relatedLinks: [
+      { href: "/best-designer-finds", label: "Best designer finds" },
       { href: "/jacket-finds", label: "Jacket finds" },
       { href: "/brands/stone-island", label: "Stone Island brand hub" },
       { href: "/finds", label: "Finds hub" },
+    ],
+    sections: [
+      {
+        heading: "Stone Island badge QC",
+        paragraphs: [
+          "Compass badge placement and arm patch stitching separate good batches from bad ones. Use reference QC on LitBuy Finds, then verify your exact jacket on warehouse photos.",
+        ],
+        links: [
+          { href: "/what-are-qc-photos", label: "What are QC photos" },
+          { href: "/moncler-finds", label: "Moncler finds" },
+        ],
+      },
     ],
     faqs: [
       {

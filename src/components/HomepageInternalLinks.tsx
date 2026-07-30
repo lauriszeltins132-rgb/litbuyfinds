@@ -52,14 +52,29 @@ const SECTIONS = [
     ],
   },
   {
-    title: "Guides & fresh finds",
+    title: "Guides & authority",
     links: [
+      { href: "/guides", label: "Guides hub" },
+      { href: "/how-to-use-litbuy", label: "How to use LitBuy" },
+      { href: "/how-to-buy-reps", label: "How to buy reps" },
+      { href: "/what-are-qc-photos", label: "What are QC photos" },
+      { href: "/how-to-save-on-shipping", label: "Save on shipping" },
       { href: "/guides/beginner-guide-to-litbuy", label: "Beginner guide" },
       { href: "/litbuy-qc-photos", label: "LitBuy QC photos" },
       { href: "/litbuy-spreadsheet", label: "Spreadsheet guide" },
-      { href: "/latest", label: "Latest finds" },
+    ],
+  },
+  {
+    title: "Best finds",
+    links: [
+      { href: "/finds", label: "Finds hub" },
+      { href: "/best-sneaker-finds", label: "Best sneaker finds" },
+      { href: "/best-clothing-finds", label: "Best clothing finds" },
+      { href: "/best-designer-finds", label: "Best designer finds" },
+      { href: "/latest-finds", label: "Latest finds" },
       { href: "/trending", label: "Trending" },
-      { href: "/guides", label: "All guides" },
+      { href: "/nike-finds", label: "Nike finds" },
+      { href: "/moncler-finds", label: "Moncler finds" },
     ],
   },
 ] as const;

@@ -829,6 +829,248 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
     publishedTime: PUBLISHED,
     modifiedTime: MODIFIED,
   },
+
+  "what-are-qc-photos": {
+    slug: "what-are-qc-photos",
+    path: "/what-are-qc-photos",
+    title: "What Are QC Photos? Warehouse Quality Check Explained",
+    metaDescription:
+      "QC photos are warehouse quality-check pictures of your exact item before international shipping. Learn what QC means, when you get photos, and how to use them on LitBuy.",
+    badge: "QC authority",
+    h1: "What are QC photos?",
+    directAnswer:
+      "QC photos are pictures taken at your shopping agent's warehouse of the actual item you ordered — not marketing images from the seller listing. You review them to confirm color, size, batch quality, and defects before paying international shipping.",
+    summary:
+      "Reference QC on find pages shows batch examples from other buyers. Warehouse QC on LitBuy shows your specific unit. Always approve warehouse photos before freight — returns are harder after export.",
+    parentCrumb: { label: "Guides", href: "/guides" },
+    sections: [
+      {
+        heading: "QC means quality check",
+        paragraphs: [
+          "In rep buying, QC usually refers to warehouse photography after the seller delivers domestically to your agent. Staff unpacks the parcel, photographs the product from multiple angles, and uploads images to your order panel for approval.",
+          "The goal is simple: catch wrong sizes, color mismatches, and obvious flaws while the item is still in China and exchanges are more practical.",
+        ],
+        links: [
+          { href: "/guides/what-are-qc-photos", label: "Full QC guide" },
+          { href: "/guides/how-to-check-qc-photos", label: "How to check QC" },
+        ],
+      },
+      {
+        heading: "Reference QC vs warehouse QC",
+        paragraphs: [
+          "LitBuy Finds product pages may link to community QC albums showing what a batch looked like for other buyers. That helps you know what to expect — but your warehouse QC is the final look at your exact pair or jacket before shipping.",
+        ],
+        links: [
+          { href: "/litbuy-qc-photos", label: "LitBuy QC photos" },
+          { href: "/litbuy-qc", label: "QC authority hub" },
+          { href: "/collections/best-qc-approved-finds", label: "QC-approved finds" },
+        ],
+      },
+      {
+        heading: "What to check on QC photos",
+        paragraphs: [
+          "Sneakers: sole shape, stitching, logo placement, heel tab, and color under natural light. Clothing: embroidery, tags, zipper hardware, and fabric weight. Bags: hardware, lining, stamp alignment, and strap quality.",
+          "If something looks off, request closer shots or open a support ticket before approving shipment.",
+        ],
+        links: [
+          { href: "/guides/qc-checklist-for-shoes", label: "Shoe QC checklist" },
+          { href: "/guides/qc-checklist-for-clothing", label: "Clothing QC checklist" },
+          { href: "/guides/qc-checklist-for-bags", label: "Bag QC checklist" },
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: "Do QC photos cost extra?",
+        answer:
+          "Many agents include basic warehouse photos. Detailed QC or extra angles may cost a small fee — check LitBuy at checkout.",
+      },
+      {
+        question: "Can I skip QC?",
+        answer:
+          "You can, but it is risky for sneakers and designer items. Batch quality varies — warehouse QC is your last chance to catch issues cheaply.",
+      },
+      {
+        question: "Where do I see QC on LitBuy Finds?",
+        answer:
+          "Product pages show reference QC links when available. After purchase, QC appears in your LitBuy order panel.",
+      },
+    ],
+    relatedLinks: [
+      { href: "/how-to-use-litbuy", label: "How to use LitBuy" },
+      { href: "/how-to-buy-reps", label: "How to buy reps" },
+      { href: "/finds", label: "Finds hub" },
+      ...CORE_RELATED.slice(0, 6),
+    ],
+    publishedTime: PUBLISHED,
+    modifiedTime: MODIFIED,
+  },
+
+  "how-to-buy-reps": {
+    slug: "how-to-buy-reps",
+    path: "/how-to-buy-reps",
+    title: "How to Buy Reps – Step-by-Step Agent Guide",
+    metaDescription:
+      "Learn how to buy reps through a Chinese shopping agent: find products, use agent links, pay, check QC photos, and ship your haul internationally.",
+    badge: "Buying guide",
+    h1: "How to buy reps",
+    directAnswer:
+      "To buy reps, find a product on LitBuy Finds or a spreadsheet, open the agent buy link, pay for purchasing and domestic shipping to the warehouse, review QC photos of your exact item, then pay international freight when you are ready to receive the parcel.",
+    summary:
+      "Discovery happens on LitBuy Finds. Purchasing, QC, and shipping happen on LitBuy or your preferred agent. Start with a lower-cost test piece if you are new.",
+    parentCrumb: { label: "Guides", href: "/guides" },
+    sections: [
+      {
+        heading: "Step 1 — Find a product",
+        paragraphs: [
+          "Search LitBuy Finds by brand, category, or keyword. Open the product page, check price and reference QC, then click your agent buy button. You can also paste a Weidian or Taobao URL directly into LitBuy.",
+        ],
+        links: [
+          { href: "/finds", label: "Finds hub" },
+          { href: "/latest-finds", label: "Latest finds" },
+          { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+        ],
+      },
+      {
+        heading: "Step 2 — Order through an agent",
+        paragraphs: [
+          "Create a LitBuy account, confirm size and color on the listing, and pay for purchasing plus domestic shipping to the warehouse. Keep items in the warehouse until you are ready to ship internationally — consolidation saves freight per piece.",
+        ],
+        links: [
+          { href: "/how-to-use-litbuy", label: "How to use LitBuy" },
+          { href: "/guides/how-to-order-from-litbuy", label: "Order guide" },
+          { href: LITBUY_SIGNUP_URL, label: "LitBuy coupons" },
+        ],
+      },
+      {
+        heading: "Step 3 — QC before shipping",
+        paragraphs: [
+          "When the seller ships to the warehouse, request QC photos. Compare with reference QC on the find page. Approve only when satisfied — designer items and sneakers benefit most from careful review.",
+        ],
+        links: [
+          { href: "/what-are-qc-photos", label: "What are QC photos" },
+          { href: "/litbuy-qc-photos", label: "LitBuy QC guide" },
+        ],
+      },
+      {
+        heading: "Step 4 — Ship and save",
+        paragraphs: [
+          "Choose an international line based on speed, budget, and your country's customs rules. Combine items into one haul to lower cost per piece. Use shipping coupons when LitBuy promotions apply.",
+        ],
+        links: [
+          { href: "/how-to-save-on-shipping", label: "Save on shipping" },
+          { href: "/guides/how-shipping-works-with-agents", label: "Shipping guide" },
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: "Is buying reps legal?",
+        answer:
+          "Laws vary by country. You are responsible for import rules and customs in your destination. LitBuy Finds provides discovery guides — not legal advice.",
+      },
+      {
+        question: "Which agent should I use?",
+        answer:
+          "LitBuy is the default on this site with coupon support. Kakobuy, MuleBuy, and others work on the same marketplace links — switch in the site header.",
+      },
+      {
+        question: "How do I avoid bad batches?",
+        answer:
+          "Compare reference QC, read community feedback, and start with well-photographed listings. Warehouse QC is your final safety check.",
+      },
+    ],
+    relatedLinks: [
+      { href: "/guides", label: "All guides" },
+      { href: "/what-is-litbuy", label: "What is LitBuy" },
+      { href: "/sneaker-finds", label: "Sneaker finds" },
+      ...CORE_RELATED.slice(0, 5),
+    ],
+    publishedTime: PUBLISHED,
+    modifiedTime: MODIFIED,
+  },
+
+  "how-to-save-on-shipping": {
+    slug: "how-to-save-on-shipping",
+    path: "/how-to-save-on-shipping",
+    title: "How to Save on Shipping – Agent Haul Tips",
+    metaDescription:
+      "Practical ways to save on international shipping with LitBuy and other agents: haul consolidation, line selection, coupons, and weight reduction tips.",
+    badge: "Shipping savings",
+    h1: "How to save on shipping",
+    directAnswer:
+      "Save on agent shipping by consolidating multiple items into one haul, choosing the right freight line for your country, removing excess packaging, using LitBuy shipping coupons when available, and avoiding rush lines unless you need speed.",
+    summary:
+      "International freight is often the largest cost in a rep haul. Planning items together and comparing shipping lines usually saves more than hunting cheaper product listings alone.",
+    parentCrumb: { label: "Guides", href: "/guides" },
+    sections: [
+      {
+        heading: "Consolidate warehouse items",
+        paragraphs: [
+          "Agents charge per gram or per volumetric weight. Shipping three hoodies in one parcel usually costs less per item than three separate international shipments. Let items sit in the warehouse until your haul is ready.",
+        ],
+        links: [
+          { href: "/guides/how-to-build-your-first-haul", label: "Build your first haul" },
+          { href: "/guides/how-shipping-works-with-agents", label: "How shipping works" },
+        ],
+      },
+      {
+        heading: "Pick the right shipping line",
+        paragraphs: [
+          "Express lines are faster but expensive. Economy or postal-style lines cost less but take longer. Match the line to your budget and how quickly you need delivery — check LitBuy's line calculator for your country.",
+        ],
+        links: [
+          { href: "/litbuy-shipping-coupon", label: "Shipping coupons" },
+          { href: LITBUY_SIGNUP_URL, label: "LitBuy coupons" },
+        ],
+      },
+      {
+        heading: "Reduce weight and volume",
+        paragraphs: [
+          "Remove shoe boxes if you do not need them. Vacuum bags can compress clothing. Avoid ordering heavy items you do not need — budget finds add up in freight.",
+        ],
+        links: [
+          { href: "/cheap-finds", label: "Cheap finds" },
+          { href: "/guides/how-to-save-money-on-shipping", label: "Detailed savings guide" },
+        ],
+      },
+      {
+        heading: "Use coupons and promotions",
+        paragraphs: [
+          "LitBuy runs shipping and signup promotions. Confirm codes on the checkout screen — terms vary by destination and cart total.",
+        ],
+        links: [
+          { href: LITBUY_SIGNUP_URL, label: "LitBuy signup coupons" },
+          { href: "/litbuy-coupons", label: "Coupon hub" },
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: "Is free international shipping real?",
+        answer:
+          "Permanent free worldwide shipping is rare. Short-term promotions may discount freight — always verify on LitBuy checkout.",
+      },
+      {
+        question: "Should I ship shoes with boxes?",
+        answer:
+          "Boxes protect shape but add weight. Many buyers ship without boxes to save cost — request extra padding in the parcel instead.",
+      },
+      {
+        question: "Does removing tags save money?",
+        answer:
+          "Tags add minimal weight. The bigger savings come from consolidation, line choice, and dropping shoe boxes.",
+      },
+    ],
+    relatedLinks: [
+      { href: "/how-to-buy-reps", label: "How to buy reps" },
+      { href: "/how-to-use-litbuy", label: "How to use LitBuy" },
+      { href: "/guides", label: "All guides" },
+      ...CORE_RELATED.slice(0, 5),
+    ],
+    publishedTime: PUBLISHED,
+    modifiedTime: MODIFIED,
+  },
 };
 
 export const AUTHORITY_PAGE_SLUGS = Object.keys(AUTHORITY_PAGES);

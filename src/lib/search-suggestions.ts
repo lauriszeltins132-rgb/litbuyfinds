@@ -114,11 +114,14 @@ function buildIndex(): SearchSuggestion[] {
 
   const hubPages = [
     { label: "Finds hub", href: "/finds", keywords: "finds hub rep finds", priority: 98 },
+    { label: "Guides", href: "/guides", keywords: "litbuy guides how to buy", priority: 97 },
     { label: "Latest finds", href: "/latest-finds", keywords: "latest rep finds", priority: 96 },
-    { label: "Sneaker finds", href: "/sneaker-finds", keywords: "sneaker finds", priority: 95 },
-    { label: "Clothing finds", href: "/clothing-finds", keywords: "clothing finds", priority: 94 },
-    { label: "QC photos", href: "/litbuy-qc", keywords: "litbuy qc photos", priority: 93 },
-    { label: "Spreadsheet", href: "/litbuy-spreadsheet", keywords: "litbuy spreadsheet", priority: 92 },
+    { label: "Best sneaker finds", href: "/best-sneaker-finds", keywords: "best sneaker finds", priority: 95 },
+    { label: "How to buy reps", href: "/how-to-buy-reps", keywords: "how to buy reps", priority: 94 },
+    { label: "Sneaker finds", href: "/sneaker-finds", keywords: "sneaker finds", priority: 93 },
+    { label: "Clothing finds", href: "/clothing-finds", keywords: "clothing finds", priority: 92 },
+    { label: "QC photos", href: "/what-are-qc-photos", keywords: "qc photos quality check", priority: 91 },
+    { label: "Spreadsheet", href: "/litbuy-spreadsheet", keywords: "litbuy spreadsheet", priority: 90 },
   ];
   for (const hub of hubPages) {
     items.push({
