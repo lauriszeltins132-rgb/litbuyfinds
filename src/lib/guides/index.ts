@@ -11,6 +11,7 @@ import type { GuideCategory, GuidePage } from "./types";
 
 export type { GuideCategory, GuidePage } from "./types";
 export { GUIDE_CATEGORIES, getGuideCategoryMeta } from "./categories";
+export { GUIDE_HUB_SECTIONS, GUIDES_HUB_FAQS, getGuideHubSectionId } from "./hub-sections";
 export { CORE_LINKS } from "./shared";
 
 export const GUIDE_PAGES: Record<string, GuidePage> = {
@@ -41,10 +42,10 @@ export function getGuidesByCategory(category: GuideCategory): GuidePage[] {
 
 export const GUIDES_HUB = {
   path: "/guides",
-  title: "LitBuy Guides – Agents, QC Photos & How to Order",
+  title: "LitBuy Guides – Rep Finds, QC Photos, Agents & Shipping",
   metaDescription:
-    "LitBuy Finds guides for shopping agents, QC photos, shipping hauls, marketplace buying, and browsing sneaker and fashion finds.",
+    "Authority guides for rep finds, QC photos, Chinese shopping agents, spreadsheets, and shipping savings on LitBuy Finds.",
   h1: "Guides",
   intro:
-    "Clear, practical guides for browsing finds and buying through LitBuy. Start with the basics or jump straight to sneakers, fashion, brands, or budget picks.",
+    "Practical guides for browsing rep finds, checking QC photos, using Chinese shopping agents, and saving on shipping. Start with beginner basics, agent workflows, find browsing tips, or shipping and QC checklists.",
 };

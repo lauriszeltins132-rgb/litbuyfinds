@@ -28,23 +28,24 @@ const FEATURED_CATEGORY_SLUGS = [
 ];
 
 const FEATURED_GUIDE_PATHS = [
-  "/finds",
+  "/guides",
+  "/how-to-use-litbuy",
+  "/how-to-buy-reps",
+  "/what-are-qc-photos",
+  "/how-to-save-on-shipping",
   "/guides/beginner-guide-to-litbuy",
   "/guides/how-to-use-litbuy-finds",
   "/litbuy-qc",
   "/litbuy-spreadsheet",
   "/latest-finds",
+  "/best-sneaker-finds",
+  "/best-clothing-finds",
+  "/best-designer-finds",
   "/sneaker-finds",
   "/litbuy-discord",
   "/guides/how-to-buy-from-weidian",
   "/guides/how-to-find-good-reps",
-  "/guides/litbuy-vs-allchinabuy",
-  "/guides/litbuy-vs-sugargoo",
-  "/guides/litbuy-vs-pandabuy-alternatives",
-  "/guides/beginner-guide-to-litbuy",
-  "/guides/how-to-use-litbuy-finds",
   "/guides/how-to-check-qc-photos",
-  "/guides/how-to-buy-from-weidian",
   "/guides/how-shipping-works-with-agents",
 ];
 
@@ -63,6 +64,10 @@ const FEATURED_COLLECTION_SLUGS = [
 
 const FEATURED_HUB_PATHS = [
   { href: "/finds", label: "Finds hub" },
+  { href: "/guides", label: "Guides hub" },
+  { href: "/best-sneaker-finds", label: "Best sneakers" },
+  { href: "/best-clothing-finds", label: "Best clothing" },
+  { href: "/best-designer-finds", label: "Best designer" },
   { href: "/nike-finds", label: "Nike finds" },
   { href: "/jordan-finds", label: "Jordan finds" },
   { href: "/latest-finds", label: "Latest finds" },

@@ -121,6 +121,16 @@ const nextConfig: NextConfig = {
         destination: "/litbuy-qc-photos",
         permanent: true,
       },
+      {
+        source: "/guides/what-are-qc-photos",
+        destination: "/what-are-qc-photos",
+        permanent: true,
+      },
+      {
+        source: "/guides/how-to-save-money-on-shipping",
+        destination: "/how-to-save-on-shipping",
+        permanent: true,
+      },
       { source: "/mulebuy-telegram", destination: "/telegram-mulebuy", permanent: true },
       { source: "/oopbuy-telegram", destination: "/telegram-oopbuy", permanent: true },
       { source: "/kakobuy-telegram", destination: "/telegram-kakobuy", permanent: true },

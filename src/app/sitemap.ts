@@ -47,6 +47,8 @@ const SITEMAP_EXCLUDED_GUIDE_SLUGS = new Set([
   "litbuy-finds",
   "litbuy-qc-photos",
   "how-to-use-litbuy",
+  "what-are-qc-photos",
+  "how-to-save-money-on-shipping",
   "litbuy-spreadsheet",
 ]);
 

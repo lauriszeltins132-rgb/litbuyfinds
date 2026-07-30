@@ -31,6 +31,9 @@ export const AGENT_FINDS_LINKS = [
 ] as const;
 
 export const CATEGORY_FINDS_LINKS = [
+  { href: "/best-sneaker-finds", label: "Best sneaker finds" },
+  { href: "/best-clothing-finds", label: "Best clothing finds" },
+  { href: "/best-designer-finds", label: "Best designer finds" },
   { href: "/sneaker-finds", label: "Sneaker finds" },
   { href: "/clothing-finds", label: "Clothing finds" },
   { href: "/streetwear-finds", label: "Streetwear finds" },
@@ -39,4 +42,24 @@ export const CATEGORY_FINDS_LINKS = [
   { href: "/bag-finds", label: "Bag finds" },
   { href: "/cheap-finds", label: "Cheap finds" },
   { href: "/best-rep-finds", label: "Best rep finds" },
+  { href: "/latest-finds", label: "Latest finds" },
+] as const;
+
+export const BRAND_FINDS_LINKS = [
+  { href: "/nike-finds", label: "Nike finds" },
+  { href: "/jordan-finds", label: "Jordan finds" },
+  { href: "/stussy-finds", label: "Stussy finds" },
+  { href: "/moncler-finds", label: "Moncler finds" },
+  { href: "/stone-island-finds", label: "Stone Island finds" },
+  { href: "/chrome-hearts-finds", label: "Chrome Hearts finds" },
+] as const;
+
+export const GUIDE_AUTHORITY_LINKS = [
+  { href: "/guides", label: "Guides hub" },
+  { href: "/how-to-use-litbuy", label: "How to use LitBuy" },
+  { href: "/how-to-buy-reps", label: "How to buy reps" },
+  { href: "/what-are-qc-photos", label: "What are QC photos" },
+  { href: "/how-to-save-on-shipping", label: "Save on shipping" },
+  { href: "/guides/beginner-guide-to-litbuy", label: "Beginner guide" },
+  { href: "/guides/how-shipping-works-with-agents", label: "Shipping guide" },
 ] as const;

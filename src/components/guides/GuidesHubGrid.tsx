@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { GUIDE_CATEGORIES } from "@/lib/guides/categories";
+import { GUIDE_HUB_SECTIONS, getGuideHubSectionId } from "@/lib/guides/hub-sections";
 import type { GuidePage } from "@/lib/guides/types";
 
 type GuidesHubGridProps = {
@@ -24,9 +24,11 @@ export default function GuidesHubGrid({ guides }: GuidesHubGridProps) {
   }, [guides, query]);
 
   const grouped = useMemo(() => {
-    return GUIDE_CATEGORIES.map((category) => ({
-      ...category,
-      guides: filtered.filter((guide) => guide.category === category.id),
+    return GUIDE_HUB_SECTIONS.map((section) => ({
+      ...section,
+      guides: filtered.filter(
+        (guide) => getGuideHubSectionId(guide.category) === section.id
+      ),
     })).filter((group) => group.guides.length > 0);
   }, [filtered]);
 
@@ -55,7 +57,7 @@ export default function GuidesHubGrid({ guides }: GuidesHubGridProps) {
       <section className="px-4 pb-16 sm:px-6">
         <div className="mx-auto max-w-7xl space-y-12">
           {grouped.map((group) => (
-            <div key={group.id}>
+            <div key={group.id} id={group.anchor}>
               <div className="mb-5 max-w-2xl">
                 <h2 className="text-xl font-black text-foreground">{group.title}</h2>
                 <p className="mt-1 text-sm text-muted">{group.description}</p>

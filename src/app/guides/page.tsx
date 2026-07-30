@@ -1,16 +1,24 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import GuidesHubCategoryNav from "@/components/guides/GuidesHubCategoryNav";
 import GuidesHubGrid from "@/components/guides/GuidesHubGrid";
 import SchemaScript from "@/components/SchemaScript";
 import { LITBUY_SIGNUP_URL } from "@/lib/constants";
 import { GUIDES_HUB, getAllGuides } from "@/lib/guides";
-import { buildCollectionPageSchema } from "@/lib/schema";
+import { GUIDES_HUB_FAQS } from "@/lib/guides/hub-sections";
+import {
+  buildBreadcrumbSchema,
+  buildCollectionPageSchema,
+  buildFaqSchema,
+  buildWebPageSchema,
+} from "@/lib/schema";
 import { buildPageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildPageMetadata({
-  title: GUIDES_HUB.title,
-  description: GUIDES_HUB.metaDescription,
+  title: "LitBuy Guides – Rep Finds, QC Photos, Agents & Shipping",
+  description:
+    "Authority guides for rep finds, QC photos, Chinese shopping agents, spreadsheets, and shipping savings on LitBuy Finds.",
   path: GUIDES_HUB.path,
 });
 
@@ -19,6 +27,20 @@ export default function GuidesHubPage() {
 
   return (
     <>
+      <SchemaScript
+        data={buildWebPageSchema({
+          name: GUIDES_HUB.h1,
+          description: GUIDES_HUB.metaDescription,
+          path: GUIDES_HUB.path,
+        })}
+      />
+      <SchemaScript
+        data={buildBreadcrumbSchema(
+          [{ label: "Home", href: "/" }, { label: "Guides" }],
+          GUIDES_HUB.path
+        )}
+      />
+      <SchemaScript data={buildFaqSchema([...GUIDES_HUB_FAQS])} />
       <SchemaScript
         data={buildCollectionPageSchema({
           name: GUIDES_HUB.h1,
@@ -45,6 +67,9 @@ export default function GuidesHubPage() {
           <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted">
             {GUIDES_HUB.intro}
           </p>
+          <div className="mt-8">
+            <GuidesHubCategoryNav />
+          </div>
           <p className="mt-3 text-sm text-muted">
             Written by the LitBuy Finds Team ·{" "}
             <Link href="/about" className="font-bold text-accent hover:underline">

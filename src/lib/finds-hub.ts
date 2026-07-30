@@ -152,8 +152,10 @@ export function getFindsHubSections(): FindsHubSection[] {
 
 export const FINDS_HUB_CATEGORY_LINKS = [
   ...CATEGORY_FINDS_LINKS,
+  { href: "/guides", label: "Guides" },
   { href: "/finds", label: "Finds hub" },
   { href: "/latest-finds", label: "Latest finds" },
+  { href: "/how-to-buy-reps", label: "How to buy reps" },
   { href: "/litbuy-qc", label: "QC photos" },
   { href: "/litbuy-spreadsheet", label: "Spreadsheet" },
   { href: LITBUY_SIGNUP_URL, label: "Coupons" },
