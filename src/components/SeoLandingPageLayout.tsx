@@ -1,10 +1,17 @@
 import Link from "next/link";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import ContentFreshness, {
+  getUpdateFrequencyFreshnessVariant,
+} from "@/components/ContentFreshness";
 import ProductGrid from "@/components/ProductGrid";
 import SchemaScript from "@/components/SchemaScript";
 import RelatedPages from "@/components/RelatedPages";
-import { formatDatasetAge } from "@/lib/catalog-meta";
 import type { SeoLandingPageEntry } from "@/lib/seo-landing-config";
+import {
+  getFreshnessSchemaDates,
+  resolveFreshnessDescription,
+  resolveFreshnessH1,
+} from "@/lib/freshness-dates";
 import {
   resolveCompareGroups,
   resolveSeoLandingProducts,
@@ -52,20 +59,32 @@ export default function SeoLandingPageLayout({ entry }: SeoLandingPageLayoutProp
       : [];
   const faqs = entry.faqs.length > 0 ? entry.faqs : undefined;
   const sections = entry.sections ?? [];
+  const h1 = resolveFreshnessH1(entry);
+  const description = resolveFreshnessDescription(entry);
+  const freshnessDates = getFreshnessSchemaDates(
+    entry.updateFrequency,
+    entry.freshnessDisplay
+  );
+  const freshnessVariant =
+    entry.freshnessDisplay === "latestFinds"
+      ? "latest-updated"
+      : getUpdateFrequencyFreshnessVariant(entry.updateFrequency);
 
   const breadcrumbItems = [
     { label: "Home", href: "/" },
     ...(entry.type === "freshness"
       ? [{ label: "Trending", href: "/trending" }]
       : []),
-    { label: entry.h1 },
+    { label: h1 },
   ];
 
   const schema: Record<string, unknown>[] = [
     buildWebPageSchema({
-      name: entry.h1,
-      description: entry.description,
+      name: h1,
+      description,
       path,
+      datePublished: freshnessDates?.datePublished,
+      dateModified: freshnessDates?.dateModified,
     }),
     buildBreadcrumbSchema(breadcrumbItems, path),
   ];
@@ -77,10 +96,12 @@ export default function SeoLandingPageLayout({ entry }: SeoLandingPageLayoutProp
   if (products.length > 0 && entry.type !== "comparison") {
     schema.push(
       buildCollectionPageSchema({
-        name: entry.h1,
-        description: entry.description,
+        name: h1,
+        description,
         path,
         numberOfItems: products.length,
+        datePublished: freshnessDates?.datePublished,
+        dateModified: freshnessDates?.dateModified,
       })
     );
     const itemList = buildProductItemList(entry, products, path);
@@ -118,13 +139,17 @@ export default function SeoLandingPageLayout({ entry }: SeoLandingPageLayoutProp
             {entry.badge}
           </p>
           <h1 className="mt-3 text-3xl font-black tracking-tight sm:text-4xl">
-            {entry.h1}
+            {h1}
           </h1>
           <p className="mt-5 text-base leading-relaxed text-muted">{entry.intro}</p>
+          {freshnessVariant ? (
+            <div className="mt-3">
+              <ContentFreshness variant={freshnessVariant} display="badge" />
+            </div>
+          ) : null}
           {products.length > 0 ? (
             <p className="mt-3 text-sm text-muted">
-              {products.length.toLocaleString()} curated picks · Updated{" "}
-              {formatDatasetAge()}
+              {products.length.toLocaleString()} curated picks
             </p>
           ) : null}
 

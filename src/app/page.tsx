@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import HomepageCatalogSection from "@/components/HomepageCatalogSection";
-import DataFreshness from "@/components/DataFreshness";
+import ContentFreshness from "@/components/ContentFreshness";
 import DiscoveryHero from "@/components/DiscoveryHero";
 import DiscoveryRail from "@/components/DiscoveryRail";
 import HomepageAuthorityHub from "@/components/HomepageAuthorityHub";
@@ -17,6 +17,10 @@ import ProductGridSkeleton from "@/components/ProductGridSkeleton";
 import SchemaScript from "@/components/SchemaScript";
 import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/constants";
 import { getHomepageRails } from "@/lib/homepage-rails";
+import {
+  getDailyFindsTitle,
+  getWeeklyFindsTitle,
+} from "@/lib/freshness-dates";
 import { getCategories } from "@/lib/products";
 import { buildWebPageSchema } from "@/lib/schema";
 import { buildHomepageMetadata } from "@/lib/seo";
@@ -44,19 +48,21 @@ export default async function HomePage() {
       <DiscoveryHero />
 
       <DiscoveryRail
-        title="Trending Today"
+        title={getDailyFindsTitle()}
         subtitle="Most viewed and clicked in the last 24 hours"
-        href="/most-popular-finds-now"
+        href="/trending-today"
         products={rails.popularToday}
         showTrendingScore
         preloadImages
+        freshness="updated-daily"
       />
 
       <DiscoveryRail
         title="Latest Finds"
         subtitle="Newest drops from the LitBuy spreadsheet sync"
-        href="/latest"
+        href="/latest-finds"
         products={rails.latestFinds}
+        freshness="latest-updated"
       />
 
       {rails.editorsPicks.length > 0 ? (
@@ -78,11 +84,12 @@ export default async function HomePage() {
       ) : null}
 
       <DiscoveryRail
-        title="Most Viewed This Week"
+        title={getWeeklyFindsTitle()}
         subtitle="Trending sneakers, jackets and streetwear"
-        href="/trending"
+        href="/trending-this-week"
         products={rails.popularWeek}
         showTrendingScore
+        freshness="updated-weekly"
       />
 
       <HomepageCategories categories={categories} />
@@ -99,7 +106,7 @@ export default async function HomePage() {
 
       <section className="px-4 pb-2 sm:px-6">
         <div className="mx-auto max-w-7xl text-center">
-          <DataFreshness variant="block" label="Catalog synced" />
+          <ContentFreshness variant="catalog-sync" display="block" />
         </div>
       </section>
 

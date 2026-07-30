@@ -119,11 +119,15 @@ export function buildCollectionPageSchema({
   description,
   path,
   numberOfItems,
+  datePublished,
+  dateModified,
 }: {
   name: string;
   description: string;
   path: string;
   numberOfItems: number;
+  datePublished?: string;
+  dateModified?: string;
 }) {
   return {
     "@context": "https://schema.org",
@@ -132,6 +136,8 @@ export function buildCollectionPageSchema({
     description,
     url: `${SITE_URL}${path}`,
     numberOfItems,
+    ...(datePublished ? { datePublished } : {}),
+    ...(dateModified ? { dateModified } : {}),
     isPartOf: {
       "@type": "WebSite",
       "@id": WEBSITE_SCHEMA_ID,
@@ -165,11 +171,15 @@ export function buildWebPageSchema({
   description,
   path,
   aboutOrganization = false,
+  datePublished,
+  dateModified,
 }: {
   name: string;
   description: string;
   path: string;
   aboutOrganization?: boolean;
+  datePublished?: string;
+  dateModified?: string;
 }) {
   const url = `${SITE_URL}${path}`;
 
@@ -180,6 +190,8 @@ export function buildWebPageSchema({
     description,
     url,
     mainEntityOfPage: { "@id": url },
+    ...(datePublished ? { datePublished } : {}),
+    ...(dateModified ? { dateModified } : {}),
     isPartOf: {
       "@type": "WebSite",
       "@id": WEBSITE_SCHEMA_ID,

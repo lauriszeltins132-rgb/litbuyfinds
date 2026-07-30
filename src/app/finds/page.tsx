@@ -9,6 +9,9 @@ export const metadata: Metadata = buildPageMetadata({
   path: FINDS_HUB_PATH,
 });
 
+/** Refresh hub dates and product rails hourly. */
+export const revalidate = 3600;
+
 export default function FindsPage() {
   return <FindsHubPage />;
 }

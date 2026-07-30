@@ -24,6 +24,7 @@ export type SeoLandingProductFilter = {
     | "popularToday"
     | "popularWeek"
     | "addedToday"
+    | "latestFinds"
     | "editorsPicks"
     | "bestUnder20"
     | "bestValue";
@@ -45,6 +46,8 @@ export type SeoLandingPageEntry = {
   badge: string;
   keywords: string[];
   updateFrequency: SeoLandingUpdateFrequency;
+  /** Auto-title for daily/weekly/latest freshness pages. */
+  freshnessDisplay?: "dailyFinds" | "weeklyFinds" | "latestFinds";
   filter?: SeoLandingProductFilter;
   getProducts?: () => Product[];
   compareGroups?: SeoLandingCompareGroup[];
@@ -588,6 +591,7 @@ export const SEO_LANDING_CONFIG: Record<string, SeoLandingPageEntry> = {
   "trending-today": {
     slug: "trending-today",
     type: "freshness",
+    freshnessDisplay: "dailyFinds",
     title: "Trending LitBuy Finds Today",
     description:
       "Trending finds today on LitBuy Finds — daily rotated picks from engagement signals and catalog quality filters.",
@@ -617,6 +621,7 @@ export const SEO_LANDING_CONFIG: Record<string, SeoLandingPageEntry> = {
   "trending-this-week": {
     slug: "trending-this-week",
     type: "freshness",
+    freshnessDisplay: "weeklyFinds",
     title: "Trending LitBuy Finds This Week",
     description:
       "Trending finds this week — sneakers, jackets, and streetwear rotated weekly from the LitBuy Finds catalog.",

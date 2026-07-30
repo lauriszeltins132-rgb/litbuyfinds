@@ -1,5 +1,10 @@
 import { PUBLIC_CATALOG_COUNT } from "./catalog-count-public";
 import { LITBUY_SIGNUP_URL } from "./constants";
+import {
+  getDailyFindsTitle,
+  getWeeklyFindsTitle,
+  type ContentFreshnessVariant,
+} from "./freshness-dates";
 import { getHomepageRails } from "./homepage-rails";
 import { resolveProductsFromFilter } from "./seo-landing-engine";
 import type { Product } from "./types";
@@ -46,6 +51,7 @@ export type FindsHubSection = {
   description: string;
   href: string;
   linkLabel: string;
+  freshness?: ContentFreshnessVariant;
   getProducts: () => Product[];
 };
 
@@ -59,12 +65,31 @@ export function getFindsHubSections(): FindsHubSection[] {
       description: "Newest catalog additions synced from community spreadsheets — fresh drops land here first.",
       href: "/latest-finds",
       linkLabel: "All latest finds →",
+      freshness: "latest-updated",
       getProducts: () => rails.latestFinds,
+    },
+    {
+      id: "daily",
+      title: getDailyFindsTitle(),
+      description: "What buyers are clicking today — engagement-weighted picks with verified photos and prices.",
+      href: "/trending-today",
+      linkLabel: "All daily finds →",
+      freshness: "updated-daily",
+      getProducts: () => rails.popularToday,
+    },
+    {
+      id: "weekly",
+      title: getWeeklyFindsTitle(),
+      description: "Momentum picks from the past week — sneakers, outerwear, and streetwear with verified links.",
+      href: "/trending-this-week",
+      linkLabel: "All weekly finds →",
+      freshness: "updated-weekly",
+      getProducts: () => rails.popularWeek,
     },
     {
       id: "trending",
       title: "Trending finds",
-      description: "What buyers are clicking today — engagement-weighted picks with verified photos and prices.",
+      description: "Browse the full trending hub for daily and weekly rotation pages.",
       href: "/trending",
       linkLabel: "Trending hub →",
       getProducts: () => rails.popularToday,

@@ -611,6 +611,7 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
   "latest-finds": {
     slug: "latest-finds",
     type: "freshness",
+    freshnessDisplay: "latestFinds",
     title: "Latest Rep Finds 2026 | New QC Photos & Agent Links",
     description:
       "Latest rep finds added to LitBuy Finds — new sneakers, clothing, and accessories with QC photos, prices, and verified agent links updated daily.",
@@ -620,7 +621,7 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
     badge: "Fresh finds",
     keywords: ["latest rep finds", "latest rep finds 2026", "new litbuy finds"],
     updateFrequency: "daily",
-    filter: { freshness: "addedToday" },
+    filter: { freshness: "latestFinds" },
     productLimit: 48,
     sections: [
       {

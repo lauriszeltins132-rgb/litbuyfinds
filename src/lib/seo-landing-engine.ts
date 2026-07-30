@@ -101,6 +101,8 @@ export function resolveFreshnessProducts(
       return rails.popularWeek.slice(0, limit);
     case "addedToday":
       return rails.addedToday.slice(0, limit);
+    case "latestFinds":
+      return rails.latestFinds.slice(0, limit);
     case "editorsPicks":
       return rails.editorsPicks.slice(0, limit);
     case "bestUnder20":

@@ -7,6 +7,10 @@ import {
 } from "@/lib/seo-landing-config";
 import { isSeoLandingPagePublished } from "@/lib/seo-landing-engine";
 import { buildPageMetadata } from "@/lib/seo";
+import {
+  resolveFreshnessDescription,
+  resolveFreshnessPageTitle,
+} from "@/lib/freshness-dates";
 
 function requirePublishedSeoLandingConfig(slug: string) {
   const entry = getSeoLandingConfig(slug);
@@ -14,6 +18,20 @@ function requirePublishedSeoLandingConfig(slug: string) {
     notFound();
   }
   return entry;
+}
+
+function getSeoLandingRevalidate(slug: string): number {
+  const entry = getSeoLandingConfig(slug);
+  if (!entry) return 86_400;
+
+  switch (entry.updateFrequency) {
+    case "daily":
+      return 3_600;
+    case "weekly":
+      return 86_400;
+    default:
+      return 86_400;
+  }
 }
 
 export function createSeoLandingConfigPage(slug: string) {
@@ -24,8 +42,8 @@ export function createSeoLandingConfigPage(slug: string) {
     }
 
     return buildPageMetadata({
-      title: entry.title,
-      description: entry.description,
+      title: resolveFreshnessPageTitle(entry),
+      description: resolveFreshnessDescription(entry),
       path: getSeoLandingConfigPath(slug),
     });
   }
@@ -35,5 +53,7 @@ export function createSeoLandingConfigPage(slug: string) {
     return <SeoLandingPageLayout entry={entry} />;
   }
 
-  return { generateMetadata, Page };
+  const revalidate = getSeoLandingRevalidate(slug);
+
+  return { generateMetadata, Page, revalidate };
 }
