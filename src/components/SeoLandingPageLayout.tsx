@@ -72,9 +72,11 @@ export default function SeoLandingPageLayout({ entry }: SeoLandingPageLayoutProp
 
   const breadcrumbItems = [
     { label: "Home", href: "/" },
-    ...(entry.type === "freshness"
-      ? [{ label: "Trending", href: "/trending" }]
-      : []),
+    ...(entry.type === "collection"
+      ? [{ label: "Finds", href: "/finds" }]
+      : entry.type === "freshness"
+        ? [{ label: "Finds", href: "/finds" }]
+        : []),
     { label: h1 },
   ];
 

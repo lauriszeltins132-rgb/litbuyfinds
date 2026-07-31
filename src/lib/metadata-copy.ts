@@ -47,7 +47,7 @@ export function getHomepageMetadataCopy() {
       72
     ),
     description: truncateMetaDescription(
-      `Browse ${META_SCALE} LitBuy finds with QC photos, spreadsheet-style product discovery, Weidian and Taobao links, sneaker finds, fashion finds, coupons and multi-agent support.`
+      `Browse ${META_SCALE} LitBuy finds with QC photos, spreadsheet discovery, sneaker and clothing finds, coupons, Discord community alerts, and multi-agent support.`
     ),
   };
 }

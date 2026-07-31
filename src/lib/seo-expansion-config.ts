@@ -293,12 +293,12 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
   "sneaker-finds": {
     slug: "sneaker-finds",
     type: "collection",
-    title: "Best Sneaker Finds 2026 | LitBuy QC Photos & Agent Links",
+    title: "Sneaker Finds 2026 | Nike, Jordan, Adidas & QC Photos",
     description:
-      "Best sneaker finds on LitBuy Finds — Nike, Jordan, Adidas, designer runners and budget sneakers with QC photos, spreadsheet links, and verified agent buy buttons.",
-    h1: "Best sneaker finds",
+      "Sneaker finds on LitBuy Finds — Nike, Jordan, Adidas, New Balance, and designer runners with QC photos, sneaker spreadsheet links, and verified agent buy buttons.",
+    h1: "Sneaker finds",
     intro:
-      "Sneaker finds are the most searched lane on LitBuy Finds. This page surfaces Nike Dunks, Jordan retros, Adidas campus styles, New Balance runners, and designer batches — each with photos, prices, QC references where available, and one-click agent links.",
+      "Sneaker finds are the most searched lane on LitBuy Finds. Browse Nike Dunks, Jordan retros, Adidas Campus styles, and New Balance runners — each with photos, prices, QC references where available, and one-click agent links. For editor-ranked picks, see Best Sneaker Finds.",
     badge: "Sneaker finds",
     keywords: ["sneaker finds", "litbuy sneakers", "rep sneakers", "best sneaker finds 2026"],
     updateFrequency: "weekly",
@@ -332,10 +332,12 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
     ],
     relatedLinks: [
       { href: "/best-sneaker-finds", label: "Best sneaker finds" },
-      { href: "/litbuy-sneakers", label: "LitBuy sneakers hub" },
-      { href: "/shoe-spreadsheet", label: "Shoe spreadsheet" },
+      { href: "/latest-finds", label: "Latest finds" },
+      { href: "/litbuy-discord", label: "LitBuy Discord" },
+      { href: "/shoe-spreadsheet", label: "Sneaker spreadsheet" },
       { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
-      ...HUB.filter((l) => !["/litbuy-finds"].includes(l.href)).slice(0, 4),
+      { href: "/litbuy-coupons", label: "LitBuy coupons" },
+      ...HUB.filter((l) => !["/litbuy-finds"].includes(l.href)).slice(0, 3),
     ],
     faqs: [
       {
@@ -348,6 +350,11 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
         answer:
           "Budget batches can be fine for beaters — always check QC references and compare multiple listings before ordering.",
       },
+      {
+        question: "Is there a sneaker spreadsheet?",
+        answer:
+          "Yes. Browse the shoe spreadsheet page or LitBuy spreadsheet hub for Nike and Jordan rows — LitBuy Finds turns those links into searchable product pages.",
+      },
     ],
     productSectionTitle: "Top sneaker picks",
   },
@@ -355,12 +362,12 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
   "clothing-finds": {
     slug: "clothing-finds",
     type: "collection",
-    title: "Best Clothing Finds 2026 | LitBuy Fashion & Streetwear",
+    title: "Clothing Finds 2026 | Hoodies, Jackets & Streetwear",
     description:
-      "Clothing finds on LitBuy Finds — hoodies, jackets, tees, pants, and fashion layers with QC photos, spreadsheet-style discovery, and multi-agent links.",
-    h1: "Best clothing finds",
+      "Clothing finds on LitBuy Finds — hoodies, jackets, t-shirts, streetwear layers, and fashion reps with QC photos and multi-agent links.",
+    h1: "Clothing finds",
     intro:
-      "Clothing finds cover hoodies, jackets, tees, cargos, and everyday fashion layers from Weidian and Taobao. Browse curated picks with photos and prices — faster than scrolling a 5,000-row spreadsheet on mobile.",
+      "Clothing finds cover hoodies, jackets, tees, cargos, and everyday fashion layers from Weidian and Taobao. Browse by category faster than scrolling a 5,000-row spreadsheet on mobile — or jump to Best Clothing Finds for editor-ranked picks.",
     badge: "Clothing finds",
     keywords: ["clothing finds", "fashion finds", "litbuy clothing", "rep clothing"],
     updateFrequency: "weekly",
@@ -380,12 +387,25 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
           { href: "/best-clothing-finds", label: "Best clothing finds" },
         ],
       },
+      {
+        heading: "Clothing categories to browse",
+        paragraphs: [
+          "Hoodies and graphic tees lead everyday clicks. Puffer jackets and outerwear from Moncler, Stone Island, and Arc'teryx-style labels need extra QC. Streetwear staples from Stussy, Essentials, and Corteiz appear across hoodie and streetwear find pages.",
+        ],
+        links: [
+          { href: "/hoodie-finds", label: "Hoodie finds" },
+          { href: "/jacket-finds", label: "Jacket finds" },
+          { href: "/streetwear-finds", label: "Streetwear finds" },
+          { href: "/best-clothing-finds", label: "Best clothing finds" },
+        ],
+      },
     ],
     relatedLinks: [
       { href: "/best-clothing-finds", label: "Best clothing finds" },
-      { href: "/litbuy-finds", label: "LitBuy finds catalog" },
-      { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+      { href: "/latest-finds", label: "Latest finds" },
       { href: "/litbuy-discord", label: "LitBuy Discord" },
+      { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+      { href: "/litbuy-coupons", label: "LitBuy coupons" },
       ...CATEGORIES.filter((l) => l.href !== "/clothing-finds").slice(0, 4),
     ],
     faqs: [
@@ -398,6 +418,11 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
         question: "How do I find my size?",
         answer:
           "Open the LitBuy listing from the product page and check the seller size chart on Weidian or Taobao before ordering.",
+      },
+      {
+        question: "Which clothing types are most popular?",
+        answer:
+          "Hoodies, puffer jackets, and graphic tees lead search volume. Use hoodie-finds and jacket-finds for focused browsing.",
       },
     ],
     productSectionTitle: "Top clothing picks",
@@ -649,11 +674,27 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
           { href: "/guides/beginner-guide-to-litbuy", label: "Beginner guide" },
         ],
       },
+      {
+        heading: "Rep find categories",
+        paragraphs: [
+          "Sneakers, streetwear, designer outerwear, and bags each have dedicated find pages. Start here for editor-ranked picks, then drill into sneaker finds or clothing finds for full category browsing.",
+        ],
+        links: [
+          { href: "/sneaker-finds", label: "Sneaker finds" },
+          { href: "/clothing-finds", label: "Clothing finds" },
+          { href: "/best-designer-finds", label: "Designer finds" },
+          { href: "/latest-finds", label: "Latest finds" },
+        ],
+      },
     ],
     relatedLinks: [
+      { href: "/finds", label: "Finds hub" },
+      { href: "/latest-finds", label: "Latest finds" },
+      { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+      { href: "/litbuy-coupons", label: "LitBuy coupons" },
+      { href: "/litbuy-discord", label: "LitBuy Discord" },
       { href: "/best-litbuy-finds", label: "Best LitBuy finds" },
-      { href: "/best-finds", label: "Best finds hub" },
-      ...CATEGORIES.slice(0, 5),
+      ...CATEGORIES.slice(0, 4),
     ],
     faqs: [
       {
@@ -665,6 +706,11 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
         question: "Which agents support these finds?",
         answer:
           "LitBuy, MuleBuy, Kakobuy, HipoBuy, OopBuy, and ACBuy — switch per product on LitBuy Finds.",
+      },
+      {
+        question: "How often are rep finds updated?",
+        answer:
+          "The catalog syncs daily. Editor-ranked picks refresh weekly — check Latest Finds for brand-new imports.",
       },
     ],
     productSectionTitle: "Editor-ranked rep finds",
@@ -706,9 +752,15 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
       { label: "QC-linked picks", filter: { requireQc: true } },
     ],
     relatedLinks: [
+      { href: "/finds", label: "Finds hub" },
+      { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+      { href: "/litbuy-coupons", label: "LitBuy coupons" },
+      { href: "/litbuy-discord", label: "LitBuy Discord" },
+      { href: "/guides", label: "Guides" },
       ...AGENTS,
       { href: "/chinese-agent-finds", label: "Chinese agent finds" },
       { href: "/rep-agent-spreadsheets", label: "Agent spreadsheets" },
+      { href: "/best-rep-spreadsheets", label: "Best rep spreadsheets" },
     ],
     faqs: [
       {
@@ -828,6 +880,12 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
       },
     ],
     relatedLinks: [
+      { href: "/finds", label: "Finds hub" },
+      { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+      { href: "/latest-finds", label: "Latest finds" },
+      { href: "/sneaker-finds", label: "Sneaker finds" },
+      { href: "/clothing-finds", label: "Clothing finds" },
+      { href: "/litbuy-coupons", label: "LitBuy coupons" },
       { href: "/rep-agent-spreadsheets", label: "Agent spreadsheets hub" },
       ...SPREADSHEETS,
       { href: "/litbuy-discord", label: "LitBuy Discord" },
@@ -852,7 +910,7 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
       "Latest rep finds added to LitBuy Finds — new sneakers, clothing, and accessories with QC photos, prices, and verified agent links updated daily.",
     h1: "Latest rep finds",
     intro:
-      "Fresh catalog additions land here first after each daily sync. Browse the newest rep finds with photos, prices, and buy-ready agent links — updated today from community spreadsheets.",
+      "Fresh catalog additions land here first after each daily sync. Browse the newest rep finds with photos, prices, and buy-ready agent links — new products added regularly from community spreadsheets.",
     badge: "Fresh finds",
     keywords: ["latest rep finds", "latest rep finds 2026", "new litbuy finds"],
     updateFrequency: "daily",
@@ -874,21 +932,28 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
     ],
     relatedLinks: [
       { href: "/finds", label: "Finds hub" },
-      { href: "/trending", label: "Trending finds" },
-      { href: "/latest", label: "Latest catalog" },
+      { href: "/trending-today", label: "Daily finds" },
+      { href: "/sneaker-finds", label: "Sneaker finds" },
+      { href: "/litbuy-discord", label: "LitBuy Discord" },
+      { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
       { href: "/litbuy-qc", label: "QC photos" },
-      ...HUB.slice(0, 4),
+      ...HUB.slice(0, 3),
     ],
     faqs: [
       {
         question: "How often are latest finds updated?",
         answer:
-          "The catalog syncs daily. New products appear on this page after each import completes.",
+          "The catalog syncs daily. New products appear on this page after each import completes — sorted newest first.",
       },
       {
         question: "Are these the same as spreadsheet rows?",
         answer:
           "They come from the same product universe — LitBuy Finds filters broken images and surfaces shareable product pages.",
+      },
+      {
+        question: "Where do I find daily find alerts?",
+        answer:
+          "Join the LitBuy Discord for same-day alerts between syncs, or check Trending Today for engagement-weighted picks.",
       },
     ],
     productSectionTitle: "New finds today",
