@@ -6,7 +6,7 @@ export const SEO_HUB_LINKS = [
   { href: "/finds", label: "Finds hub" },
   { href: "/litbuy-finds", label: "LitBuy finds" },
   { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
-  { href: LITBUY_SIGNUP_URL, label: "LitBuy coupons" },
+  { href: "/litbuy-coupons", label: "LitBuy coupons" },
   { href: "/litbuy-discord", label: "LitBuy Discord" },
   { href: "/telegram-litbuy", label: "LitBuy Telegram" },
 ] as const;

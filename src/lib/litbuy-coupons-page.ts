@@ -116,20 +116,26 @@ export const LITBUY_COUPONS_FAQS = [
     answer:
       "We manually verify that LitBuy coupon links open the correct signup flow, update this page when offers change, and pair coupons with a searchable catalog of real finds, QC references, and LitBuy AI search.",
   },
+  {
+    question: "How do I use a LitBuy coupon?",
+    answer:
+      "Click the registration button on this page, create a LitBuy account, and confirm the welcome coupon pack and shipping discount appear at checkout before paying for your haul.",
+  },
 ] as const;
 
 export const LITBUY_COUPONS_INTERNAL_LINKS = [
   { href: "/", label: "Homepage" },
+  { href: "/finds", label: "Finds hub" },
   { href: "/litbuy-finds", label: "LitBuy finds" },
   { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
-  { href: LITBUY_SIGNUP_URL, label: "LitBuy coupons" },
   { href: "/litbuy-discord", label: "LitBuy Discord" },
   { href: "/telegram-litbuy", label: "LitBuy Telegram" },
   { href: "/litbuy-shipping-coupon", label: "Shipping coupon guide" },
-  { href: "/litbuy-coupon-code", label: "LitBuy coupon code" },
-  { href: "/best-litbuy-coupons", label: "Best LitBuy coupons" },
-  { href: "/ai", label: "LitBuy AI" },
-  { href: "/latest", label: "Latest finds" },
+  { href: "/how-to-save-on-shipping", label: "Save on shipping" },
+  { href: "/sneaker-finds", label: "Sneaker finds" },
+  { href: "/clothing-finds", label: "Clothing finds" },
+  { href: "/best-rep-finds", label: "Best rep finds" },
+  { href: "/latest-finds", label: "Latest finds" },
   { href: "/guides", label: "Guides" },
   { href: "/litbuy-qc-photos", label: "QC photos guide" },
   { href: "/how-to-use-litbuy", label: "How to use LitBuy" },
