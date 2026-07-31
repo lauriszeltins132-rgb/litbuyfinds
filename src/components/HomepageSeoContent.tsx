@@ -43,11 +43,41 @@ export default function HomepageSeoContent() {
             ))}
 
             <div className="flex flex-wrap gap-2 pt-2">
+              <Link
+                href="/litbuy-coupons"
+                className="rounded-full border border-border px-3 py-1.5 text-xs font-bold hover:border-accent/40 hover:text-accent"
+              >
+                LitBuy coupons
+              </Link>
+              <Link
+                href="/litbuy-discord"
+                className="rounded-full border border-border px-3 py-1.5 text-xs font-bold hover:border-accent/40 hover:text-accent"
+              >
+                LitBuy Discord
+              </Link>
+              <Link
+                href="/sneaker-finds"
+                className="rounded-full border border-border px-3 py-1.5 text-xs font-bold hover:border-accent/40 hover:text-accent"
+              >
+                Sneaker finds
+              </Link>
+              <Link
+                href="/clothing-finds"
+                className="rounded-full border border-border px-3 py-1.5 text-xs font-bold hover:border-accent/40 hover:text-accent"
+              >
+                Clothing finds
+              </Link>
+              <Link
+                href="/litbuy-spreadsheet"
+                className="rounded-full border border-border px-3 py-1.5 text-xs font-bold hover:border-accent/40 hover:text-accent"
+              >
+                LitBuy spreadsheet
+              </Link>
               <SmartLink
                 href={LITBUY_SIGNUP_URL}
                 className="rounded-full border border-border px-3 py-1.5 text-xs font-bold hover:border-accent/40 hover:text-accent"
               >
-                LitBuy coupons
+                Register on LitBuy
               </SmartLink>
               <Link
                 href="/guides/litbuy-finds"

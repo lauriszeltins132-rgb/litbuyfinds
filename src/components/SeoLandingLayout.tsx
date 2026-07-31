@@ -4,7 +4,7 @@ import ProductGrid from "@/components/ProductGrid";
 import SchemaScript from "@/components/SchemaScript";
 import type { SeoLandingConfig } from "@/lib/seo-landing-pages";
 import RelatedPages from "@/components/RelatedPages";
-import { buildCollectionPageSchema, buildFaqSchema } from "@/lib/schema";
+import { buildBreadcrumbSchema, buildCollectionPageSchema, buildFaqSchema, buildWebPageSchema } from "@/lib/schema";
 
 type SeoLandingLayoutProps = {
   config: SeoLandingConfig;
@@ -13,9 +13,21 @@ type SeoLandingLayoutProps = {
 export default function SeoLandingLayout({ config }: SeoLandingLayoutProps) {
   const products = config.getProducts();
   const faqs = config.faqs.length > 0 ? config.faqs : undefined;
+  const breadcrumbs = [
+    { label: "Home", href: "/" },
+    { label: config.h1 },
+  ];
 
   return (
     <>
+      <SchemaScript
+        data={buildWebPageSchema({
+          name: config.h1,
+          description: config.metaDescription,
+          path: config.path,
+        })}
+      />
+      <SchemaScript data={buildBreadcrumbSchema(breadcrumbs, config.path)} />
       <SchemaScript
         data={buildCollectionPageSchema({
           name: config.h1,
@@ -27,10 +39,7 @@ export default function SeoLandingLayout({ config }: SeoLandingLayoutProps) {
       {faqs ? <SchemaScript data={buildFaqSchema(faqs)} /> : null}
 
       <Breadcrumbs
-        items={[
-          { label: "Home", href: "/" },
-          { label: config.h1 },
-        ]}
+        items={breadcrumbs}
         currentPath={config.path}
       />
 

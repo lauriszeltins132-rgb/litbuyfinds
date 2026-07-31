@@ -125,10 +125,11 @@ export function getProductImageAlt(product: Product): string {
   const brand = getDisplayBrand(product);
   const name = getDisplayProductName(product);
   const categoryLabel = getCategoryAltLabel(product.category_slug, product.category);
+  const qcBit = product.qc_link ? " QC photo" : "";
   if (brand) {
-    return `${brand} ${name} — ${categoryLabel} with QC photos on LitBuy Finds`;
+    return `${brand} ${name} rep find${qcBit} — ${categoryLabel} on LitBuy Finds`;
   }
-  return `${name} — ${categoryLabel} on LitBuy Finds`;
+  return `${name} rep find${qcBit} — ${categoryLabel} on LitBuy Finds`;
 }
 
 export function getProductSeoDescription(product: Product): string {

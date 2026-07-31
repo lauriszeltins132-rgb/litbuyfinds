@@ -74,9 +74,9 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
     title: getSpreadsheetMetadataCopy().title,
     metaDescription: getSpreadsheetMetadataCopy().description,
     badge: "LitBuy resource",
-    h1: "LitBuy spreadsheet guide",
+    h1: "LitBuy Spreadsheet",
     intro:
-      "LitBuy spreadsheet contains thousands of curated products with QC photos, prices, and agent links. LitBuy Finds turns that same catalog into " +
+      "LitBuy Spreadsheet contains curated products with QC photos, prices, and agent links. LitBuy Finds turns that same catalog into " +
       `${PUBLIC_CATALOG_COUNT} searchable pages — updated daily with verified buy buttons for LitBuy, MuleBuy, Kakobuy, HipoBuy, OopBuy, and ACBuy.`,
     sections: [
       {
@@ -92,6 +92,18 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
         ],
       },
       {
+        heading: "Categories in the spreadsheet",
+        paragraphs: [
+          "Spreadsheet rows cover sneakers, clothing, streetwear, jackets, hoodies, bags, and accessories. LitBuy Finds mirrors those lanes as category pages — search by Nike, Jordan, Moncler, or browse sneaker finds and clothing finds without scrolling thousands of rows.",
+        ],
+        links: [
+          { href: "/sneaker-finds", label: "Sneaker finds" },
+          { href: "/clothing-finds", label: "Clothing finds" },
+          { href: "/latest-finds", label: "Latest finds" },
+          { href: "/best-rep-finds", label: "Best rep finds" },
+        ],
+      },
+      {
         heading: "What a LitBuy spreadsheet contains",
         paragraphs: [
           "Most community spreadsheets list product names, thumbnail images, seller URLs, approximate prices, and sometimes QC photo references from previous buyers. They are powerful for power users but difficult to search on mobile and hard to share one product at a time.",
@@ -100,6 +112,16 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
         links: [
           { href: "/collections/litbuy-spreadsheet-alternative", label: "Spreadsheet alternative" },
           { href: "/litbuy-products", label: "Browse products" },
+        ],
+      },
+      {
+        heading: "How often the spreadsheet updates",
+        paragraphs: [
+          "The LitBuy Finds catalog syncs daily. New rows from community spreadsheets appear in Latest Finds, Recently Added, and category pages after each import — check the homepage timestamp for the last sync.",
+        ],
+        links: [
+          { href: "/latest-finds", label: "Latest finds" },
+          { href: "/litbuy-discord", label: "LitBuy Discord alerts" },
         ],
       },
       {
@@ -183,9 +205,14 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
       },
     ],
     relatedLinks: [
+      { href: "/finds", label: "Finds hub" },
+      { href: "/latest-finds", label: "Latest finds" },
+      { href: "/sneaker-finds", label: "Sneaker finds" },
+      { href: "/clothing-finds", label: "Clothing finds" },
+      { href: "/litbuy-coupons", label: "LitBuy coupons" },
+      { href: "/litbuy-discord", label: "LitBuy Discord" },
       { href: "/litbuy-finds", label: "LitBuy finds" },
       { href: "/litbuy-guide", label: "LitBuy guide hub" },
-      { href: "/litbuy-discord", label: "LitBuy Discord" },
       { href: "/kakobuy-spreadsheet", label: "Kakobuy spreadsheet" },
       { href: "/mulebuy-spreadsheet", label: "MuleBuy spreadsheet" },
       { href: "/rep-agent-spreadsheets", label: "Agent spreadsheets" },
