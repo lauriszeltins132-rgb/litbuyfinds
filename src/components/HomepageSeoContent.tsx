@@ -3,7 +3,8 @@ import SmartLink from "@/components/SmartLink";
 import { LITBUY_SIGNUP_URL, PUBLIC_CATALOG_COUNT } from "@/lib/constants";
 
 const PARAGRAPHS = [
-  `LitBuy Finds is the largest searchable catalog of LitBuy spreadsheet products on the web. Instead of scrolling endless rows in a shared Google Sheet, you get ${PUBLIC_CATALOG_COUNT} indexed finds with photos, prices, QC references, and one-click agent links. Whether you are hunting sneaker finds, fashion finds, or rep finds for your next haul, everything is organized by brand, category, and collection.`,
+  `LitBuy Finds is the authority website for product finds — a searchable database of ${PUBLIC_CATALOG_COUNT} LitBuy spreadsheet products with QC photos, prices, and one-click agent links. Whether you are hunting sneaker finds, clothing finds, or rep finds for your next haul, everything is organized by brand, category, and collection.`,
+  "As a clothing and sneaker discovery platform, LitBuy Finds turns raw spreadsheet rows into proper landing pages you can search, filter, and share. QC photo references help you compare batches before ordering. Coupon and shipping resources — including LitBuy coupons and the LitBuy Discord community — sit alongside the catalog so you can discover, save, and buy in one workflow.",
   "Spreadsheets were the original way the community shared Weidian and Taobao links — and they still work for power users. The problem is discovery: a sheet does not tell you which Nike Dunk batch has the best photos, which Moncler jacket has QC history, or what dropped today. LitBuy Finds solves that by turning raw spreadsheet data into proper landing pages you can search, filter, and share.",
   "Search is the fastest path in. Type a brand like Jordan or Moncler, a category like hoodies or bags, or even a specific silhouette. The homepage search bar and catalog filters work together so you can narrow from thousands of listings to a shortlist worth opening. Each product page shows the listing image, USD price when available, marketplace source, and buttons for LitBuy, OopBuy, Kakobuy, MuleBuy, and ACBuy.",
   "QC photos are the reason many buyers use agents in the first place. After you order, the warehouse photographs your item so you can approve it or request an exchange before international shipping. LitBuy Finds highlights listings with QC references — links to real warehouse photos from past orders — so you know what a batch looked like for other buyers. That does not replace your own QC set, but it helps you avoid obvious misses.",
@@ -43,6 +44,12 @@ export default function HomepageSeoContent() {
             ))}
 
             <div className="flex flex-wrap gap-2 pt-2">
+              <Link
+                href="/latest-finds"
+                className="rounded-full border border-border px-3 py-1.5 text-xs font-bold hover:border-accent/40 hover:text-accent"
+              >
+                Latest finds
+              </Link>
               <Link
                 href="/litbuy-coupons"
                 className="rounded-full border border-border px-3 py-1.5 text-xs font-bold hover:border-accent/40 hover:text-accent"

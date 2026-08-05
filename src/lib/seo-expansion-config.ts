@@ -8,7 +8,6 @@ import {
   SEO_HUB_LINKS,
   SPREADSHEET_CLUSTER_LINKS,
 } from "./seo-internal-links";
-import { LITBUY_SIGNUP_URL } from "./constants";
 
 const HUB = [...SEO_HUB_LINKS];
 const SPREADSHEETS = [...SPREADSHEET_CLUSTER_LINKS];
@@ -431,14 +430,14 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
   "streetwear-finds": {
     slug: "streetwear-finds",
     type: "collection",
-    title: "Best Streetwear Finds 2026 | Stussy, Corteiz & Hype",
+    title: "Streetwear Finds 2026 | Stussy, Corteiz & Hype Layers",
     description:
-      "Streetwear finds on LitBuy Finds — Stussy, Corteiz, Supreme, Essentials, and hype labels with QC photos and agent spreadsheet links.",
-    h1: "Best streetwear finds",
+      "Streetwear finds on LitBuy Finds — Stussy, Corteiz, Supreme, Essentials, and hype labels with QC photos, spreadsheet links, and verified agent buy buttons.",
+    h1: "Streetwear finds",
     intro:
-      "Streetwear finds combine UK and US hype labels — Stussy, Corteiz, Supreme, Fear of God Essentials, and Chrome Hearts-style pieces. This page highlights listings with strong photos and verified buy links.",
+      "Streetwear finds cover UK and US hype labels — Stussy, Corteiz, Supreme, Fear of God Essentials, and Chrome Hearts-style pieces. Browse listings with photos, QC references where available, and one-click agent links — or jump to Best Clothing Finds for editor-ranked fashion picks.",
     badge: "Streetwear finds",
-    keywords: ["streetwear finds", "hype finds", "stussy finds", "corteiz finds"],
+    keywords: ["streetwear finds", "hype finds", "stussy finds", "corteiz finds", "fashion finds"],
     updateFrequency: "weekly",
     filter: {
       keywords: ["stussy", "corteiz", "supreme", "essentials", "chrome", "streetwear", "fear of god"],
@@ -446,9 +445,20 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
     brandLinks: ["stussy", "corteiz", "supreme", "essentials"],
     sections: [
       {
-        heading: "Streetwear brands to browse",
+        heading: "What you can find",
         paragraphs: [
-          "Stussy and Corteiz lead UK streetwear searches. Supreme and Essentials remain staple haul picks. Use brand pages for full inventory when you know the label you want.",
+          "Graphic hoodies, cargos, varsity jackets, and logo-heavy layers from Stussy, Corteiz, Supreme, and Essentials. Each listing links to verified Weidian or Taobao checkout through LitBuy, Kakobuy, MuleBuy, or other supported agents.",
+        ],
+        links: [
+          { href: "/hoodie-finds", label: "Hoodie finds" },
+          { href: "/clothing-finds", label: "Clothing finds" },
+          { href: "/latest-finds", label: "Latest finds" },
+        ],
+      },
+      {
+        heading: "Popular streetwear brands",
+        paragraphs: [
+          "Stussy and Corteiz lead UK streetwear searches. Supreme and Essentials remain staple haul picks. Chrome Hearts-style jewelry and hoodies appear in accessories and streetwear filters — use brand pages when you know the label you want.",
         ],
         links: [
           { href: "/brands/stussy", label: "Stussy" },
@@ -457,18 +467,47 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
           { href: "/streetwear-spreadsheet", label: "Streetwear spreadsheet" },
         ],
       },
+      {
+        heading: "Spreadsheets and QC for streetwear",
+        paragraphs: [
+          "Community streetwear spreadsheets move fast — new batches and price drops appear daily. LitBuy Finds turns those rows into searchable pages with QC badges. Pair reference QC on find pages with warehouse QC on LitBuy before shipping heavy outerwear.",
+        ],
+        links: [
+          { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+          { href: "/litbuy-qc-photos", label: "QC photos guide" },
+          { href: "/litbuy-discord", label: "LitBuy Discord" },
+        ],
+      },
     ],
     relatedLinks: [
       { href: "/clothing-finds", label: "Clothing finds" },
       { href: "/hoodie-finds", label: "Hoodie finds" },
-      { href: "/litbuy-spreadsheet", label: "Spreadsheet hub" },
-      ...HUB.slice(0, 4),
+      { href: "/latest-finds", label: "Latest finds" },
+      { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+      { href: "/litbuy-coupons", label: "LitBuy coupons" },
+      { href: "/litbuy-discord", label: "LitBuy Discord" },
+      ...HUB.filter((l) => !["/litbuy-finds"].includes(l.href)).slice(0, 3),
     ],
     faqs: [
       {
         question: "What counts as streetwear on LitBuy Finds?",
         answer:
           "Hype labels, graphic hoodies, cargos, and designer-street crossovers — filtered by brand tags and product keywords in the catalog.",
+      },
+      {
+        question: "Where do streetwear finds come from?",
+        answer:
+          "Most listings originate from Weidian and Taobao sellers indexed in community LitBuy spreadsheets. LitBuy Finds normalizes them into searchable product pages with agent links.",
+      },
+      {
+        question: "Is there a streetwear spreadsheet?",
+        answer:
+          "Yes. Browse the streetwear spreadsheet page or LitBuy spreadsheet hub — LitBuy Finds turns those rows into mobile-friendly find pages with QC references.",
+      },
+      {
+        question: "How do I compare streetwear batches?",
+        answer:
+          "Check reference QC on the product page, read Discord threads for batch opinions, and request warehouse QC after purchase before international shipping.",
       },
     ],
     productSectionTitle: "Top streetwear picks",
@@ -564,22 +603,22 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
   "hoodie-finds": {
     slug: "hoodie-finds",
     type: "collection",
-    title: "Best Hoodie Finds 2026 | Streetwear & Designer",
+    title: "Hoodie Finds 2026 | Stussy, Essentials & Streetwear",
     description:
-      "Hoodie finds on LitBuy Finds — Stussy, Essentials, Nike Tech Fleece, and designer hoodies with QC photos and spreadsheet links.",
-    h1: "Best hoodie finds",
+      "Hoodie finds on LitBuy Finds — Stussy, Essentials, Nike Tech Fleece, Corteiz, and designer hoodies with QC photos, spreadsheet links, and agent buy buttons.",
+    h1: "Hoodie finds",
     intro:
-      "Hoodie finds are the backbone of most streetwear hauls. Browse Stussy, Essentials, Nike Tech Fleece, Corteiz, and designer hoodies with verified agent buy buttons — updated weekly from the LitBuy catalog.",
+      "Hoodie finds are the backbone of most streetwear hauls. Browse Stussy, Essentials, Nike Tech Fleece, Corteiz, and designer hoodies with verified agent buy buttons — updated weekly from the LitBuy catalog and community spreadsheets.",
     badge: "Hoodie finds",
-    keywords: ["hoodie finds", "streetwear hoodies", "litbuy hoodies", "rep hoodies"],
+    keywords: ["hoodie finds", "streetwear hoodies", "litbuy hoodies", "rep hoodies", "clothing finds"],
     updateFrequency: "weekly",
     filter: { keywords: ["hoodie", "sweatshirt", "crewneck"] },
     brandLinks: ["stussy", "essentials", "nike", "corteiz"],
     sections: [
       {
-        heading: "Hoodie styles buyers search",
+        heading: "Popular hoodie styles",
         paragraphs: [
-          "Graphic streetwear hoodies, minimalist Essentials layers, and Nike Tech Fleece-style zip-ups lead volume. Compare photos and QC threads on Discord before committing to a batch.",
+          "Graphic streetwear hoodies, minimalist Essentials layers, and Nike Tech Fleece-style zip-ups lead search volume. Compare photos and QC threads on Discord before committing to a batch — hoodies vary in weight, embroidery, and fit between sellers.",
         ],
         links: [
           { href: "/litbuy-hoodies", label: "LitBuy hoodies hub" },
@@ -587,17 +626,58 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
           { href: "/streetwear-finds", label: "Streetwear finds" },
         ],
       },
+      {
+        heading: "Brands buyers search most",
+        paragraphs: [
+          "Stussy and Essentials dominate everyday hoodie hauls. Nike Tech Fleece-style zip-ups and Corteiz graphic hoodies are frequent spreadsheet rows. Use brand pages when you want the full inventory for one label.",
+        ],
+        links: [
+          { href: "/brands/stussy", label: "Stussy" },
+          { href: "/brands/nike", label: "Nike" },
+          { href: "/clothing-finds", label: "Clothing finds" },
+        ],
+      },
+      {
+        heading: "Spreadsheets and latest drops",
+        paragraphs: [
+          "New hoodie batches appear in community spreadsheets daily. LitBuy Finds syncs those rows into searchable pages — check Latest Finds for fresh imports or join Discord for same-day alerts between syncs.",
+        ],
+        links: [
+          { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+          { href: "/latest-finds", label: "Latest finds" },
+          { href: "/litbuy-discord", label: "LitBuy Discord" },
+        ],
+      },
     ],
     relatedLinks: [
       { href: "/clothing-finds", label: "Clothing finds" },
-      { href: "/litbuy-spreadsheet", label: "Spreadsheet" },
-      ...HUB.slice(0, 4),
+      { href: "/streetwear-finds", label: "Streetwear finds" },
+      { href: "/latest-finds", label: "Latest finds" },
+      { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+      { href: "/litbuy-coupons", label: "LitBuy coupons" },
+      { href: "/litbuy-discord", label: "LitBuy Discord" },
+      ...HUB.filter((l) => !["/litbuy-finds"].includes(l.href)).slice(0, 3),
     ],
     faqs: [
       {
         question: "How do I pick a hoodie batch?",
         answer:
           "Check reference QC on the product page, compare weight and embroidery in community threads, and request warehouse QC after purchase.",
+      },
+      {
+        question: "Which hoodie brands are most popular?",
+        answer:
+          "Stussy, Essentials, Nike Tech Fleece-style zip-ups, and Corteiz graphic hoodies lead search volume on LitBuy Finds.",
+      },
+      {
+        question: "Are hoodie finds the same as spreadsheet rows?",
+        answer:
+          "Same product universe — LitBuy Finds adds search, filters, QC badges, and shareable product URLs without scrolling thousands of spreadsheet rows.",
+      },
+      {
+        question: "Do hoodies need QC before shipping?",
+        answer:
+          "Recommended for graphic embroidery and logo placement. Request warehouse QC on LitBuy and compare stitching to reference photos before paying international freight.",
       },
     ],
     productSectionTitle: "Top hoodie picks",
@@ -631,7 +711,7 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
     ],
     relatedLinks: [
       { href: "/deals", label: "Deals hub" },
-      { href: LITBUY_SIGNUP_URL, label: "LitBuy coupons" },
+      { href: "/litbuy-coupons", label: "LitBuy coupons" },
       ...HUB.slice(0, 4),
     ],
     faqs: [
@@ -847,6 +927,10 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
     relatedLinks: [
       ...SPREADSHEETS,
       { href: "/best-rep-spreadsheets", label: "Best rep spreadsheets" },
+      { href: "/sneaker-finds", label: "Sneaker finds" },
+      { href: "/clothing-finds", label: "Clothing finds" },
+      { href: "/latest-finds", label: "Latest finds" },
+      { href: "/litbuy-discord", label: "LitBuy Discord" },
       ...AGENTS.slice(0, 4),
     ],
     faqs: [...SPREADSHEET_FAQS],

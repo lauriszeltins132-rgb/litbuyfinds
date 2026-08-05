@@ -754,6 +754,16 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
         answer:
           "Yes. The catalog syncs daily and community members post new rows, QC threads, and deal alerts throughout the day on Discord.",
       },
+      {
+        question: "What is the LitBuy finds Discord?",
+        answer:
+          "The LitBuy finds Discord is the community server linked from LitBuy Finds — buyers share spreadsheet drops, QC photos, haul reviews, and coupon updates alongside the searchable catalog on this website.",
+      },
+      {
+        question: "How is LitBuy Discord different from Telegram?",
+        answer:
+          "Both share find alerts. Discord is better for threaded QC discussions and haul reviews. Telegram is faster for one-line drop notifications. Many buyers follow both channels.",
+      },
     ],
     relatedLinks: [
       { href: "/", label: "Homepage" },

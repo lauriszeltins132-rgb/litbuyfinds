@@ -1,6 +1,4 @@
-import Link from "next/link";
 import SmartLink from "@/components/SmartLink";
-import { LITBUY_SIGNUP_URL } from "@/lib/constants";
 
 const SECTIONS = [
   {
@@ -48,6 +46,8 @@ const SECTIONS = [
       { href: "/ai", label: "LitBuy AI" },
       { href: "/is-litbuy-legit", label: "Is LitBuy legit" },
       { href: "/sneaker-finds", label: "Sneaker finds" },
+      { href: "/clothing-finds", label: "Clothing finds" },
+      { href: "/latest-finds", label: "Latest finds" },
       { href: "/best-rep-finds", label: "Rep finds" },
     ],
   },

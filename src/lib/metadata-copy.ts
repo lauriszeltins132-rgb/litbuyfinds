@@ -183,15 +183,17 @@ export function buildProductMetaTitle(productName: string): string {
 export function buildProductRepFindTitle(options: {
   name: string;
   brand: string | null;
+  categoryLabel?: string | null;
   hasQc: boolean;
 }): string {
-  const { name, brand, hasQc } = options;
+  const { name, brand, categoryLabel, hasQc } = options;
   const lead =
     brand && !name.toLowerCase().includes(brand.toLowerCase())
       ? `${brand} ${name}`
       : name;
+  const categoryBit = categoryLabel ? ` ${categoryLabel}` : "";
   const qcBit = hasQc ? " - QC Photos" : "";
-  return truncateMetaTitle(`${lead} Rep Find${qcBit} & Agent Link`);
+  return truncateMetaTitle(`${lead}${categoryBit} Rep Find${qcBit} & Agent Link`);
 }
 
 export function buildProductMetaDescription(options: {
