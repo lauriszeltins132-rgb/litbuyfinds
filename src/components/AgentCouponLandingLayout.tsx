@@ -5,6 +5,7 @@ import SchemaScript from "@/components/SchemaScript";
 import {
   buildAgentCouponWebPageSchema,
   buildBreadcrumbSchema,
+  buildFaqSchema,
 } from "@/lib/schema";
 import type { AgentCouponLandingConfig } from "@/lib/agent-coupon-landing-pages";
 
@@ -19,6 +20,8 @@ export default function AgentCouponLandingLayout({
     { label: "Home", href: "/" },
     { label: config.h1 },
   ];
+  const sections = config.sections ?? [];
+  const faqs = config.faqs ?? [];
 
   return (
     <>
@@ -35,6 +38,7 @@ export default function AgentCouponLandingLayout({
       <SchemaScript
         data={buildBreadcrumbSchema(breadcrumbItems, config.path)}
       />
+      {faqs.length > 0 ? <SchemaScript data={buildFaqSchema(faqs)} /> : null}
 
       <Breadcrumbs items={breadcrumbItems} currentPath={config.path} />
 
@@ -79,6 +83,53 @@ export default function AgentCouponLandingLayout({
               )}
             </div>
           </section>
+
+          {sections.length > 0 ? (
+            <div className="mt-10 space-y-10">
+              {sections.map((section) => (
+                <section key={section.heading}>
+                  <h2 className="text-xl font-black text-foreground">
+                    {section.heading}
+                  </h2>
+                  <div className="mt-3 space-y-3 text-base leading-relaxed text-muted">
+                    {section.paragraphs.map((paragraph) => (
+                      <p key={paragraph}>{paragraph}</p>
+                    ))}
+                  </div>
+                  {section.links && section.links.length > 0 ? (
+                    <ul className="mt-4 flex flex-wrap gap-2">
+                      {section.links.map((link) => (
+                        <li key={link.href}>
+                          <Link
+                            href={link.href}
+                            className="rounded-full border border-border px-3 py-1.5 text-xs font-bold text-foreground/80 hover:border-accent/40 hover:text-accent"
+                          >
+                            {link.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </section>
+              ))}
+            </div>
+          ) : null}
+
+          {faqs.length > 0 ? (
+            <section className="mt-12 rounded-2xl border border-border bg-surface/40 p-6">
+              <h2 className="text-xl font-black">Frequently asked questions</h2>
+              <dl className="mt-5 space-y-5">
+                {faqs.map((faq) => (
+                  <div key={faq.question}>
+                    <dt className="font-bold text-foreground">{faq.question}</dt>
+                    <dd className="mt-1 text-sm leading-relaxed text-muted">
+                      {faq.answer}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </section>
+          ) : null}
 
           <section className="mt-10 rounded-2xl border border-border bg-surface/20 p-5">
             <h2 className="text-sm font-bold uppercase tracking-[0.16em] text-muted">

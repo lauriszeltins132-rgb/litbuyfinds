@@ -1,4 +1,5 @@
 import type { StaticPageSection } from "./static-pages";
+import { getDatasetSyncedIso } from "./catalog-meta";
 import { LITBUY_SIGNUP_URL, SOCIAL_LINKS } from "./constants";
 import {
   LITBUY_AUTHORITY_LINKS,
@@ -26,7 +27,7 @@ export type AuthorityPage = {
 };
 
 const PUBLISHED = "2026-07-21T00:00:00.000Z";
-const MODIFIED = "2026-07-21T00:00:00.000Z";
+const MODIFIED = getDatasetSyncedIso();
 
 const CORE_RELATED = LITBUY_AUTHORITY_LINKS.filter(
   (l) =>
@@ -671,13 +672,13 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
   "litbuy-discord": {
     slug: "litbuy-discord",
     path: "/litbuy-discord",
-    title: "LitBuy Discord Server | Finds, QC Photos & Agent Community",
+    title: "LitBuy Discord Server | Finds, QC Photos & Community",
     metaDescription:
-      "Join the LitBuy Finds Discord community for new clothing finds, QC photos, agent discussions, spreadsheet drops, shipping tips, and coupon updates.",
+      "Join the LitBuy Discord server for litbuy finds discord alerts — new products, QC photos, spreadsheets, shipping tips, and coupon updates from the buyer community.",
     badge: "Community",
     h1: "LitBuy Discord Server",
     directAnswer:
-      "Join the LitBuy Finds Discord community to discover new clothing finds, QC photos, agent discussions, spreadsheets, and shipping tips.",
+      "Join the LitBuy Finds Discord community for new finds, QC photos, spreadsheets, and shopping discussions.",
     summary:
       "The LitBuy Discord is a free buyer community for daily find alerts, QC checks, spreadsheet links, haul advice, and coupon updates — alongside LitBuy Finds catalog discovery.",
     primaryCta: {
@@ -713,9 +714,11 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
           "New finds posted from community spreadsheets and catalog syncs. QC checks and batch comparisons for sneakers, jackets, and bags. Agent discussions covering LitBuy, Kakobuy, MuleBuy, and other supported agents. Shipping advice for EMS, DHL, and economy lines. Coupon and promo updates when registration offers change.",
         ],
         links: [
+          { href: "/finds", label: "Finds hub" },
           { href: "/sneaker-finds", label: "Sneaker finds" },
+          { href: "/clothing-finds", label: "Clothing finds" },
           { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
-          { href: LITBUY_SIGNUP_URL, label: "LitBuy coupons" },
+          { href: "/litbuy-coupons", label: "LitBuy coupons" },
           { href: "/telegram-litbuy", label: "LitBuy Telegram" },
         ],
       },
@@ -751,12 +754,24 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
         answer:
           "Yes. The catalog syncs daily and community members post new rows, QC threads, and deal alerts throughout the day on Discord.",
       },
+      {
+        question: "What is the LitBuy finds Discord?",
+        answer:
+          "The LitBuy finds Discord is the community server linked from LitBuy Finds — buyers share spreadsheet drops, QC photos, haul reviews, and coupon updates alongside the searchable catalog on this website.",
+      },
+      {
+        question: "How is LitBuy Discord different from Telegram?",
+        answer:
+          "Both share find alerts. Discord is better for threaded QC discussions and haul reviews. Telegram is faster for one-line drop notifications. Many buyers follow both channels.",
+      },
     ],
     relatedLinks: [
       { href: "/", label: "Homepage" },
+      { href: "/finds", label: "Finds hub" },
+      { href: "/latest-finds", label: "Latest finds" },
       { href: "/litbuy-finds", label: "LitBuy finds" },
       { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
-      { href: LITBUY_SIGNUP_URL, label: "LitBuy coupons" },
+      { href: "/litbuy-coupons", label: "LitBuy coupons" },
       { href: "/telegram-litbuy", label: "LitBuy Telegram" },
       { href: "/sneaker-finds", label: "Sneaker finds" },
       { href: "/best-rep-finds", label: "Rep finds" },

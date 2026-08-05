@@ -35,7 +35,6 @@ import TrackProductView from "@/components/TrackProductView";
 import RelatedPages from "@/components/RelatedPages";
 import TelegramDailyFindsCta from "@/components/TelegramDailyFindsCta";
 import { getRelatedGuidesForProduct } from "@/lib/related-guides";
-import { LITBUY_SIGNUP_URL } from "@/lib/constants";
 import { buildBreadcrumbSchema } from "@/lib/schema";
 
 type ProductPageProps = {
@@ -224,17 +223,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
               More {brand} finds →
             </Link>
           ) : null}
+          <Link href="/finds" className="text-sm font-bold text-muted hover:text-accent">
+            Finds hub →
+          </Link>
           <Link href="/litbuy-spreadsheet" className="text-sm font-bold text-muted hover:text-accent">
             Spreadsheet →
           </Link>
-          <a
-            href={LITBUY_SIGNUP_URL}
-            target="_blank"
-            rel="noopener noreferrer sponsored"
-            className="text-sm font-bold text-muted hover:text-accent"
-          >
+          <Link href="/litbuy-coupons" className="text-sm font-bold text-muted hover:text-accent">
             Coupons →
-          </a>
+          </Link>
           <Link href="/litbuy-discord" className="text-sm font-bold text-muted hover:text-accent">
             Discord →
           </Link>

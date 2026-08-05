@@ -64,12 +64,16 @@ const FEATURED_COLLECTION_SLUGS = [
 
 const FEATURED_HUB_PATHS = [
   { href: "/finds", label: "Finds hub" },
+  { href: "/litbuy-discord", label: "LitBuy Discord" },
+  { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+  { href: "/litbuy-coupons", label: "LitBuy coupons" },
   { href: "/guides", label: "Guides hub" },
   { href: "/best-sneaker-finds", label: "Best sneakers" },
   { href: "/best-clothing-finds", label: "Best clothing" },
+  { href: "/best-rep-finds", label: "Best rep finds" },
   { href: "/best-designer-finds", label: "Best designer" },
   { href: "/nike-finds", label: "Nike finds" },
-  { href: "/jordan-finds", label: "Jordan finds" },
+  { href: "/clothing-finds", label: "Clothing finds" },
   { href: "/latest-finds", label: "Latest finds" },
   { href: "/litbuy-qc", label: "QC photos" },
 ];

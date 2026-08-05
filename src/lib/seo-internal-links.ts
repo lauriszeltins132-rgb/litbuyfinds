@@ -1,4 +1,3 @@
-import { LITBUY_SIGNUP_URL } from "./constants";
 
 /** Cross-site SEO hub links — use in relatedLinks and contextual sections. */
 export const SEO_HUB_LINKS = [
@@ -6,8 +5,9 @@ export const SEO_HUB_LINKS = [
   { href: "/finds", label: "Finds hub" },
   { href: "/litbuy-finds", label: "LitBuy finds" },
   { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
-  { href: LITBUY_SIGNUP_URL, label: "LitBuy coupons" },
+  { href: "/litbuy-coupons", label: "LitBuy coupons" },
   { href: "/litbuy-discord", label: "LitBuy Discord" },
+  { href: "/latest-finds", label: "Latest finds" },
   { href: "/telegram-litbuy", label: "LitBuy Telegram" },
 ] as const;
 

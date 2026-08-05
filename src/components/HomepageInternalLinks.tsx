@@ -1,6 +1,4 @@
-import Link from "next/link";
 import SmartLink from "@/components/SmartLink";
-import { LITBUY_SIGNUP_URL } from "@/lib/constants";
 
 const SECTIONS = [
   {
@@ -42,12 +40,14 @@ const SECTIONS = [
       { href: "/finds", label: "Finds hub" },
       { href: "/what-is-litbuy", label: "What is LitBuy" },
       { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+      { href: "/litbuy-discord", label: "LitBuy Discord" },
+      { href: "/litbuy-coupons", label: "LitBuy coupons" },
       { href: "/how-to-use-litbuy", label: "How to use LitBuy" },
       { href: "/ai", label: "LitBuy AI" },
       { href: "/is-litbuy-legit", label: "Is LitBuy legit" },
-      { href: LITBUY_SIGNUP_URL, label: "LitBuy coupons" },
-      { href: "/litbuy-discord", label: "LitBuy Discord" },
       { href: "/sneaker-finds", label: "Sneaker finds" },
+      { href: "/clothing-finds", label: "Clothing finds" },
+      { href: "/latest-finds", label: "Latest finds" },
       { href: "/best-rep-finds", label: "Rep finds" },
     ],
   },

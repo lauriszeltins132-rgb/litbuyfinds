@@ -116,7 +116,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     routes.push({
       url: `${SITE_URL}${page.path}`,
       changeFrequency: "weekly",
-      priority: 0.88,
+      priority: slug === "litbuy-spreadsheet" ? 0.95 : 0.88,
+      lastModified: getDatasetSyncedIso(),
     });
   }
 
@@ -125,6 +126,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${SITE_URL}/${entry.slug}`,
       changeFrequency: getSitemapChangeFrequency(entry),
       priority: entry.type === "freshness" ? 0.9 : 0.87,
+      lastModified: getDatasetSyncedIso(),
     });
   }
 

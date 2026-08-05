@@ -111,12 +111,26 @@ function getCategoryAltLabel(categorySlug: string, categoryName: string): string
   return CATEGORY_ALT_LABELS[categorySlug] ?? `${categoryName.toLowerCase()} find`;
 }
 
+const CATEGORY_TITLE_LABELS: Record<string, string> = {
+  shoes: "Sneaker",
+  "hoodies-and-pants": "Streetwear",
+  "coats-and-jackets": "Jacket",
+  "tshirts-and-shorts": "Clothing",
+  accessories: "Accessory",
+  electronics: "Electronics",
+};
+
+function getCategoryTitleLabel(categorySlug: string): string | null {
+  return CATEGORY_TITLE_LABELS[categorySlug] ?? null;
+}
+
 export function getProductSeoTitle(product: Product): string {
   const name = getDisplayProductName(product);
   const brand = getDisplayBrand(product);
   return buildProductRepFindTitle({
     name,
     brand,
+    categoryLabel: getCategoryTitleLabel(product.category_slug),
     hasQc: Boolean(product.qc_link),
   });
 }
@@ -125,10 +139,11 @@ export function getProductImageAlt(product: Product): string {
   const brand = getDisplayBrand(product);
   const name = getDisplayProductName(product);
   const categoryLabel = getCategoryAltLabel(product.category_slug, product.category);
+  const qcBit = product.qc_link ? " QC photo" : "";
   if (brand) {
-    return `${brand} ${name} — ${categoryLabel} with QC photos on LitBuy Finds`;
+    return `${brand} ${name} rep find${qcBit} — ${categoryLabel} on LitBuy Finds`;
   }
-  return `${name} — ${categoryLabel} on LitBuy Finds`;
+  return `${name} rep find${qcBit} — ${categoryLabel} on LitBuy Finds`;
 }
 
 export function getProductSeoDescription(product: Product): string {
