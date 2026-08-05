@@ -994,7 +994,7 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
       "Latest rep finds added to LitBuy Finds — new sneakers, clothing, and accessories with QC photos, prices, and verified agent links updated daily.",
     h1: "Latest rep finds",
     intro:
-      "Fresh catalog additions land here first after each daily sync. Browse the newest rep finds with photos, prices, and buy-ready agent links — new products added regularly from community spreadsheets.",
+      "Fresh catalog additions land here first after each daily sync. Browse the newest rep finds with photos, prices, and buy-ready agent links — new products added regularly from community spreadsheets. For same-day alerts between syncs, join the LitBuy Discord community.",
     badge: "Fresh finds",
     keywords: ["latest rep finds", "latest rep finds 2026", "new litbuy finds"],
     updateFrequency: "daily",

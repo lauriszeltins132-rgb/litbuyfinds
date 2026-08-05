@@ -77,7 +77,7 @@ export const LITBUY_COUPONS_METADATA = {
     "Claim the working LitBuy coupon for 2026 — up to $500 in welcome coupons plus 40% off shipping when you register. Verified LitBuy coupon codes, promo offers and referral bonuses updated regularly.",
   h1: "Best LitBuy Coupon Codes",
   heroIntro:
-    "This is the canonical LitBuy coupon page for litbuyfinds.io. New users who register through our verified link can unlock up to $500 in LitBuy welcome coupons plus up to 40% off international shipping. We track working LitBuy coupon codes and promo offers here — confirm the live discount on LitBuy checkout before paying.",
+    "This is the canonical LitBuy coupon page for litbuyfinds.io. New users who register through our verified link can unlock up to $500 in LitBuy welcome coupons plus up to 40% off international shipping. We track working LitBuy coupon codes and promo offers here — confirm the live discount on LitBuy checkout before paying. Coupon and shipping updates are also shared in the LitBuy Discord community.",
 };
 
 export const LITBUY_COUPONS_FAQS = [
