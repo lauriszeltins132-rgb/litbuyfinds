@@ -18,7 +18,7 @@ type AuthorityPageLayoutProps = {
 };
 
 export default function AuthorityPageLayout({ page }: AuthorityPageLayoutProps) {
-  const breadcrumbs = [
+  const breadcrumbs = page.breadcrumbItems ?? [
     { label: "Home", href: "/" },
     ...(page.parentCrumb ? [page.parentCrumb] : []),
     { label: page.h1 },

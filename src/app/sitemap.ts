@@ -87,8 +87,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     routes.push({
       url: `${SITE_URL}${page.path}`,
       changeFrequency: "weekly",
-      priority: 0.93,
-      lastModified: page.modifiedTime,
+      priority: slug === "litbuy-discord" ? 0.94 : 0.93,
+      lastModified:
+        slug === "litbuy-discord" ? getDatasetSyncedIso() : page.modifiedTime,
     });
   }
 

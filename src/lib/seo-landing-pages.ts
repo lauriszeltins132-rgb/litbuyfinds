@@ -77,7 +77,7 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
     h1: "LitBuy Spreadsheet",
     intro:
       "LitBuy Spreadsheet contains curated products with QC photos, prices, and agent links. LitBuy Finds turns that same catalog into " +
-      `${PUBLIC_CATALOG_COUNT} searchable pages — updated daily with verified buy buttons for LitBuy, MuleBuy, Kakobuy, HipoBuy, OopBuy, and ACBuy.`,
+      `${PUBLIC_CATALOG_COUNT} searchable pages — updated daily with verified buy buttons for LitBuy, MuleBuy, Kakobuy, HipoBuy, OopBuy, and ACBuy. Join the LitBuy Discord community for spreadsheet drop alerts between daily syncs.`,
     sections: [
       {
         heading: "Quick answer",
@@ -121,7 +121,7 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
         ],
         links: [
           { href: "/latest-finds", label: "Latest finds" },
-          { href: "/litbuy-discord", label: "LitBuy Discord alerts" },
+          { href: "/litbuy-discord", label: "LitBuy Discord" },
         ],
       },
       {

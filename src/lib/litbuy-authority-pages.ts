@@ -21,6 +21,8 @@ export type AuthorityPage = {
   faqs?: { question: string; answer: string }[];
   relatedLinks?: { href: string; label: string }[];
   parentCrumb?: { label: string; href: string };
+  /** Override default Home > H1 breadcrumbs (e.g. Homepage > LitBuy Discord). */
+  breadcrumbItems?: { label: string; href?: string }[];
   primaryCta?: { href: string; label: string };
   publishedTime: string;
   modifiedTime: string;
@@ -672,15 +674,19 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
   "litbuy-discord": {
     slug: "litbuy-discord",
     path: "/litbuy-discord",
-    title: "LitBuy Discord Server | Finds, QC Photos & Community",
+    title: "LitBuy Discord Server | Join the LitBuy Finds Community",
     metaDescription:
-      "Join the LitBuy Discord server for litbuy finds discord alerts — new products, QC photos, spreadsheets, shipping tips, and coupon updates from the buyer community.",
+      "LitBuy Discord — join the LitBuy Finds Discord server for new finds, QC photos, spreadsheets, shipping tips, and community updates from buyers.",
     badge: "Community",
     h1: "LitBuy Discord Server",
     directAnswer:
-      "Join the LitBuy Finds Discord community for new finds, QC photos, spreadsheets, and shopping discussions.",
+      "LitBuy Discord is the community hub for LitBuy Finds users. The LitBuy Finds Discord server connects buyers who share new product finds, QC photos, spreadsheets, shipping tips, and coupon updates every day. Join the LitBuy Discord server to get real-time alerts, batch comparisons, and haul advice alongside the searchable LitBuy Finds catalog. Whether you are hunting sneakers, clothing, or designer picks, the LitBuy Discord community helps you spot spreadsheet drops and QC threads between daily catalog syncs. Membership is free — use LitBuy agent links from product pages when you are ready to purchase.",
     summary:
       "The LitBuy Discord is a free buyer community for daily find alerts, QC checks, spreadsheet links, haul advice, and coupon updates — alongside LitBuy Finds catalog discovery.",
+    breadcrumbItems: [
+      { label: "Homepage", href: "/" },
+      { label: "LitBuy Discord" },
+    ],
     primaryCta: {
       href: SOCIAL_LINKS.discord,
       label: "Join LitBuy Discord",
@@ -735,9 +741,14 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
     ],
     faqs: [
       {
-        question: "What is the LitBuy Discord?",
+        question: "What is the LitBuy Discord server?",
         answer:
-          "A free community server for LitBuy Finds buyers — find alerts, QC discussions, spreadsheet links, shipping tips, and agent advice.",
+          "The LitBuy Discord server is a community for LitBuy Finds users to share products, QC photos, spreadsheets, and updates.",
+      },
+      {
+        question: "Where can I join LitBuy Discord?",
+        answer:
+          "Users can join the LitBuy Discord community through the official LitBuy Finds Discord page.",
       },
       {
         question: "Is the LitBuy Discord free?",
@@ -747,22 +758,12 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
       {
         question: "Where can I find LitBuy spreadsheets?",
         answer:
-          "Browse the LitBuy spreadsheet guide on LitBuy Finds or check Discord for fresh spreadsheet drops shared by the community.",
+          "Browse the LitBuy spreadsheet guide on LitBuy Finds or check the LitBuy Discord for fresh spreadsheet drops shared by the community.",
       },
       {
         question: "Are new finds posted daily?",
         answer:
-          "Yes. The catalog syncs daily and community members post new rows, QC threads, and deal alerts throughout the day on Discord.",
-      },
-      {
-        question: "What is the LitBuy finds Discord?",
-        answer:
-          "The LitBuy finds Discord is the community server linked from LitBuy Finds — buyers share spreadsheet drops, QC photos, haul reviews, and coupon updates alongside the searchable catalog on this website.",
-      },
-      {
-        question: "How is LitBuy Discord different from Telegram?",
-        answer:
-          "Both share find alerts. Discord is better for threaded QC discussions and haul reviews. Telegram is faster for one-line drop notifications. Many buyers follow both channels.",
+          "Yes. The catalog syncs daily and community members post new rows, QC threads, and deal alerts throughout the day on the LitBuy Discord server.",
       },
     ],
     relatedLinks: [
@@ -777,7 +778,7 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
       { href: "/best-rep-finds", label: "Rep finds" },
     ],
     publishedTime: PUBLISHED,
-    modifiedTime: MODIFIED,
+    modifiedTime: getDatasetSyncedIso(),
   },
 
   "litbuy-shipping-coupon": {

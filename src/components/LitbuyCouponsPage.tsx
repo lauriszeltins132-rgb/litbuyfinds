@@ -58,6 +58,13 @@ export default function LitbuyCouponsPage() {
             <p className="mt-5 text-base leading-relaxed text-foreground">
               {LITBUY_COUPONS_METADATA.heroIntro}
             </p>
+            <p className="mt-3 text-sm leading-relaxed text-muted">
+              Community coupon and shipping updates are also posted in the{" "}
+              <Link href="/litbuy-discord" className="font-semibold text-accent hover:underline">
+                LitBuy Discord
+              </Link>
+              .
+            </p>
 
             <div className="mt-6 grid gap-3 sm:grid-cols-2">
               <div className="rounded-2xl border border-accent/35 bg-background/70 px-5 py-4 text-center">
