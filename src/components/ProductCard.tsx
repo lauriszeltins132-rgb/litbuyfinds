@@ -64,6 +64,9 @@ function ProductCard({
     [cardProps, showTrendingScore]
   );
   const freshness = cardProps?.freshness ?? null;
+  const hasBuyLink = Boolean(product.affiliate_link);
+  const hasQc = Boolean(product.qc_link);
+  const showMicroCta = hasBuyLink && !compact;
 
   async function handleCopy() {
     const url = `${window.location.origin}${productHref}`;
@@ -76,13 +79,10 @@ function ProductCard({
     if (onOpen) onOpen(product);
   }
 
-  const iconBtn =
-    "flex h-7 w-7 items-center justify-center rounded-full border border-border text-muted transition-colors hover:border-accent/40 hover:text-accent sm:h-8 sm:w-8";
-
   return (
     <article
-      className={`product-card group flex flex-col overflow-hidden rounded-xl border border-border/80 bg-panel shadow-sm active:scale-[0.99] sm:rounded-2xl ${
-        compact ? "text-[12px] sm:text-[13px]" : ""
+      className={`product-card group flex h-full flex-col overflow-hidden active:scale-[0.99] ${
+        compact ? "product-card--compact" : ""
       }`}
     >
       <div className="product-card-media">
@@ -99,7 +99,7 @@ function ProductCard({
             productHref={productHref}
             priority={priority}
           />
-          <div className="product-card-hover-hint bg-gradient-to-t from-background/80 to-transparent px-3 py-2 opacity-0 transition-opacity group-hover:opacity-100">
+          <div className="product-card-hover-hint bg-gradient-to-t from-white/90 to-transparent px-3 py-2 opacity-0 transition-opacity group-hover:opacity-100">
             <p className="text-[10px] font-bold uppercase tracking-wider text-accent">
               View details
             </p>
@@ -108,105 +108,120 @@ function ProductCard({
         <ProductBadges badges={badges} />
       </div>
 
-      <div className={`flex flex-1 flex-col gap-1.5 ${compact ? "p-2.5 sm:p-3" : "p-3.5"}`}>
-        <Link href={productHref} className="text-left">
-          <h3
-            className={`line-clamp-2 font-bold leading-snug text-foreground ${
-              compact ? "text-xs" : "text-sm"
-            }`}
-          >
-            {displayName}
-          </h3>
-        </Link>
+      <div
+        className={`product-card-body flex min-h-0 flex-1 flex-col ${
+          compact ? "p-2.5 sm:p-3" : "p-3 sm:p-3.5"
+        }`}
+      >
+        <div className="product-card-copy flex min-h-0 flex-1 flex-col gap-1.5">
+          <Link href={productHref} className="text-left">
+            <h3
+              className={`product-card-title line-clamp-2 font-bold leading-snug text-foreground ${
+                compact ? "min-h-[2.35rem] text-xs" : "min-h-[2.5rem] text-sm"
+              }`}
+            >
+              {displayName}
+            </h3>
+          </Link>
 
-        <div className="flex flex-wrap items-center gap-1.5 text-[11px] text-muted">
-          {brand ? <BrandMark name={brand} size="sm" /> : null}
-          <span className="rounded bg-surface px-1.5 py-0.5 uppercase">{source}</span>
-          {freshness ? (
-            <span className="text-[10px] font-semibold text-accent/80">{freshness}</span>
-          ) : null}
+          <div className="product-card-meta flex min-h-[1.25rem] flex-wrap items-center gap-1.5 text-[11px] text-muted">
+            {brand ? <BrandMark name={brand} size="sm" /> : null}
+            <span className="product-card-source rounded-full border border-border/60 bg-white px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide">
+              {source}
+            </span>
+            {freshness ? (
+              <span className="text-[10px] font-semibold text-accent/80">{freshness}</span>
+            ) : null}
+          </div>
+
+          <p
+            className={`product-card-price font-black ${
+              getPriceStatus(product.price) === "exact"
+                ? "text-accent"
+                : "text-muted text-sm"
+            } ${compact ? "text-sm" : "text-base"}`}
+          >
+            {formatProductPrice(product.price, currency)}
+          </p>
         </div>
 
-        <p
-          className={`font-black ${
-            getPriceStatus(product.price) === "exact"
-              ? "text-accent"
-              : "text-muted text-sm"
-          } ${compact ? "text-sm" : "text-base"}`}
+        <div
+          className={`product-card-actions mt-auto ${
+            showMicroCta ? "product-card-actions--with-footer" : ""
+          }`}
         >
-          {formatProductPrice(product.price, currency)}
-        </p>
+          <div className="product-card-actions__primary">
+            {hasBuyLink ? (
+              <BuyWithAgentButton
+                product={product}
+                location="product_card"
+                showAgentPicker
+                compact
+                className="product-card-buy"
+              />
+            ) : (
+              <button
+                type="button"
+                onClick={openProduct}
+                className="product-card-action product-card-action--secondary"
+              >
+                View
+              </button>
+            )}
 
-        <div className="mt-auto flex flex-wrap items-center gap-1.5 pt-1">
-          {product.affiliate_link ? (
-            <BuyWithAgentButton
-              product={product}
-              location="product_card"
-              showAgentPicker
-              compact
-            />
-          ) : (
+            {hasQc ? (
+              <a
+                href={product.qc_link!}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackProductContext("qc_click", product, "product_card")}
+                className="product-card-action product-card-action--secondary"
+              >
+                QC
+              </a>
+            ) : null}
+          </div>
+
+          <div className="product-card-actions__secondary">
             <button
               type="button"
-              onClick={openProduct}
-              className="rounded-full border border-border px-3 py-1.5 text-[11px] font-semibold text-muted"
+              onClick={() => {
+                if (!saved) trackSaveClick(product.id, "product_card");
+                toggleWishlist(product.id);
+              }}
+              aria-label={saved ? "Remove from saved" : "Save item"}
+              className={`product-card-icon-btn ${
+                saved ? "product-card-icon-btn--active" : ""
+              }`}
             >
-              View
+              ♥
             </button>
-          )}
 
-          {product.qc_link ? (
-            <a
-              href={product.qc_link}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackProductContext("qc_click", product, "product_card")}
-              className="rounded-full border border-border px-2.5 py-1.5 text-[11px] font-bold text-foreground hover:border-accent/40"
+            <button
+              type="button"
+              onClick={() => shareProduct(product, displayName)}
+              aria-label="Share product"
+              className="product-card-icon-btn"
             >
-              QC
-            </a>
-          ) : (
-            <span className="rounded-full border border-border/50 px-2.5 py-1.5 text-[11px] text-muted/50">
-              QC
-            </span>
-          )}
+              ↗
+            </button>
 
-          <button
-            type="button"
-            onClick={() => {
-              if (!saved) trackSaveClick(product.id, "product_card");
-              toggleWishlist(product.id);
-            }}
-            aria-label={saved ? "Remove from saved" : "Save item"}
-            className={`${iconBtn} ${
-              saved ? "border-accent bg-accent text-background" : ""
-            }`}
-          >
-            ♥
-          </button>
+            <button
+              type="button"
+              onClick={handleCopy}
+              aria-label="Copy product link"
+              className="product-card-icon-btn"
+            >
+              {copied ? "✓" : "⧉"}
+            </button>
+          </div>
 
-          <button
-            type="button"
-            onClick={() => shareProduct(product, displayName)}
-            aria-label="Share product"
-            className={iconBtn}
-          >
-            ↗
-          </button>
-
-          <button
-            type="button"
-            onClick={handleCopy}
-            aria-label="Copy product link"
-            className={iconBtn}
-          >
-            {copied ? "✓" : "⧉"}
-          </button>
+          {showMicroCta ? (
+            <div className="product-card-footer">
+              <LitBuyMicroCta location="product_card_litbuy" />
+            </div>
+          ) : null}
         </div>
-
-        {product.affiliate_link && !compact ? (
-          <LitBuyMicroCta location="product_card_litbuy" />
-        ) : null}
       </div>
     </article>
   );

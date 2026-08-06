@@ -41,14 +41,16 @@ export default function DiscoveryRail({
 
   return (
     <section
-      className={`px-3 sm:px-6 ${tight ? "py-3 sm:py-4" : "py-4 sm:py-8"}`}
+      className={`discovery-section px-3 sm:px-6 ${tight ? "py-3 sm:py-5" : "py-5 sm:py-8"}`}
     >
       <div className="mx-auto max-w-7xl">
         {(title || subtitle) && (
-          <div className="mb-2.5 flex items-end justify-between gap-3 sm:mb-5 sm:gap-4">
+          <div className="discovery-section__header flex items-end justify-between gap-3 sm:gap-4">
             <div className="min-w-0">
               {title && (
-                <h2 className="text-lg font-black leading-tight sm:text-2xl">{title}</h2>
+                <h2 className="text-lg font-black leading-tight tracking-tight sm:text-2xl">
+                  {title}
+                </h2>
               )}
               {subtitle && (
                 <p className="mt-0.5 line-clamp-1 text-xs text-muted sm:mt-1 sm:line-clamp-none sm:text-sm">
@@ -63,7 +65,7 @@ export default function DiscoveryRail({
             </div>
             <Link
               href={href}
-              className="shrink-0 text-sm font-bold text-accent hover:underline"
+              className="shrink-0 rounded-full border border-border/70 bg-white px-3 py-1.5 text-xs font-bold text-accent shadow-sm transition hover:border-accent/35 sm:text-sm"
             >
               View all →
             </Link>
@@ -74,7 +76,7 @@ export default function DiscoveryRail({
           {railProducts.map((product, index) => (
             <div
               key={product.id}
-              className="w-[calc(50vw-1.25rem)] max-w-[178px] shrink-0 sm:w-[240px] sm:max-w-none"
+              className="discovery-rail__item w-[calc(50vw-1.25rem)] max-w-[178px] shrink-0 sm:w-[240px] sm:max-w-none"
             >
               <ProductCard
                 product={product}
