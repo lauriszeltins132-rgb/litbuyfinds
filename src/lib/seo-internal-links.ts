@@ -3,12 +3,28 @@
 export const SEO_HUB_LINKS = [
   { href: "/", label: "Homepage" },
   { href: "/finds", label: "Finds hub" },
-  { href: "/litbuy-finds", label: "LitBuy finds" },
+  { href: "/latest-finds", label: "Latest finds" },
   { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+  { href: "/litbuy-finds", label: "LitBuy finds" },
+  { href: "/litbuy-qc", label: "QC product database" },
   { href: "/litbuy-coupons", label: "LitBuy coupons" },
   { href: "/litbuy-discord", label: "LitBuy Discord" },
-  { href: "/latest-finds", label: "Latest finds" },
   { href: "/telegram-litbuy", label: "LitBuy Telegram" },
+] as const;
+
+export const FINDS_DATABASE_LINKS = [
+  { href: "/latest-finds", label: "Latest finds hub" },
+  { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+  { href: "/sneaker-finds", label: "Sneaker finds" },
+  { href: "/clothing-finds", label: "Clothing finds" },
+  { href: "/streetwear-finds", label: "Streetwear finds" },
+  { href: "/hoodie-finds", label: "Hoodie finds" },
+  { href: "/jacket-finds", label: "Jacket finds" },
+  { href: "/best-rep-finds", label: "Best rep finds" },
+  { href: "/litbuy-qc", label: "QC database" },
+  { href: "/brands", label: "Brand finds" },
+  { href: "/categories", label: "Category database" },
+  { href: "/finds", label: "Finds hub" },
 ] as const;
 
 export const SPREADSHEET_CLUSTER_LINKS = [

@@ -1,6 +1,14 @@
 import SmartLink from "@/components/SmartLink";
+import { FINDS_DATABASE_HUB_LINKS } from "@/lib/finds-authority";
 
 const SECTIONS = [
+  {
+    title: "Finds database",
+    links: FINDS_DATABASE_HUB_LINKS.map((link) => ({
+      href: link.href,
+      label: link.label,
+    })),
+  },
   {
     title: "Top collections",
     links: [
@@ -83,9 +91,9 @@ export default function HomepageInternalLinks() {
   return (
     <section className="px-4 py-6 sm:px-6">
       <div className="mx-auto max-w-7xl rounded-2xl border border-border/80 bg-surface/20 p-5 sm:p-6">
-        <h2 className="text-lg font-black sm:text-xl">Explore the catalog</h2>
+        <h2 className="text-lg font-black sm:text-xl">Explore the LitBuy finds database</h2>
         <p className="mt-1 text-sm text-muted">
-          Jump to collections, brands, categories, and guides — all indexable landing pages.
+          Product discovery hubs, category databases, spreadsheet resources, and brand pages — all crawlable and linked from the homepage.
         </p>
         <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           {SECTIONS.map((section) => (

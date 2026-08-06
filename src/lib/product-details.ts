@@ -127,11 +127,17 @@ function getCategoryTitleLabel(categorySlug: string): string | null {
 export function getProductSeoTitle(product: Product): string {
   const name = getDisplayProductName(product);
   const brand = getDisplayBrand(product);
+  const price =
+    hasExactPrice(product.price) && product.price !== null
+      ? formatPrice(product.price, "USD")
+      : null;
+
   return buildProductRepFindTitle({
     name,
     brand,
     categoryLabel: getCategoryTitleLabel(product.category_slug),
     hasQc: Boolean(product.qc_link),
+    price,
   });
 }
 

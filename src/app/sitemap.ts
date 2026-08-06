@@ -61,7 +61,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/ai`, changeFrequency: "weekly", priority: 0.9 },
     { url: SITE_URL, changeFrequency: "daily", priority: 1 },
     { url: `${SITE_URL}/trending`, changeFrequency: "daily", priority: 0.9 },
-    { url: `${SITE_URL}/latest`, changeFrequency: "daily", priority: 0.9 },
+    { url: `${SITE_URL}/latest`, changeFrequency: "daily", priority: 0.88 },
     { url: `${SITE_URL}${FINDS_HUB_PATH}`, changeFrequency: "daily", priority: 0.98 },
     { url: `${SITE_URL}/deals`, changeFrequency: "daily", priority: 0.9 },
     { url: `${SITE_URL}/recently-added`, changeFrequency: "daily", priority: 0.92 },
@@ -117,7 +117,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     routes.push({
       url: `${SITE_URL}${page.path}`,
       changeFrequency: "weekly",
-      priority: slug === "litbuy-spreadsheet" ? 0.95 : 0.88,
+      priority:
+        slug === "litbuy-spreadsheet"
+          ? 0.96
+          : slug === "latest-finds"
+            ? 0.97
+            : 0.88,
       lastModified: getDatasetSyncedIso(),
     });
   }
@@ -126,7 +131,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     routes.push({
       url: `${SITE_URL}/${entry.slug}`,
       changeFrequency: getSitemapChangeFrequency(entry),
-      priority: entry.type === "freshness" ? 0.9 : 0.87,
+      priority:
+        entry.slug === "latest-finds"
+          ? 0.97
+          : entry.type === "freshness"
+            ? 0.9
+            : 0.87,
       lastModified: getDatasetSyncedIso(),
     });
   }

@@ -5,6 +5,7 @@ import ContentFreshness from "@/components/ContentFreshness";
 import DiscoveryHero from "@/components/DiscoveryHero";
 import DiscoveryRail from "@/components/DiscoveryRail";
 import HomepageDiscoveryTools from "@/components/HomepageDiscoveryTools";
+import HomepageFindsDatabaseHub from "@/components/HomepageFindsDatabaseHub";
 import RevealOnScroll from "@/components/RevealOnScroll";
 import HomepageAuthorityHub from "@/components/HomepageAuthorityHub";
 import HomepageBrands from "@/components/HomepageBrands";
@@ -59,6 +60,8 @@ export default async function HomePage() {
         freshness="updated-daily"
         tight
       />
+
+      <HomepageFindsDatabaseHub />
 
       <RevealOnScroll>
         <DiscoveryRail
