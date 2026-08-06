@@ -20,6 +20,8 @@ type DiscoveryRailProps = {
   /** Only the first rail should preload card images. */
   preloadImages?: boolean;
   freshness?: ContentFreshnessVariant;
+  /** Tighter vertical spacing for above-the-fold rails. */
+  tight?: boolean;
 };
 
 export default function DiscoveryRail({
@@ -30,6 +32,7 @@ export default function DiscoveryRail({
   showTrendingScore = false,
   preloadImages = false,
   freshness,
+  tight = false,
 }: DiscoveryRailProps) {
   const [selected, setSelected] = useState<Product | null>(null);
   const railProducts = dedupeListingRail(products);
@@ -37,7 +40,9 @@ export default function DiscoveryRail({
   if (railProducts.length === 0) return null;
 
   return (
-    <section className="px-3 py-4 sm:px-6 sm:py-8">
+    <section
+      className={`px-3 sm:px-6 ${tight ? "py-3 sm:py-4" : "py-4 sm:py-8"}`}
+    >
       <div className="mx-auto max-w-7xl">
         {(title || subtitle) && (
           <div className="mb-2.5 flex items-end justify-between gap-3 sm:mb-5 sm:gap-4">

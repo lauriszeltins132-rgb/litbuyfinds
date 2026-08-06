@@ -28,7 +28,7 @@ export default function HomepageCategories({ categories }: HomepageCategoriesPro
             <Link
               key={category.slug}
               href={category.href}
-              className="panel-shell rounded-2xl border border-border p-4 transition hover:border-accent/35"
+              className="panel-shell rounded-2xl border border-border p-4 transition duration-200 hover:-translate-y-0.5 hover:border-accent/35"
             >
               <p className="font-bold text-foreground">{category.name}</p>
               <p className="mt-1 text-xs text-muted">

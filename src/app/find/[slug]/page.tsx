@@ -24,6 +24,7 @@ import {
 import { getAllProductSlugs, getProductBySlug, getProductSlug, slugify } from "@/lib/slugs";
 import { getLatestProducts, getTrendingProducts } from "@/lib/products";
 import { buildPageMetadata } from "@/lib/seo";
+import RevealOnScroll from "@/components/RevealOnScroll";
 import FloatingBackButton from "@/components/FloatingBackButton";
 import ProductJsonLd from "@/components/ProductJsonLd";
 import SchemaScript from "@/components/SchemaScript";
@@ -149,46 +150,52 @@ export default async function ProductPage({ params }: ProductPageProps) {
       />
 
       {similar.length > 0 ? (
-        <section className="px-4 pt-4 sm:px-6">
-          <div className="mx-auto max-w-7xl">
-            <h2 className="text-xl font-black">Similar finds</h2>
-            <p className="mt-1 text-sm text-muted">
-              You might also like these picks in {product.category}
-              {brand ? ` and ${brand}` : ""}.
-            </p>
-            <div className="mt-6">
-              <ProductGrid products={similar} />
+        <RevealOnScroll>
+          <section className="px-4 pt-4 sm:px-6">
+            <div className="mx-auto max-w-7xl">
+              <h2 className="text-xl font-black">Similar finds</h2>
+              <p className="mt-1 text-sm text-muted">
+                You might also like these picks in {product.category}
+                {brand ? ` and ${brand}` : ""}.
+              </p>
+              <div className="mt-6">
+                <ProductGrid products={similar} />
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </RevealOnScroll>
       ) : null}
 
       {moreFromBrand.length > 0 ? (
-        <section className="px-4 pt-4 sm:px-6">
-          <div className="mx-auto max-w-7xl">
-            <h2 className="text-xl font-black">More From This Brand</h2>
-            <p className="mt-1 text-sm text-muted">
-              Popular {brand} finds in the catalog.
-            </p>
-            <div className="mt-6">
-              <ProductGrid products={moreFromBrand} />
+        <RevealOnScroll>
+          <section className="px-4 pt-4 sm:px-6">
+            <div className="mx-auto max-w-7xl">
+              <h2 className="text-xl font-black">More From This Brand</h2>
+              <p className="mt-1 text-sm text-muted">
+                Popular {brand} finds in the catalog.
+              </p>
+              <div className="mt-6">
+                <ProductGrid products={moreFromBrand} />
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </RevealOnScroll>
       ) : null}
 
       {popularInCategory.length > 0 ? (
-        <section className="px-4 pt-4 sm:px-6">
-          <div className="mx-auto max-w-7xl">
-            <h2 className="text-xl font-black">Popular in {product.category}</h2>
-            <p className="mt-1 text-sm text-muted">
-              Trending picks from this category.
-            </p>
-            <div className="mt-6">
-              <ProductGrid products={popularInCategory} />
+        <RevealOnScroll>
+          <section className="px-4 pt-4 sm:px-6">
+            <div className="mx-auto max-w-7xl">
+              <h2 className="text-xl font-black">Popular in {product.category}</h2>
+              <p className="mt-1 text-sm text-muted">
+                Trending picks from this category.
+              </p>
+              <div className="mt-6">
+                <ProductGrid products={popularInCategory} />
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </RevealOnScroll>
       ) : null}
 
       <RelatedGuides links={getRelatedGuidesForProduct(product)} />

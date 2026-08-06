@@ -4,6 +4,8 @@ import HomepageCatalogSection from "@/components/HomepageCatalogSection";
 import ContentFreshness from "@/components/ContentFreshness";
 import DiscoveryHero from "@/components/DiscoveryHero";
 import DiscoveryRail from "@/components/DiscoveryRail";
+import HomepageDiscoveryTools from "@/components/HomepageDiscoveryTools";
+import RevealOnScroll from "@/components/RevealOnScroll";
 import HomepageAuthorityHub from "@/components/HomepageAuthorityHub";
 import HomepageBrands from "@/components/HomepageBrands";
 import HomepageCategories from "@/components/HomepageCategories";
@@ -45,7 +47,7 @@ export default async function HomePage() {
         })}
       />
 
-      <DiscoveryHero />
+      <DiscoveryHero compact />
 
       <DiscoveryRail
         title={getDailyFindsTitle()}
@@ -55,42 +57,53 @@ export default async function HomePage() {
         showTrendingScore
         preloadImages
         freshness="updated-daily"
+        tight
       />
 
-      <DiscoveryRail
-        title="Latest Finds"
-        subtitle="Newest drops from the LitBuy spreadsheet sync"
-        href="/latest-finds"
-        products={rails.latestFinds}
-        freshness="latest-updated"
-      />
+      <RevealOnScroll>
+        <DiscoveryRail
+          title="Latest Finds"
+          subtitle="Newest drops from the LitBuy spreadsheet sync"
+          href="/latest-finds"
+          products={rails.latestFinds}
+          freshness="latest-updated"
+        />
+      </RevealOnScroll>
+
+      <HomepageDiscoveryTools />
 
       {rails.editorsPicks.length > 0 ? (
-        <DiscoveryRail
-          title="Editor's Picks"
-          subtitle="QC-linked standouts with strong presentation"
-          href="/editors-picks"
-          products={rails.editorsPicks}
-        />
+        <RevealOnScroll>
+          <DiscoveryRail
+            title="Editor's Picks"
+            subtitle="QC-linked standouts with strong presentation"
+            href="/editors-picks"
+            products={rails.editorsPicks}
+          />
+        </RevealOnScroll>
       ) : null}
 
       {rails.bestUnder20.length > 0 ? (
-        <DiscoveryRail
-          title="Best Under $20"
-          subtitle="Budget-friendly finds that still look premium"
-          href="/best-under-30"
-          products={rails.bestUnder20}
-        />
+        <RevealOnScroll>
+          <DiscoveryRail
+            title="Best Under $20"
+            subtitle="Budget-friendly finds that still look premium"
+            href="/best-under-30"
+            products={rails.bestUnder20}
+          />
+        </RevealOnScroll>
       ) : null}
 
-      <DiscoveryRail
-        title={getWeeklyFindsTitle()}
-        subtitle="Trending sneakers, jackets and streetwear"
-        href="/trending-this-week"
-        products={rails.popularWeek}
-        showTrendingScore
-        freshness="updated-weekly"
-      />
+      <RevealOnScroll>
+        <DiscoveryRail
+          title={getWeeklyFindsTitle()}
+          subtitle="Trending sneakers, jackets and streetwear"
+          href="/trending-this-week"
+          products={rails.popularWeek}
+          showTrendingScore
+          freshness="updated-weekly"
+        />
+      </RevealOnScroll>
 
       <HomepageCategories categories={categories} />
       <HomepageCollections />
