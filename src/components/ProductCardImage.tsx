@@ -140,8 +140,14 @@ export default function ProductCardImage({
 
   return (
     <div
-      className={`product-float-stage product-float-stage--card ${className}`}
+      className={`product-float-stage product-float-stage--card relative ${className}`}
     >
+      {!loaded ? (
+        <div
+          className="product-card-image-skeleton skeleton absolute inset-0 z-0 rounded-[inherit]"
+          aria-hidden
+        />
+      ) : null}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         ref={imgRef}
@@ -154,7 +160,7 @@ export default function ProductCardImage({
         fetchPriority={priority ? "high" : "auto"}
         decoding="async"
         referrerPolicy="no-referrer"
-        className={assetClass}
+        className={`${assetClass} relative z-[1]`}
         onLoad={(event) => confirmLoaded(event.currentTarget)}
         onError={advanceOrFail}
       />
