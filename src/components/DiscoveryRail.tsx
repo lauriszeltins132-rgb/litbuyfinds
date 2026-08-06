@@ -43,12 +43,12 @@ export default function DiscoveryRail({
     <section
       className={`discovery-section px-3 sm:px-6 ${tight ? "py-3 sm:py-5" : "py-5 sm:py-8"}`}
     >
-      <div className="mx-auto max-w-7xl">
+      <div className="discovery-section__panel mx-auto max-w-7xl">
         {(title || subtitle) && (
           <div className="discovery-section__header flex items-end justify-between gap-3 sm:gap-4">
             <div className="min-w-0">
               {title && (
-                <h2 className="text-lg font-black leading-tight tracking-tight sm:text-2xl">
+                <h2 className="discovery-section__title text-lg font-black leading-tight tracking-tight sm:text-2xl">
                   {title}
                 </h2>
               )}
@@ -65,7 +65,7 @@ export default function DiscoveryRail({
             </div>
             <Link
               href={href}
-              className="shrink-0 rounded-full border border-border/70 bg-white px-3 py-1.5 text-xs font-bold text-accent shadow-sm transition hover:border-accent/35 sm:text-sm"
+              className="discovery-section__cta shrink-0 rounded-full border border-border/70 bg-white px-3 py-1.5 text-xs font-bold text-accent shadow-sm transition hover:border-accent/35 sm:text-sm"
             >
               View all →
             </Link>

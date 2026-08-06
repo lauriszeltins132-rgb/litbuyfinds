@@ -147,73 +147,75 @@ function ProductCard({
 
         <div
           className={`product-card-actions mt-auto ${
-            showMicroCta ? "product-card-actions--with-footer" : ""
-          }`}
+            compact ? "product-card-actions--compact" : ""
+          } ${showMicroCta ? "product-card-actions--with-footer" : ""}`}
         >
-          <div className="product-card-actions__primary">
-            {hasBuyLink ? (
-              <BuyWithAgentButton
-                product={product}
-                location="product_card"
-                showAgentPicker
-                compact
-                className="product-card-buy"
-              />
-            ) : (
+          <div className="product-card-actions__toolbar">
+            <div className="product-card-actions__primary">
+              {hasBuyLink ? (
+                <BuyWithAgentButton
+                  product={product}
+                  location="product_card"
+                  showAgentPicker
+                  compact
+                  className="product-card-buy"
+                />
+              ) : (
+                <button
+                  type="button"
+                  onClick={openProduct}
+                  className="product-card-action product-card-action--secondary product-card-buy"
+                >
+                  View
+                </button>
+              )}
+
+              {hasQc ? (
+                <a
+                  href={product.qc_link!}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => trackProductContext("qc_click", product, "product_card")}
+                  className="product-card-action product-card-action--secondary"
+                >
+                  QC
+                </a>
+              ) : null}
+            </div>
+
+            <div className="product-card-actions__secondary">
               <button
                 type="button"
-                onClick={openProduct}
-                className="product-card-action product-card-action--secondary"
+                onClick={() => {
+                  if (!saved) trackSaveClick(product.id, "product_card");
+                  toggleWishlist(product.id);
+                }}
+                aria-label={saved ? "Remove from saved" : "Save item"}
+                className={`product-card-icon-btn ${
+                  saved ? "product-card-icon-btn--active" : ""
+                }`}
               >
-                View
+                ♥
               </button>
-            )}
 
-            {hasQc ? (
-              <a
-                href={product.qc_link!}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => trackProductContext("qc_click", product, "product_card")}
-                className="product-card-action product-card-action--secondary"
+              <button
+                type="button"
+                onClick={() => shareProduct(product, displayName)}
+                aria-label="Share product"
+                className="product-card-icon-btn"
               >
-                QC
-              </a>
-            ) : null}
-          </div>
+                ↗
+              </button>
 
-          <div className="product-card-actions__secondary">
-            <button
-              type="button"
-              onClick={() => {
-                if (!saved) trackSaveClick(product.id, "product_card");
-                toggleWishlist(product.id);
-              }}
-              aria-label={saved ? "Remove from saved" : "Save item"}
-              className={`product-card-icon-btn ${
-                saved ? "product-card-icon-btn--active" : ""
-              }`}
-            >
-              ♥
-            </button>
-
-            <button
-              type="button"
-              onClick={() => shareProduct(product, displayName)}
-              aria-label="Share product"
-              className="product-card-icon-btn"
-            >
-              ↗
-            </button>
-
-            <button
-              type="button"
-              onClick={handleCopy}
-              aria-label="Copy product link"
-              className="product-card-icon-btn"
-            >
-              {copied ? "✓" : "⧉"}
-            </button>
+              <button
+                type="button"
+                onClick={handleCopy}
+                aria-label="Copy product link"
+                className="product-card-icon-btn"
+              >
+                {copied ? "✓" : "⧉"}
+              </button>
+            </div>
           </div>
 
           {showMicroCta ? (
