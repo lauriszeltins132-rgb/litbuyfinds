@@ -68,7 +68,7 @@ export default memo(function ProductGrid({
   return (
     <>
       <div
-        className={`product-grid grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6${
+        className={`product-grid grid grid-cols-2 items-stretch gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6${
           instant ? " product-grid--instant" : ""
         }`}
       >
