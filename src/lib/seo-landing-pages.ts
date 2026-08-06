@@ -1,5 +1,6 @@
 import type { StaticPageSection } from "./static-pages";
 import { PUBLIC_CATALOG_COUNT } from "./catalog-count-public";
+import { getFindsAuthorityStats } from "./finds-authority";
 import { getEditorsPicks } from "./discovery";
 import { getSpreadsheetMetadataCopy } from "./metadata-copy";
 import { filterFeaturedEligible } from "./product-media";
@@ -67,6 +68,8 @@ const RESOURCE_LINKS = [
   { href: "/guides", label: "All guides" },
 ];
 
+const SPREADSHEET_STATS = getFindsAuthorityStats();
+
 export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
   "litbuy-spreadsheet": {
     slug: "litbuy-spreadsheet",
@@ -76,8 +79,7 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
     badge: "LitBuy resource",
     h1: "LitBuy Spreadsheet",
     intro:
-      "LitBuy Spreadsheet contains curated products with QC photos, prices, and agent links. LitBuy Finds turns that same catalog into " +
-      `${PUBLIC_CATALOG_COUNT} searchable pages — updated daily with verified buy buttons for LitBuy, MuleBuy, Kakobuy, HipoBuy, OopBuy, and ACBuy. Join the LitBuy Discord community for spreadsheet drop alerts between daily syncs.`,
+      `The LitBuy spreadsheet is the community source for rep product rows — and LitBuy Finds turns that universe into ${SPREADSHEET_STATS.totalFindsLabel} searchable product pages with ${SPREADSHEET_STATS.qcFindsLabel} QC-linked listings, daily syncs, and verified buy buttons for LitBuy, MuleBuy, Kakobuy, HipoBuy, OopBuy, and ACBuy. Use this guide to understand spreadsheet categories, how rows become find pages, and where to browse the latest imports.`,
     sections: [
       {
         heading: "Quick answer",
@@ -115,13 +117,16 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
         ],
       },
       {
-        heading: "How often the spreadsheet updates",
+        heading: "Connect spreadsheet rows to Latest Finds",
         paragraphs: [
-          "The LitBuy Finds catalog syncs daily. New rows from community spreadsheets appear in Latest Finds, Recently Added, and category pages after each import — check the homepage timestamp for the last sync.",
+          "Latest Finds is the main discovery hub for new spreadsheet imports — sneakers, clothing, streetwear, and QC-linked products added after each daily sync. Start there when you want today's drops; return to this spreadsheet guide when you need category context or bulk reference.",
         ],
         links: [
-          { href: "/latest-finds", label: "Latest finds" },
-          { href: "/litbuy-discord", label: "LitBuy Discord" },
+          { href: "/latest-finds", label: "Latest finds hub" },
+          { href: "/recently-added", label: "Recently added" },
+          { href: "/finds", label: "Finds hub" },
+          { href: "/sneaker-finds", label: "Sneaker finds" },
+          { href: "/clothing-finds", label: "Clothing finds" },
         ],
       },
       {
@@ -181,7 +186,7 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
     faqs: [
       {
         question: "How many products are in the LitBuy spreadsheet catalog?",
-        answer: `LitBuy Finds indexes ${PUBLIC_CATALOG_COUNT} curated finds with daily catalog syncs. The underlying spreadsheet universe is larger, but we filter broken images and missing prices before publishing.`,
+        answer: `LitBuy Finds indexes ${SPREADSHEET_STATS.totalFindsLabel} curated finds with ${SPREADSHEET_STATS.qcFindsLabel} QC-linked listings and daily catalog syncs. The underlying spreadsheet universe is larger, but broken images and missing prices are filtered before publishing.`,
       },
       {
         question: "How often is the LitBuy spreadsheet updated?",
@@ -205,13 +210,16 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
       },
     ],
     relatedLinks: [
+      { href: "/latest-finds", label: "Latest finds hub" },
       { href: "/finds", label: "Finds hub" },
-      { href: "/latest-finds", label: "Latest finds" },
       { href: "/sneaker-finds", label: "Sneaker finds" },
       { href: "/clothing-finds", label: "Clothing finds" },
+      { href: "/streetwear-finds", label: "Streetwear finds" },
+      { href: "/best-rep-finds", label: "Best rep finds" },
+      { href: "/litbuy-qc", label: "QC database" },
+      { href: "/litbuy-finds", label: "LitBuy finds" },
       { href: "/litbuy-coupons", label: "LitBuy coupons" },
       { href: "/litbuy-discord", label: "LitBuy Discord" },
-      { href: "/litbuy-finds", label: "LitBuy finds" },
       { href: "/litbuy-guide", label: "LitBuy guide hub" },
       { href: "/kakobuy-spreadsheet", label: "Kakobuy spreadsheet" },
       { href: "/mulebuy-spreadsheet", label: "MuleBuy spreadsheet" },

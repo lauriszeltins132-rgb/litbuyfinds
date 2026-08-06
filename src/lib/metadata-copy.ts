@@ -1,4 +1,5 @@
 import { PUBLIC_CATALOG_COUNT } from "./catalog-count-public";
+import { getFindsAuthorityStats } from "./finds-authority";
 
 export const META_SCALE = PUBLIC_CATALOG_COUNT;
 
@@ -41,13 +42,14 @@ export function truncateMetaTitle(text: string, max = TITLE_MAX): string {
 }
 
 export function getHomepageMetadataCopy() {
+  const stats = getFindsAuthorityStats();
   return {
     title: truncateMetaTitle(
-      `LitBuy Finds 2026 | ${META_SCALE} QC Photos, Spreadsheet Finds & Best Reps`,
+      `LitBuy Finds 2026 | ${stats.totalFindsLabel} QC Photos, Spreadsheet & Rep Database`,
       72
     ),
     description: truncateMetaDescription(
-      `Browse ${META_SCALE} LitBuy finds with QC photos, spreadsheet discovery, sneaker and clothing finds, coupons, Discord community alerts, and multi-agent support.`
+      `Browse ${stats.totalFindsLabel} LitBuy finds with ${stats.qcFindsLabel} QC-linked listings — sneaker, clothing, and streetwear rep discovery, spreadsheet finds, brand hubs, and verified agent links.`
     ),
   };
 }
@@ -100,12 +102,13 @@ export function getCollectionsHubMetadataCopy() {
 }
 
 export function getSpreadsheetMetadataCopy() {
+  const stats = getFindsAuthorityStats();
   return {
     title: truncateMetaTitle(
-      `LitBuy Spreadsheet | ${META_SCALE} QC Photos & Agent Links`
+      `LitBuy Spreadsheet | ${stats.totalFindsLabel} Finds, QC Photos & Agent Links`
     ),
     description: truncateMetaDescription(
-      `Searchable LitBuy spreadsheet with ${META_SCALE} curated finds, QC photos, ${META_VALUE_STACK}. ${META_AGENTS}.`
+      `LitBuy spreadsheet guide with ${stats.totalFindsLabel} searchable finds, ${stats.qcFindsLabel} QC-linked listings, category browsing, latest finds sync, and ${META_AGENTS} checkout.`
     ),
   };
 }
@@ -185,15 +188,17 @@ export function buildProductRepFindTitle(options: {
   brand: string | null;
   categoryLabel?: string | null;
   hasQc: boolean;
+  price?: string | null;
 }): string {
-  const { name, brand, categoryLabel, hasQc } = options;
+  const { name, brand, categoryLabel, hasQc, price } = options;
   const lead =
     brand && !name.toLowerCase().includes(brand.toLowerCase())
       ? `${brand} ${name}`
       : name;
   const categoryBit = categoryLabel ? ` ${categoryLabel}` : "";
   const qcBit = hasQc ? " - QC Photos" : "";
-  return truncateMetaTitle(`${lead}${categoryBit} Rep Find${qcBit} & Agent Link`);
+  const priceBit = price ? ", Price" : "";
+  return truncateMetaTitle(`${lead}${categoryBit} Rep Find${qcBit}${priceBit} & LitBuy Link`);
 }
 
 export function buildProductMetaDescription(options: {

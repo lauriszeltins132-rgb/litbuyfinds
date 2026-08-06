@@ -116,6 +116,8 @@ export function resolveFreshnessH1(
       return getDailyFindsTitle(now);
     case "weeklyFinds":
       return getWeeklyFindsTitle(now);
+    case "latestFinds":
+      return `Latest LitBuy Finds — ${formatFreshnessDate(now)}`;
     default:
       return entry.h1;
   }
@@ -131,7 +133,7 @@ export function resolveFreshnessPageTitle(
     case "weeklyFinds":
       return `${getWeeklyFindsTitle(now)} | LitBuy Finds`;
     case "latestFinds":
-      return `Latest Rep Finds - ${formatFreshnessDate(now)} | LitBuy Finds`;
+      return `LitBuy Finds — Latest Rep Products | ${formatFreshnessDate(now)}`;
     default:
       return entry.title;
   }
@@ -147,7 +149,7 @@ export function resolveFreshnessDescription(
     case "weeklyFinds":
       return `Weekly finds for the week of ${formatContentDate(getUtcWeekStart(now).toISOString())} — trending rep picks updated weekly on LitBuy Finds.`;
     case "latestFinds":
-      return `Latest rep finds updated ${formatFreshnessDate(now)} — new sneakers, clothing, and accessories with QC photos and agent links on LitBuy Finds.`;
+      return `Latest LitBuy finds updated ${formatFreshnessDate(now)} — new rep sneakers, clothing, QC photos, spreadsheet drops, and verified agent links on LitBuy Finds.`;
     default:
       return entry.description;
   }

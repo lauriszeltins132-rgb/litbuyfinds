@@ -37,6 +37,7 @@ import RelatedPages from "@/components/RelatedPages";
 import TelegramDailyFindsCta from "@/components/TelegramDailyFindsCta";
 import { getRelatedGuidesForProduct } from "@/lib/related-guides";
 import { buildBreadcrumbSchema } from "@/lib/schema";
+import { getCategoryFindsPagePath } from "@/lib/finds-authority";
 
 type ProductPageProps = {
   params: Promise<{ slug: string }>;
@@ -109,8 +110,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
     product.group === "featured"
       ? product.category_slug === "trending-now"
         ? "/trending"
-        : "/latest"
+        : product.category_slug === "latest-finds"
+          ? "/latest-finds"
+          : "/latest"
       : `/categories/${product.category_slug}`;
+  const categoryFindsHref = getCategoryFindsPagePath(product.category_slug);
   const facts = getProductFacts(product, categoryHref);
   const engagement = getProductEngagementStats(product.id);
   const showTrending = isProductTrending(product.id);
@@ -216,12 +220,20 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
       <section className="px-4 pb-16 pt-4 sm:px-6">
         <div className="mx-auto flex max-w-7xl flex-wrap justify-center gap-4 text-center">
+          <Link href="/latest-finds" className="text-sm font-bold text-accent hover:underline">
+            Latest finds hub →
+          </Link>
           <Link href="/finds" className="text-sm font-bold text-accent hover:underline">
             Finds hub →
           </Link>
           <Link href={categoryHref} className="text-sm font-bold text-accent hover:underline">
             Browse more in {product.category} →
           </Link>
+          {categoryFindsHref ? (
+            <Link href={categoryFindsHref} className="text-sm font-bold text-accent hover:underline">
+              {product.category} finds page →
+            </Link>
+          ) : null}
           {brand ? (
             <Link
               href={`/brands/${slugify(brand)}`}
@@ -230,26 +242,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
               More {brand} finds →
             </Link>
           ) : null}
-          <Link href="/finds" className="text-sm font-bold text-muted hover:text-accent">
-            Finds hub →
-          </Link>
           <Link href="/litbuy-spreadsheet" className="text-sm font-bold text-muted hover:text-accent">
-            Spreadsheet →
+            LitBuy spreadsheet →
           </Link>
-          <Link href="/litbuy-coupons" className="text-sm font-bold text-muted hover:text-accent">
-            Coupons →
-          </Link>
-          <Link href="/litbuy-discord" className="text-sm font-bold text-muted hover:text-accent">
-            Discord →
+          <Link href="/litbuy-qc" className="text-sm font-bold text-muted hover:text-accent">
+            QC database →
           </Link>
           <Link href="/trending" className="text-sm font-bold text-muted hover:text-accent">
             Trending finds →
-          </Link>
-          <Link href="/latest-finds" className="text-sm font-bold text-muted hover:text-accent">
-            Latest finds →
-          </Link>
-          <Link href="/litbuy-qc" className="text-sm font-bold text-muted hover:text-accent">
-            QC photos →
           </Link>
           <Link href="/guides/beginner-guide-to-litbuy" className="text-sm font-bold text-muted hover:text-accent">
             Beginner guide →
