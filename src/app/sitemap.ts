@@ -63,6 +63,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/trending`, changeFrequency: "daily", priority: 0.9 },
     { url: `${SITE_URL}/latest`, changeFrequency: "daily", priority: 0.88 },
     { url: `${SITE_URL}${FINDS_HUB_PATH}`, changeFrequency: "daily", priority: 0.98 },
+    { url: `${SITE_URL}/best-shopping-agent`, changeFrequency: "monthly", priority: 0.9 },
     { url: `${SITE_URL}/deals`, changeFrequency: "daily", priority: 0.9 },
     { url: `${SITE_URL}/recently-added`, changeFrequency: "daily", priority: 0.92 },
     { url: `${SITE_URL}/brands`, changeFrequency: "weekly", priority: 0.8 },

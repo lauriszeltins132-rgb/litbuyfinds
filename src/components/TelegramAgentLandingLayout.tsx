@@ -16,7 +16,7 @@ type TelegramAgentLandingLayoutProps = {
 export default function TelegramAgentLandingLayout({
   config,
 }: TelegramAgentLandingLayoutProps) {
-  const breadcrumbItems = [
+  const breadcrumbItems = config.breadcrumbItems ?? [
     { label: "Home", href: "/" },
     { label: "Telegram", href: "/telegram" },
     { label: config.h1 },
@@ -124,6 +124,26 @@ export default function TelegramAgentLandingLayout({
                   </div>
                 ))}
               </dl>
+            </section>
+          ) : null}
+
+          {config.relatedResourceLinks && config.relatedResourceLinks.length > 0 ? (
+            <section className="mt-10 border-t border-border pt-8">
+              <h2 className="text-sm font-bold uppercase tracking-[0.16em] text-muted">
+                {config.relatedResourcesTitle ?? `Related ${config.agentName} resources`}
+              </h2>
+              <ul className="mt-4 flex flex-wrap gap-2">
+                {config.relatedResourceLinks.map((link) => (
+                  <li key={link.href}>
+                    <SmartLink
+                      href={link.href}
+                      className="rounded-full border border-border px-3 py-1.5 text-xs font-bold text-foreground/80 hover:border-accent/40 hover:text-accent"
+                    >
+                      {link.label}
+                    </SmartLink>
+                  </li>
+                ))}
+              </ul>
             </section>
           ) : null}
 

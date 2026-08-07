@@ -132,7 +132,9 @@ export default function AuthorityPageLayout({ page }: AuthorityPageLayoutProps) 
           ) : null}
 
           <section className="mt-12 border-t border-border pt-10">
-            <h2 className="text-xl font-black text-foreground">Related pages</h2>
+            <h2 className="text-xl font-black text-foreground">
+              {page.relatedResourcesTitle ?? "Related pages"}
+            </h2>
             <ul className="mt-4 flex flex-wrap gap-2">
               {(page.relatedLinks ?? LITBUY_AUTHORITY_LINKS).map((link) => (
                 <li key={link.href}>

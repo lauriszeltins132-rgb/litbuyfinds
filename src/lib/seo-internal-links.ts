@@ -1,9 +1,11 @@
+import { AGENTS_HUB_PATH } from "./agent-resource-agents";
 
 /** Cross-site SEO hub links — use in relatedLinks and contextual sections. */
 export const SEO_HUB_LINKS = [
   { href: "/", label: "Homepage" },
   { href: "/finds", label: "Finds hub" },
   { href: "/latest-finds", label: "Latest finds" },
+  { href: AGENTS_HUB_PATH, label: "Shopping agents hub" },
   { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
   { href: "/litbuy-finds", label: "LitBuy finds" },
   { href: "/litbuy-qc", label: "QC product database" },

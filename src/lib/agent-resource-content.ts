@@ -8,40 +8,78 @@ import {
   SPREADSHEET_CLUSTER_LINKS,
 } from "./seo-internal-links";
 import type { AgentResourceDefinition } from "./agent-resource-agents";
+import { AGENT_RESOURCE_AGENTS, AGENTS_HUB_PATH } from "./agent-resource-agents";
 
 const PUBLISHED = "2026-08-07T00:00:00.000Z";
 const MODIFIED = getDatasetSyncedIso();
 
-function agentFindsPath(agent: AgentResourceDefinition): string {
-  return `/${agent.slug}-finds`;
+export { AGENTS_HUB_PATH };
+
+export function agentFindsPath(agent: AgentResourceDefinition | string): string {
+  const slug = typeof agent === "string" ? agent : agent.slug;
+  return `/${slug}-finds`;
 }
 
-function agentSpreadsheetPath(agent: AgentResourceDefinition): string {
-  return `/${agent.slug}-spreadsheet`;
+export function agentSpreadsheetPath(
+  agent: AgentResourceDefinition | string
+): string {
+  const slug = typeof agent === "string" ? agent : agent.slug;
+  return `/${slug}-spreadsheet`;
 }
 
-function agentReviewPath(agent: AgentResourceDefinition): string {
-  return `/${agent.slug}-review`;
+export function agentReviewPath(agent: AgentResourceDefinition | string): string {
+  const slug = typeof agent === "string" ? agent : agent.slug;
+  return `/${slug}-review`;
 }
 
-function agentTelegramPath(agent: AgentResourceDefinition): string {
-  return `/telegram-${agent.slug}`;
+export function agentTelegramPath(agent: AgentResourceDefinition | string): string {
+  const slug = typeof agent === "string" ? agent : agent.slug;
+  return `/telegram-${slug}`;
 }
 
-function agentDiscordPath(agent: AgentResourceDefinition): string {
-  return `/discord-${agent.slug}`;
+export function agentDiscordPath(agent: AgentResourceDefinition | string): string {
+  const slug = typeof agent === "string" ? agent : agent.slug;
+  return `/discord-${slug}`;
+}
+
+export function buildAgentHubBreadcrumbs(
+  agent: AgentResourceDefinition,
+  currentLabel: string
+) {
+  return [
+    { label: "Home", href: "/" },
+    { label: "Agents", href: AGENTS_HUB_PATH },
+    { label: currentLabel },
+  ];
+}
+
+export function buildAgentRelatedResourceLinks(agent: AgentResourceDefinition) {
+  const name = agent.name;
+  return [
+    { href: agentTelegramPath(agent), label: `${name} Telegram` },
+    { href: agentSpreadsheetPath(agent), label: `${name} Spreadsheet` },
+    { href: agentFindsPath(agent), label: `${name} Finds` },
+    { href: "/latest-finds", label: "Latest Finds" },
+    { href: agentDiscordPath(agent), label: `${name} Discord` },
+    { href: agentReviewPath(agent), label: `${name} review` },
+    { href: "/guides", label: "Shopping guides" },
+  ];
+}
+
+export function buildAgentHubDiscoveryLinks() {
+  return AGENT_RESOURCE_AGENTS.flatMap((agent) => [
+    { href: agentFindsPath(agent), label: `${agent.name} finds` },
+    { href: agentTelegramPath(agent), label: `${agent.name} Telegram` },
+    { href: agentSpreadsheetPath(agent), label: `${agent.name} spreadsheet` },
+    { href: agentReviewPath(agent), label: `${agent.name} review` },
+  ]);
 }
 
 function resourceLinks(agent: AgentResourceDefinition) {
   return [
-    { href: agentFindsPath(agent), label: `${agent.name} finds` },
-    { href: agentSpreadsheetPath(agent), label: `${agent.name} spreadsheet` },
-    { href: agentTelegramPath(agent), label: `${agent.name} Telegram` },
-    { href: agentDiscordPath(agent), label: `${agent.name} Discord` },
-    { href: agentReviewPath(agent), label: `${agent.name} review` },
-    { href: "/latest-finds", label: "Latest finds" },
+    ...buildAgentRelatedResourceLinks(agent),
     { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
-    { href: "/guides", label: "Shopping guides" },
+    { href: AGENTS_HUB_PATH, label: "Compare shopping agents" },
   ];
 }
 
@@ -193,6 +231,7 @@ export function buildAgentSpreadsheetConfig(agent: AgentResourceDefinition) {
   const name = agent.name;
   return {
     slug: `${agent.slug}-spreadsheet`,
+    agentResourceSlug: agent.slug,
     type: "spreadsheet" as const,
     title: `${name} Spreadsheet Finds | Searchable Catalog & QC Links`,
     description: `${name} spreadsheet-style finds on LitBuy Finds — searchable catalog with QC references, category filters, and ${name} checkout on every product page.`,
@@ -311,6 +350,8 @@ export function buildAgentReviewPage(
       },
     ],
     relatedLinks: resourceLinks(agent),
+    breadcrumbItems: buildAgentHubBreadcrumbs(agent, `${name} review`),
+    relatedResourcesTitle: `Related ${name} resources`,
     publishedTime: PUBLISHED,
     modifiedTime: MODIFIED,
   };

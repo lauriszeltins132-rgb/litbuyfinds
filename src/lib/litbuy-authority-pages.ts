@@ -24,6 +24,8 @@ export type AuthorityPage = {
   parentCrumb?: { label: string; href: string };
   /** Override default Home > H1 breadcrumbs (e.g. Homepage > LitBuy Discord). */
   breadcrumbItems?: { label: string; href?: string }[];
+  /** When set, relatedLinks render under this heading instead of "Related pages". */
+  relatedResourcesTitle?: string;
   primaryCta?: { href: string; label: string };
   publishedTime: string;
   modifiedTime: string;

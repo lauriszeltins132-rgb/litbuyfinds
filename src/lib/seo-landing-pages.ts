@@ -22,6 +22,9 @@ export type SeoLandingConfig = {
   relatedLinks: { href: string; label: string }[];
   getProducts: () => Product[];
   productSectionTitle: string;
+  breadcrumbItems?: { label: string; href?: string }[];
+  relatedResourceLinks?: { href: string; label: string }[];
+  relatedResourcesTitle?: string;
 };
 
 function priced(items: Product[]) {

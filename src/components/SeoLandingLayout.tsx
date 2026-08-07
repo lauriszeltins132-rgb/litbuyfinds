@@ -13,7 +13,7 @@ type SeoLandingLayoutProps = {
 export default function SeoLandingLayout({ config }: SeoLandingLayoutProps) {
   const products = config.getProducts();
   const faqs = config.faqs.length > 0 ? config.faqs : undefined;
-  const breadcrumbs = [
+  const breadcrumbs = config.breadcrumbItems ?? [
     { label: "Home", href: "/" },
     { label: config.h1 },
   ];
@@ -104,6 +104,26 @@ export default function SeoLandingLayout({ config }: SeoLandingLayoutProps) {
                   </div>
                 ))}
               </dl>
+            </section>
+          ) : null}
+
+          {config.relatedResourceLinks && config.relatedResourceLinks.length > 0 ? (
+            <section className="mt-10 border-t border-border pt-8">
+              <h2 className="text-sm font-bold uppercase tracking-[0.16em] text-muted">
+                {config.relatedResourcesTitle ?? "Related resources"}
+              </h2>
+              <ul className="mt-4 flex flex-wrap gap-2">
+                {config.relatedResourceLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="rounded-full border border-border px-3 py-1.5 text-xs font-bold text-foreground/80 hover:border-accent/40 hover:text-accent"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </section>
           ) : null}
 

@@ -41,14 +41,11 @@ const TRUST_LINKS = [
   { href: "/terms", label: "Terms" },
 ];
 
-const AGENT_FINDS_LINKS = [
-  { href: "/litbuy-finds", label: "LitBuy finds" },
-  { href: "/kakobuy-finds", label: "Kakobuy finds" },
-  { href: "/oopbuy-finds", label: "OopBuy finds" },
-  { href: "/hipobuy-finds", label: "HipoBuy finds" },
-  { href: "/acbuy-finds", label: "ACBuy finds" },
-  { href: "/mulebuy-finds", label: "MuleBuy finds" },
-];
+import {
+  AGENT_FINDS_LINKS,
+  AGENT_RESOURCE_LINKS,
+} from "@/lib/seo-internal-links";
+import { AGENTS_HUB_PATH } from "@/lib/agent-resource-agents";
 
 export default function Footer() {
   const categories = siteNavigation.categories;
@@ -212,7 +209,19 @@ export default function Footer() {
                   Trending finds
                 </Link>
               </li>
+              <li>
+                <Link href={AGENTS_HUB_PATH} className="text-foreground/75 transition hover:text-accent">
+                  Compare shopping agents
+                </Link>
+              </li>
               {AGENT_FINDS_LINKS.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="text-foreground/75 transition hover:text-accent">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+              {AGENT_RESOURCE_LINKS.slice(0, 6).map((link) => (
                 <li key={link.href}>
                   <Link href={link.href} className="text-foreground/75 transition hover:text-accent">
                     {link.label}

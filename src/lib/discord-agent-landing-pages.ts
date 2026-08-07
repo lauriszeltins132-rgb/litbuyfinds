@@ -6,6 +6,8 @@ import {
   buildAgentDiscordIntro,
   buildAgentDiscordMeta,
   buildAgentDiscordSections,
+  buildAgentHubBreadcrumbs,
+  buildAgentRelatedResourceLinks,
 } from "./agent-resource-content";
 import { SOCIAL_LINKS } from "./constants";
 
@@ -23,6 +25,9 @@ export type DiscordAgentLandingConfig = {
   sections: StaticPageSection[];
   faqs: { question: string; answer: string }[];
   footerLinks: { href: string; label: string }[];
+  breadcrumbItems?: { label: string; href?: string }[];
+  relatedResourceLinks?: { href: string; label: string }[];
+  relatedResourcesTitle?: string;
 };
 
 const LEGACY_AGENTS = [
@@ -78,6 +83,9 @@ function buildResourceAgentConfig(
     sections: buildAgentDiscordSections(agent),
     faqs: buildAgentDiscordFaqs(agent),
     footerLinks: buildDiscordFooterLinks(agent.slug),
+    breadcrumbItems: buildAgentHubBreadcrumbs(agent, `${agent.name} Discord`),
+    relatedResourceLinks: buildAgentRelatedResourceLinks(agent),
+    relatedResourcesTitle: `Related ${agent.name} resources`,
   };
 }
 

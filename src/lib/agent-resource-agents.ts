@@ -8,6 +8,9 @@ export const AGENT_RESOURCE_AGENTS = [
   { id: "boonbuy", name: "BoonBuy", slug: "boonbuy" },
 ] as const;
 
+/** Primary internal hub for shopping agent discovery and comparison. */
+export const AGENTS_HUB_PATH = "/best-shopping-agent";
+
 export type AgentResourceId = (typeof AGENT_RESOURCE_AGENTS)[number]["id"];
 
 export type AgentResourceDefinition = (typeof AGENT_RESOURCE_AGENTS)[number];
