@@ -134,6 +134,16 @@ const nextConfig: NextConfig = {
       { source: "/mulebuy-telegram", destination: "/telegram-mulebuy", permanent: true },
       { source: "/oopbuy-telegram", destination: "/telegram-oopbuy", permanent: true },
       { source: "/kakobuy-telegram", destination: "/telegram-kakobuy", permanent: true },
+      { source: "/hipobuy-telegram", destination: "/telegram-hipobuy", permanent: true },
+      { source: "/usfans-telegram", destination: "/telegram-usfans", permanent: true },
+      { source: "/gtbuy-telegram", destination: "/telegram-gtbuy", permanent: true },
+      { source: "/boonbuy-telegram", destination: "/telegram-boonbuy", permanent: true },
+      { source: "/oopbuy-discord", destination: "/discord-oopbuy", permanent: true },
+      { source: "/kakobuy-discord", destination: "/discord-kakobuy", permanent: true },
+      { source: "/hipobuy-discord", destination: "/discord-hipobuy", permanent: true },
+      { source: "/usfans-discord", destination: "/discord-usfans", permanent: true },
+      { source: "/gtbuy-discord", destination: "/discord-gtbuy", permanent: true },
+      { source: "/boonbuy-discord", destination: "/discord-boonbuy", permanent: true },
     ];
   },
   images: {

@@ -38,7 +38,7 @@ import {
   LITBUY_COUPONS_PATH,
 } from "@/lib/litbuy-coupons-page";
 import { getDatasetSyncedIso } from "@/lib/catalog-meta";
-import { AUTHORITY_PAGE_SLUGS, AUTHORITY_PAGES } from "@/lib/litbuy-authority-pages";
+import { AUTHORITY_PAGE_SLUGS, getAuthorityPage } from "@/lib/litbuy-authority-pages";
 import { SITE_URL } from "@/lib/site";
 
 /** Guides that 301/308 to root authority pages — omit from sitemap to avoid duplicate URLs. */
@@ -83,7 +83,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   for (const slug of AUTHORITY_PAGE_SLUGS) {
-    const page = AUTHORITY_PAGES[slug];
+    const page = getAuthorityPage(slug);
+    if (!page) continue;
     routes.push({
       url: `${SITE_URL}${page.path}`,
       changeFrequency: "weekly",

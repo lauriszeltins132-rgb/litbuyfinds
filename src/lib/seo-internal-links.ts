@@ -29,9 +29,13 @@ export const FINDS_DATABASE_LINKS = [
 
 export const SPREADSHEET_CLUSTER_LINKS = [
   { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
-  { href: "/kakobuy-spreadsheet", label: "Kakobuy spreadsheet" },
-  { href: "/mulebuy-spreadsheet", label: "MuleBuy spreadsheet" },
   { href: "/oopbuy-spreadsheet", label: "OopBuy spreadsheet" },
+  { href: "/kakobuy-spreadsheet", label: "Kakobuy spreadsheet" },
+  { href: "/hipobuy-spreadsheet", label: "HipoBuy spreadsheet" },
+  { href: "/usfans-spreadsheet", label: "USFans spreadsheet" },
+  { href: "/gtbuy-spreadsheet", label: "GTBuy spreadsheet" },
+  { href: "/boonbuy-spreadsheet", label: "BoonBuy spreadsheet" },
+  { href: "/mulebuy-spreadsheet", label: "MuleBuy spreadsheet" },
   { href: "/acbuy-spreadsheet", label: "ACBuy spreadsheet" },
   { href: "/nike-spreadsheet", label: "Nike spreadsheet" },
   { href: "/streetwear-spreadsheet", label: "Streetwear spreadsheet" },
@@ -39,11 +43,35 @@ export const SPREADSHEET_CLUSTER_LINKS = [
 
 export const AGENT_FINDS_LINKS = [
   { href: "/litbuy-finds", label: "LitBuy finds" },
-  { href: "/mulebuy-finds", label: "MuleBuy finds" },
+  { href: "/oopbuy-finds", label: "OopBuy finds" },
   { href: "/kakobuy-finds", label: "Kakobuy finds" },
   { href: "/hipobuy-finds", label: "HipoBuy finds" },
-  { href: "/oopbuy-finds", label: "OopBuy finds" },
+  { href: "/usfans-finds", label: "USFans finds" },
+  { href: "/gtbuy-finds", label: "GTBuy finds" },
+  { href: "/boonbuy-finds", label: "BoonBuy finds" },
+  { href: "/mulebuy-finds", label: "MuleBuy finds" },
   { href: "/acbuy-finds", label: "ACBuy finds" },
+] as const;
+
+export const AGENT_RESOURCE_LINKS = [
+  { href: "/telegram-oopbuy", label: "OopBuy Telegram" },
+  { href: "/telegram-kakobuy", label: "Kakobuy Telegram" },
+  { href: "/telegram-hipobuy", label: "HipoBuy Telegram" },
+  { href: "/telegram-usfans", label: "USFans Telegram" },
+  { href: "/telegram-gtbuy", label: "GTBuy Telegram" },
+  { href: "/telegram-boonbuy", label: "BoonBuy Telegram" },
+  { href: "/discord-oopbuy", label: "OopBuy Discord" },
+  { href: "/discord-kakobuy", label: "Kakobuy Discord" },
+  { href: "/discord-hipobuy", label: "HipoBuy Discord" },
+  { href: "/discord-usfans", label: "USFans Discord" },
+  { href: "/discord-gtbuy", label: "GTBuy Discord" },
+  { href: "/discord-boonbuy", label: "BoonBuy Discord" },
+  { href: "/oopbuy-review", label: "OopBuy review" },
+  { href: "/kakobuy-review", label: "Kakobuy review" },
+  { href: "/hipobuy-review", label: "HipoBuy review" },
+  { href: "/usfans-review", label: "USFans review" },
+  { href: "/gtbuy-review", label: "GTBuy review" },
+  { href: "/boonbuy-review", label: "BoonBuy review" },
 ] as const;
 
 export const CATEGORY_FINDS_LINKS = [

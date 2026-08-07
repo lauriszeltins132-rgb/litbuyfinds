@@ -44,11 +44,14 @@ const HUB_LINKS = [
 
 const AGENT_TELEGRAM_LINKS = [
   { href: "/telegram-litbuy", label: "LitBuy Telegram" },
-  { href: "/telegram-mulebuy", label: "MuleBuy Telegram" },
-  { href: "/telegram-hipobuy", label: "HipoBuy Telegram" },
   { href: "/telegram-oopbuy", label: "OopBuy Telegram" },
-  { href: "/acbuy-telegram", label: "ACBuy Telegram" },
   { href: "/telegram-kakobuy", label: "Kakobuy Telegram" },
+  { href: "/telegram-hipobuy", label: "HipoBuy Telegram" },
+  { href: "/telegram-usfans", label: "USFans Telegram" },
+  { href: "/telegram-gtbuy", label: "GTBuy Telegram" },
+  { href: "/telegram-boonbuy", label: "BoonBuy Telegram" },
+  { href: "/telegram-mulebuy", label: "MuleBuy Telegram" },
+  { href: "/acbuy-telegram", label: "ACBuy Telegram" },
 ];
 
 export const TELEGRAM_COMMUNITY_FOOTER_LINKS = [
