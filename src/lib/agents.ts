@@ -3,6 +3,9 @@ import type { Product } from "./types";
 
 const LITBUY_SIGNUP_URL = "https://litbuy.com/register?inviteCode=SMKS";
 const LITBUY_INVITE_CODE = "SMKS";
+const BOONBUY_SIGNUP_URL =
+  "https://boonbuy.com/register?inviteCode=32IJIHM6P";
+const BOONBUY_INVITE_CODE = "32IJIHM6P";
 
 export type AgentId =
   | "litbuy"
@@ -93,8 +96,8 @@ export const BUYING_AGENTS: AgentDefinition[] = [
     name: "BoonBuy",
     slug: "boonbuy",
     recommended: false,
-    affiliateEnabled: false,
-    signupUrl: "https://boonbuy.com/register",
+    affiliateEnabled: true,
+    signupUrl: BOONBUY_SIGNUP_URL,
     description: "Import finds and open listings on BoonBuy.",
     shortLabel: "BoonBuy",
   },
@@ -201,7 +204,7 @@ const AGENT_URL_BUILDERS: Record<AgentId, AgentUrlBuilder> = {
   },
   boonbuy: {
     fromListing: (platform, id) =>
-      `https://boonbuy.com/product/${platform}/${id}`,
+      `https://boonbuy.com/product/${platform}/${id}?inviteCode=${BOONBUY_INVITE_CODE}`,
     search: (query) =>
       `https://boonbuy.com/search?q=${encodeURIComponent(query)}`,
   },
@@ -216,8 +219,12 @@ export function buildAgentProductUrl(
 
   if (!affiliateLink) return null;
 
-  if (agent.affiliateEnabled && /litbuy\.com/i.test(affiliateLink)) {
+  if (agent.id === "litbuy" && agent.affiliateEnabled && /litbuy\.com/i.test(affiliateLink)) {
     return withCurrentLitBuyInvite(affiliateLink);
+  }
+
+  if (agent.id === "boonbuy" && agent.affiliateEnabled && /boonbuy\.com/i.test(affiliateLink)) {
+    return withCurrentBoonBuyInvite(affiliateLink);
   }
 
   const listing = extractListingFromAffiliateLink(affiliateLink);
@@ -245,6 +252,19 @@ export function withCurrentLitBuyInvite(url: string): string {
   return url.includes("?")
     ? `${url}&inviteCode=${LITBUY_INVITE_CODE}`
     : `${url}?inviteCode=${LITBUY_INVITE_CODE}`;
+}
+
+/** Keep BoonBuy checkout links on the current invite code. */
+export function withCurrentBoonBuyInvite(url: string): string {
+  if (/inviteCode=/i.test(url)) {
+    return url.replace(
+      /inviteCode=[^&]+/i,
+      `inviteCode=${BOONBUY_INVITE_CODE}`
+    );
+  }
+  return url.includes("?")
+    ? `${url}&inviteCode=${BOONBUY_INVITE_CODE}`
+    : `${url}?inviteCode=${BOONBUY_INVITE_CODE}`;
 }
 
 /** @deprecated Use BUYING_AGENTS — kept for PreferencesContext compatibility */
