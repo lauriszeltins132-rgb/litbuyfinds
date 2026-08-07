@@ -3,7 +3,7 @@ import { getFindsAuthorityStats } from "./finds-authority";
 
 export const META_SCALE = PUBLIC_CATALOG_COUNT;
 
-export const META_AGENTS = "LitBuy, MuleBuy, OopBuy, Kakobuy and ACBuy";
+export const META_AGENTS = "LitBuy, USFans, GTBuy, BoonBuy, OopBuy, Kakobuy and HipoBuy";
 
 /** Value stack used across descriptions — no weak openers (browse/explore/discover). */
 export const META_VALUE_STACK =

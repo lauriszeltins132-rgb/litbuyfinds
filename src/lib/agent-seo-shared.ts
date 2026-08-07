@@ -15,6 +15,25 @@ export const SEO_AGENT_IDS = [
 
 export type SeoAgentId = (typeof SEO_AGENT_IDS)[number];
 
+/** SEO-only agents removed from the active buying selector but kept for landing pages. */
+type SeoAgentSource = {
+  name: string;
+  slug: string;
+  signupUrl: string;
+  description: string;
+  shortLabel: string;
+};
+
+const LEGACY_SEO_AGENTS: Partial<Record<SeoAgentId, SeoAgentSource>> = {
+  mulebuy: {
+    name: "MuleBuy",
+    slug: "mulebuy",
+    signupUrl: "https://mulebuy.com/register",
+    description: "Search or import finds on MuleBuy.",
+    shortLabel: "MuleBuy",
+  },
+};
+
 export type SeoAgentDefinition = {
   id: SeoAgentId;
   name: string;
@@ -27,7 +46,8 @@ export type SeoAgentDefinition = {
 };
 
 function getAgent(id: SeoAgentId) {
-  const agent = BUYING_AGENTS.find((entry) => entry.id === id);
+  const agent =
+    BUYING_AGENTS.find((entry) => entry.id === id) ?? LEGACY_SEO_AGENTS[id];
   if (!agent) {
     throw new Error(`Missing SEO agent config: ${id}`);
   }

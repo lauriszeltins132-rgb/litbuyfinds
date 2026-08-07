@@ -3,14 +3,18 @@ import type { Product } from "./types";
 
 const LITBUY_SIGNUP_URL = "https://litbuy.com/register?inviteCode=SMKS";
 const LITBUY_INVITE_CODE = "SMKS";
+const BOONBUY_SIGNUP_URL =
+  "https://boonbuy.com/register?inviteCode=32IJIHM6P";
+const BOONBUY_INVITE_CODE = "32IJIHM6P";
 
 export type AgentId =
   | "litbuy"
   | "oopbuy"
   | "kakobuy"
   | "hipobuy"
-  | "acbuy"
-  | "mulebuy";
+  | "usfans"
+  | "gtbuy"
+  | "boonbuy";
 
 export type MarketplacePlatform = "weidian" | "taobao" | "1688";
 
@@ -68,24 +72,34 @@ export const BUYING_AGENTS: AgentDefinition[] = [
     shortLabel: "HipoBuy",
   },
   {
-    id: "acbuy",
-    name: "ACBuy",
-    slug: "acbuy",
+    id: "usfans",
+    name: "USFans",
+    slug: "usfans",
     recommended: false,
     affiliateEnabled: false,
-    signupUrl: "https://www.acbuy.com/register",
-    description: "Import marketplace links on ACBuy.",
-    shortLabel: "ACBuy",
+    signupUrl: "https://www.usfans.com/register",
+    description: "Paste or import Weidian and Taobao links on USFans.",
+    shortLabel: "USFans",
   },
   {
-    id: "mulebuy",
-    name: "MuleBuy",
-    slug: "mulebuy",
+    id: "gtbuy",
+    name: "GTBuy",
+    slug: "gtbuy",
     recommended: false,
     affiliateEnabled: false,
-    signupUrl: "https://mulebuy.com/register",
-    description: "Search or import finds on MuleBuy.",
-    shortLabel: "MuleBuy",
+    signupUrl: "https://www.gtbuy.com/register",
+    description: "Open marketplace listings on GTBuy.",
+    shortLabel: "GTBuy",
+  },
+  {
+    id: "boonbuy",
+    name: "BoonBuy",
+    slug: "boonbuy",
+    recommended: false,
+    affiliateEnabled: true,
+    signupUrl: BOONBUY_SIGNUP_URL,
+    description: "Import finds and open listings on BoonBuy.",
+    shortLabel: "BoonBuy",
   },
 ];
 
@@ -173,17 +187,26 @@ const AGENT_URL_BUILDERS: Record<AgentId, AgentUrlBuilder> = {
     search: (query) =>
       `https://hipobuy.com/search?keyword=${encodeURIComponent(query)}`,
   },
-  acbuy: {
-    fromListing: (platform, id) =>
-      `https://www.acbuy.com/product/${platform}/${id}`,
+  usfans: {
+    fromListing: (platform, id) => {
+      const platformCode =
+        platform === "taobao" ? 1 : platform === "1688" ? 2 : 3;
+      return `https://www.usfans.com/product/${platformCode}/${id}`;
+    },
     search: (query) =>
-      `https://www.acbuy.com/search?keyword=${encodeURIComponent(query)}`,
+      `https://www.usfans.com/search?q=${encodeURIComponent(query)}`,
   },
-  mulebuy: {
+  gtbuy: {
     fromListing: (platform, id) =>
-      `https://mulebuy.com/product/${platform}/${id}`,
+      `https://www.gtbuy.com/product/${platform}/${id}`,
     search: (query) =>
-      `https://mulebuy.com/search?q=${encodeURIComponent(query)}`,
+      `https://www.gtbuy.com/search?q=${encodeURIComponent(query)}`,
+  },
+  boonbuy: {
+    fromListing: (platform, id) =>
+      `https://boonbuy.com/product/${platform}/${id}?inviteCode=${BOONBUY_INVITE_CODE}`,
+    search: (query) =>
+      `https://boonbuy.com/search?q=${encodeURIComponent(query)}`,
   },
 };
 
@@ -196,8 +219,12 @@ export function buildAgentProductUrl(
 
   if (!affiliateLink) return null;
 
-  if (agent.affiliateEnabled && /litbuy\.com/i.test(affiliateLink)) {
+  if (agent.id === "litbuy" && agent.affiliateEnabled && /litbuy\.com/i.test(affiliateLink)) {
     return withCurrentLitBuyInvite(affiliateLink);
+  }
+
+  if (agent.id === "boonbuy" && agent.affiliateEnabled && /boonbuy\.com/i.test(affiliateLink)) {
+    return withCurrentBoonBuyInvite(affiliateLink);
   }
 
   const listing = extractListingFromAffiliateLink(affiliateLink);
@@ -225,6 +252,19 @@ export function withCurrentLitBuyInvite(url: string): string {
   return url.includes("?")
     ? `${url}&inviteCode=${LITBUY_INVITE_CODE}`
     : `${url}?inviteCode=${LITBUY_INVITE_CODE}`;
+}
+
+/** Keep BoonBuy checkout links on the current invite code. */
+export function withCurrentBoonBuyInvite(url: string): string {
+  if (/inviteCode=/i.test(url)) {
+    return url.replace(
+      /inviteCode=[^&]+/i,
+      `inviteCode=${BOONBUY_INVITE_CODE}`
+    );
+  }
+  return url.includes("?")
+    ? `${url}&inviteCode=${BOONBUY_INVITE_CODE}`
+    : `${url}?inviteCode=${BOONBUY_INVITE_CODE}`;
 }
 
 /** @deprecated Use BUYING_AGENTS — kept for PreferencesContext compatibility */
