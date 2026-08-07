@@ -20,11 +20,7 @@ export const SITE_ALTERNATE_NAMES = [
 export const SITE_ENTITY_DESCRIPTION =
   "LitBuy Finds is a product discovery platform for QC photos, spreadsheet finds, fashion finds, sneaker finds, and multi-agent shopping links.";
 
-const SUPPORTED_AGENT_NAMES = BUYING_AGENTS.filter((a) =>
-  ["litbuy", "mulebuy", "oopbuy", "acbuy", "kakobuy"].includes(a.id)
-)
-  .map((a) => a.name)
-  .join(", ");
+const SUPPORTED_AGENT_NAMES = BUYING_AGENTS.map((a) => a.name).join(", ");
 
 export const HERO_ENTITY_LINE =
   "Verified listings from Weidian and Taobao — searchable like a litbuy spreadsheet catalog, with litbuy QC finds updated daily.";

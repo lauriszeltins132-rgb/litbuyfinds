@@ -16,10 +16,11 @@ type AgentSelectorProps = {
 /** Primary agents shown first in mobile sheet */
 const MOBILE_AGENT_ORDER: AgentId[] = [
   "litbuy",
-  "mulebuy",
+  "usfans",
   "oopbuy",
   "kakobuy",
-  "acbuy",
+  "gtbuy",
+  "boonbuy",
   "hipobuy",
 ];
 
