@@ -1,3 +1,4 @@
+import { getAgentReviewPage, AGENT_REVIEW_SLUGS } from "./agent-review-pages";
 import type { StaticPageSection } from "./static-pages";
 import { getDatasetSyncedIso } from "./catalog-meta";
 import { LITBUY_SIGNUP_URL, SOCIAL_LINKS } from "./constants";
@@ -1089,8 +1090,11 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
   },
 };
 
-export const AUTHORITY_PAGE_SLUGS = Object.keys(AUTHORITY_PAGES);
+export const AUTHORITY_PAGE_SLUGS = [
+  ...Object.keys(AUTHORITY_PAGES),
+  ...AGENT_REVIEW_SLUGS,
+];
 
 export function getAuthorityPage(slug: string): AuthorityPage | undefined {
-  return AUTHORITY_PAGES[slug];
+  return AUTHORITY_PAGES[slug] ?? getAgentReviewPage(slug);
 }

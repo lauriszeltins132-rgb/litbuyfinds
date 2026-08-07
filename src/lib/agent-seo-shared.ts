@@ -7,10 +7,13 @@ import {
 
 export const SEO_AGENT_IDS = [
   "litbuy",
-  "mulebuy",
-  "hipobuy",
   "oopbuy",
   "kakobuy",
+  "hipobuy",
+  "usfans",
+  "gtbuy",
+  "boonbuy",
+  "mulebuy",
 ] as const;
 
 export type SeoAgentId = (typeof SEO_AGENT_IDS)[number];
@@ -90,6 +93,8 @@ export function getAgentPlatformPaths(agent: SeoAgentDefinition) {
   return {
     telegram: `/telegram-${agent.slug}`,
     discord: `/discord-${agent.slug}`,
+    spreadsheet: `/${agent.slug}-spreadsheet`,
+    review: `/${agent.slug}-review`,
     coupons: agent.id === "litbuy" ? LITBUY_SIGNUP_URL : `/${agent.slug}-coupons`,
     finds: agent.findsPath,
   };
@@ -110,8 +115,10 @@ export function buildTelegramFooterLinks(currentSlug: string) {
   if (paths && agent) {
     links.push(
       { href: paths.discord, label: `${agent.name} Discord` },
-      { href: paths.coupons, label: `${agent.name} coupons` },
-      { href: paths.finds, label: `${agent.name} finds` }
+      { href: paths.spreadsheet, label: `${agent.name} spreadsheet` },
+      { href: paths.review, label: `${agent.name} review` },
+      { href: paths.finds, label: `${agent.name} finds` },
+      { href: "/latest-finds", label: "Latest finds" }
     );
   }
 
@@ -134,8 +141,10 @@ export function buildDiscordFooterLinks(currentSlug: string) {
   if (paths && agent) {
     links.push(
       { href: paths.telegram, label: `${agent.name} Telegram` },
-      { href: paths.coupons, label: `${agent.name} coupons` },
-      { href: paths.finds, label: `${agent.name} finds` }
+      { href: paths.spreadsheet, label: `${agent.name} spreadsheet` },
+      { href: paths.review, label: `${agent.name} review` },
+      { href: paths.finds, label: `${agent.name} finds` },
+      { href: "/latest-finds", label: "Latest finds" }
     );
   }
 
@@ -155,6 +164,8 @@ export function buildCouponFooterLinks(
     { href: paths.finds, label: `${agent.name} finds` },
     { href: paths.telegram, label: `${agent.name} Telegram` },
     { href: paths.discord, label: `${agent.name} Discord` },
+    { href: paths.spreadsheet, label: `${agent.name} spreadsheet` },
+    { href: paths.review, label: `${agent.name} review` },
     ...siblingCouponPaths.filter((link) => link.href !== currentPath),
     ...SEO_AGENTS.filter((entry) => entry.slug !== agent.slug).map((entry) => ({
       href: `/${entry.slug}-coupons`,

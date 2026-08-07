@@ -1,7 +1,16 @@
 import type { StaticPageSection } from "./static-pages";
+import { AGENT_RESOURCE_AGENTS } from "./agent-resource-agents";
+import { buildAgentSpreadsheetConfig } from "./agent-resource-content";
 import { SEO_EXPANSION_PAGES } from "./seo-expansion-config";
 import { TOP_LISTS } from "./top-lists";
 import type { Product } from "./types";
+
+const AGENT_RESOURCE_SPREADSHEET_PAGES = Object.fromEntries(
+  AGENT_RESOURCE_AGENTS.map((agent) => [
+    `${agent.slug}-spreadsheet`,
+    buildAgentSpreadsheetConfig(agent),
+  ])
+);
 
 export type SeoLandingPageType =
   | "collection"
@@ -796,6 +805,7 @@ export const SEO_LANDING_CONFIG: Record<string, SeoLandingPageEntry> = {
     productSectionTitle: "Sample finds to compare",
   },
 
+  ...AGENT_RESOURCE_SPREADSHEET_PAGES,
   ...SEO_EXPANSION_PAGES,
 };
 

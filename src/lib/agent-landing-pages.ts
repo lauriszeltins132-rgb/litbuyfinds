@@ -5,9 +5,12 @@ import { getAllProducts, getTrendingProducts } from "./products";
 
 const AGENT_LINKS = [
   { href: "/litbuy-finds", label: "LitBuy finds" },
-  { href: "/kakobuy-finds", label: "Kakobuy finds" },
   { href: "/oopbuy-finds", label: "OopBuy finds" },
+  { href: "/kakobuy-finds", label: "Kakobuy finds" },
   { href: "/hipobuy-finds", label: "HipoBuy finds" },
+  { href: "/usfans-finds", label: "USFans finds" },
+  { href: "/gtbuy-finds", label: "GTBuy finds" },
+  { href: "/boonbuy-finds", label: "BoonBuy finds" },
   { href: "/acbuy-finds", label: "ACBuy finds" },
   { href: "/mulebuy-finds", label: "MuleBuy finds" },
   { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
@@ -153,6 +156,45 @@ export const AGENT_LANDING_PAGES: Record<string, SeoLandingConfig> = {
       "Discover verified finds and choose MuleBuy as your preferred agent, or stay with LitBuy — our recommended option for QC and verified links.",
     extraParagraph:
       "MuleBuy users get the same searchable LitBuy Finds experience, with agent choice saved while you browse the catalog.",
+  }),
+  "usfans-finds": buildAgentLandingConfig({
+    slug: "usfans-finds",
+    agentName: "USFans",
+    title: "USFans Finds & Spreadsheet",
+    metaDescription:
+      "Browse verified sneaker and fashion finds with LitBuy recommended, or choose USFans and other supported agents at checkout.",
+    badge: "USFans finds",
+    h1: "USFans Finds & Spreadsheet",
+    intro:
+      "Discover indexed Weidian and Taobao listings on LitBuy Finds and open them on USFans when that is your preferred agent.",
+    extraParagraph:
+      "USFans shoppers can use the same searchable catalog, QC references, and category filters — then route purchases through USFans from the Buy button.",
+  }),
+  "gtbuy-finds": buildAgentLandingConfig({
+    slug: "gtbuy-finds",
+    agentName: "GTBuy",
+    title: "GTBuy Finds & Spreadsheet",
+    metaDescription:
+      "Explore QC-curated finds with LitBuy recommended, or choose GTBuy and other supported agents before you buy.",
+    badge: "GTBuy finds",
+    h1: "GTBuy Finds & Spreadsheet",
+    intro:
+      "LitBuy Finds helps you discover trending listings. Set GTBuy as your preferred agent, or keep LitBuy as the recommended option.",
+    extraParagraph:
+      "GTBuy users browse the same product grid as every other agent — photos, pricing, and QC references where available.",
+  }),
+  "boonbuy-finds": buildAgentLandingConfig({
+    slug: "boonbuy-finds",
+    agentName: "BoonBuy",
+    title: "BoonBuy Finds & Spreadsheet",
+    metaDescription:
+      "Verified streetwear and sneaker finds with LitBuy recommended. Choose BoonBuy or another agent before buying.",
+    badge: "BoonBuy finds",
+    h1: "BoonBuy Finds & Spreadsheet",
+    intro:
+      "Browse the LitBuy Finds catalog and open products on BoonBuy when that is your agent of choice. LitBuy stays the recommended default.",
+    extraParagraph:
+      "BoonBuy shoppers get curated product pages, filters, and QC-linked listings — then checkout through BoonBuy from any product page.",
   }),
 };
 
