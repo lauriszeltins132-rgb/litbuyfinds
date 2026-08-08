@@ -6,7 +6,7 @@ LitBuy Finds uses a **static JSON catalog** (`src/data/products.json`) baked int
 
 | Layer | Role |
 |-------|------|
-| **GitHub Actions** (`spreadsheet-sync.yml`) | **Primary import** — monthly schedule + manual trigger. Runs full sync, regenerates manifests, commits to `main`, Vercel auto-deploys. |
+| **GitHub Actions** (`spreadsheet-sync.yml`) | **Primary import** — weekly schedule + manual trigger. Runs full sync, regenerates manifests, commits to `main`, Vercel auto-deploys. |
 | **Vercel Cron** (`/api/cron/spreadsheet-check`) | **Weekly dry-run check** — reports pending imports without modifying data. |
 | **Local / manual** (`npm run spreadsheet:sync`) | On-demand import before pushing. |
 
@@ -39,7 +39,7 @@ npm run spreadsheet:check
 
 Workflow: `.github/workflows/spreadsheet-sync.yml`
 
-- **Schedule:** 1st of each month, 08:00 UTC
+- **Schedule:** Every Monday, 08:00 UTC
 - **Manual:** Actions → Spreadsheet sync → Run workflow
 
 No extra secrets required — uses the default `GITHUB_TOKEN` for commits to `main`.
@@ -95,4 +95,4 @@ New products automatically appear on:
 
 ## Adjusting the schedule
 
-Edit `.github/workflows/spreadsheet-sync.yml` cron expression if the sheet updates more or less often than monthly.
+Edit `.github/workflows/spreadsheet-sync.yml` cron expression if the sheet updates more or less often than weekly.
