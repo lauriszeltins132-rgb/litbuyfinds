@@ -1,0 +1,59 @@
+name: Spreadsheet sync
+
+# Imports new products from the live Google Sheet, regenerates manifests,
+# commits to main, and triggers a Vercel production deploy.
+on:
+  schedule:
+    # 1st of each month at 08:00 UTC (adjust if your sheet updates on a different cadence)
+    - cron: "0 8 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: spreadsheet-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run spreadsheet sync
+        env:
+          SYNC_TRIGGER: github-actions
+        run: npm run spreadsheet:sync
+
+      - name: Commit and push catalog updates
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            data/spreadsheet-import-log.json \
+            src/data/products.json \
+            src/data/search-index.json \
+            src/data/site-navigation.json \
+            src/data/card-props.json \
+            src/data/dead-image-urls.json \
+            src/data/image-quality-manifest.json \
+            src/data/damaged-processed-manifest.json \
+            src/generated/dataset-meta.ts
+          if git diff --staged --quiet; then
+            echo "No catalog changes to commit."
+            exit 0
+          fi
+          git commit -m "chore(catalog): automated spreadsheet sync $(date -u +%Y-%m-%d)"
+          git push
