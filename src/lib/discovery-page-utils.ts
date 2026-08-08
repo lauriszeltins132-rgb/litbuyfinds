@@ -19,17 +19,16 @@ export type DiscoveryHeroStat = {
   value: string;
 };
 
-/** First 1–2 sentences for above-the-fold hero copy. Full intro stays in SEO block below. */
-export function getHeroIntro(intro: string, maxSentences = 2): string {
+/** First sentence for above-the-fold hero copy. Full intro stays in SEO block below. */
+export function getHeroIntro(intro: string, maxChars = 120): string {
   const trimmed = intro.trim();
   if (!trimmed) return "";
 
   const sentences = trimmed.match(/[^.!?]+[.!?]+(?:\s|$)/g);
-  if (!sentences || sentences.length <= maxSentences) {
-    return trimmed;
-  }
+  const first = (sentences?.[0] ?? trimmed).trim();
 
-  return sentences.slice(0, maxSentences).join(" ").trim();
+  if (first.length <= maxChars) return first;
+  return `${first.slice(0, maxChars).trimEnd()}…`;
 }
 
 export function getDiscoveryHeroStats(
