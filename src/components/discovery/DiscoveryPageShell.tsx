@@ -3,6 +3,7 @@ import ContentFreshness, {
   type ContentFreshnessVariant,
 } from "@/components/ContentFreshness";
 import DiscoveryBrowseRails from "@/components/discovery/DiscoveryBrowseRails";
+import DiscoveryRail from "@/components/DiscoveryRail";
 import ProductGrid from "@/components/ProductGrid";
 import type { StaticPageSection } from "@/lib/static-pages";
 import {
@@ -62,10 +63,11 @@ export default function DiscoveryPageShell({
   const displayedProducts = products.slice(0, productLimit);
   const hasCompareGroups = compareGroups.some((group) => group.products.length > 0);
   const hasPrimaryProducts = displayedProducts.length > 0 && !hasCompareGroups;
+  const heroStatLine = heroStats.map((stat) => stat.value).join(" · ");
 
   return (
     <>
-      <section className="px-4 pb-4 pt-6 sm:px-6">
+      <section className="px-4 pb-2 pt-4 sm:px-6">
         <div className="mx-auto max-w-7xl">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
             {badge}
@@ -74,21 +76,10 @@ export default function DiscoveryPageShell({
             {h1}
           </h1>
           {heroIntro ? (
-            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted sm:text-base">
-              {heroIntro}
-            </p>
+            <p className="mt-2 max-w-xl text-sm text-muted">{heroIntro}</p>
           ) : null}
-
-          <div className="mt-4 flex flex-wrap items-center gap-2">
-            {heroStats.map((stat) => (
-              <div
-                key={stat.label}
-                className="rounded-xl border border-border/70 bg-surface/20 px-3 py-2"
-              >
-                <p className="text-sm font-black text-foreground">{stat.value}</p>
-                <p className="text-[11px] font-semibold text-muted">{stat.label}</p>
-              </div>
-            ))}
+          <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-semibold text-muted">
+            <span>{heroStatLine}</span>
             {freshnessVariant ? (
               <ContentFreshness variant={freshnessVariant} display="badge" />
             ) : null}
@@ -96,8 +87,19 @@ export default function DiscoveryPageShell({
         </div>
       </section>
 
+      {hasPrimaryProducts ? (
+        <DiscoveryRail
+          title={productSectionTitle ?? "Browse finds"}
+          subtitle="Tap a product to view photos, price, and buy link"
+          href={path}
+          products={displayedProducts.slice(0, 12)}
+          preloadImages
+          tight
+        />
+      ) : null}
+
       {hasCompareGroups
-        ? compareGroups.map((group, index) =>
+        ? compareGroups.map((group) =>
             group.products.length > 0 ? (
               <section key={group.label} className="px-4 pb-4 pt-2 sm:px-6">
                 <div className="mx-auto max-w-7xl">
@@ -112,10 +114,15 @@ export default function DiscoveryPageShell({
         : null}
 
       {hasPrimaryProducts ? (
-        <section className="px-4 pb-4 pt-2 sm:px-6">
+        <section className="px-4 pb-6 pt-2 sm:px-6">
           <div className="mx-auto max-w-7xl">
-            <h2 className="sr-only">{productSectionTitle ?? "Featured finds"}</h2>
-            <ProductGrid products={displayedProducts} />
+            <h2 className="text-lg font-black sm:text-xl">All picks</h2>
+            <p className="mt-1 text-sm text-muted">
+              {displayedProducts.length.toLocaleString()} curated listings with verified buy links
+            </p>
+            <div className="mt-4">
+              <ProductGrid products={displayedProducts} />
+            </div>
           </div>
         </section>
       ) : null}
@@ -127,14 +134,17 @@ export default function DiscoveryPageShell({
         categories={browseCategories}
       />
 
-      <article className="px-4 py-8 sm:px-6">
+      <article className="border-t border-border px-4 py-8 sm:px-6">
         <div className="mx-auto max-w-3xl">
-          {intro && intro !== heroIntro ? (
-            <p className="text-base leading-relaxed text-muted">{intro}</p>
+          <h2 className="text-sm font-bold uppercase tracking-[0.16em] text-muted">
+            About this page
+          </h2>
+          {intro ? (
+            <p className="mt-3 text-base leading-relaxed text-muted">{intro}</p>
           ) : null}
 
           {sections.length > 0 ? (
-            <div className={`space-y-10 ${intro && intro !== heroIntro ? "mt-10" : ""}`}>
+            <div className="mt-10 space-y-10">
               {sections.map((section) => {
                 const Heading = section.level === 3 ? "h3" : "h2";
                 return (

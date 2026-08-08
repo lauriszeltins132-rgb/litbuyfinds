@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import CatalogPanel from "@/components/CatalogPanel";
-import ProductGrid from "@/components/ProductGrid";
+import DiscoveryRail from "@/components/DiscoveryRail";
 import RelatedGuides from "@/components/RelatedGuides";
 import SignupCard from "@/components/SignupCard";
 import BestOfLinks from "@/components/BestOfLinks";
@@ -104,17 +104,14 @@ export default async function CategoryLandingPage({ params }: CategoryPageProps)
       </section>
 
       {featuredProducts.length > 0 ? (
-        <section className="px-4 pb-4 sm:px-6">
-          <div className="mx-auto max-w-7xl">
-            <h2 className="text-xl font-black sm:text-2xl">Featured {resolved.name} finds</h2>
-            <p className="mt-1 text-sm text-muted">
-              Top picks with photos and verified buy links — filter the full catalog below.
-            </p>
-            <div className="mt-4">
-              <ProductGrid products={featuredProducts} />
-            </div>
-          </div>
-        </section>
+        <DiscoveryRail
+          title={`Featured ${resolved.name} finds`}
+          subtitle="Top picks with photos and verified buy links"
+          href={pagePath}
+          products={featuredProducts}
+          preloadImages
+          tight
+        />
       ) : null}
 
       <Suspense fallback={<div className="py-24 text-center text-muted">Loading...</div>}>
