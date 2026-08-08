@@ -2,7 +2,11 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { trackBrokenImage } from "@/lib/analytics-events";
-import { validateImageUrl } from "@/lib/image-url";
+import {
+  hasPlausibleImageDimensions,
+  validateImageUrl,
+} from "@/lib/image-url";
+import { IMAGE_LOAD_TIMEOUT_MS } from "@/lib/image-load-timeout";
 import ImageUnavailablePlaceholder from "./ImageUnavailablePlaceholder";
 
 type ProductCardImageProps = {
@@ -83,7 +87,7 @@ export default function ProductCardImage({
 
   const confirmLoaded = useCallback(
     (img: HTMLImageElement) => {
-      if (img.naturalWidth <= 0 || img.naturalHeight <= 0) {
+      if (!hasPlausibleImageDimensions(img.naturalWidth, img.naturalHeight)) {
         advanceOrFail();
         return;
       }
@@ -119,6 +123,16 @@ export default function ProductCardImage({
       cancelled = true;
     };
   }, [confirmLoaded, displaySrc, failed, srcIndex]);
+
+  useEffect(() => {
+    if (failed || !displaySrc || loaded) return;
+
+    const timer = window.setTimeout(() => {
+      advanceOrFail();
+    }, IMAGE_LOAD_TIMEOUT_MS);
+
+    return () => window.clearTimeout(timer);
+  }, [advanceOrFail, displaySrc, failed, loaded, srcIndex]);
 
   if (failed || !displaySrc) {
     return (

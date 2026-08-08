@@ -91,7 +91,7 @@ export default async function HomePage() {
           <DiscoveryRail
             title="Best Under $20"
             subtitle="Budget-friendly finds that still look premium"
-            href="/best-under-30"
+            href="/best-under-20"
             products={rails.bestUnder20}
           />
         </RevealOnScroll>
