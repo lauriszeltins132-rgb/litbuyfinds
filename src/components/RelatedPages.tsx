@@ -3,6 +3,7 @@ import { getAllGuides } from "@/lib/guides";
 import { getCategories, getAllProducts } from "@/lib/products";
 import { getBrandsFromProducts } from "@/lib/brands";
 import { SHARE_COLLECTION_SLUGS, SHARE_COLLECTIONS } from "@/lib/share-collections";
+import { AGENTS_HUB_PATH } from "@/lib/agent-resource-agents";
 
 const FEATURED_BRAND_SLUGS = [
   "nike",
@@ -64,7 +65,11 @@ const FEATURED_COLLECTION_SLUGS = [
 
 const FEATURED_HUB_PATHS = [
   { href: "/finds", label: "Finds hub" },
+  { href: AGENTS_HUB_PATH, label: "Shopping agents" },
+  { href: "/rep-agent-spreadsheets", label: "Agent spreadsheets" },
   { href: "/litbuy-discord", label: "LitBuy Discord" },
+  { href: "/telegram-usfans", label: "USFans Telegram" },
+  { href: "/telegram-oopbuy", label: "OopBuy Telegram" },
   { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
   { href: "/litbuy-coupons", label: "LitBuy coupons" },
   { href: "/guides", label: "Guides hub" },

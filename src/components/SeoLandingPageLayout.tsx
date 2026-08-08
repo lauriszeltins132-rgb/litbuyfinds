@@ -7,6 +7,11 @@ import ProductGrid from "@/components/ProductGrid";
 import SchemaScript from "@/components/SchemaScript";
 import RelatedPages from "@/components/RelatedPages";
 import type { SeoLandingPageEntry } from "@/lib/seo-landing-config";
+import { getAgentResourceBySlug } from "@/lib/agent-resource-agents";
+import {
+  buildAgentHubBreadcrumbs,
+  buildAgentRelatedResourceLinks,
+} from "@/lib/agent-resource-content";
 import {
   getFreshnessSchemaDates,
   resolveFreshnessDescription,
@@ -70,15 +75,25 @@ export default function SeoLandingPageLayout({ entry }: SeoLandingPageLayoutProp
       ? "latest-updated"
       : getUpdateFrequencyFreshnessVariant(entry.updateFrequency);
 
-  const breadcrumbItems = [
-    { label: "Home", href: "/" },
-    ...(entry.type === "collection"
-      ? [{ label: "Finds", href: "/finds" }]
-      : entry.type === "freshness"
-        ? [{ label: "Finds", href: "/finds" }]
-        : []),
-    { label: h1 },
-  ];
+  const agent = entry.agentResourceSlug
+    ? getAgentResourceBySlug(entry.agentResourceSlug)
+    : undefined;
+
+  const breadcrumbItems = agent
+    ? buildAgentHubBreadcrumbs(agent, `${agent.name} spreadsheet`)
+    : [
+        { label: "Home", href: "/" },
+        ...(entry.type === "collection"
+          ? [{ label: "Finds", href: "/finds" }]
+          : entry.type === "freshness"
+            ? [{ label: "Finds", href: "/finds" }]
+            : []),
+        { label: h1 },
+      ];
+
+  const agentRelatedResourceLinks = agent
+    ? buildAgentRelatedResourceLinks(agent)
+    : null;
 
   const schema: Record<string, unknown>[] = [
     buildWebPageSchema({
@@ -251,6 +266,26 @@ export default function SeoLandingPageLayout({ entry }: SeoLandingPageLayoutProp
                   </div>
                 ))}
               </dl>
+            </section>
+          ) : null}
+
+          {agent && agentRelatedResourceLinks ? (
+            <section className="mt-10 border-t border-border pt-8">
+              <h2 className="text-sm font-bold uppercase tracking-[0.16em] text-muted">
+                Related {agent.name} resources
+              </h2>
+              <ul className="mt-4 flex flex-wrap gap-2">
+                {agentRelatedResourceLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="rounded-full border border-border px-3 py-1.5 text-xs font-bold text-foreground/80 hover:border-accent/40 hover:text-accent"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </section>
           ) : null}
 

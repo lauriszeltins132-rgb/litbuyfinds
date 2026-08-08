@@ -1,5 +1,7 @@
 import SmartLink from "@/components/SmartLink";
 import { FINDS_DATABASE_HUB_LINKS } from "@/lib/finds-authority";
+import { AGENTS_HUB_PATH } from "@/lib/agent-resource-agents";
+import { AGENT_RESOURCE_LINKS } from "@/lib/seo-internal-links";
 
 const SECTIONS = [
   {
@@ -40,6 +42,19 @@ const SECTIONS = [
       { href: "/categories/accessories", label: "Accessories" },
       { href: "/categories/tshirts-and-shorts", label: "T-shirts" },
       { href: "/categories/electronics", label: "Electronics" },
+    ],
+  },
+  {
+    title: "Shopping agents",
+    links: [
+      { href: AGENTS_HUB_PATH, label: "Compare shopping agents" },
+      { href: "/rep-agent-spreadsheets", label: "Agent spreadsheets hub" },
+      { href: "/telegram", label: "Telegram finds hub" },
+      { href: "/litbuy-discord", label: "LitBuy Discord" },
+      ...AGENT_RESOURCE_LINKS.slice(0, 12).map((link) => ({
+        href: link.href,
+        label: link.label,
+      })),
     ],
   },
   {

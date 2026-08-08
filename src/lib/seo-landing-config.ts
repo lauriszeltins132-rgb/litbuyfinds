@@ -1,6 +1,9 @@
 import type { StaticPageSection } from "./static-pages";
 import { AGENT_RESOURCE_AGENTS } from "./agent-resource-agents";
-import { buildAgentSpreadsheetConfig } from "./agent-resource-content";
+import {
+  buildAgentHubDiscoveryLinks,
+  buildAgentSpreadsheetConfig,
+} from "./agent-resource-content";
 import { SEO_EXPANSION_PAGES } from "./seo-expansion-config";
 import { TOP_LISTS } from "./top-lists";
 import type { Product } from "./types";
@@ -68,6 +71,8 @@ export type SeoLandingPageEntry = {
   productSectionTitle?: string;
   productLimit?: number;
   minProducts?: number;
+  /** When set, spreadsheet pages get agent hub breadcrumbs and a related-resources block. */
+  agentResourceSlug?: string;
 };
 
 function pathFor(slug: string): string {
@@ -558,7 +563,7 @@ export const SEO_LANDING_CONFIG: Record<string, SeoLandingPageEntry> = {
       "How to choose a shopping agent for Weidian and Taobao finds — LitBuy, MuleBuy, OopBuy, Kakobuy, and ACBuy compared at a high level.",
     h1: "Best shopping agent for these finds",
     intro:
-      "There is no single best agent for every buyer. LitBuy is our recommended default because this catalog and QC examples are LitBuy-first. MuleBuy, OopBuy, Kakobuy, and ACBuy are supported alternatives when their fees or shipping lines fit your country better.",
+      "There is no single best agent for every buyer. LitBuy is our recommended default because this catalog and QC examples are LitBuy-first. USFans, GTBuy, BoonBuy, OopBuy, Kakobuy, and HipoBuy are supported alternatives when their fees or shipping lines fit your country better.",
     badge: "Agent guide",
     keywords: ["best shopping agent", "litbuy agent comparison"],
     updateFrequency: "monthly",
@@ -571,16 +576,33 @@ export const SEO_LANDING_CONFIG: Record<string, SeoLandingPageEntry> = {
         links: [
           { href: "/guides/what-is-a-shopping-agent", label: "What is an agent?" },
           { href: "/guides/how-shipping-works-with-agents", label: "Shipping basics" },
+          { href: "/rep-agent-spreadsheets", label: "Agent spreadsheets hub" },
+        ],
+      },
+      {
+        heading: "Agent resource pages",
+        paragraphs: [
+          "Each supported agent has dedicated Telegram, Discord, spreadsheet, finds, and review pages on LitBuy Finds — use them to jump from comparison to discovery without hunting scattered links.",
+        ],
+        links: [
+          { href: "/litbuy-finds", label: "LitBuy finds" },
+          { href: "/telegram-litbuy", label: "LitBuy Telegram" },
+          { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+          ...buildAgentHubDiscoveryLinks(),
         ],
       },
     ],
     filter: { freshness: "editorsPicks" },
     relatedLinks: [
       { href: "/litbuy-finds", label: "LitBuy finds" },
-      { href: "/mulebuy-finds", label: "MuleBuy finds" },
-      { href: "/kakobuy-finds", label: "Kakobuy finds" },
-      { href: "/oopbuy-finds", label: "OopBuy finds" },
-      { href: "/acbuy-finds", label: "ACBuy finds" },
+      { href: "/telegram-litbuy", label: "LitBuy Telegram" },
+      { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+      ...AGENT_RESOURCE_AGENTS.flatMap((agent) => [
+        { href: `/${agent.slug}-finds`, label: `${agent.name} finds` },
+        { href: `/telegram-${agent.slug}`, label: `${agent.name} Telegram` },
+      ]),
+      { href: "/rep-agent-spreadsheets", label: "Agent spreadsheets hub" },
+      { href: "/latest-finds", label: "Latest finds" },
     ],
     faqs: [
       {

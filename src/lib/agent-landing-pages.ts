@@ -2,6 +2,11 @@ import type { SeoLandingConfig } from "./seo-landing-pages";
 import { filterFeaturedEligible } from "./product-media";
 import { hasExactPrice } from "./pricing";
 import { getAllProducts, getTrendingProducts } from "./products";
+import { getAgentResourceBySlug } from "./agent-resource-agents";
+import {
+  buildAgentHubBreadcrumbs,
+  buildAgentRelatedResourceLinks,
+} from "./agent-resource-content";
 
 const AGENT_LINKS = [
   { href: "/litbuy-finds", label: "LitBuy finds" },
@@ -40,6 +45,7 @@ type AgentLandingSeed = {
 function buildAgentLandingConfig(seed: AgentLandingSeed): SeoLandingConfig {
   const path = `/${seed.slug}`;
   const isLitBuy = seed.agentName === "LitBuy";
+  const resourceAgent = getAgentResourceBySlug(seed.slug.replace("-finds", ""));
 
   return {
     slug: seed.slug,
@@ -83,7 +89,20 @@ function buildAgentLandingConfig(seed: AgentLandingSeed): SeoLandingConfig {
           "This is an independent curated finds directory. It helps you discover products and open them on your chosen agent — not a replacement for each agent's own tools.",
       },
     ],
-    relatedLinks: AGENT_LINKS.filter((link) => link.href !== path),
+    relatedLinks: [
+      ...(resourceAgent ? buildAgentRelatedResourceLinks(resourceAgent) : []),
+      ...AGENT_LINKS.filter((link) => link.href !== path),
+    ],
+    ...(resourceAgent
+      ? {
+          breadcrumbItems: buildAgentHubBreadcrumbs(
+            resourceAgent,
+            `${resourceAgent.name} Finds`
+          ),
+          relatedResourceLinks: buildAgentRelatedResourceLinks(resourceAgent),
+          relatedResourcesTitle: `Related ${resourceAgent.name} resources`,
+        }
+      : {}),
     getProducts: () => (isLitBuy ? trendingProducts() : featuredProducts()),
     productSectionTitle: isLitBuy
       ? "Popular LitBuy finds"

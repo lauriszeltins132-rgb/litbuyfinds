@@ -2,6 +2,8 @@ import type { StaticPageSection } from "./static-pages";
 import { buildTelegramFooterLinks } from "./agent-seo-shared";
 import { AGENT_RESOURCE_AGENTS } from "./agent-resource-agents";
 import {
+  buildAgentHubBreadcrumbs,
+  buildAgentRelatedResourceLinks,
   buildAgentTelegramFaqs,
   buildAgentTelegramIntro,
   buildAgentTelegramMeta,
@@ -23,6 +25,9 @@ export type TelegramAgentLandingConfig = {
   sections: StaticPageSection[];
   faqs: { question: string; answer: string }[];
   footerLinks: { href: string; label: string }[];
+  breadcrumbItems?: { label: string; href?: string }[];
+  relatedResourceLinks?: { href: string; label: string }[];
+  relatedResourcesTitle?: string;
 };
 
 const LEGACY_AGENTS = [
@@ -78,6 +83,9 @@ function buildResourceAgentConfig(
     sections: buildAgentTelegramSections(agent),
     faqs: buildAgentTelegramFaqs(agent),
     footerLinks: buildTelegramFooterLinks(agent.slug),
+    breadcrumbItems: buildAgentHubBreadcrumbs(agent, `${agent.name} Telegram`),
+    relatedResourceLinks: buildAgentRelatedResourceLinks(agent),
+    relatedResourcesTitle: `Related ${agent.name} resources`,
   };
 }
 
