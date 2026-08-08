@@ -134,9 +134,9 @@ export function getFindsHubSections(): FindsHubSection[] {
     {
       id: "budget",
       title: "Budget finds",
-      description: "Sub-$30 picks that still ship light — ideal for filling out a haul without heavy freight.",
-      href: "/cheap-finds",
-      linkLabel: "Cheap finds →",
+      description: "Sub-$20 picks that still ship light — ideal for filling out a haul without heavy freight.",
+      href: "/best-under-20",
+      linkLabel: "Under $20 →",
       getProducts: () => rails.bestUnder20,
     },
     {

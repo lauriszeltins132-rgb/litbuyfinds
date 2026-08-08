@@ -7,6 +7,7 @@ import {
   hasPlausibleImageDimensions,
   validateImageUrl,
 } from "@/lib/image-url";
+import { IMAGE_LOAD_TIMEOUT_MS } from "@/lib/image-load-timeout";
 import ImageUnavailablePlaceholder from "./ImageUnavailablePlaceholder";
 
 type ProductImageVariant = "card" | "featured" | "hero";
@@ -166,6 +167,16 @@ export default function ProductImage({
       cancelled = true;
     };
   }, [confirmLoaded, displaySrc, failed, srcIndex]);
+
+  useEffect(() => {
+    if (failed || !displaySrc || loaded) return;
+
+    const timer = window.setTimeout(() => {
+      advanceOrFail();
+    }, IMAGE_LOAD_TIMEOUT_MS);
+
+    return () => window.clearTimeout(timer);
+  }, [advanceOrFail, displaySrc, failed, loaded, srcIndex]);
 
   if (failed || !displaySrc) {
     return (
