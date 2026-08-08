@@ -4,8 +4,8 @@ name: Spreadsheet sync
 # commits to main, and triggers a Vercel production deploy.
 on:
   schedule:
-    # 1st of each month at 08:00 UTC (adjust if your sheet updates on a different cadence)
-    - cron: "0 8 1 * *"
+    # Every Monday at 08:00 UTC (adjust if your sheet updates on a different cadence)
+    - cron: "0 8 * * 1"
   workflow_dispatch:
 
 permissions:
