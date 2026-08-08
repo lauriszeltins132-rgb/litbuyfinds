@@ -2,6 +2,7 @@ import Link from "next/link";
 import SmartLink from "@/components/SmartLink";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import ContentFreshness from "@/components/ContentFreshness";
+import DiscoveryRail from "@/components/DiscoveryRail";
 import ProductGrid from "@/components/ProductGrid";
 import SchemaScript from "@/components/SchemaScript";
 import { PUBLIC_CATALOG_COUNT } from "@/lib/constants";
@@ -29,6 +30,7 @@ export default function FindsHubPage() {
     { label: "Home", href: "/" },
     { label: FINDS_HUB_METADATA.h1 },
   ];
+  const [leadSection, ...moreSections] = sections;
 
   return (
     <>
@@ -56,25 +58,44 @@ export default function FindsHubPage() {
 
       <Breadcrumbs items={breadcrumbs} currentPath={FINDS_HUB_PATH} />
 
-      <article className="px-4 py-8 sm:px-6">
+      <section className="px-4 pb-4 pt-6 sm:px-6">
         <div className="mx-auto max-w-7xl">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
             {FINDS_HUB_METADATA.badge}
           </p>
-          <h1 className="mt-3 text-3xl font-black tracking-tight sm:text-4xl">
+          <h1 className="mt-2 text-3xl font-black tracking-tight sm:text-4xl">
             {FINDS_HUB_METADATA.h1}
           </h1>
-          <p className="mt-5 max-w-3xl text-base leading-relaxed text-foreground">
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted sm:text-base">
             {FINDS_HUB_METADATA.directAnswer}
           </p>
 
-          <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-semibold text-muted">
+          <div className="mt-4 flex flex-wrap items-center gap-2">
+            <div className="rounded-xl border border-border/70 bg-surface/20 px-3 py-2">
+              <p className="text-sm font-black text-foreground">{PUBLIC_CATALOG_COUNT}</p>
+              <p className="text-[11px] font-semibold text-muted">Finds indexed</p>
+            </div>
             <ContentFreshness variant="updated-daily" display="badge" />
-            <span>{PUBLIC_CATALOG_COUNT} finds indexed</span>
             <ContentFreshness variant="catalog-sync" />
           </div>
+        </div>
+      </section>
 
-          <div className="mt-8 flex flex-wrap gap-2">
+      {leadSection && leadSection.getProducts().length > 0 ? (
+        <DiscoveryRail
+          title={leadSection.title}
+          subtitle={leadSection.description}
+          href={leadSection.href}
+          products={leadSection.getProducts()}
+          freshness={leadSection.freshness}
+          preloadImages
+          tight
+        />
+      ) : null}
+
+      <section className="px-4 pb-4 sm:px-6">
+        <div className="mx-auto max-w-7xl">
+          <div className="flex flex-wrap gap-2">
             {FINDS_HUB_CATEGORY_LINKS.map((link) => (
               <SmartLink
                 key={link.href}
@@ -85,9 +106,13 @@ export default function FindsHubPage() {
               </SmartLink>
             ))}
           </div>
+        </div>
+      </section>
 
-          <div className="mt-12 space-y-14">
-            {sections.map((section) => {
+      <article className="px-4 pb-8 sm:px-6">
+        <div className="mx-auto max-w-7xl">
+          <div className="space-y-14">
+            {moreSections.map((section) => {
               const products = section.getProducts();
               if (products.length === 0) return null;
 

@@ -1,0 +1,258 @@
+import Link from "next/link";
+import ContentFreshness, {
+  type ContentFreshnessVariant,
+} from "@/components/ContentFreshness";
+import DiscoveryBrowseRails from "@/components/discovery/DiscoveryBrowseRails";
+import ProductGrid from "@/components/ProductGrid";
+import type { StaticPageSection } from "@/lib/static-pages";
+import {
+  getDiscoveryHeroStats,
+  getHeroIntro,
+} from "@/lib/discovery-page-utils";
+import type { Product } from "@/lib/types";
+
+export type DiscoveryCompareGroup = {
+  label: string;
+  products: Product[];
+};
+
+type DiscoveryPageShellProps = {
+  path: string;
+  badge: string;
+  h1: string;
+  intro: string;
+  freshnessVariant?: ContentFreshnessVariant | null;
+  products: Product[];
+  productSectionTitle?: string;
+  productLimit?: number;
+  compareGroups?: DiscoveryCompareGroup[];
+  sections?: StaticPageSection[];
+  faqs?: { question: string; answer: string }[];
+  relatedLinks?: { href: string; label: string }[];
+  brandLinks?: string[];
+  categoryLinks?: string[];
+  browseSlug: string;
+  browseCategories?: string[];
+};
+
+export default function DiscoveryPageShell({
+  path,
+  badge,
+  h1,
+  intro,
+  freshnessVariant,
+  products,
+  productSectionTitle,
+  productLimit = 48,
+  compareGroups = [],
+  sections = [],
+  faqs,
+  relatedLinks = [],
+  brandLinks = [],
+  categoryLinks = [],
+  browseSlug,
+  browseCategories = [],
+}: DiscoveryPageShellProps) {
+  const heroIntro = getHeroIntro(intro);
+  const qcCount = products.filter((product) => product.qc_link).length;
+  const heroStats = getDiscoveryHeroStats(
+    Math.min(products.length, productLimit),
+    { qcCount }
+  );
+  const displayedProducts = products.slice(0, productLimit);
+  const hasCompareGroups = compareGroups.some((group) => group.products.length > 0);
+  const hasPrimaryProducts = displayedProducts.length > 0 && !hasCompareGroups;
+
+  return (
+    <>
+      <section className="px-4 pb-4 pt-6 sm:px-6">
+        <div className="mx-auto max-w-7xl">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
+            {badge}
+          </p>
+          <h1 className="mt-2 text-3xl font-black tracking-tight sm:text-4xl">
+            {h1}
+          </h1>
+          {heroIntro ? (
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted sm:text-base">
+              {heroIntro}
+            </p>
+          ) : null}
+
+          <div className="mt-4 flex flex-wrap items-center gap-2">
+            {heroStats.map((stat) => (
+              <div
+                key={stat.label}
+                className="rounded-xl border border-border/70 bg-surface/20 px-3 py-2"
+              >
+                <p className="text-sm font-black text-foreground">{stat.value}</p>
+                <p className="text-[11px] font-semibold text-muted">{stat.label}</p>
+              </div>
+            ))}
+            {freshnessVariant ? (
+              <ContentFreshness variant={freshnessVariant} display="badge" />
+            ) : null}
+          </div>
+        </div>
+      </section>
+
+      {hasCompareGroups
+        ? compareGroups.map((group, index) =>
+            group.products.length > 0 ? (
+              <section key={group.label} className="px-4 pb-4 pt-2 sm:px-6">
+                <div className="mx-auto max-w-7xl">
+                  <h2 className="text-xl font-black sm:text-2xl">{group.label}</h2>
+                  <div className="mt-4">
+                    <ProductGrid products={group.products} />
+                  </div>
+                </div>
+              </section>
+            ) : null
+          )
+        : null}
+
+      {hasPrimaryProducts ? (
+        <section className="px-4 pb-4 pt-2 sm:px-6">
+          <div className="mx-auto max-w-7xl">
+            <h2 className="sr-only">{productSectionTitle ?? "Featured finds"}</h2>
+            <ProductGrid products={displayedProducts} />
+          </div>
+        </section>
+      ) : null}
+
+      <DiscoveryBrowseRails
+        slug={browseSlug}
+        path={path}
+        primaryProducts={displayedProducts}
+        categories={browseCategories}
+      />
+
+      <article className="px-4 py-8 sm:px-6">
+        <div className="mx-auto max-w-3xl">
+          {intro && intro !== heroIntro ? (
+            <p className="text-base leading-relaxed text-muted">{intro}</p>
+          ) : null}
+
+          {sections.length > 0 ? (
+            <div className={`space-y-10 ${intro && intro !== heroIntro ? "mt-10" : ""}`}>
+              {sections.map((section) => {
+                const Heading = section.level === 3 ? "h3" : "h2";
+                return (
+                  <section key={section.heading}>
+                    <Heading
+                      className={
+                        section.level === 3
+                          ? "text-lg font-bold text-foreground"
+                          : "text-xl font-black text-foreground"
+                      }
+                    >
+                      {section.heading}
+                    </Heading>
+                    <div className="mt-3 space-y-3 text-base leading-relaxed text-muted">
+                      {section.paragraphs.map((paragraph) => (
+                        <p key={paragraph}>{paragraph}</p>
+                      ))}
+                    </div>
+                    {section.links && section.links.length > 0 ? (
+                      <ul className="mt-4 flex flex-wrap gap-2">
+                        {section.links.map((link) => (
+                          <li key={link.href}>
+                            <Link
+                              href={link.href}
+                              className="rounded-full border border-border px-3 py-1.5 text-xs font-bold text-foreground/80 hover:border-accent/40 hover:text-accent"
+                            >
+                              {link.label}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : null}
+                  </section>
+                );
+              })}
+            </div>
+          ) : null}
+
+          {brandLinks.length > 0 || categoryLinks.length > 0 ? (
+            <section className="mt-10 rounded-2xl border border-border bg-surface/30 p-5">
+              {brandLinks.length > 0 ? (
+                <div>
+                  <h2 className="text-sm font-bold uppercase tracking-[0.16em] text-muted">
+                    Popular brands
+                  </h2>
+                  <ul className="mt-3 flex flex-wrap gap-2">
+                    {brandLinks.map((slug) => (
+                      <li key={slug}>
+                        <Link
+                          href={`/brands/${slug}`}
+                          className="rounded-full border border-border px-3 py-1.5 text-xs font-bold capitalize text-foreground/80 hover:border-accent/40 hover:text-accent"
+                        >
+                          {slug.replace(/-/g, " ")}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+              {categoryLinks.length > 0 ? (
+                <div className={brandLinks.length > 0 ? "mt-5" : undefined}>
+                  <h2 className="text-sm font-bold uppercase tracking-[0.16em] text-muted">
+                    Browse categories
+                  </h2>
+                  <ul className="mt-3 flex flex-wrap gap-2">
+                    {categoryLinks.map((slug) => (
+                      <li key={slug}>
+                        <Link
+                          href={`/categories/${slug}`}
+                          className="rounded-full border border-border px-3 py-1.5 text-xs font-bold text-foreground/80 hover:border-accent/40 hover:text-accent"
+                        >
+                          {slug.replace(/-/g, " ")}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+            </section>
+          ) : null}
+
+          {faqs && faqs.length > 0 ? (
+            <section className="mt-12 rounded-2xl border border-border bg-surface/40 p-6">
+              <h2 className="text-xl font-black">Frequently asked questions</h2>
+              <dl className="mt-5 space-y-5">
+                {faqs.map((faq) => (
+                  <div key={faq.question}>
+                    <dt className="font-bold text-foreground">{faq.question}</dt>
+                    <dd className="mt-1 text-sm leading-relaxed text-muted">
+                      {faq.answer}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </section>
+          ) : null}
+
+          {relatedLinks.length > 0 ? (
+            <section className="mt-10 border-t border-border pt-8">
+              <h2 className="text-sm font-bold uppercase tracking-[0.16em] text-muted">
+                Keep exploring
+              </h2>
+              <ul className="mt-4 flex flex-wrap gap-2">
+                {relatedLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="rounded-full border border-border px-3 py-1.5 text-xs font-bold text-foreground/80 hover:border-accent/40 hover:text-accent"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
+        </div>
+      </article>
+    </>
+  );
+}
