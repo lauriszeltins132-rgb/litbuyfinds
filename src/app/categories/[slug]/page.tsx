@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import CatalogPanel from "@/components/CatalogPanel";
+import ProductGrid from "@/components/ProductGrid";
 import RelatedGuides from "@/components/RelatedGuides";
 import SignupCard from "@/components/SignupCard";
 import BestOfLinks from "@/components/BestOfLinks";
@@ -21,6 +22,7 @@ import {
 } from "@/lib/category-aliases";
 import { getCategories } from "@/lib/products";
 import { buildPageMetadata } from "@/lib/seo";
+import { sortByProductQuality } from "@/lib/product-quality-score";
 
 type CategoryPageProps = {
   params: Promise<{ slug: string }>;
@@ -65,6 +67,7 @@ export default async function CategoryLandingPage({ params }: CategoryPageProps)
     .filter((c) => c.slug !== resolved.slug && c.group === "category")
     .slice(0, 6);
   const pagePath = `/categories/${slug}`;
+  const featuredProducts = sortByProductQuality(resolved.products).slice(0, 12);
 
   return (
     <>
@@ -85,34 +88,34 @@ export default async function CategoryLandingPage({ params }: CategoryPageProps)
         currentPath={pagePath}
       />
 
-      <section className="px-4 pb-6 pt-4 sm:px-6">
+      <section className="px-4 pb-4 pt-4 sm:px-6">
         <div className="mx-auto max-w-7xl">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
             Category
           </p>
           <h1 className="mt-3 text-3xl font-black sm:text-4xl">{copy.title}</h1>
-          <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted">
-            {copy.intro}
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted">
+            {copy.intro.split(/(?<=[.!?])\s+/).slice(0, 2).join(" ")}
           </p>
-          <p className="mt-3 text-sm text-muted">
-            {resolved.count.toLocaleString()} products indexed
+          <p className="mt-3 text-sm font-semibold text-muted">
+            {resolved.count.toLocaleString()} products indexed · QC photos on select listings
           </p>
         </div>
       </section>
 
-      <CategorySeoBlock
-        categorySlug={slug}
-        categoryName={resolved.name}
-        intro={copy.intro}
-        brands={brands}
-        relatedCategories={relatedCategories}
-      />
-
-      <RelatedGuides links={getRelatedGuidesForCategory(slug)} />
-      <BestOfLinks categorySlug={resolved.slug} />
-      <SignupCard location={`category_signup_${slug}`} variant="compact" />
-      <RelatedSeoLinks />
-      <RelatedPages currentPath={pagePath} categorySlug={resolved.slug} />
+      {featuredProducts.length > 0 ? (
+        <section className="px-4 pb-4 sm:px-6">
+          <div className="mx-auto max-w-7xl">
+            <h2 className="text-xl font-black sm:text-2xl">Featured {resolved.name} finds</h2>
+            <p className="mt-1 text-sm text-muted">
+              Top picks with photos and verified buy links — filter the full catalog below.
+            </p>
+            <div className="mt-4">
+              <ProductGrid products={featuredProducts} />
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       <Suspense fallback={<div className="py-24 text-center text-muted">Loading...</div>}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
@@ -128,6 +131,20 @@ export default async function CategoryLandingPage({ params }: CategoryPageProps)
           basePath={resolved.href}
         />
       </Suspense>
+
+      <CategorySeoBlock
+        categorySlug={slug}
+        categoryName={resolved.name}
+        intro={copy.intro}
+        brands={brands}
+        relatedCategories={relatedCategories}
+      />
+
+      <RelatedGuides links={getRelatedGuidesForCategory(slug)} />
+      <BestOfLinks categorySlug={resolved.slug} />
+      <SignupCard location={`category_signup_${slug}`} variant="compact" />
+      <RelatedSeoLinks />
+      <RelatedPages currentPath={pagePath} categorySlug={resolved.slug} />
     </>
   );
 }
