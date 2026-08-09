@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { trackBrokenImage } from "@/lib/analytics-events";
 import { getImageFillClass } from "@/lib/image-quality";
 import {
@@ -8,6 +8,10 @@ import {
   validateImageUrl,
 } from "@/lib/image-url";
 import { IMAGE_LOAD_TIMEOUT_MS } from "@/lib/image-load-timeout";
+import {
+  isImageUrlCached,
+  rememberLoadedImageUrl,
+} from "@/lib/image-load-cache";
 import ImageUnavailablePlaceholder from "./ImageUnavailablePlaceholder";
 
 type ProductImageVariant = "card" | "featured" | "hero";
@@ -90,13 +94,19 @@ export default function ProductImage({
   const loggedRef = useRef(false);
 
   const displaySrc = candidates[srcIndex] ?? "";
+  const wasCachedOnMount = useMemo(
+    () => isImageUrlCached(displaySrc),
+    [displaySrc]
+  );
 
   useEffect(() => {
+    const firstSrc = candidates[0] ?? "";
+    const cached = isImageUrlCached(firstSrc);
     setSrcIndex(0);
     setFailed(candidates.length === 0);
-    setLoaded(false);
+    setLoaded(cached);
     loggedRef.current = false;
-  }, [candidateKey, candidates.length]);
+  }, [candidateKey, candidates]);
 
   const failExhausted = useCallback(() => {
     setFailed(true);
@@ -109,21 +119,24 @@ export default function ProductImage({
 
   const advanceOrFail = useCallback(() => {
     setSrcIndex((currentIndex) => {
-      if (currentIndex + 1 < candidates.length) {
-        setLoaded(false);
-        return currentIndex + 1;
+      const nextIndex = currentIndex + 1;
+      if (nextIndex < candidates.length) {
+        const nextSrc = candidates[nextIndex] ?? "";
+        setLoaded(isImageUrlCached(nextSrc));
+        return nextIndex;
       }
       failExhausted();
       return currentIndex;
     });
-  }, [candidates.length, failExhausted]);
+  }, [candidates, failExhausted]);
 
   const confirmLoaded = useCallback(
-    (img: HTMLImageElement) => {
+    (img: HTMLImageElement, url: string) => {
       if (!hasPlausibleImageDimensions(img.naturalWidth, img.naturalHeight)) {
         advanceOrFail();
         return;
       }
+      rememberLoadedImageUrl(url);
       setLoaded(true);
     },
     [advanceOrFail]
@@ -131,22 +144,36 @@ export default function ProductImage({
 
   const handleLoad = useCallback(
     (event: React.SyntheticEvent<HTMLImageElement>) => {
-      confirmLoaded(event.currentTarget);
+      confirmLoaded(event.currentTarget, displaySrc);
     },
-    [confirmLoaded]
+    [confirmLoaded, displaySrc]
   );
 
   const handleError = useCallback(() => {
     advanceOrFail();
   }, [advanceOrFail]);
 
+  useLayoutEffect(() => {
+    const img = imgRef.current;
+    if (failed || !displaySrc) return;
+
+    if (isImageUrlCached(displaySrc)) {
+      setLoaded(true);
+      return;
+    }
+
+    if (img?.complete && img.naturalWidth > 0) {
+      confirmLoaded(img, displaySrc);
+    }
+  }, [confirmLoaded, displaySrc, failed, srcIndex]);
+
   useEffect(() => {
     const img = imgRef.current;
-    if (!img || failed || !displaySrc) return;
+    if (!img || failed || !displaySrc || loaded) return;
 
     const tryConfirm = () => {
       if (img.complete && img.naturalWidth > 0) {
-        confirmLoaded(img);
+        confirmLoaded(img, displaySrc);
         return true;
       }
       return false;
@@ -159,6 +186,7 @@ export default function ProductImage({
       if (!cancelled) tryConfirm();
     }).catch(() => {
       if (!cancelled && img.complete && img.naturalWidth > 0) {
+        rememberLoadedImageUrl(displaySrc);
         setLoaded(true);
       }
     });
@@ -166,7 +194,7 @@ export default function ProductImage({
     return () => {
       cancelled = true;
     };
-  }, [confirmLoaded, displaySrc, failed, srcIndex]);
+  }, [confirmLoaded, displaySrc, failed, loaded, srcIndex]);
 
   useEffect(() => {
     if (failed || !displaySrc || loaded) return;
@@ -196,6 +224,8 @@ export default function ProductImage({
     .filter(Boolean)
     .join(" ");
 
+  const shouldLazyLoad = !priority && !wasCachedOnMount && !loaded;
+
   const imageNode = (
     /* eslint-disable-next-line @next/next/no-img-element */
     <img
@@ -205,7 +235,7 @@ export default function ProductImage({
       alt={alt}
       width={IMAGE_LAYOUT[variant].width}
       height={IMAGE_LAYOUT[variant].height}
-      loading={priority ? "eager" : "lazy"}
+      loading={shouldLazyLoad ? "lazy" : "eager"}
       fetchPriority={priority ? "high" : "auto"}
       decoding="async"
       referrerPolicy="no-referrer"

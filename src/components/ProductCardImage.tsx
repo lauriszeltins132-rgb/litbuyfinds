@@ -1,12 +1,16 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { trackBrokenImage } from "@/lib/analytics-events";
 import {
   hasPlausibleImageDimensions,
   validateImageUrl,
 } from "@/lib/image-url";
 import { IMAGE_LOAD_TIMEOUT_MS } from "@/lib/image-load-timeout";
+import {
+  isImageUrlCached,
+  rememberLoadedImageUrl,
+} from "@/lib/image-load-cache";
 import ImageUnavailablePlaceholder from "./ImageUnavailablePlaceholder";
 
 type ProductCardImageProps = {
@@ -57,13 +61,19 @@ export default function ProductCardImage({
   const loggedRef = useRef(false);
 
   const displaySrc = candidates[srcIndex] ?? "";
+  const wasCachedOnMount = useMemo(
+    () => isImageUrlCached(displaySrc),
+    [displaySrc]
+  );
 
   useEffect(() => {
+    const firstSrc = candidates[0] ?? "";
+    const cached = isImageUrlCached(firstSrc);
     setSrcIndex(0);
     setFailed(candidates.length === 0);
-    setLoaded(false);
+    setLoaded(cached);
     loggedRef.current = false;
-  }, [candidateKey, candidates.length]);
+  }, [candidateKey, candidates]);
 
   const failExhausted = useCallback(() => {
     setFailed(true);
@@ -76,33 +86,50 @@ export default function ProductCardImage({
 
   const advanceOrFail = useCallback(() => {
     setSrcIndex((currentIndex) => {
-      if (currentIndex + 1 < candidates.length) {
-        setLoaded(false);
-        return currentIndex + 1;
+      const nextIndex = currentIndex + 1;
+      if (nextIndex < candidates.length) {
+        const nextSrc = candidates[nextIndex] ?? "";
+        setLoaded(isImageUrlCached(nextSrc));
+        return nextIndex;
       }
       failExhausted();
       return currentIndex;
     });
-  }, [candidates.length, failExhausted]);
+  }, [candidates, failExhausted]);
 
   const confirmLoaded = useCallback(
-    (img: HTMLImageElement) => {
+    (img: HTMLImageElement, url: string) => {
       if (!hasPlausibleImageDimensions(img.naturalWidth, img.naturalHeight)) {
         advanceOrFail();
         return;
       }
+      rememberLoadedImageUrl(url);
       setLoaded(true);
     },
     [advanceOrFail]
   );
 
+  useLayoutEffect(() => {
+    const img = imgRef.current;
+    if (failed || !displaySrc) return;
+
+    if (isImageUrlCached(displaySrc)) {
+      setLoaded(true);
+      return;
+    }
+
+    if (img?.complete && img.naturalWidth > 0) {
+      confirmLoaded(img, displaySrc);
+    }
+  }, [confirmLoaded, displaySrc, failed, srcIndex]);
+
   useEffect(() => {
     const img = imgRef.current;
-    if (!img || failed || !displaySrc) return;
+    if (!img || failed || !displaySrc || loaded) return;
 
     const tryConfirm = () => {
       if (img.complete && img.naturalWidth > 0) {
-        confirmLoaded(img);
+        confirmLoaded(img, displaySrc);
         return true;
       }
       return false;
@@ -115,6 +142,7 @@ export default function ProductCardImage({
       if (!cancelled) tryConfirm();
     }).catch(() => {
       if (!cancelled && img.complete && img.naturalWidth > 0) {
+        rememberLoadedImageUrl(displaySrc);
         setLoaded(true);
       }
     });
@@ -122,7 +150,7 @@ export default function ProductCardImage({
     return () => {
       cancelled = true;
     };
-  }, [confirmLoaded, displaySrc, failed, srcIndex]);
+  }, [confirmLoaded, displaySrc, failed, loaded, srcIndex]);
 
   useEffect(() => {
     if (failed || !displaySrc || loaded) return;
@@ -152,6 +180,8 @@ export default function ProductCardImage({
     .filter(Boolean)
     .join(" ");
 
+  const shouldLazyLoad = !priority && !wasCachedOnMount && !loaded;
+
   return (
     <div
       className={`product-float-stage product-float-stage--card relative ${className}`}
@@ -170,12 +200,12 @@ export default function ProductCardImage({
         alt={alt}
         width={400}
         height={400}
-        loading={priority ? "eager" : "lazy"}
+        loading={shouldLazyLoad ? "lazy" : "eager"}
         fetchPriority={priority ? "high" : "auto"}
         decoding="async"
         referrerPolicy="no-referrer"
         className={`${assetClass} relative z-[1]`}
-        onLoad={(event) => confirmLoaded(event.currentTarget)}
+        onLoad={(event) => confirmLoaded(event.currentTarget, displaySrc)}
         onError={advanceOrFail}
       />
     </div>
