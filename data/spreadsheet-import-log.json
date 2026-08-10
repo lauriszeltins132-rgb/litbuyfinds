@@ -1,3 +1,65 @@
 {
-  "runs": []
+  "runs": [
+    {
+      "timestamp": "2026-08-10T09:18:53.939Z",
+      "trigger": "github-actions",
+      "dryRun": false,
+      "added": 0,
+      "duplicatesSkipped": 1165,
+      "failed": 0,
+      "failuresByReason": {},
+      "catalogTotalBefore": 3226,
+      "catalogTotalAfter": 3226,
+      "perSheet": {
+        "trending-now": {
+          "parsed": 190,
+          "added": 0,
+          "duplicates": 190,
+          "failed": 0
+        },
+        "latest-finds": {
+          "parsed": 169,
+          "added": 0,
+          "duplicates": 169,
+          "failed": 0
+        },
+        "shoes": {
+          "parsed": 149,
+          "added": 0,
+          "duplicates": 149,
+          "failed": 0
+        },
+        "hoodies-and-pants": {
+          "parsed": 144,
+          "added": 0,
+          "duplicates": 144,
+          "failed": 0
+        },
+        "coats-and-jackets": {
+          "parsed": 126,
+          "added": 0,
+          "duplicates": 126,
+          "failed": 0
+        },
+        "tshirts-and-shorts": {
+          "parsed": 129,
+          "added": 0,
+          "duplicates": 129,
+          "failed": 0
+        },
+        "accessories": {
+          "parsed": 153,
+          "added": 0,
+          "duplicates": 153,
+          "failed": 0
+        },
+        "electronics": {
+          "parsed": 105,
+          "added": 0,
+          "duplicates": 105,
+          "failed": 0
+        }
+      }
+    }
+  ]
 }
