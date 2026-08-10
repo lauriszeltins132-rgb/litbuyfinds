@@ -95,6 +95,7 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
                 alt={imageAlt}
                 variant="card"
                 productHref={getProductHref(product)}
+                priority
               />
               <ProductBadges badges={badges} />
             </div>

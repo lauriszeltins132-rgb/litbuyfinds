@@ -67,19 +67,6 @@ export default function ProductDetailView({
   const freshnessLabel = useMemo(() => getProductFreshnessLabel(product), [product]);
 
   useEffect(() => {
-    const preferredSrc = displayImage?.displaySrc ?? product.image;
-    if (!preferredSrc) return;
-    const link = document.createElement("link");
-    link.rel = "preload";
-    link.as = "image";
-    link.href = preferredSrc;
-    document.head.appendChild(link);
-    return () => {
-      document.head.removeChild(link);
-    };
-  }, [displayImage?.displaySrc, product.image]);
-
-  useEffect(() => {
     const node = buySentinelRef.current;
     if (!node) return;
 

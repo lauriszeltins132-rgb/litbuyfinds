@@ -163,8 +163,13 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: "Link",
-            value:
-              "<https://i.postimg.cc>; rel=preconnect, <https://si.geilicdn.com>; rel=preconnect, <https://cbu01.alicdn.com>; rel=preconnect",
+            value: [
+              "<https://i.postimg.cc>; rel=preconnect",
+              "<https://si.geilicdn.com>; rel=preconnect",
+              "<https://cbu01.alicdn.com>; rel=preconnect",
+              "<https://img.alicdn.com>; rel=preconnect",
+              "<https://ae01.alicdn.com>; rel=preconnect",
+            ].join(", "),
           },
         ],
       },

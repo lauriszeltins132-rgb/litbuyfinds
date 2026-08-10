@@ -13,12 +13,15 @@ type ProductGridProps = {
   emptyMessage?: string;
   /** Skip enter animation — use for catalog paging. */
   instant?: boolean;
+  /** How many cards get high-priority image loading (default 4). */
+  priorityCount?: number;
 };
 
 export default memo(function ProductGrid({
   products,
   emptyMessage = "No products match your filters.",
   instant = false,
+  priorityCount = 4,
 }: ProductGridProps) {
   const [selected, setSelected] = useState<Product | null>(null);
   const handleOpen = useCallback((product: Product) => setSelected(product), []);
@@ -78,7 +81,7 @@ export default memo(function ProductGrid({
             product={product}
             onOpen={handleOpen}
             showTrendingScore
-            priority={index < 4}
+            priority={index < priorityCount}
           />
         ))}
       </div>
