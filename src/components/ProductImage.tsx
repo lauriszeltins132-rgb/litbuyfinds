@@ -9,6 +9,7 @@ import {
 } from "@/lib/image-url";
 import { IMAGE_LOAD_TIMEOUT_MS } from "@/lib/image-load-timeout";
 import {
+  isImageElementCached,
   isImageUrlCached,
   rememberLoadedImageUrl,
 } from "@/lib/image-load-cache";
@@ -162,7 +163,7 @@ export default function ProductImage({
       return;
     }
 
-    if (img?.complete && img.naturalWidth > 0) {
+    if (img && isImageElementCached(img)) {
       confirmLoaded(img, displaySrc);
     }
   }, [confirmLoaded, displaySrc, failed, srcIndex]);
@@ -225,6 +226,11 @@ export default function ProductImage({
     .join(" ");
 
   const shouldLazyLoad = !priority && !wasCachedOnMount && !loaded;
+  const fetchPriority = priority
+    ? "high"
+    : wasCachedOnMount || loaded
+      ? "auto"
+      : "low";
 
   const imageNode = (
     /* eslint-disable-next-line @next/next/no-img-element */
@@ -236,7 +242,7 @@ export default function ProductImage({
       width={IMAGE_LAYOUT[variant].width}
       height={IMAGE_LAYOUT[variant].height}
       loading={shouldLazyLoad ? "lazy" : "eager"}
-      fetchPriority={priority ? "high" : "auto"}
+      fetchPriority={fetchPriority}
       decoding="async"
       referrerPolicy="no-referrer"
       className={assetClass}

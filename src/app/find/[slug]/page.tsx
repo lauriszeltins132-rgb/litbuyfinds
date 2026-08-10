@@ -163,7 +163,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 {brand ? ` and ${brand}` : ""}.
               </p>
               <div className="mt-6">
-                <ProductGrid products={similar} />
+                <ProductGrid products={similar} priorityCount={0} />
               </div>
             </div>
           </section>
@@ -179,7 +179,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 Popular {brand} finds in the catalog.
               </p>
               <div className="mt-6">
-                <ProductGrid products={moreFromBrand} />
+                <ProductGrid products={moreFromBrand} priorityCount={0} />
               </div>
             </div>
           </section>
@@ -195,7 +195,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 Trending picks from this category.
               </p>
               <div className="mt-6">
-                <ProductGrid products={popularInCategory} />
+                <ProductGrid products={popularInCategory} priorityCount={0} />
               </div>
             </div>
           </section>

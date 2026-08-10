@@ -8,6 +8,7 @@ import {
 } from "@/lib/image-url";
 import { IMAGE_LOAD_TIMEOUT_MS } from "@/lib/image-load-timeout";
 import {
+  isImageElementCached,
   isImageUrlCached,
   rememberLoadedImageUrl,
 } from "@/lib/image-load-cache";
@@ -118,7 +119,7 @@ export default function ProductCardImage({
       return;
     }
 
-    if (img?.complete && img.naturalWidth > 0) {
+    if (img && isImageElementCached(img)) {
       confirmLoaded(img, displaySrc);
     }
   }, [confirmLoaded, displaySrc, failed, srcIndex]);
@@ -181,6 +182,11 @@ export default function ProductCardImage({
     .join(" ");
 
   const shouldLazyLoad = !priority && !wasCachedOnMount && !loaded;
+  const fetchPriority = priority
+    ? "high"
+    : wasCachedOnMount || loaded
+      ? "auto"
+      : "low";
 
   return (
     <div
@@ -201,7 +207,7 @@ export default function ProductCardImage({
         width={400}
         height={400}
         loading={shouldLazyLoad ? "lazy" : "eager"}
-        fetchPriority={priority ? "high" : "auto"}
+        fetchPriority={fetchPriority}
         decoding="async"
         referrerPolicy="no-referrer"
         className={`${assetClass} relative z-[1]`}
