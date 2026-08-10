@@ -1044,7 +1044,7 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
       "Latest LitBuy finds updated daily — new rep sneakers, clothing, streetwear, and QC-linked products from the LitBuy spreadsheet catalog with verified agent buy buttons.",
     h1: "Latest LitBuy finds",
     intro:
-      `LitBuy Finds is the main discovery hub for new rep products. This page lists the newest ${FINDS_STATS.totalFindsLabel}-product catalog additions after each daily sync — with photos, prices, QC references where available, and verified LitBuy, MuleBuy, Kakobuy, OopBuy, and ACBuy links. Browse by category below or jump to the LitBuy spreadsheet guide for how rows become searchable product pages.`,
+      `LitBuy Finds is the main rep product discovery database. This page lists the newest ${FINDS_STATS.totalFindsLabel} catalog additions after each daily spreadsheet sync — with photos, prices, QC references where available, and verified LitBuy, MuleBuy, Kakobuy, OopBuy, and ACBuy links. New products from the database appear here first before rolling into category and brand pages.`,
     badge: "Discovery hub",
     keywords: [
       "litbuy finds",
@@ -1094,6 +1094,19 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
           { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet guide" },
           { href: "/recently-added", label: "Recently added" },
           { href: "/trending-today", label: "Trending today" },
+        ],
+      },
+      {
+        heading: "QC database and rep find verification",
+        paragraphs: [
+          `Each latest find links to a full product page with QC badges when reference photos exist. The LitBuy QC database indexes ${FINDS_STATS.qcFindsLabel} listings — use it to compare batches, verify materials, and shortlist rep finds before opening your agent checkout.`,
+          "Latest Finds is the front door for new spreadsheet imports. The QC database and category pages are where you dig deeper once something catches your eye.",
+        ],
+        links: [
+          { href: "/litbuy-qc", label: "QC product database" },
+          { href: "/what-are-qc-photos", label: "What are QC photos" },
+          { href: "/collections/best-qc-approved-finds", label: "QC-approved collection" },
+          { href: "/guides/how-to-check-qc-photos", label: "How to check QC photos" },
         ],
       },
     ],

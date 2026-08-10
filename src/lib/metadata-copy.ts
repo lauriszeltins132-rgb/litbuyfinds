@@ -5,6 +5,10 @@ export const META_SCALE = PUBLIC_CATALOG_COUNT;
 
 export const META_AGENTS = "LitBuy, USFans, GTBuy, BoonBuy, OopBuy, Kakobuy and HipoBuy";
 
+/** Discovery-first value stack for category and brand database pages. */
+export const META_DISCOVERY_STACK =
+  "QC photos, verified agent links, spreadsheet-synced listings, and daily database updates";
+
 /** Value stack used across descriptions — no weak openers (browse/explore/discover). */
 export const META_VALUE_STACK =
   "verified shopping links, QC photos, shipping coupons, agent discounts and daily updates";
@@ -139,7 +143,7 @@ export function buildCategoryMetaDescription(
   count: number
 ): string {
   return truncateMetaDescription(
-    `${count.toLocaleString()} QC-approved ${name.toLowerCase()} finds with ${META_VALUE_STACK}. ${META_AGENTS}.`
+    `${count.toLocaleString()} rep ${name.toLowerCase()} finds in the LitBuy database — ${META_DISCOVERY_STACK}. Browse QC-linked listings with ${META_AGENTS}.`
   );
 }
 
@@ -160,10 +164,10 @@ const PREMIUM_BRAND_SLUGS = new Set([
 export function buildBrandMetaTitle(name: string, slug: string): string {
   if (PREMIUM_BRAND_SLUGS.has(slug)) {
     return truncateMetaTitle(
-      `${name} QC Finds | QC Photos, Coupons & Verified Links`
+      `${name} Rep Finds | QC Photos, Spreadsheet & Agent Links`
     );
   }
-  return truncateMetaTitle(`${name} LitBuy Finds | QC Photos & Agent Discounts`);
+  return truncateMetaTitle(`${name} LitBuy Finds | QC Photos & Agent Links`);
 }
 
 export function buildBrandMetaDescription(
@@ -172,7 +176,7 @@ export function buildBrandMetaDescription(
   categoryLine: string
 ): string {
   return truncateMetaDescription(
-    `${count.toLocaleString()} QC-approved ${name} finds — ${categoryLine}. ${META_VALUE_STACK}. ${META_AGENTS}.`
+    `${count.toLocaleString()} ${name} rep finds in the LitBuy database — ${categoryLine}. ${META_DISCOVERY_STACK}. ${META_AGENTS}.`
   );
 }
 
@@ -198,7 +202,7 @@ export function buildProductRepFindTitle(options: {
   const categoryBit = categoryLabel ? ` ${categoryLabel}` : "";
   const qcBit = hasQc ? " - QC Photos" : "";
   const priceBit = price ? ", Price" : "";
-  return truncateMetaTitle(`${lead}${categoryBit} Rep Find${qcBit}${priceBit} & LitBuy Link`);
+  return truncateMetaTitle(`${lead}${categoryBit} Rep Find${qcBit}${priceBit} & Agent Link`);
 }
 
 export function buildProductMetaDescription(options: {
@@ -213,6 +217,6 @@ export function buildProductMetaDescription(options: {
   const qcBit = hasQc ? "QC photos, " : "";
 
   return truncateMetaDescription(
-    `${lead}${priceBit} — ${qcBit}verified shopping links, shipping coupons, agent discounts and ${META_AGENTS} checkout.`
+    `${lead}${priceBit} rep find — ${qcBit}product discovery page with verified agent links, QC database references, and ${META_AGENTS} checkout.`
   );
 }

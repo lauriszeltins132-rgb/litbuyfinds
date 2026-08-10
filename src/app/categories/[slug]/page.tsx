@@ -45,10 +45,17 @@ export async function generateMetadata({
   if (!resolved) return {};
 
   const copy = getResolvedCategorySeo(resolved);
+  const pagePath = `/categories/${slug}`;
+  const canonicalPath =
+    resolved.slug !== resolved.canonicalSlug
+      ? `/categories/${resolved.canonicalSlug}`
+      : pagePath;
+
   return buildPageMetadata({
     title: copy.title,
     description: copy.description,
-    path: `/categories/${slug}`,
+    path: pagePath,
+    canonicalPath,
   });
 }
 

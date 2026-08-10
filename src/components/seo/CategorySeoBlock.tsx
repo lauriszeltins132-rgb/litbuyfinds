@@ -2,6 +2,7 @@ import Link from "next/link";
 import SchemaScript from "@/components/SchemaScript";
 import type { BrandInfo } from "@/lib/brands";
 import { buildFaqSchema } from "@/lib/schema";
+import { FINDS_DATABASE_HUB_LINKS } from "@/lib/finds-authority";
 import {
   getCategoryFaqs,
   getCategoryRelatedGuides,
@@ -75,6 +76,24 @@ export default function CategorySeoBlock({
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <div className="rounded-2xl border border-border bg-surface/30 p-5 md:col-span-2 lg:col-span-4">
+            <h3 className="text-sm font-bold uppercase tracking-[0.14em] text-muted">
+              Discovery database hubs
+            </h3>
+            <ul className="mt-3 flex flex-wrap gap-2">
+              {FINDS_DATABASE_HUB_LINKS.slice(0, 8).map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="rounded-full border border-border px-3 py-1 text-xs font-bold hover:border-accent/40 hover:text-accent"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
           <div className="rounded-2xl border border-border bg-surface/30 p-5">
             <h3 className="text-sm font-bold uppercase tracking-[0.14em] text-muted">
               Popular brands
