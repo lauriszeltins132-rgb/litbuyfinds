@@ -1,6 +1,7 @@
 import Link from "next/link";
 import SchemaScript from "@/components/SchemaScript";
 import { getBrandAuthority } from "@/lib/brand-authority-content";
+import { FINDS_DATABASE_HUB_LINKS } from "@/lib/finds-authority";
 import { buildFaqSchema } from "@/lib/schema";
 import { getBrandFaqs, getBrandRelatedGuides } from "@/lib/seo-content";
 
@@ -94,6 +95,28 @@ export default function BrandSeoCollapsible({
             ))}
 
             <div className="grid gap-4 md:grid-cols-2">
+              <div className="rounded-xl border border-border bg-surface/40 p-4 md:col-span-2">
+                <h3 className="text-sm font-bold uppercase tracking-[0.14em] text-muted">
+                  {brandName} in the LitBuy finds database
+                </h3>
+                <p className="mt-2 text-sm text-muted">
+                  Connect brand products to the wider rep discovery database — latest spreadsheet
+                  imports, QC photos, category pages, and agent checkout links.
+                </p>
+                <ul className="mt-3 flex flex-wrap gap-2">
+                  {FINDS_DATABASE_HUB_LINKS.slice(0, 8).map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        href={link.href}
+                        className="rounded-full border border-border px-3 py-1 text-xs font-bold hover:border-accent/40 hover:text-accent"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
               <div className="rounded-xl border border-border bg-surface/40 p-4">
                 <h3 className="text-sm font-bold uppercase tracking-[0.14em] text-muted">
                   Buying tips

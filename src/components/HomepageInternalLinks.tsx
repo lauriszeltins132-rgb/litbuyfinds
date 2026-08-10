@@ -43,13 +43,11 @@ const SECTIONS = [
     ],
   },
   {
-    title: "LitBuy authority",
+    title: "LitBuy resources",
     links: [
       { href: "/finds", label: "Finds hub" },
       { href: "/what-is-litbuy", label: "What is LitBuy" },
       { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
-      { href: "/litbuy-discord", label: "LitBuy Discord" },
-      { href: "/litbuy-coupons", label: "LitBuy coupons" },
       { href: "/how-to-use-litbuy", label: "How to use LitBuy" },
       { href: "/ai", label: "LitBuy AI" },
       { href: "/is-litbuy-legit", label: "Is LitBuy legit" },
@@ -57,6 +55,14 @@ const SECTIONS = [
       { href: "/clothing-finds", label: "Clothing finds" },
       { href: "/latest-finds", label: "Latest finds" },
       { href: "/best-rep-finds", label: "Rep finds" },
+    ],
+  },
+  {
+    title: "Community & coupons",
+    links: [
+      { href: "/litbuy-discord", label: "LitBuy Discord" },
+      { href: "/telegram-litbuy", label: "LitBuy Telegram" },
+      { href: "/litbuy-coupons", label: "LitBuy coupons" },
     ],
   },
   {

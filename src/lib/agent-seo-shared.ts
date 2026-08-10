@@ -106,6 +106,10 @@ export function buildTelegramFooterLinks(currentSlug: string) {
 
   const links = [
     { href: "/", label: "LitBuy Finds homepage" },
+    { href: "/finds", label: "Finds database hub" },
+    { href: "/latest-finds", label: "Latest finds" },
+    { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+    { href: "/litbuy-qc", label: "QC database" },
     ...SEO_AGENTS.filter((entry) => entry.slug !== currentSlug).map((entry) => ({
       href: `/telegram-${entry.slug}`,
       label: `${entry.name} Telegram`,
@@ -114,11 +118,10 @@ export function buildTelegramFooterLinks(currentSlug: string) {
 
   if (paths && agent) {
     links.push(
-      { href: paths.discord, label: `${agent.name} Discord` },
-      { href: paths.spreadsheet, label: `${agent.name} spreadsheet` },
-      { href: paths.review, label: `${agent.name} review` },
       { href: paths.finds, label: `${agent.name} finds` },
-      { href: "/latest-finds", label: "Latest finds" }
+      { href: paths.spreadsheet, label: `${agent.name} spreadsheet` },
+      { href: paths.discord, label: `${agent.name} Discord` },
+      { href: paths.review, label: `${agent.name} review` }
     );
   }
 
@@ -132,6 +135,10 @@ export function buildDiscordFooterLinks(currentSlug: string) {
 
   const links = [
     { href: "/", label: "LitBuy Finds homepage" },
+    { href: "/finds", label: "Finds database hub" },
+    { href: "/latest-finds", label: "Latest finds" },
+    { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+    { href: "/litbuy-qc", label: "QC database" },
     ...SEO_AGENTS.filter((entry) => entry.slug !== currentSlug).map((entry) => ({
       href: `/discord-${entry.slug}`,
       label: `${entry.name} Discord`,
@@ -140,11 +147,10 @@ export function buildDiscordFooterLinks(currentSlug: string) {
 
   if (paths && agent) {
     links.push(
-      { href: paths.telegram, label: `${agent.name} Telegram` },
-      { href: paths.spreadsheet, label: `${agent.name} spreadsheet` },
-      { href: paths.review, label: `${agent.name} review` },
       { href: paths.finds, label: `${agent.name} finds` },
-      { href: "/latest-finds", label: "Latest finds" }
+      { href: paths.spreadsheet, label: `${agent.name} spreadsheet` },
+      { href: paths.telegram, label: `${agent.name} Telegram` },
+      { href: paths.review, label: `${agent.name} review` }
     );
   }
 
@@ -160,11 +166,14 @@ export function buildCouponFooterLinks(
 
   return [
     { href: "/", label: "LitBuy Finds homepage" },
-    { href: "/recently-added", label: "New finds" },
+    { href: "/finds", label: "Finds database hub" },
+    { href: "/latest-finds", label: "Latest finds" },
+    { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+    { href: "/litbuy-qc", label: "QC database" },
     { href: paths.finds, label: `${agent.name} finds` },
+    { href: paths.spreadsheet, label: `${agent.name} spreadsheet` },
     { href: paths.telegram, label: `${agent.name} Telegram` },
     { href: paths.discord, label: `${agent.name} Discord` },
-    { href: paths.spreadsheet, label: `${agent.name} spreadsheet` },
     { href: paths.review, label: `${agent.name} review` },
     ...siblingCouponPaths.filter((link) => link.href !== currentPath),
     ...SEO_AGENTS.filter((entry) => entry.slug !== agent.slug).map((entry) => ({

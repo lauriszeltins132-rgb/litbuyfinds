@@ -28,6 +28,8 @@ type PageMetadataOptions = {
   title: string;
   description: string;
   path: string;
+  /** Preferred canonical when it differs from `path` (e.g. category alias pages). */
+  canonicalPath?: string;
   image?: string;
   type?: "website" | "article";
   publishedTime?: string;
@@ -39,6 +41,7 @@ export function buildPageMetadata({
   title,
   description,
   path,
+  canonicalPath,
   image,
   type = "website",
   publishedTime,
@@ -46,13 +49,14 @@ export function buildPageMetadata({
   authors,
 }: PageMetadataOptions): Metadata {
   const url = `${BASE_URL}${path}`;
+  const canonicalUrl = `${BASE_URL}${canonicalPath ?? path}`;
   const ogImage = resolveOgImage(image);
   const pageTitle = title.trim();
 
   return {
     title: { absolute: pageTitle },
     description,
-    alternates: { canonical: url },
+    alternates: { canonical: canonicalUrl },
     ...(type === "article" && publishedTime
       ? {
           other: {

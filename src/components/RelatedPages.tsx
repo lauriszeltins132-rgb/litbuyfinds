@@ -63,19 +63,21 @@ const FEATURED_COLLECTION_SLUGS = [
 ];
 
 const FEATURED_HUB_PATHS = [
-  { href: "/finds", label: "Finds hub" },
-  { href: "/litbuy-discord", label: "LitBuy Discord" },
+  { href: "/finds", label: "Finds database hub" },
+  { href: "/latest-finds", label: "Latest finds" },
   { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
-  { href: "/litbuy-coupons", label: "LitBuy coupons" },
-  { href: "/guides", label: "Guides hub" },
+  { href: "/litbuy-qc", label: "QC database" },
+  { href: "/best-rep-finds", label: "Best rep finds" },
+  { href: "/sneaker-finds", label: "Sneaker finds" },
+  { href: "/clothing-finds", label: "Clothing finds" },
+  { href: "/hoodie-finds", label: "Hoodie finds" },
+  { href: "/jacket-finds", label: "Jacket finds" },
   { href: "/best-sneaker-finds", label: "Best sneakers" },
   { href: "/best-clothing-finds", label: "Best clothing" },
-  { href: "/best-rep-finds", label: "Best rep finds" },
-  { href: "/best-designer-finds", label: "Best designer" },
   { href: "/nike-finds", label: "Nike finds" },
-  { href: "/clothing-finds", label: "Clothing finds" },
-  { href: "/latest-finds", label: "Latest finds" },
-  { href: "/litbuy-qc", label: "QC photos" },
+  { href: "/brands", label: "Brand directory" },
+  { href: "/categories", label: "Category database" },
+  { href: "/guides", label: "Guides hub" },
 ];
 
 type RelatedPagesProps = {

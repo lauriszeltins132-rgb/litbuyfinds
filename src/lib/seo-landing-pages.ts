@@ -82,38 +82,54 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
       `The LitBuy spreadsheet is the community source for rep product rows — and LitBuy Finds turns that universe into ${SPREADSHEET_STATS.totalFindsLabel} searchable product pages with ${SPREADSHEET_STATS.qcFindsLabel} QC-linked listings, daily syncs, and verified buy buttons for LitBuy, MuleBuy, Kakobuy, HipoBuy, OopBuy, and ACBuy. Use this guide to understand spreadsheet categories, how rows become find pages, and where to browse the latest imports.`,
     sections: [
       {
-        heading: "Quick answer",
+        heading: "What is the LitBuy Spreadsheet?",
         paragraphs: [
-          `The LitBuy spreadsheet lists Weidian and Taobao finds with prices and QC notes. LitBuy Finds indexes ${PUBLIC_CATALOG_COUNT} curated products with daily syncs, mobile search, filters, and multi-agent checkout — the same spreadsheet universe without scrolling endless rows.`,
+          `The LitBuy spreadsheet lists Weidian and Taobao rep finds with prices and QC notes. LitBuy Finds indexes ${PUBLIC_CATALOG_COUNT} curated products with daily syncs, mobile search, filters, and multi-agent checkout — the same spreadsheet universe without scrolling endless rows.`,
         ],
         links: [
-          { href: "/rep-agent-spreadsheets", label: "Agent spreadsheets hub" },
-          { href: "/best-rep-spreadsheets", label: "Best rep spreadsheets" },
-          { href: "/kakobuy-spreadsheet", label: "Kakobuy spreadsheet" },
-          { href: "/mulebuy-spreadsheet", label: "MuleBuy spreadsheet" },
+          { href: "/finds", label: "Finds database hub" },
+          { href: "/latest-finds", label: "Latest spreadsheet additions" },
+          { href: "/what-is-litbuy-finds", label: "What is LitBuy Finds" },
         ],
       },
       {
-        heading: "Categories in the spreadsheet",
+        heading: "How LitBuy Finds organizes spreadsheet products",
         paragraphs: [
-          "Spreadsheet rows cover sneakers, clothing, streetwear, jackets, hoodies, bags, and accessories. LitBuy Finds mirrors those lanes as category pages — search by Nike, Jordan, Moncler, or browse sneaker finds and clothing finds without scrolling thousands of rows.",
+          "Each spreadsheet row becomes a searchable product page with photos, category tags, brand labels, QC badges, and shareable URLs. Daily imports flow into Latest Finds first, then roll into category databases, brand hubs, and collection pages — so new spreadsheet drops stay discoverable without re-downloading files.",
         ],
         links: [
+          { href: "/recently-added", label: "Recently added" },
+          { href: "/litbuy-qc", label: "QC product database" },
+          { href: "/rep-agent-spreadsheets", label: "Agent spreadsheets hub" },
+        ],
+      },
+      {
+        heading: "Browse spreadsheet finds by category",
+        paragraphs: [
+          "Spreadsheet rows cover sneakers, clothing, streetwear, jackets, hoodies, bags, accessories, and electronics. LitBuy Finds mirrors those lanes as category databases — search by Nike, Jordan, Moncler, or browse dedicated find pages without scrolling thousands of rows.",
+        ],
+        links: [
+          { href: "/categories/shoes", label: "Sneakers" },
+          { href: "/categories/hoodies", label: "Hoodies" },
+          { href: "/categories/coats-and-jackets", label: "Jackets" },
+          { href: "/categories/accessories", label: "Accessories" },
+          { href: "/categories/electronics", label: "Electronics" },
           { href: "/sneaker-finds", label: "Sneaker finds" },
           { href: "/clothing-finds", label: "Clothing finds" },
-          { href: "/latest-finds", label: "Latest finds" },
-          { href: "/best-rep-finds", label: "Best rep finds" },
+          { href: "/brands/nike", label: "Nike brand page" },
+          { href: "/brands/jordan", label: "Jordan brand page" },
+          { href: "/brands/moncler", label: "Moncler brand page" },
         ],
       },
       {
-        heading: "What a LitBuy spreadsheet contains",
+        heading: "QC photo database connection",
         paragraphs: [
-          "Most community spreadsheets list product names, thumbnail images, seller URLs, approximate prices, and sometimes QC photo references from previous buyers. They are powerful for power users but difficult to search on mobile and hard to share one product at a time.",
-          "LitBuy Finds imports catalog data and normalizes it into product pages. Each page shows pricing, category, brand tags, QC status, and a direct LitBuy buy link — the same outcome as copying a row from a sheet, but faster to browse.",
+          `Many spreadsheet rows include QC references from previous buyers. LitBuy Finds links those references on product pages and maintains a QC database of ${SPREADSHEET_STATS.qcFindsLabel} listings — so you can verify batches before checkout without hunting through Telegram threads or sheet comments.`,
         ],
         links: [
-          { href: "/collections/litbuy-spreadsheet-alternative", label: "Spreadsheet alternative" },
-          { href: "/litbuy-products", label: "Browse products" },
+          { href: "/litbuy-qc", label: "QC database" },
+          { href: "/what-are-qc-photos", label: "What are QC photos" },
+          { href: "/collections/best-qc-approved-finds", label: "QC-approved finds" },
         ],
       },
       {
@@ -141,7 +157,7 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
         ],
       },
       {
-        heading: "Why curated pages beat raw rows",
+        heading: "Why use LitBuy Finds instead of raw spreadsheets",
         paragraphs: [
           "Spreadsheets do not filter by image quality, QC availability, or category automatically. LitBuy Finds ranks popular products, hides broken listings where possible, and surfaces related finds so you can build a haul without jumping between tabs.",
           "Collection pages like best Nike finds or QC-approved picks are designed for sharing in Discord, Reddit, and TikTok bios — cleaner than sending someone a 5,000-row Google Sheet.",
@@ -149,6 +165,7 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
         links: [
           { href: "/best-litbuy-finds", label: "Best LitBuy finds" },
           { href: "/collections/best-qc-approved-finds", label: "QC finds" },
+          { href: "/collections/litbuy-spreadsheet-alternative", label: "Spreadsheet alternative" },
         ],
       },
       {
@@ -210,20 +227,24 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
       },
     ],
     relatedLinks: [
+      { href: "/finds", label: "Finds database hub" },
       { href: "/latest-finds", label: "Latest finds hub" },
-      { href: "/finds", label: "Finds hub" },
       { href: "/sneaker-finds", label: "Sneaker finds" },
       { href: "/clothing-finds", label: "Clothing finds" },
       { href: "/streetwear-finds", label: "Streetwear finds" },
+      { href: "/hoodie-finds", label: "Hoodie finds" },
+      { href: "/jacket-finds", label: "Jacket finds" },
       { href: "/best-rep-finds", label: "Best rep finds" },
       { href: "/litbuy-qc", label: "QC database" },
+      { href: "/brands", label: "Brand directory" },
+      { href: "/categories", label: "Category database" },
       { href: "/litbuy-finds", label: "LitBuy finds" },
-      { href: "/litbuy-coupons", label: "LitBuy coupons" },
-      { href: "/litbuy-discord", label: "LitBuy Discord" },
       { href: "/litbuy-guide", label: "LitBuy guide hub" },
       { href: "/kakobuy-spreadsheet", label: "Kakobuy spreadsheet" },
       { href: "/mulebuy-spreadsheet", label: "MuleBuy spreadsheet" },
       { href: "/rep-agent-spreadsheets", label: "Agent spreadsheets" },
+      { href: "/litbuy-coupons", label: "LitBuy coupons" },
+      { href: "/litbuy-discord", label: "LitBuy Discord" },
       ...RESOURCE_LINKS.filter((l) => l.href !== "/litbuy-finds"),
     ],
     getProducts: () => getEditorsPicks(48),

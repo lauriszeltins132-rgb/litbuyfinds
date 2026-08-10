@@ -56,6 +56,9 @@ export const BRAND_AUTHORITY: Record<string, BrandAuthorityContent> = {
             "Filter this page by price to find budget pairs under $50 or higher-tier batches with QC references.",
           ],
           links: [
+            { href: "/latest-finds", label: "Latest finds" },
+            { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+            { href: "/litbuy-qc", label: "QC database" },
             { href: "/best-sneakers", label: "Best sneakers" },
             { href: "/best-under-50", label: "Under $50" },
           ],
@@ -84,6 +87,9 @@ export const BRAND_AUTHORITY: Record<string, BrandAuthorityContent> = {
             "High-tops and mids dominate searches. Collab colorways rotate through trending rails weekly.",
           ],
           links: [
+            { href: "/latest-finds", label: "Latest finds" },
+            { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+            { href: "/litbuy-qc", label: "QC database" },
             { href: "/best-jordan-finds-2026", label: "Jordan 2026" },
             { href: "/best-sneakers", label: "Best sneakers" },
           ],
@@ -123,6 +129,9 @@ export const BRAND_AUTHORITY: Record<string, BrandAuthorityContent> = {
             "Outerwear is bulky — consolidate with lighter items in one haul. QC badge and zipper brand matter most.",
           ],
           links: [
+            { href: "/latest-finds", label: "Latest finds" },
+            { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+            { href: "/litbuy-qc", label: "QC database" },
             { href: "/best-jackets", label: "Best jackets" },
             { href: "/guides/best-moncler-finds", label: "Moncler guide" },
           ],
@@ -164,7 +173,11 @@ export const BRAND_AUTHORITY: Record<string, BrandAuthorityContent> = {
           paragraphs: [
             "Demand spikes around drops — check Recently Added for fresh listings. QC references help compare logo and tag details.",
           ],
-          links: [{ href: "/best-hoodies", label: "Best hoodies" }],
+          links: [
+            { href: "/latest-finds", label: "Latest finds" },
+            { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+            { href: "/best-hoodies", label: "Best hoodies" },
+          ],
         },
       ]
     ),

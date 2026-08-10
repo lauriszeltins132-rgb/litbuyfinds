@@ -17,10 +17,17 @@ type SeoLandingLayoutProps = {
 export default function SeoLandingLayout({ config }: SeoLandingLayoutProps) {
   const products = config.getProducts();
   const faqs = config.faqs.length > 0 ? config.faqs : undefined;
-  const breadcrumbs = [
-    { label: "Home", href: "/" },
-    { label: config.h1 },
-  ];
+  const breadcrumbs =
+    config.slug === "litbuy-spreadsheet"
+      ? [
+          { label: "Home", href: "/" },
+          { label: "Finds", href: "/finds" },
+          { label: config.h1 },
+        ]
+      : [
+          { label: "Home", href: "/" },
+          { label: config.h1 },
+        ];
 
   return (
     <>
