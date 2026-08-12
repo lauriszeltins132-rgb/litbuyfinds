@@ -4,8 +4,11 @@ export default function HomepageFindsDatabaseHub() {
   const stats = getFindsAuthorityStats();
 
   const hubs = [
-  { href: "/latest-finds", label: "Latest finds", detail: "Daily updated rep products" },
+  { href: "/latest-finds", label: "Latest finds", detail: "Weekly updated rep products" },
+  { href: "/best-litbuy-finds-2026", label: "Best finds 2026", detail: "Curated editor picks" },
+  { href: "/best-budget-finds", label: "Budget finds", detail: "Affordable picks under $30" },
   { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet", detail: "Spreadsheet → searchable catalog" },
+  { href: "/guides/litbuy-spreadsheet-guide", label: "Spreadsheet guide", detail: "Organized product discovery" },
   { href: "/sneaker-finds", label: "Sneaker finds", detail: "Nike, Jordan, Adidas & more" },
   { href: "/clothing-finds", label: "Clothing finds", detail: "Hoodies, jackets, streetwear" },
   { href: "/streetwear-finds", label: "Streetwear finds", detail: "Stussy, Corteiz, hype layers" },

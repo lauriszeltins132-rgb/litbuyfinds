@@ -2,13 +2,23 @@ import Link from "next/link";
 
 const RESOURCES = [
   {
-    href: "/brands",
-    label: "Browse All Brands",
-    description: "Nike, Moncler, Chrome Hearts, Stussy and more",
+    href: "/best-litbuy-finds-2026",
+    label: "Best LitBuy Finds 2026",
+    description: "Curated editor picks with QC photos and agent links",
+  },
+  {
+    href: "/best-budget-finds",
+    label: "Budget LitBuy Finds",
+    description: "Affordable rep picks under $30 from the spreadsheet catalog",
+  },
+  {
+    href: "/guides/litbuy-spreadsheet-guide",
+    label: "LitBuy Spreadsheet Guide",
+    description: "Organized product discovery resource — rows to browseable pages",
   },
   {
     href: "/litbuy-spreadsheet",
-    label: "LitBuy Spreadsheet Guide",
+    label: "LitBuy Spreadsheet Hub",
     description: "Searchable catalog vs raw spreadsheet rows",
   },
   {
@@ -32,9 +42,9 @@ const RESOURCES = [
     description: "Editor picks updated daily",
   },
   {
-    href: "/litbuy-weidian",
-    label: "LitBuy Weidian Guide",
-    description: "How to buy Weidian through LitBuy",
+    href: "/brands",
+    label: "Browse All Brands",
+    description: "Nike, Moncler, Chrome Hearts, Stussy and more",
   },
 ] as const;
 

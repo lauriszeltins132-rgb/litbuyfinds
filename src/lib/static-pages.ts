@@ -482,14 +482,25 @@ export const STATIC_PAGES: Record<string, StaticPage> = {
 
   "best-budget-finds": {
     path: "/best-budget-finds",
-    title: "Best Budget Finds Under $30",
+    title: "Budget LitBuy Finds | Affordable Rep Picks Under $30",
     metaDescription:
-      "Best budget finds on LitBuy under $30 — tees, accessories, and entry-level pickups with verified links.",
+      "Budget LitBuy finds under $30 — affordable rep sneakers, hoodies, tees, and accessories with QC references and verified agent links.",
     badge: "Budget picks",
-    h1: "Best budget finds",
+    h1: "Budget LitBuy finds",
     intro:
-      "You do not need to spend a lot for a solid first haul. These collections surface affordable finds that are popular with new buyers and veteran budget hunters alike.",
+      "Affordable rep finds for first hauls and tight budgets. These popular under-$30 listings come from the LitBuy spreadsheet catalog — photos, QC references where available, and trusted agent checkout links without sacrificing browse quality.",
     sections: [
+      {
+        heading: "Popular affordable picks",
+        paragraphs: [
+          "Budget-friendly tees, accessories, and entry sneakers are ideal for testing agents, filling out a haul, or keeping shipping weight low. Each listing links to a full product page with QC badges when references exist.",
+        ],
+        links: [
+          { href: "/collections/best-budget-finds", label: "Budget collection" },
+          { href: "/best-under-20", label: "Under $20 finds" },
+          { href: "/deals", label: "Deals under $30" },
+        ],
+      },
       {
         heading: "Deals under $30",
         paragraphs: [
@@ -513,10 +524,44 @@ export const STATIC_PAGES: Record<string, StaticPage> = {
           { href: "/categories/tshirts", label: "T-shirts" },
           { href: "/categories/accessories", label: "Accessories" },
           { href: "/categories/hoodies", label: "Hoodies" },
+          { href: "/categories/shoes", label: "Sneakers" },
+        ],
+      },
+      {
+        heading: "Budget buying tips",
+        paragraphs: [
+          "Start with one affordable item to learn QC and shipping workflow. Bundle multiple budget pieces in one parcel to lower per-item shipping cost. Always confirm live prices on LitBuy before paying — spreadsheet rows can lag seller updates.",
+        ],
+        links: [
+          { href: "/guides/beginner-guide-to-litbuy", label: "Beginner guide" },
+          { href: "/litbuy-spreadsheet", label: "Spreadsheet guide" },
+          { href: "/how-to-save-on-shipping", label: "Save on shipping" },
         ],
       },
     ],
-    relatedLinks: GUIDE_LINKS,
+    faqs: [
+      {
+        question: "What are the best budget LitBuy finds?",
+        answer:
+          "Tees, accessories, and entry-level sneakers under $30 are the most popular budget picks. Open the deals page or budget collection for the current catalog rotation.",
+      },
+      {
+        question: "Can I still get QC on cheap finds?",
+        answer:
+          "Yes — many budget listings include QC reference links. Request warehouse QC on your agent after purchase for the check that matters before shipping.",
+      },
+      {
+        question: "Where do budget finds come from?",
+        answer:
+          "They are indexed from the same LitBuy spreadsheet catalog as premium picks — filtered by price and photo quality for easier browsing.",
+      },
+    ],
+    relatedLinks: [
+      { href: "/best-litbuy-finds-2026", label: "Best finds 2026" },
+      { href: "/latest-finds", label: "Latest finds" },
+      { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+      ...GUIDE_LINKS,
+    ],
   },
 
   "litbuy-vs-other-agents": {

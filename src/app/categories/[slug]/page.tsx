@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -104,6 +105,32 @@ export default async function CategoryLandingPage({ params }: CategoryPageProps)
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted">
             {copy.intro.split(/(?<=[.!?])\s+/).slice(0, 2).join(" ")}
           </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <Link
+              href="/latest-finds"
+              className="rounded-full border border-border px-3 py-1 text-xs font-bold hover:border-accent/40 hover:text-accent"
+            >
+              Latest finds →
+            </Link>
+            <Link
+              href="/litbuy-spreadsheet"
+              className="rounded-full border border-border px-3 py-1 text-xs font-bold hover:border-accent/40 hover:text-accent"
+            >
+              LitBuy spreadsheet →
+            </Link>
+            <Link
+              href="/guides/litbuy-spreadsheet-guide"
+              className="rounded-full border border-border px-3 py-1 text-xs font-bold hover:border-accent/40 hover:text-accent"
+            >
+              Spreadsheet guide →
+            </Link>
+            <Link
+              href="/litbuy-qc"
+              className="rounded-full border border-border px-3 py-1 text-xs font-bold hover:border-accent/40 hover:text-accent"
+            >
+              QC database →
+            </Link>
+          </div>
           <p className="mt-3 text-sm font-semibold text-muted">
             {resolved.count.toLocaleString()} products indexed · QC photos on select listings
           </p>

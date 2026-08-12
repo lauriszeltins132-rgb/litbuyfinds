@@ -79,7 +79,7 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
     badge: "LitBuy resource",
     h1: "LitBuy Spreadsheet",
     intro:
-      `The LitBuy spreadsheet is the community source for rep product rows — and LitBuy Finds turns that universe into ${SPREADSHEET_STATS.totalFindsLabel} searchable product pages with ${SPREADSHEET_STATS.qcFindsLabel} QC-linked listings, daily syncs, and verified buy buttons for LitBuy, MuleBuy, Kakobuy, HipoBuy, OopBuy, and ACBuy. Use this guide to understand spreadsheet categories, how rows become find pages, and where to browse the latest imports.`,
+      `Discover LitBuy finds organized by category. Our catalog has ${SPREADSHEET_STATS.totalFindsLabel}+ products (${SPREADSHEET_STATS.qcFindsLabel} with QC photos) updated weekly from the LitBuy spreadsheet — searchable pages with trusted agent links instead of endless rows.`,
     sections: [
       {
         heading: "What is the LitBuy Spreadsheet?",
@@ -1180,28 +1180,74 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
   "best-litbuy-finds-2026": {
     slug: "best-litbuy-finds-2026",
     path: "/best-litbuy-finds-2026",
-    title: "Best LitBuy Finds 2026",
+    title: "Best LitBuy Finds 2026 | Spreadsheet Picks, QC Photos & Rep Database",
     metaDescription:
-      "Best LitBuy finds in 2026 — editor picks, QC-approved sneakers, jackets, and streetwear with verified links.",
+      "Best LitBuy finds in 2026 — curated rep sneakers, hoodies, accessories, and streetwear with QC photos, spreadsheet-synced listings, and verified agent links.",
     badge: "2026",
     h1: "Best LitBuy finds 2026",
     intro:
-      "The definitive 2026 collection of top LitBuy finds — combining QC availability, engagement, premium brands, and verified buy links.",
+      "A curated snapshot of the strongest LitBuy rep finds for 2026 — editor picks with QC references, trusted agent links, and daily catalog syncs from the LitBuy spreadsheet. Browse sneakers, hoodies, jackets, and accessories without scrolling raw spreadsheet rows.",
     sections: [
+      {
+        heading: "Top categories in 2026",
+        paragraphs: [
+          "The best LitBuy finds span sneakers, streetwear layers, outerwear, and accessories. Use category databases when you want the full lane — this page highlights standouts across the catalog.",
+        ],
+        links: [
+          { href: "/categories/shoes", label: "Sneakers" },
+          { href: "/categories/hoodies", label: "Hoodies" },
+          { href: "/categories/accessories", label: "Accessories" },
+          { href: "/categories/coats-and-jackets", label: "Jackets" },
+          { href: "/sneaker-finds", label: "Sneaker finds" },
+          { href: "/clothing-finds", label: "Clothing finds" },
+        ],
+      },
       {
         heading: "2026 editor picks",
         paragraphs: [
-          "This page highlights the strongest catalog entries for 2026 — sneakers, outerwear, and designer accessories with the best photos and QC coverage.",
+          "This page highlights the strongest catalog entries for 2026 — sneakers, outerwear, and designer accessories with the best photos and QC coverage from the LitBuy spreadsheet import.",
         ],
         links: [
           { href: "/collections/best-litbuy-finds-2026", label: "2026 collection" },
           { href: "/best-litbuy-sneakers-2026", label: "Sneakers 2026" },
+          { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet guide" },
+          { href: "/latest-finds", label: "Latest spreadsheet additions" },
+        ],
+      },
+      {
+        heading: "QC and shipping tips",
+        paragraphs: [
+          "Request warehouse QC on sneakers and jackets before international shipping. Compare batch references on product pages, bundle lighter items to reduce per-piece shipping cost, and confirm live prices on your agent before paying.",
+        ],
+        links: [
+          { href: "/litbuy-qc", label: "QC database" },
+          { href: "/guides/how-to-check-qc-photos", label: "QC checklist" },
+          { href: "/how-to-save-on-shipping", label: "Save on shipping" },
         ],
       },
     ],
-    faqs: [],
+    faqs: [
+      {
+        question: "What are the best LitBuy finds in 2026?",
+        answer:
+          "Editor picks on this page combine QC availability, photo quality, engagement, and verified agent links — updated as the LitBuy spreadsheet catalog syncs daily.",
+      },
+      {
+        question: "How do I find budget LitBuy finds?",
+        answer:
+          "Open the Budget finds page for sub-$30 picks, or filter any category by price. Many first hauls start with tees, accessories, and budget sneakers.",
+      },
+      {
+        question: "Are these the same as spreadsheet rows?",
+        answer:
+          "Yes — they come from the same LitBuy spreadsheet universe. LitBuy Finds turns rows into searchable product pages with QC badges and shareable URLs.",
+      },
+    ],
     relatedLinks: [
+      { href: "/best-budget-finds", label: "Budget LitBuy finds" },
       { href: "/best-litbuy-finds", label: "Best finds hub" },
+      { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+      { href: "/latest-finds", label: "Latest finds" },
       { href: "/litbuy-finds", label: "All finds" },
     ],
     getProducts: () => getEditorsPicks(96),

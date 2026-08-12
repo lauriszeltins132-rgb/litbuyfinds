@@ -1039,12 +1039,12 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
     slug: "latest-finds",
     type: "freshness",
     freshnessDisplay: "latestFinds",
-    title: "LitBuy Finds — Latest Rep Products, QC Photos & Spreadsheet Drops",
+    title: "Latest LitBuy Finds | 2026 Spreadsheet Products & QC Photos",
     description:
-      "Latest LitBuy finds updated daily — new rep sneakers, clothing, streetwear, and QC-linked products from the LitBuy spreadsheet catalog with verified agent buy buttons.",
+      "Latest LitBuy finds updated weekly — new rep sneakers, clothing, streetwear, and QC-linked products from the LitBuy spreadsheet catalog with verified agent buy buttons.",
     h1: "Latest LitBuy finds",
     intro:
-      `LitBuy Finds is the main rep product discovery database. This page lists the newest ${FINDS_STATS.totalFindsLabel} catalog additions after each daily spreadsheet sync — with photos, prices, QC references where available, and verified LitBuy, MuleBuy, Kakobuy, OopBuy, and ACBuy links. New products from the database appear here first before rolling into category and brand pages.`,
+      `Discover LitBuy finds organized by category. Our catalog has ${FINDS_STATS.totalFindsLabel}+ products (${FINDS_STATS.qcFindsLabel} with QC photos) updated weekly from the LitBuy spreadsheet. This page shows the newest rep products after each sync — with photos, prices, QC references, and trusted LitBuy, MuleBuy, Kakobuy, OopBuy, and ACBuy links.`,
     badge: "Discovery hub",
     keywords: [
       "litbuy finds",

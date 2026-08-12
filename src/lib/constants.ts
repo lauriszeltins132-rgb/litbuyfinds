@@ -16,10 +16,10 @@ export const SITE_OG_TITLE = HOMEPAGE_TITLE;
 export const SITE_OG_DESCRIPTION = SITE_DESCRIPTION;
 
 export const HERO_HEADLINE =
-  "LitBuy Finds — QC Photos, Spreadsheet Discovery & Rep Fashion Database";
+  "LitBuy Finds — Curated Rep Discovery, Spreadsheet Catalog & QC Photos";
 
 export const HERO_SUBHEADLINE =
-  "Search thousands of rep finds with QC photos, spreadsheet-style discovery, and verified agent links — sneakers, clothing, streetwear, and brand finds updated daily.";
+  "LitBuyFinds: curated LitBuy product discoveries with QC references, price comparisons, and trusted agent links — sneakers, clothing, and rep finds updated weekly.";
 
 export const HERO_TAGLINE = HERO_SUBHEADLINE;
 

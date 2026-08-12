@@ -1,7 +1,9 @@
 import HeroSearch from "@/components/HeroSearch";
+import DiscoveryQuickLinks from "@/components/DiscoveryQuickLinks";
 import LiveSiteSignals from "@/components/LiveSiteSignals";
 import { HERO_HEADLINE, HERO_SUBHEADLINE } from "@/lib/constants";
 import { HERO_ENTITY_LINE } from "@/lib/brand-entity";
+import { getFindsAuthorityStats } from "@/lib/finds-authority";
 import { getSearchIndex } from "@/lib/search-suggestions";
 
 type DiscoveryHeroProps = {
@@ -17,6 +19,7 @@ export default function DiscoveryHero({ compact = false }: DiscoveryHeroProps) {
     keywords,
     priority,
   }));
+  const stats = getFindsAuthorityStats();
 
   return (
     <section className="border-b border-border/50 px-4 pb-4 pt-4 sm:px-6 sm:pb-5 sm:pt-6">
@@ -34,11 +37,15 @@ export default function DiscoveryHero({ compact = false }: DiscoveryHeroProps) {
 
         {!compact ? (
           <p className="mx-auto mt-2 max-w-2xl text-xs leading-relaxed text-muted/80 sm:text-sm">
-            {HERO_ENTITY_LINE}
+            {HERO_ENTITY_LINE} Discover LitBuy finds organized by category — our catalog has{" "}
+            {stats.totalFindsLabel}+ products with {stats.qcFindsLabel} QC-linked listings,
+            updated weekly from the LitBuy spreadsheet.
           </p>
         ) : null}
 
         <LiveSiteSignals />
+
+        {!compact ? <DiscoveryQuickLinks /> : null}
 
         <div className="mx-auto mt-4 max-w-[700px]">
           <HeroSearch searchIndex={searchIndex} />

@@ -195,20 +195,25 @@ export const SHARE_COLLECTIONS: Record<string, SeoListConfig> = {
     ],
   }),
   "best-litbuy-finds-2026": wrap("best-litbuy-finds-2026", {
-    title: "Best LitBuy Finds 2026",
+    title: "Best LitBuy Finds 2026 | QC Photos & Spreadsheet Picks",
     metaDescription:
-      "The best LitBuy finds in 2026 — editor picks, QC-approved products, and trending sneakers and fashion.",
+      "The best LitBuy finds in 2026 — editor picks, QC-approved products, and trending sneakers and fashion from the spreadsheet catalog.",
     badge: "Collection",
     h1: "Best LitBuy finds 2026",
     intro:
-      "A shareable snapshot of standout catalog picks for 2026. Updated with daily catalog sync.",
+      "A shareable snapshot of standout LitBuy rep finds for 2026 — curated from the spreadsheet catalog with QC references, trusted agent links, and daily sync updates.",
     getProducts: () => getEditorsPicks(96),
     relatedLinks: [
+      { href: "/best-litbuy-finds-2026", label: "Best finds landing page" },
+      { href: "/best-budget-finds", label: "Budget finds" },
       { href: "/top-litbuy-finds-this-month", label: "This month" },
       { href: "/most-popular-finds-now", label: "Popular today" },
       { href: "/guides/litbuy-finds", label: "LitBuy finds guide" },
     ],
     clusterLinks: [
+      { href: "/categories/shoes", label: "Sneakers" },
+      { href: "/categories/hoodies", label: "Hoodies" },
+      { href: "/categories/accessories", label: "Accessories" },
       { href: "/collections/best-qc-approved-finds", label: "QC finds" },
     ],
   }),

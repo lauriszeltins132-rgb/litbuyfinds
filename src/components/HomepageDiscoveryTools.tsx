@@ -1,4 +1,5 @@
 import AiHeroEntry from "@/components/ai/AiHeroEntry";
+import DiscoveryQuickLinks from "@/components/DiscoveryQuickLinks";
 import TrustStrip from "@/components/TrustStrip";
 
 export default function HomepageDiscoveryTools() {
@@ -7,6 +8,7 @@ export default function HomepageDiscoveryTools() {
       <div className="mx-auto max-w-[700px]">
         <AiHeroEntry />
       </div>
+      <DiscoveryQuickLinks />
       <div className="mx-auto mt-5 max-w-7xl sm:mt-6">
         <TrustStrip compact />
       </div>
