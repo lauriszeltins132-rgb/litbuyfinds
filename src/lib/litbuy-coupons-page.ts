@@ -161,6 +161,50 @@ export const LITBUY_COUPONS_INTERNAL_LINKS = [
   { href: "/how-to-use-litbuy", label: "How to use LitBuy" },
 ] as const;
 
+/** Post-coupon discovery links — turn coupon visitors into catalog browsers */
+export const LITBUY_COUPONS_DISCOVERY_LINKS = [
+  {
+    href: "/latest-finds",
+    label: "Latest LitBuy Finds",
+    description: "New spreadsheet drops with photos and buy links",
+  },
+  {
+    href: "/litbuy-spreadsheet",
+    label: "LitBuy Spreadsheet",
+    description: "Browse the organized catalog behind the sheet",
+  },
+  {
+    href: "/collections/best-qc-approved-finds",
+    label: "QC Finds",
+    description: "Listings with QC photo references ready to compare",
+  },
+  {
+    href: "/litbuy-qc",
+    label: "QC photo guide",
+    description: "How warehouse QC works before you ship",
+  },
+  {
+    href: "/litbuy-finds",
+    label: "LitBuy agent finds",
+    description: "Curated products with verified LitBuy checkout links",
+  },
+  {
+    href: "/kakobuy-finds",
+    label: "Kakobuy finds",
+    description: "Same catalog lane with Kakobuy agent links",
+  },
+  {
+    href: "/oopbuy-finds",
+    label: "OopBuy finds",
+    description: "Browse finds with OopBuy checkout options",
+  },
+  {
+    href: "/mulebuy-finds",
+    label: "MuleBuy finds",
+    description: "Agent finds for MuleBuy shoppers",
+  },
+] as const;
+
 export const LITBUY_COUPONS_TRUST_SIGNALS = [
   "LitBuy coupons manually verified before listing",
   "Updated when catalog sync runs",
