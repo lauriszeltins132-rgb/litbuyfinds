@@ -82,9 +82,19 @@ export const LITBUY_COUPONS_METADATA = {
 
 export const LITBUY_COUPONS_FAQS = [
   {
+    question: "What are LitBuy coupons?",
+    answer:
+      "LitBuy coupons are registration and checkout discounts for LitBuy agent shoppers — typically a new-user welcome coupon pack plus shipping savings. On LitBuy Finds, the verified LitBuy coupons hub explains the current offer and links to official registration so you can confirm the live total before paying.",
+  },
+  {
     question: "What is the best LitBuy coupon code in 2026?",
     answer:
       "The best working LitBuy coupon on LitBuy Finds bundles a new-user welcome pack (up to $500 in coupons) with up to 40% off international shipping when you register through our verified referral link. LitBuy may show additional promo codes at checkout — always verify the live offer on litbuy.com.",
+  },
+  {
+    question: "How do LitBuy coupon codes work?",
+    answer:
+      "Most LitBuy coupon value is unlocked at registration through a verified referral / invite link (invite code SMKS on this page). After signup, welcome coupons appear in your LitBuy account and shipping discounts apply at parcel checkout. Always confirm the live total on LitBuy before paying — third-party code dumps often list expired offers.",
   },
   {
     question: "Is there a working LitBuy promo code?",
@@ -102,9 +112,19 @@ export const LITBUY_COUPONS_FAQS = [
       "A referral code (invite code) is tied to registration — it can unlock welcome coupon packs and account credits. A coupon is usually applied at checkout for shipping or fees. On LitBuy, registration through a referral link often combines both into one working LitBuy coupon offer.",
   },
   {
+    question: "How do LitBuy shipping discounts work?",
+    answer:
+      "Eligible new accounts can unlock up to 40% off international shipping when registering through the verified LitBuy coupon link on this page. Shipping lines, weight, and destination still determine the final fee — confirm the discounted total in LitBuy checkout before you submit a parcel.",
+  },
+  {
     question: "Do LitBuy coupons expire?",
     answer:
       "LitBuy coupon and promo offers can change by season, region, and account type. We update the comparison table when we re-verify offers. If checkout does not show the expected $500 pack or shipping discount, check LitBuy's live promotions page.",
+  },
+  {
+    question: "How are agent coupon updates tracked?",
+    answer:
+      "We re-check the LitBuy registration and shipping offer when catalog sync runs and when community reports change. Working LitBuy coupons stay listed as Active; expired or unverified codes are removed so this LitBuy coupons page stays accurate for shoppers.",
   },
   {
     question: "How much can I save with a LitBuy coupon?",

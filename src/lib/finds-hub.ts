@@ -1,5 +1,5 @@
 import { PUBLIC_CATALOG_COUNT } from "./catalog-count-public";
-import { LITBUY_SIGNUP_URL } from "./constants";
+import { } from "./constants";
 import {
   getDailyFindsTitle,
   getWeeklyFindsTitle,
@@ -163,6 +163,6 @@ export const FINDS_HUB_CATEGORY_LINKS = [
   { href: "/how-to-buy-reps", label: "How to buy reps" },
   { href: "/litbuy-qc", label: "QC photos" },
   { href: "/litbuy-spreadsheet", label: "Spreadsheet" },
-  { href: LITBUY_SIGNUP_URL, label: "Coupons" },
+  { href: "/litbuy-coupons", label: "LitBuy coupons" },
   { href: "/litbuy-discord", label: "Discord" },
 ] as const;

@@ -43,13 +43,19 @@ export default function HomepageConversion() {
           <p className="mt-2 text-sm leading-relaxed text-muted">
             Create a free LitBuy account for shipping coupons, QC access, and order tracking.
           </p>
+          <Link
+            href="/litbuy-coupons"
+            className="mt-3 inline-block text-sm font-bold text-accent hover:underline"
+          >
+            LitBuy coupons →
+          </Link>
           <a
             href={LITBUY_SIGNUP_URL}
             target="_blank"
             rel="noopener noreferrer sponsored"
-            className="mt-3 inline-block text-sm font-bold text-accent hover:underline"
+            className="mt-2 block text-sm font-semibold text-muted hover:text-accent"
           >
-            Claim LitBuy coupons →
+            Register on LitBuy →
           </a>
         </div>
       </div>

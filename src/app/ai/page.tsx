@@ -5,7 +5,6 @@ import SmartLink from "@/components/SmartLink";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import SchemaScript from "@/components/SchemaScript";
 import { AI_PROMPT_CHIPS } from "@/lib/ai/prompt-chips";
-import { LITBUY_SIGNUP_URL } from "@/lib/constants";
 import { buildFaqSchema, buildWebPageSchema } from "@/lib/schema";
 import { buildPageMetadata } from "@/lib/seo";
 
@@ -137,7 +136,7 @@ export default async function AiPage({ searchParams }: AiPageProps) {
                 { href: "/categories", label: "Categories" },
                 { href: "/guides", label: "Guides" },
                 { href: "/telegram-litbuy", label: "Telegram" },
-                { href: LITBUY_SIGNUP_URL, label: "Coupons" },
+                { href: "/litbuy-coupons", label: "LitBuy coupons" },
                 { href: "/best-shoes", label: "Best shoes" },
               ].map((link) => (
                 <li key={link.href}>

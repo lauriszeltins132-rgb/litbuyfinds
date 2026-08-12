@@ -177,6 +177,7 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
         links: [
           { href: "/litbuy-qc", label: "LitBuy QC guide" },
           { href: "/how-to-buy", label: "How to buy" },
+          { href: "/litbuy-coupons", label: "LitBuy coupons" },
         ],
       },
       {

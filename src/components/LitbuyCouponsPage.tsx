@@ -123,6 +123,88 @@ export default function LitbuyCouponsPage() {
             ))}
           </ul>
 
+          {/* What are LitBuy coupons */}
+          <section className="mt-12">
+            <h2 className="text-xl font-black text-foreground">
+              What are LitBuy coupons?
+            </h2>
+            <p className="mt-3 text-base leading-relaxed text-muted">
+              LitBuy coupons are registration and checkout discounts for shoppers
+              who buy Weidian and Taobao finds through the LitBuy agent. The main
+              offer tracked on this LitBuy coupons page is a new-user welcome pack
+              (up to $500 in account coupons) plus international shipping savings
+              when you register through our verified link. Product prices on{" "}
+              <Link href="/litbuy-finds" className="font-semibold text-accent hover:underline">
+                LitBuy Finds
+              </Link>{" "}
+              stay separate — coupons mainly reduce fees and freight on your haul.
+            </p>
+          </section>
+
+          {/* How coupon codes work */}
+          <section className="mt-12">
+            <h2 className="text-xl font-black text-foreground">
+              How LitBuy coupon codes work
+            </h2>
+            <p className="mt-3 text-base leading-relaxed text-muted">
+              Most value comes from registering with a verified referral / invite
+              link rather than pasting random blog codes. After signup, welcome
+              coupons land in your LitBuy wallet and shipping discounts apply when
+              you submit an international parcel. Always confirm the live total on
+              LitBuy checkout — if a third-party “promo code” does not appear, it
+              is usually expired.
+            </p>
+            <p className="mt-3 text-base leading-relaxed text-muted">
+              Prefer browsing first? Open the{" "}
+              <Link href="/litbuy-spreadsheet" className="font-semibold text-accent hover:underline">
+                LitBuy Spreadsheet
+              </Link>{" "}
+              hub or{" "}
+              <Link href="/latest-finds" className="font-semibold text-accent hover:underline">
+                Latest LitBuy finds
+              </Link>
+              , shortlist products, then claim the coupon before you pay shipping.
+            </p>
+          </section>
+
+          {/* Shipping discounts */}
+          <section className="mt-12">
+            <h2 className="text-xl font-black text-foreground">
+              LitBuy shipping discounts
+            </h2>
+            <p className="mt-3 text-base leading-relaxed text-muted">
+              Eligible new accounts can unlock up to{" "}
+              <strong className="text-foreground">40% off international shipping</strong>{" "}
+              through the registration offer on this page. Final freight still
+              depends on weight, volumetric size, line, and destination — so treat
+              the percentage as a checkout discount, not a flat fee. Pair the
+              shipping coupon with lighter finds when testing your first haul, and
+              see our{" "}
+              <Link href="/how-to-save-on-shipping" className="font-semibold text-accent hover:underline">
+                shipping savings guide
+              </Link>{" "}
+              for haul tips.
+            </p>
+          </section>
+
+          {/* Agent coupon updates */}
+          <section className="mt-12">
+            <h2 className="text-xl font-black text-foreground">
+              Agent coupon updates
+            </h2>
+            <p className="mt-3 text-base leading-relaxed text-muted">
+              LitBuy promotions can change by season and account type. We refresh
+              this LitBuy coupons hub when catalog sync runs and when community
+              reports show a change at checkout. Active rows stay in the comparison
+              table; expired offers are removed so shoppers are not sent to dead
+              codes. For community shipping and coupon chatter, check the{" "}
+              <Link href="/litbuy-discord" className="font-semibold text-accent hover:underline">
+                LitBuy Discord
+              </Link>{" "}
+              page as well.
+            </p>
+          </section>
+
           {/* Current working coupon */}
           <section className="mt-12">
             <h2 className="text-xl font-black text-foreground">
