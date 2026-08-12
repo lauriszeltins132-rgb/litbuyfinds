@@ -4,6 +4,7 @@ import RegisterLink from "@/components/RegisterLink";
 import SchemaScript from "@/components/SchemaScript";
 import {
   LITBUY_COUPONS_CTA,
+  LITBUY_COUPONS_DISCOVERY_LINKS,
   LITBUY_COUPONS_FAQS,
   LITBUY_COUPONS_INTERNAL_LINKS,
   LITBUY_COUPONS_METADATA,
@@ -395,7 +396,33 @@ export default function LitbuyCouponsPage() {
                 {LITBUY_COUPONS_CTA.label}
               </RegisterLink>
             </div>
-            <ul className="mt-4 flex flex-wrap gap-2">
+          </section>
+
+          {/* After coupon — browse LitBuy Finds */}
+          <section className="mt-12">
+            <h2 className="text-xl font-black text-foreground">
+              After you claim — browse LitBuy Finds
+            </h2>
+            <p className="mt-3 text-base leading-relaxed text-muted">
+              Once your account is set up, use LitBuy Finds to shortlist products
+              before you spend the coupon pack on shipping. Start with new drops,
+              open the spreadsheet hub for organized browsing, check QC-linked
+              listings, then pick an agent lane when you are ready to buy.
+            </p>
+            <ul className="mt-6 space-y-3">
+              {LITBUY_COUPONS_DISCOVERY_LINKS.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="font-semibold text-accent hover:underline"
+                  >
+                    {link.label}
+                  </Link>
+                  <span className="text-sm text-muted"> — {link.description}</span>
+                </li>
+              ))}
+            </ul>
+            <ul className="mt-6 flex flex-wrap gap-2">
               {LITBUY_COUPONS_INTERNAL_LINKS.map((link) => (
                 <li key={link.href}>
                   <Link
