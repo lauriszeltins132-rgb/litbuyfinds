@@ -1,4 +1,3 @@
-import { LITBUY_SIGNUP_URL } from "./constants";
 
 export type StaticPageSection = {
   heading: string;
@@ -333,7 +332,7 @@ export const STATIC_PAGES: Record<string, StaticPage> = {
           "Create a LitBuy account using a referral link if you want shipping discounts for new users. Registration is free and takes a few minutes.",
         ],
         links: [
-          { href: LITBUY_SIGNUP_URL, label: "LitBuy coupons & shipping discount" },
+          { href: "/litbuy-coupons", label: "LitBuy coupons & shipping discount" },
         ],
       },
       {
@@ -392,7 +391,7 @@ export const STATIC_PAGES: Record<string, StaticPage> = {
           "Pick one affordable item from our Best Under $30 collection. You learn the full flow — payment, warehouse, QC, shipping — without risking a large budget.",
         ],
         links: [
-          { href: LITBUY_SIGNUP_URL, label: "LitBuy coupons" },
+          { href: "/litbuy-coupons", label: "LitBuy coupons" },
           { href: "/deals", label: "Deals under $30" },
           { href: "/best-budget-finds", label: "Best budget finds" },
         ],
@@ -592,7 +591,7 @@ export const STATIC_PAGES: Record<string, StaticPage> = {
           "LitBuy often runs promotions for new accounts — including shipping discounts when you register through a referral. Check the current offer on our homepage banner.",
         ],
         links: [
-          { href: LITBUY_SIGNUP_URL, label: "LitBuy coupons" },
+          { href: "/litbuy-coupons", label: "LitBuy coupons" },
           { href: "/new-user-guide", label: "New user guide" },
         ],
       },

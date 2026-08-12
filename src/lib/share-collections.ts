@@ -1,5 +1,4 @@
 import type { SeoListConfig } from "./top-lists";
-import { LITBUY_SIGNUP_URL } from "./constants";
 import { TOP_LISTS } from "./top-lists";
 import { COLLECTION_SEO_BODIES } from "./collection-seo-bodies";
 import { getEditorsPicks } from "./discovery";
@@ -420,7 +419,7 @@ export const SHARE_COLLECTIONS: Record<string, SeoListConfig> = {
     relatedLinks: [
       { href: "/most-popular-finds-now", label: "Popular today" },
       { href: "/collections/trending-this-week", label: "Trending week" },
-      { href: LITBUY_SIGNUP_URL, label: "LitBuy coupons" },
+      { href: "/litbuy-coupons", label: "LitBuy coupons" },
     ],
     clusterLinks: [
       { href: "/collections/best-nike-finds", label: "Nike finds" },

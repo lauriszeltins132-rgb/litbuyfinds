@@ -4,7 +4,6 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import GuidesHubCategoryNav from "@/components/guides/GuidesHubCategoryNav";
 import GuidesHubGrid from "@/components/guides/GuidesHubGrid";
 import SchemaScript from "@/components/SchemaScript";
-import { LITBUY_SIGNUP_URL } from "@/lib/constants";
 import { GUIDES_HUB, getAllGuides } from "@/lib/guides";
 import { GUIDES_HUB_FAQS } from "@/lib/guides/hub-sections";
 import {
@@ -76,14 +75,9 @@ export default function GuidesHubPage() {
               Our mission
             </Link>
             {" · "}
-            <a
-              href={LITBUY_SIGNUP_URL}
-              target="_blank"
-              rel="noopener noreferrer sponsored"
-              className="font-bold text-accent hover:underline"
-            >
+            <Link href="/litbuy-coupons" className="font-bold text-accent hover:underline">
               LitBuy coupons
-            </a>
+            </Link>
           </p>
         </div>
       </section>
