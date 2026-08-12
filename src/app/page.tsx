@@ -14,6 +14,7 @@ import HomepageCollections from "@/components/HomepageCollections";
 import HomepageConversion from "@/components/HomepageConversion";
 import HomepageFaq from "@/components/HomepageFaq";
 import HomepageInternalLinks from "@/components/HomepageInternalLinks";
+import HomepageLitBuyResources from "@/components/HomepageLitBuyResources";
 import HomepageSeoContent from "@/components/HomepageSeoContent";
 import RecentlyViewedRail from "@/components/RecentlyViewedRail";
 import ProductGridSkeleton from "@/components/ProductGridSkeleton";
@@ -115,6 +116,7 @@ export default async function HomePage() {
       <RecentlyViewedRail />
 
       <HomepageConversion />
+      <HomepageLitBuyResources />
       <HomepageAuthorityHub />
       <HomepageInternalLinks />
       <HomepageSeoContent />

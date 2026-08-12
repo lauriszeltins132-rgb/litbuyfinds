@@ -49,11 +49,11 @@ export function getHomepageMetadataCopy() {
   const stats = getFindsAuthorityStats();
   return {
     title: truncateMetaTitle(
-      `LitBuy Finds 2026 | ${stats.totalFindsLabel} QC Photos, Spreadsheet & Rep Database`,
+      `LitBuy Finds: 2026 Spreadsheet, Products & QC Photos`,
       72
     ),
     description: truncateMetaDescription(
-      `Browse ${stats.totalFindsLabel} LitBuy finds with ${stats.qcFindsLabel} QC-linked listings — sneaker, clothing, and streetwear rep discovery, spreadsheet finds, brand hubs, and verified agent links.`
+      `Browse ${stats.totalFindsLabel} LitBuy finds and rep products — spreadsheet-synced catalog with ${stats.qcFindsLabel} QC photos, trusted agent links, category discovery, and weekly updates.`
     ),
   };
 }
@@ -109,10 +109,10 @@ export function getSpreadsheetMetadataCopy() {
   const stats = getFindsAuthorityStats();
   return {
     title: truncateMetaTitle(
-      `LitBuy Spreadsheet | ${stats.totalFindsLabel} Finds, QC Photos & Agent Links`
+      `LitBuy Spreadsheet 2026: Best Finds, Guide & QC Database`
     ),
     description: truncateMetaDescription(
-      `LitBuy spreadsheet guide with ${stats.totalFindsLabel} searchable finds, ${stats.qcFindsLabel} QC-linked listings, category browsing, latest finds sync, and ${META_AGENTS} checkout.`
+      `LitBuy spreadsheet guide with ${stats.totalFindsLabel}+ searchable rep finds, ${stats.qcFindsLabel} QC-linked listings, category browsing, latest finds sync, and ${META_AGENTS} checkout.`
     ),
   };
 }

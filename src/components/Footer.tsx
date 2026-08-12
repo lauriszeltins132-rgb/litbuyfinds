@@ -27,11 +27,22 @@ const GUIDE_LINKS = [
 ];
 
 const COLLECTION_LINKS = [
-  { href: "/collections/best-litbuy-finds-2026", label: "Best finds 2026" },
+  { href: "/best-litbuy-finds-2026", label: "Best finds 2026" },
+  { href: "/best-budget-finds", label: "Budget finds" },
+  { href: "/collections/best-litbuy-finds-2026", label: "2026 collection" },
   { href: "/collections/best-nike-finds", label: "Best Nike finds" },
   { href: "/collections/best-qc-approved-finds", label: "QC finds" },
-  { href: "/collections/best-budget-finds", label: "Budget finds" },
+  { href: "/collections/best-budget-finds", label: "Budget collection" },
   { href: "/collections/litbuy-spreadsheet-alternative", label: "Sheet alternative" },
+];
+
+const RESOURCE_LINKS = [
+  { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+  { href: "/guides/litbuy-spreadsheet-guide", label: "Spreadsheet guide" },
+  { href: "/latest-finds", label: "Latest finds" },
+  { href: "/finds", label: "Finds database" },
+  { href: "/litbuy-qc", label: "QC photo guide" },
+  { href: "/best-rep-finds", label: "Best rep finds" },
 ];
 
 const TRUST_LINKS = [
@@ -194,6 +205,13 @@ export default function Footer() {
                 </li>
               ))}
               {COLLECTION_LINKS.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="text-foreground/75 transition hover:text-accent">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+              {RESOURCE_LINKS.map((link) => (
                 <li key={link.href}>
                   <Link href={link.href} className="text-foreground/75 transition hover:text-accent">
                     {link.label}

@@ -326,13 +326,13 @@ export const BEGINNER_GUIDES: Record<string, GuidePage> = {
   }),
 
   "litbuy-spreadsheet-guide": buildGuide("litbuy-spreadsheet-guide", "beginner", {
-    title: "LitBuy Spreadsheet Guide",
+    title: "LitBuy Spreadsheet Guide 2026 | Organized Product Discovery",
     metaDescription:
-      "How find spreadsheets relate to LitBuy Finds — columns, agent links, QC references, and why the site is easier to browse than a raw sheet.",
+      "LitBuy spreadsheet guide — an organized product discovery resource with QC references, category browsing, and searchable rep finds instead of raw spreadsheet rows.",
     badge: "Spreadsheet guide",
     h1: "LitBuy spreadsheet guide",
     intro:
-      "A lot of finds still originate in shared spreadsheets — one row per product with a price, photo link, and agent URL. LitBuy Finds imports that style of data so you can search it like a normal catalog.",
+      "The LitBuy spreadsheet is a community-maintained list of rep finds — and LitBuy Finds is the organized product discovery resource built on top of it. Rows become searchable pages with QC photos, category filters, brand hubs, and trusted agent links you can share without sending fragile sheet URLs.",
     cardDescription:
       "How sheet rows become browsable product listings here.",
     sections: [
@@ -359,6 +359,10 @@ export const BEGINNER_GUIDES: Record<string, GuidePage> = {
           "Sheets are wide and awkward on a phone. Here you get filters, brand pages, trending sorts, and stable links to share. QC references stay visible on the listing when the import includes them.",
         ],
         links: [
+          { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet hub" },
+          { href: "/latest-finds", label: "Latest spreadsheet additions" },
+          { href: "/best-litbuy-finds-2026", label: "Best finds 2026" },
+          { href: "/best-budget-finds", label: "Budget finds" },
           { href: "/trending", label: "Trending finds" },
           { href: "/brands", label: "Brand index" },
         ],
