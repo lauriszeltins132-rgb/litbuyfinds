@@ -422,18 +422,41 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
     faqs: [
       {
         question: "Is LitBuy Finds free?",
-        answer: "Yes. Browsing is free. You only pay when purchasing through LitBuy.",
+        answer: "Yes. Browsing is free. You only pay when purchasing through LitBuy or another supported agent.",
       },
       {
         question: "How many products are listed?",
         answer:
-          "The public catalog highlights 10,000+ curated finds with daily updates across sneakers, clothing, and accessories.",
+          `The public catalog highlights ${PUBLIC_CATALOG_COUNT} curated finds with daily updates across sneakers, clothing, and accessories.`,
+      },
+      {
+        question: "What is the difference between LitBuy Finds and a LitBuy spreadsheet?",
+        answer:
+          "A LitBuy spreadsheet is a long list of rows. LitBuy Finds turns that universe into searchable product pages with photos, QC badges, category filters, and shareable URLs.",
+      },
+      {
+        question: "Where do I browse clothing and sneakers?",
+        answer:
+          "Use Clothing finds, Sneaker finds, Hoodie finds, and Jacket finds for category databases — or open Latest Finds for new spreadsheet imports.",
+      },
+      {
+        question: "How do QC photos work on LitBuy Finds?",
+        answer:
+          "Reference QC links on product pages show batch examples. Request warehouse QC on your agent after purchase for photos of your exact item.",
       },
     ],
     relatedLinks: [
+      { href: "/finds", label: "Finds hub" },
+      { href: "/latest-finds", label: "Latest finds" },
+      { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
       { href: "/best-litbuy-finds", label: "Best finds" },
+      { href: "/sneaker-finds", label: "Sneaker finds" },
+      { href: "/clothing-finds", label: "Clothing finds" },
+      { href: "/hoodie-finds", label: "Hoodie finds" },
+      { href: "/jacket-finds", label: "Jacket finds" },
+      { href: "/best-rep-finds", label: "Best rep finds" },
+      { href: "/litbuy-qc", label: "QC database" },
       { href: "/litbuy-products", label: "All products" },
-      ...RESOURCE_LINKS,
     ],
     getProducts: () => getEditorsPicks(72),
     productSectionTitle: "Top LitBuy finds right now",
@@ -717,13 +740,13 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
   "best-litbuy-finds": {
     slug: "best-litbuy-finds",
     path: "/best-litbuy-finds",
-    title: "Best LitBuy Finds 2026",
+    title: "Best LitBuy Finds 2026 | Rep Picks, QC Photos & Spreadsheet",
     metaDescription:
-      "Best LitBuy finds in 2026 — editor picks, QC-approved products, trending sneakers and streetwear with verified links.",
+      "Best LitBuy finds in 2026 — editor picks, QC-approved sneakers, clothing, and streetwear with spreadsheet-synced listings and verified agent links.",
     badge: "Best finds",
     h1: "Best LitBuy finds",
     intro:
-      "The strongest picks from the LitBuy Finds catalog — combining photos, QC availability, verified buy links, and community engagement. Updated with daily catalog sync.",
+      "The strongest picks from the LitBuy Finds catalog — combining photos, QC availability, verified buy links, and community engagement. Updated with weekly spreadsheet syncs.",
     sections: [
       {
         heading: "How we pick best finds",
@@ -733,17 +756,58 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
         links: [
           { href: "/most-popular-finds-now", label: "Popular today" },
           { href: "/collections/best-litbuy-finds-2026", label: "2026 collection" },
+          { href: "/best-litbuy-finds-2026", label: "Best finds 2026 landing" },
+        ],
+      },
+      {
+        heading: "Browse by category",
+        paragraphs: [
+          "Best finds span sneakers, clothing, hoodies, jackets, and accessories. Jump to category find databases when you want the full lane instead of editor-ranked highlights.",
+        ],
+        links: [
+          { href: "/sneaker-finds", label: "Sneaker finds" },
+          { href: "/clothing-finds", label: "Clothing finds" },
+          { href: "/hoodie-finds", label: "Hoodie finds" },
+          { href: "/jacket-finds", label: "Jacket finds" },
+          { href: "/best-rep-finds", label: "Best rep finds" },
+        ],
+      },
+      {
+        heading: "Spreadsheet and QC connection",
+        paragraphs: [
+          "Editor picks come from the same LitBuy spreadsheet universe as Latest Finds. QC badges help you shortlist batches before opening agent checkout.",
+        ],
+        links: [
+          { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+          { href: "/latest-finds", label: "Latest finds" },
+          { href: "/litbuy-qc", label: "QC database" },
         ],
       },
     ],
     faqs: [
       {
         question: "How often do best finds change?",
-        answer: "The grid rotates daily based on analytics and catalog updates.",
+        answer: "The grid rotates with catalog analytics and spreadsheet syncs — check Latest Finds for brand-new imports.",
+      },
+      {
+        question: "Are best finds the same as spreadsheet rows?",
+        answer:
+          "They come from the same product universe. Best finds are ranked for photos, QC, and engagement — not every spreadsheet row.",
+      },
+      {
+        question: "Where do I browse budget picks?",
+        answer:
+          "Open Budget LitBuy finds or Cheap finds for under-$30 options that still have clear photos and agent links.",
       },
     ],
     relatedLinks: [
       { href: "/litbuy-finds", label: "All LitBuy finds" },
+      { href: "/best-litbuy-finds-2026", label: "Best finds 2026" },
+      { href: "/best-rep-finds", label: "Best rep finds" },
+      { href: "/latest-finds", label: "Latest finds" },
+      { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+      { href: "/sneaker-finds", label: "Sneaker finds" },
+      { href: "/clothing-finds", label: "Clothing finds" },
       { href: "/litbuy-sneakers", label: "Sneakers" },
     ],
     getProducts: () => getEditorsPicks(96),
@@ -1294,13 +1358,13 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
   "litbuy-hoodies": {
     slug: "litbuy-hoodies",
     path: "/litbuy-hoodies",
-    title: "LitBuy Hoodies – Streetwear & Sweats Catalog",
+    title: "LitBuy Hoodies | Streetwear Sweats, QC Photos & Spreadsheet Finds",
     metaDescription:
-      "Browse LitBuy hoodies and sweats from the LitBuy Finds catalog — Nike, Stussy, Essentials, and budget picks with QC links.",
+      "Browse LitBuy hoodies and sweats from the LitBuy Finds catalog — Nike, Stussy, Essentials, and budget picks with QC links and spreadsheet-synced listings.",
     badge: "LitBuy hoodies",
     h1: "LitBuy hoodies",
     intro:
-      "LitBuy hoodies and sweatsets from the LitBuy Finds catalog — browse hoodies, zip-ups, and crewnecks with photos, prices, and LitBuy buy links. Filter by brand on category pages or search with LitBuy AI.",
+      "LitBuy hoodies and sweatsets from the LitBuy Finds catalog — browse hoodies, zip-ups, and crewnecks with photos, prices, QC references, and LitBuy buy links. Filter by brand on category pages or open Hoodie finds for the full streetwear lane.",
     sections: [
       {
         heading: "Finding the right hoodie",
@@ -1309,12 +1373,48 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
         ],
         links: [
           { href: "/best-litbuy-hoodies", label: "Best hoodies list" },
+          { href: "/hoodie-finds", label: "Hoodie finds" },
           { href: "/categories/hoodies-and-pants", label: "Hoodies category" },
         ],
       },
+      {
+        heading: "Spreadsheet and clothing hubs",
+        paragraphs: [
+          "Hoodie rows from LitBuy spreadsheets land here and on Hoodie finds. Use Clothing finds for the broader fashion database and Latest Finds for new imports.",
+        ],
+        links: [
+          { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+          { href: "/clothing-finds", label: "Clothing finds" },
+          { href: "/latest-finds", label: "Latest finds" },
+          { href: "/streetwear-finds", label: "Streetwear finds" },
+        ],
+      },
     ],
-    faqs: [],
-    relatedLinks: [{ href: "/litbuy-finds", label: "LitBuy Finds" }],
+    faqs: [
+      {
+        question: "Where do LitBuy hoodies come from?",
+        answer:
+          "They are indexed from LitBuy spreadsheet and marketplace imports — each page includes photos, prices, and verified agent buy links.",
+      },
+      {
+        question: "Should I QC hoodies?",
+        answer:
+          "Yes for graphic embroidery and logo placement. Request warehouse QC and compare stitching before international shipping.",
+      },
+      {
+        question: "How do I browse more streetwear?",
+        answer:
+          "Open Hoodie finds, Streetwear finds, or Clothing finds for broader databases beyond this LitBuy hoodies hub.",
+      },
+    ],
+    relatedLinks: [
+      { href: "/hoodie-finds", label: "Hoodie finds" },
+      { href: "/clothing-finds", label: "Clothing finds" },
+      { href: "/streetwear-finds", label: "Streetwear finds" },
+      { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+      { href: "/litbuy-finds", label: "LitBuy Finds" },
+      { href: "/latest-finds", label: "Latest finds" },
+    ],
     getProducts: () =>
       byKeyword("hoodie", "hoodies", "sweatshirt", "zip-up").slice(0, 96),
     productSectionTitle: "LitBuy hoodies",
@@ -1323,9 +1423,9 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
   "litbuy-bags": {
     slug: "litbuy-bags",
     path: "/litbuy-bags",
-    title: "LitBuy Bags – Designer & Street Bags Catalog",
+    title: "LitBuy Bags | Designer Bags, Totes & QC Photos",
     metaDescription:
-      "Browse LitBuy bags — Louis Vuitton, Gucci, Goyard, and streetwear bags with images, prices, and verified LitBuy links.",
+      "Browse LitBuy bags — Louis Vuitton, Gucci, Goyard, and streetwear bags with images, prices, QC references, and verified LitBuy links.",
     badge: "LitBuy bags",
     h1: "LitBuy bags",
     intro:
@@ -1338,12 +1438,47 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
         ],
         links: [
           { href: "/best-litbuy-bags-2026", label: "Best bags 2026" },
+          { href: "/bag-finds", label: "Bag finds" },
           { href: "/collections/best-bags", label: "Bag collection" },
         ],
       },
+      {
+        heading: "Spreadsheet and QC for bags",
+        paragraphs: [
+          "Bag rows from LitBuy spreadsheets become searchable product pages here. Always QC hardware engraving and monogram alignment before shipping.",
+        ],
+        links: [
+          { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+          { href: "/litbuy-qc", label: "QC database" },
+          { href: "/categories/accessories", label: "Accessories" },
+        ],
+      },
     ],
-    faqs: [],
-    relatedLinks: [{ href: "/litbuy-finds", label: "LitBuy Finds" }],
+    faqs: [
+      {
+        question: "Should I always QC LitBuy bags?",
+        answer:
+          "Yes — bags are high-value. Compare hardware, stitching, and lining in warehouse QC before paying international freight.",
+      },
+      {
+        question: "Where else can I browse bags?",
+        answer:
+          "Open Bag finds for the full bag database, or Accessories for smaller carry pieces and budget street bags.",
+      },
+      {
+        question: "Are bags in the LitBuy spreadsheet?",
+        answer:
+          "Yes. Community spreadsheet rows for bags are indexed into LitBuy Finds product pages with photos and agent links.",
+      },
+    ],
+    relatedLinks: [
+      { href: "/bag-finds", label: "Bag finds" },
+      { href: "/litbuy-accessories", label: "LitBuy accessories" },
+      { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+      { href: "/litbuy-qc", label: "QC database" },
+      { href: "/litbuy-finds", label: "LitBuy Finds" },
+      { href: "/latest-finds", label: "Latest finds" },
+    ],
     getProducts: () => byKeyword("bag", "tote", "crossbody", "backpack").slice(0, 96),
     productSectionTitle: "LitBuy bags",
   },
@@ -1379,9 +1514,9 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
   "litbuy-accessories": {
     slug: "litbuy-accessories",
     path: "/litbuy-accessories",
-    title: "LitBuy Accessories – Hats, Belts, Watches & More",
+    title: "LitBuy Accessories | Hats, Belts, Watches & Spreadsheet Finds",
     metaDescription:
-      "Browse LitBuy accessories — hats, belts, watches, socks, and small goods from the LitBuy Finds catalog.",
+      "Browse LitBuy accessories — hats, belts, watches, socks, and small goods from the LitBuy Finds spreadsheet catalog with QC references.",
     badge: "LitBuy accessories",
     h1: "LitBuy accessories",
     intro:
@@ -1395,11 +1530,46 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
         links: [
           { href: "/best-litbuy-accessories-2026", label: "Best accessories 2026" },
           { href: "/categories/accessories", label: "Accessories category" },
+          { href: "/bag-finds", label: "Bag finds" },
+        ],
+      },
+      {
+        heading: "Spreadsheet connection",
+        paragraphs: [
+          "Accessory rows from LitBuy spreadsheets become searchable product pages here. Pair them with clothing finds and hoodie finds when building a haul.",
+        ],
+        links: [
+          { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+          { href: "/clothing-finds", label: "Clothing finds" },
+          { href: "/latest-finds", label: "Latest finds" },
         ],
       },
     ],
-    faqs: [],
-    relatedLinks: [{ href: "/litbuy-finds", label: "LitBuy Finds" }],
+    faqs: [
+      {
+        question: "What accessories are good for first hauls?",
+        answer:
+          "Hats, belts, and small leather goods add variety without heavy freight — lower risk than large outerwear pieces.",
+      },
+      {
+        question: "Are accessories in the LitBuy spreadsheet?",
+        answer:
+          "Yes. Spreadsheet rows for accessories are indexed into LitBuy Finds with photos, prices, and agent links.",
+      },
+      {
+        question: "Should I QC accessories?",
+        answer:
+          "A quick warehouse QC check is enough for most small goods. For designer-style belts and bags, compare hardware carefully.",
+      },
+    ],
+    relatedLinks: [
+      { href: "/categories/accessories", label: "Accessories category" },
+      { href: "/bag-finds", label: "Bag finds" },
+      { href: "/clothing-finds", label: "Clothing finds" },
+      { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+      { href: "/litbuy-finds", label: "LitBuy Finds" },
+      { href: "/latest-finds", label: "Latest finds" },
+    ],
     getProducts: () => byCategory("accessories").slice(0, 96),
     productSectionTitle: "LitBuy accessories",
   },

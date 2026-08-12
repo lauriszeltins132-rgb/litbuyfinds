@@ -123,21 +123,44 @@ export default function sitemap(): MetadataRoute.Sitemap {
           ? 0.96
           : slug === "latest-finds"
             ? 0.97
-            : 0.88,
+            : slug === "litbuy-finds" ||
+                slug === "best-litbuy-finds" ||
+                slug === "best-litbuy-finds-2026" ||
+                slug === "litbuy-hoodies" ||
+                slug === "litbuy-bags" ||
+                slug === "litbuy-accessories" ||
+                slug === "litbuy-qc"
+              ? 0.91
+              : 0.88,
       lastModified: getDatasetSyncedIso(),
     });
   }
 
   for (const entry of getPublishedSeoLandingConfigs()) {
+    const discoveryPriority = new Set([
+      "sneaker-finds",
+      "clothing-finds",
+      "hoodie-finds",
+      "jacket-finds",
+      "streetwear-finds",
+      "best-rep-finds",
+      "bag-finds",
+      "best-sneaker-finds",
+      "best-clothing-finds",
+    ]);
     routes.push({
       url: `${SITE_URL}/${entry.slug}`,
       changeFrequency: getSitemapChangeFrequency(entry),
       priority:
         entry.slug === "latest-finds"
           ? 0.97
-          : entry.type === "freshness"
-            ? 0.9
-            : 0.87,
+          : discoveryPriority.has(entry.slug)
+            ? 0.92
+            : entry.type === "freshness"
+              ? 0.9
+              : entry.type === "spreadsheet"
+                ? 0.9
+                : 0.87,
       lastModified: getDatasetSyncedIso(),
     });
   }

@@ -15,10 +15,10 @@ export const FINDS_HUB_PATH = "/finds";
 export const FINDS_HUB_METADATA = {
   title: "LitBuy Finds - Best Rep Sneakers, Clothing Finds & QC Photos",
   description:
-    `Discover ${PUBLIC_CATALOG_COUNT} curated rep finds with QC photos, prices, agent spreadsheets, and verified LitBuy, Kakobuy, and MuleBuy links — updated daily.`,
+    `Discover ${PUBLIC_CATALOG_COUNT} curated rep finds with QC photos, LitBuy spreadsheet discovery, clothing and sneaker databases, and verified agent links — updated weekly.`,
   h1: "LitBuy Finds",
   directAnswer:
-    "Discover thousands of curated rep finds with QC photos, prices, spreadsheets, and verified agent links.",
+    "Discover thousands of curated rep finds with QC photos, spreadsheet-synced listings, and verified agent links.",
   badge: "Finds hub",
 } as const;
 
@@ -29,14 +29,19 @@ export const FINDS_HUB_FAQS = [
       "LitBuy Finds is a searchable catalog of rep products from Weidian and Taobao — each listing includes photos, prices, QC references where available, and verified agent buy links.",
   },
   {
+    question: "How is LitBuy Finds different from a LitBuy spreadsheet?",
+    answer:
+      "A LitBuy spreadsheet is a long list of product rows. LitBuy Finds indexes that universe into searchable pages with category filters, brand hubs, QC badges, and shareable URLs.",
+  },
+  {
     question: "How often are finds updated?",
     answer:
-      "The catalog syncs daily. New products appear in Latest Finds and Trending sections after each import.",
+      "The catalog syncs weekly from spreadsheet imports. New products appear in Latest Finds and Trending sections after each sync.",
   },
   {
     question: "Can I browse by brand or category?",
     answer:
-      "Yes. Use the category and brand sections below, or search by Nike, Jordan, Moncler, Stussy, hoodies, sneakers, and jackets from the homepage search bar.",
+      "Yes. Use Clothing finds, Sneaker finds, Hoodie finds, and Jacket finds — or search brands like Nike, Jordan, Moncler, and Stussy from the homepage.",
   },
   {
     question: "Where do QC photos come from?",

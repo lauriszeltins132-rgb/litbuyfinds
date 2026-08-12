@@ -365,6 +365,52 @@ const CATEGORY_FAQS: Record<string, { question: string; answer: string }[]> = {
         "Hats, belts, and small leather goods add variety without heavy freight. They are lower risk than large outerwear pieces.",
     },
   ],
+  "hoodies-and-pants": [
+    {
+      question: "What is in the hoodies and pants category?",
+      answer:
+        "Streetwear hoodies, crewnecks, sweatpants, cargos, and layer staples from brands like Stussy, Corteiz, Nike, and Essentials — indexed from LitBuy spreadsheet imports.",
+    },
+    {
+      question: "How do I browse more hoodie finds?",
+      answer:
+        "Open Hoodie finds for a focused hoodie database, Clothing finds for broader fashion, or the LitBuy spreadsheet guide to understand how rows become product pages.",
+    },
+    {
+      question: "Should I QC hoodies and pants?",
+      answer:
+        "Yes for graphic embroidery and logo placement. Compare measurements to garments you already own before shipping.",
+    },
+  ],
+  "coats-and-jackets": [
+    {
+      question: "What jackets are in this category?",
+      answer:
+        "Puffers, parkas, shells, and designer outerwear — Moncler, Canada Goose, The North Face, and Arc'teryx-style pieces lead winter searches.",
+    },
+    {
+      question: "How do jacket finds relate to the LitBuy spreadsheet?",
+      answer:
+        "Outerwear rows from LitBuy spreadsheets become searchable product pages on Jacket finds and this category hub, with QC badges and agent links.",
+    },
+    {
+      question: "What should I check in jacket QC?",
+      answer:
+        "Badge stitching, zipper branding, fill distribution, and cuff finish. Puffers are bulky — factor volumetric shipping weight.",
+    },
+  ],
+  "tshirts-and-shorts": [
+    {
+      question: "What is in t-shirts and shorts?",
+      answer:
+        "Graphic tees, staples, summer shorts, and warm-weather essentials from the LitBuy Finds catalog — good budget haul fillers.",
+    },
+    {
+      question: "Are tees good for first LitBuy orders?",
+      answer:
+        "Yes. Tees and shorts are lower risk and lighter to ship. Confirm size charts on the agent listing before ordering.",
+    },
+  ],
   electronics: [
     {
       question: "Should I buy electronics through LitBuy?",
