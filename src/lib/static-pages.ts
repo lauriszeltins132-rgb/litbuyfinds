@@ -488,23 +488,37 @@ export const STATIC_PAGES: Record<string, StaticPage> = {
     badge: "Budget picks",
     h1: "Budget LitBuy finds",
     intro:
-      "Affordable rep finds for first hauls and tight budgets. These popular under-$30 listings come from the LitBuy spreadsheet catalog — photos, QC references where available, and trusted agent checkout links without sacrificing browse quality.",
+      "Hundreds of wallet-friendly LitBuy finds filtered for price. Updated daily so you never miss a sale. These under-$30 picks come from the LitBuy Spreadsheet catalog with photos, QC references where available, and trusted agent checkout links.",
     sections: [
+      {
+        heading: "Example budget categories",
+        paragraphs: [
+          "Popular wallet-friendly lanes include graphic tees, accessories (hats, belts, socks), entry sneakers, and basic hoodies. Premium outerwear and electronics usually sit above the budget filter — start with lighter items to learn QC and shipping.",
+        ],
+        links: [
+          { href: "/categories/tshirts", label: "T-shirts" },
+          { href: "/categories/accessories", label: "Accessories" },
+          { href: "/categories/hoodies", label: "Hoodies" },
+          { href: "/categories/shoes", label: "Sneakers" },
+          { href: "/latest-finds", label: "Latest LitBuy finds" },
+        ],
+      },
       {
         heading: "Popular affordable picks",
         paragraphs: [
-          "Budget-friendly tees, accessories, and entry sneakers are ideal for testing agents, filling out a haul, or keeping shipping weight low. Each listing links to a full product page with QC badges when references exist.",
+          "Budget-friendly tees, accessories, and entry sneakers are ideal for testing agents, filling out a haul, or keeping shipping weight low. Each listing links to a full LitBuy Finds product page with QC badges when references exist.",
         ],
         links: [
           { href: "/collections/best-budget-finds", label: "Budget collection" },
           { href: "/best-under-20", label: "Under $20 finds" },
           { href: "/deals", label: "Deals under $30" },
+          { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
         ],
       },
       {
         heading: "Deals under $30",
         paragraphs: [
-          "Our deals page filters the catalog to items at or below $30, sorted with photos first so you can scan quickly.",
+          "Our deals page filters the LitBuy Finds catalog to items at or below $30, sorted with photos first so you can scan quickly.",
         ],
         links: [{ href: "/deals", label: "Shop deals under $30" }],
       },
@@ -516,25 +530,14 @@ export const STATIC_PAGES: Record<string, StaticPage> = {
         links: [{ href: "/hidden-gems", label: "Hidden gems" }],
       },
       {
-        heading: "Good categories for budget buys",
-        paragraphs: [
-          "T-shirts, accessories, and basic hoodies often land under $30. Electronics and premium outerwear usually do not — set expectations accordingly.",
-        ],
-        links: [
-          { href: "/categories/tshirts", label: "T-shirts" },
-          { href: "/categories/accessories", label: "Accessories" },
-          { href: "/categories/hoodies", label: "Hoodies" },
-          { href: "/categories/shoes", label: "Sneakers" },
-        ],
-      },
-      {
         heading: "Budget buying tips",
         paragraphs: [
-          "Start with one affordable item to learn QC and shipping workflow. Bundle multiple budget pieces in one parcel to lower per-item shipping cost. Always confirm live prices on LitBuy before paying — spreadsheet rows can lag seller updates.",
+          "Start with one affordable item to learn QC and shipping workflow. Bundle multiple budget pieces in one parcel to lower per-item shipping cost. Always confirm live prices on LitBuy before paying — LitBuy Spreadsheet rows can lag seller updates.",
         ],
         links: [
           { href: "/guides/beginner-guide-to-litbuy", label: "Beginner guide" },
-          { href: "/litbuy-spreadsheet", label: "Spreadsheet guide" },
+          { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
+          { href: "/litbuy-qc", label: "QC photo guide" },
           { href: "/how-to-save-on-shipping", label: "Save on shipping" },
         ],
       },
@@ -543,7 +546,12 @@ export const STATIC_PAGES: Record<string, StaticPage> = {
       {
         question: "What are the best budget LitBuy finds?",
         answer:
-          "Tees, accessories, and entry-level sneakers under $30 are the most popular budget picks. Open the deals page or budget collection for the current catalog rotation.",
+          "Tees, accessories, and entry-level sneakers under $30 are the most popular budget LitBuy finds. Open the deals page or budget collection for the current catalog rotation.",
+      },
+      {
+        question: "How do I buy budget finds from the LitBuy Spreadsheet?",
+        answer:
+          "Browse this page or Latest LitBuy finds, open a product, check QC when available, then use the verified agent link and confirm the live price on LitBuy.",
       },
       {
         question: "Can I still get QC on cheap finds?",
@@ -553,13 +561,13 @@ export const STATIC_PAGES: Record<string, StaticPage> = {
       {
         question: "Where do budget finds come from?",
         answer:
-          "They are indexed from the same LitBuy spreadsheet catalog as premium picks — filtered by price and photo quality for easier browsing.",
+          "They are indexed from the same LitBuy Spreadsheet catalog as premium LitBuy finds — filtered by price and photo quality for easier browsing.",
       },
     ],
     relatedLinks: [
-      { href: "/best-litbuy-finds-2026", label: "Best finds 2026" },
-      { href: "/latest-finds", label: "Latest finds" },
-      { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+      { href: "/best-litbuy-finds-2026", label: "Best LitBuy finds 2026" },
+      { href: "/latest-finds", label: "Latest LitBuy finds" },
+      { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
       ...GUIDE_LINKS,
     ],
   },
