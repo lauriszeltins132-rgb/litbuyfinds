@@ -428,26 +428,39 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
     relatedLinks: [
       { href: "/best-clothing-finds", label: "Best clothing finds" },
       { href: "/latest-finds", label: "Latest finds" },
-      { href: "/litbuy-discord", label: "LitBuy Discord" },
       { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
-      { href: "/litbuy-coupons", label: "LitBuy coupons" },
-      ...CATEGORIES.filter((l) => l.href !== "/clothing-finds").slice(0, 4),
+      { href: "/hoodie-finds", label: "Hoodie finds" },
+      { href: "/jacket-finds", label: "Jacket finds" },
+      { href: "/streetwear-finds", label: "Streetwear finds" },
+      { href: "/finds", label: "Finds hub" },
+      { href: "/litbuy-qc", label: "QC database" },
+      ...CATEGORIES.filter((l) => l.href !== "/clothing-finds").slice(0, 3),
     ],
     faqs: [
       {
         question: "Is clothing on LitBuy Finds the same as spreadsheet rows?",
         answer:
-          "Same product universe — LitBuy Finds adds search, filters, QC badges, and shareable product URLs.",
+          "Same product universe — LitBuy Finds adds search, filters, QC badges, and shareable product URLs instead of endless spreadsheet rows.",
+      },
+      {
+        question: "How do I use a LitBuy clothing spreadsheet with this page?",
+        answer:
+          "Community clothing spreadsheets list hoodies, jackets, and tees as rows. LitBuy Finds indexes those rows into searchable pages — start here for the clothing database, then open the LitBuy spreadsheet guide for how columns map to product pages.",
       },
       {
         question: "How do I find my size?",
         answer:
-          "Open the LitBuy listing from the product page and check the seller size chart on Weidian or Taobao before ordering.",
+          "Open the LitBuy listing from the product page and check the seller size chart on Weidian or Taobao before ordering. Compare measurements to a garment you already own.",
       },
       {
         question: "Which clothing types are most popular?",
         answer:
           "Hoodies, puffer jackets, and graphic tees lead search volume. Use hoodie-finds and jacket-finds for focused browsing.",
+      },
+      {
+        question: "Should I request QC for clothing?",
+        answer:
+          "Yes for jackets and higher-value hoodies. Check embroidery, fill, zippers, and print placement in warehouse QC before international shipping.",
       },
     ],
     productSectionTitle: "Top clothing picks",
@@ -542,12 +555,12 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
   "bag-finds": {
     slug: "bag-finds",
     type: "collection",
-    title: "Best Bag Finds 2026 | Designer & Street Bags",
+    title: "Bag Finds 2026 | Designer Bags, Totes & Crossbodies",
     description:
-      "Bag finds on LitBuy Finds — Louis Vuitton, Gucci, Goyard, Prada, and street crossbody bags with QC photos and verified agent links.",
-    h1: "Best bag finds",
+      "Bag finds on LitBuy Finds — Louis Vuitton, Gucci, Goyard, Prada, and street crossbody bags with QC photos, spreadsheet-synced listings, and verified agent links.",
+    h1: "Bag finds",
     intro:
-      "Bag finds span designer crossbodies, totes, backpacks, and streetwear shoulder bags. QC matters most here — check hardware, stitching, and lining on warehouse photos before shipping.",
+      "Bag finds span designer crossbodies, totes, backpacks, and streetwear shoulder bags from the LitBuy spreadsheet catalog. QC matters most here — check hardware, stitching, and lining on warehouse photos before shipping.",
     badge: "Bag finds",
     keywords: ["bag finds", "designer bag finds", "litbuy bags", "rep bags"],
     updateFrequency: "weekly",
@@ -562,20 +575,57 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
         links: [
           { href: "/litbuy-bags", label: "LitBuy bags hub" },
           { href: "/top-designer-bags", label: "Designer bags list" },
+          { href: "/categories/accessories", label: "Accessories category" },
           { href: "/guides/best-bag-finds", label: "Bag buying guide" },
+        ],
+      },
+      {
+        heading: "QC checklist for bag finds",
+        paragraphs: [
+          "Compare hardware engraving, monogram alignment, stitching, zipper pulls, and lining photos in warehouse QC. Bags are high-value — never ship without reviewing your own QC set.",
+        ],
+        links: [
+          { href: "/litbuy-qc", label: "QC database" },
+          { href: "/what-are-qc-photos", label: "What are QC photos" },
+          { href: "/guides/how-to-check-qc-photos", label: "How to check QC" },
+        ],
+      },
+      {
+        heading: "Spreadsheet connection for bag finds",
+        paragraphs: [
+          "Community LitBuy spreadsheets list bag rows with seller URLs and approximate prices. LitBuy Finds turns those rows into searchable bag product pages with QC badges and agent buy buttons.",
+        ],
+        links: [
+          { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+          { href: "/latest-finds", label: "Latest finds" },
+          { href: "/finds", label: "Finds hub" },
         ],
       },
     ],
     relatedLinks: [
       { href: "/best-bags", label: "Best bags collection" },
-      { href: "/litbuy-spreadsheet", label: "Spreadsheet" },
-      ...HUB.slice(0, 4),
+      { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+      { href: "/latest-finds", label: "Latest finds" },
+      { href: "/clothing-finds", label: "Clothing finds" },
+      { href: "/litbuy-qc", label: "QC database" },
+      { href: "/finds", label: "Finds hub" },
+      { href: "/categories/accessories", label: "Accessories" },
     ],
     faqs: [
       {
         question: "Should I QC bags before shipping?",
         answer:
           "Yes. Bags are high-value items — always request warehouse QC and compare hardware engraving to reference photos.",
+      },
+      {
+        question: "Where do bag finds come from?",
+        answer:
+          "Most bag listings originate from Weidian and Taobao sellers indexed via LitBuy spreadsheet imports — each page links to verified agent checkout.",
+      },
+      {
+        question: "What are the most popular bag brands?",
+        answer:
+          "Louis Vuitton, Gucci, Goyard, and Prada lead designer bag searches. Budget street bags appear under accessories.",
       },
     ],
     productSectionTitle: "Top bag picks",
@@ -584,14 +634,14 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
   "jacket-finds": {
     slug: "jacket-finds",
     type: "collection",
-    title: "Best Jacket Finds 2026 | Moncler, TNF & Puffers",
+    title: "Jacket Finds 2026 | Moncler, TNF, Puffers & Outerwear",
     description:
-      "Jacket finds on LitBuy Finds — Moncler, Canada Goose, Arc'teryx, The North Face, and puffer jackets with QC photos and agent links.",
-    h1: "Best jacket finds",
+      "Jacket finds on LitBuy Finds — Moncler, Canada Goose, Arc'teryx, The North Face, and puffer jackets with QC photos, spreadsheet-synced listings, and agent links.",
+    h1: "Jacket finds",
     intro:
-      "Jacket finds cover puffers, parkas, softshells, and designer outerwear. Moncler and Canada Goose-style rows dominate winter searches — this page surfaces listings with photos, prices, and QC references.",
+      "Jacket finds cover puffers, parkas, softshells, and designer outerwear from the LitBuy spreadsheet catalog. Moncler and Canada Goose-style rows dominate winter searches — this page surfaces listings with photos, prices, and QC references.",
     badge: "Jacket finds",
-    keywords: ["jacket finds", "puffer finds", "moncler finds", "winter jacket finds"],
+    keywords: ["jacket finds", "puffer finds", "moncler finds", "winter jacket finds", "rep jackets"],
     updateFrequency: "weekly",
     filter: {
       categories: ["coats-and-jackets"],
@@ -608,6 +658,18 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
           { href: "/litbuy-jackets", label: "LitBuy jackets hub" },
           { href: "/best-jackets", label: "Best jackets" },
           { href: "/brands/moncler", label: "Moncler finds" },
+          { href: "/brands/canada-goose", label: "Canada Goose finds" },
+        ],
+      },
+      {
+        heading: "Jacket QC checklist",
+        paragraphs: [
+          "Check badge stitching, zipper branding, fill distribution, cuff and hem finish, and overall weight against reference QC. Outerwear batches vary — never approve shipping from listing photos alone.",
+        ],
+        links: [
+          { href: "/litbuy-qc", label: "QC database" },
+          { href: "/what-are-qc-photos", label: "What are QC photos" },
+          { href: "/guides/how-to-check-qc-photos", label: "How to check QC" },
         ],
       },
       {
@@ -622,17 +684,47 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
           { href: "/categories/coats-and-jackets", label: "Jacket category hub" },
         ],
       },
+      {
+        heading: "Shipping tips for jackets",
+        paragraphs: [
+          "Puffers are bulky — factor volumetric weight into shipping. Bundle jackets with lighter items in one parcel when possible, and use rehearsal packing on your agent before paying freight.",
+        ],
+        links: [
+          { href: "/how-to-save-on-shipping", label: "Save on shipping" },
+          { href: "/guides/how-shipping-works-with-agents", label: "Shipping guide" },
+        ],
+      },
     ],
     relatedLinks: [
       { href: "/hoodie-finds", label: "Hoodie finds" },
       { href: "/clothing-finds", label: "Clothing finds" },
-      ...HUB.slice(0, 4),
+      { href: "/streetwear-finds", label: "Streetwear finds" },
+      { href: "/latest-finds", label: "Latest finds" },
+      { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+      { href: "/litbuy-qc", label: "QC database" },
+      { href: "/finds", label: "Finds hub" },
+      { href: "/best-jackets", label: "Best jackets" },
     ],
     faqs: [
       {
         question: "Are jacket batches consistent?",
         answer:
           "Outerwear batches vary significantly — use reference QC and warehouse photos. Weight and fill power differ between sellers.",
+      },
+      {
+        question: "How do jacket finds relate to the LitBuy spreadsheet?",
+        answer:
+          "Jacket rows in community LitBuy spreadsheets become searchable product pages here — with photos, QC badges, and agent buy buttons instead of raw sheet cells.",
+      },
+      {
+        question: "What should I check in jacket QC?",
+        answer:
+          "Badge stitching, zipper branding, fill distribution, cuff finish, and overall silhouette. Compare to reference QC on the product page when available.",
+      },
+      {
+        question: "Which jacket brands are most popular?",
+        answer:
+          "Moncler and Canada Goose lead premium searches. The North Face and Arc'teryx-style shells are popular mid-budget outerwear picks.",
       },
     ],
     productSectionTitle: "Top jacket picks",
@@ -678,23 +770,24 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
       {
         heading: "Spreadsheets and latest drops",
         paragraphs: [
-          "New hoodie batches appear in community spreadsheets daily. LitBuy Finds syncs those rows into searchable pages — check Latest Finds for fresh imports or join Discord for same-day alerts between syncs.",
+          "New hoodie batches appear in community spreadsheets daily. LitBuy Finds syncs those rows into searchable pages — check Latest Finds for fresh imports after each catalog sync.",
         ],
         links: [
           { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
           { href: "/latest-finds", label: "Latest finds" },
-          { href: "/litbuy-discord", label: "LitBuy Discord" },
+          { href: "/guides/litbuy-spreadsheet-guide", label: "Spreadsheet guide" },
         ],
       },
     ],
     relatedLinks: [
       { href: "/clothing-finds", label: "Clothing finds" },
       { href: "/streetwear-finds", label: "Streetwear finds" },
+      { href: "/jacket-finds", label: "Jacket finds" },
       { href: "/latest-finds", label: "Latest finds" },
       { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
-      { href: "/litbuy-coupons", label: "LitBuy coupons" },
-      { href: "/litbuy-discord", label: "LitBuy Discord" },
-      ...HUB.filter((l) => !["/litbuy-finds"].includes(l.href)).slice(0, 3),
+      { href: "/litbuy-qc", label: "QC database" },
+      { href: "/finds", label: "Finds hub" },
+      { href: "/categories/hoodies", label: "Hoodies category" },
     ],
     faqs: [
       {
@@ -716,6 +809,11 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
         question: "Do hoodies need QC before shipping?",
         answer:
           "Recommended for graphic embroidery and logo placement. Request warehouse QC on LitBuy and compare stitching to reference photos before paying international freight.",
+      },
+      {
+        question: "How do I find hoodie sizing?",
+        answer:
+          "Open the agent listing from the product page and compare the seller size chart to a hoodie you already own. Fit varies by batch and brand.",
       },
     ],
     productSectionTitle: "Top hoodie picks",
@@ -784,12 +882,13 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
       {
         heading: "How to use rep finds safely",
         paragraphs: [
-          "Always check reference QC on find pages and request warehouse QC before shipping. Compare batches in the LitBuy Discord community and read category guides for sneakers, bags, and jackets.",
+          "Always check reference QC on find pages and request warehouse QC before shipping. Compare batches against product-page QC references and read category guides for sneakers, bags, and jackets.",
         ],
         links: [
+          { href: "/litbuy-qc", label: "QC database" },
           { href: "/litbuy-qc-photos", label: "QC photos guide" },
-          { href: "/litbuy-discord", label: "LitBuy Discord" },
           { href: "/guides/beginner-guide-to-litbuy", label: "Beginner guide" },
+          { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
         ],
       },
       {
@@ -821,10 +920,11 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
       { href: "/finds", label: "Finds hub" },
       { href: "/latest-finds", label: "Latest finds" },
       { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
-      { href: "/litbuy-coupons", label: "LitBuy coupons" },
-      { href: "/litbuy-discord", label: "LitBuy Discord" },
       { href: "/best-litbuy-finds", label: "Best LitBuy finds" },
-      ...CATEGORIES.slice(0, 4),
+      { href: "/litbuy-qc", label: "QC database" },
+      { href: "/sneaker-finds", label: "Sneaker finds" },
+      { href: "/clothing-finds", label: "Clothing finds" },
+      ...CATEGORIES.slice(0, 3),
     ],
     faqs: [
       {
@@ -1185,12 +1285,45 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
           { href: "/how-to-buy-reps", label: "How to buy reps" },
         ],
       },
+      {
+        heading: "Nike spreadsheet and QC",
+        paragraphs: [
+          "Nike rows in LitBuy spreadsheets become searchable Nike find pages here. Check QC badges for toe box, swoosh placement, and midsole shape before warehouse approval.",
+        ],
+        links: [
+          { href: "/nike-spreadsheet", label: "Nike spreadsheet" },
+          { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+          { href: "/litbuy-qc", label: "QC database" },
+          { href: "/latest-finds", label: "Latest finds" },
+        ],
+      },
+      {
+        heading: "Browse Nike by category",
+        paragraphs: [
+          "Most Nike finds land in sneakers, with Tech Fleece and ACG pieces in clothing and outerwear. Use sneaker finds for footwear-focused browsing and clothing finds for layers.",
+        ],
+        links: [
+          { href: "/sneaker-finds", label: "Sneaker finds" },
+          { href: "/clothing-finds", label: "Clothing finds" },
+          { href: "/categories/shoes", label: "Shoes category" },
+        ],
+      },
     ],
     faqs: [
       {
         question: "How do I find Nike batches with QC?",
         answer:
           "Filter Nike finds with QC badges on product pages, or browse the QC-approved collection for reference photos.",
+      },
+      {
+        question: "Are Nike finds the same as spreadsheet rows?",
+        answer:
+          "Yes — LitBuy Finds indexes Nike spreadsheet rows into searchable product pages with photos, prices, and agent buy buttons.",
+      },
+      {
+        question: "What are the most popular Nike silhouettes?",
+        answer:
+          "Dunks, Air Force 1, Travis Scott collabs, and Tech Fleece lead searches. Open the Nike brand hub for the full catalog.",
       },
     ],
     productSectionTitle: "Top Nike picks",
@@ -1230,12 +1363,34 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
           { href: "/what-are-qc-photos", label: "What are QC photos" },
         ],
       },
+      {
+        heading: "Jordan spreadsheet and QC tips",
+        paragraphs: [
+          "Jordan rows from LitBuy spreadsheets map to this finds page. Check wings logo, hourglass shape on Jordan 1 highs, and sole shape in warehouse QC before shipping.",
+        ],
+        links: [
+          { href: "/jordan-spreadsheet", label: "Jordan spreadsheet" },
+          { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+          { href: "/litbuy-qc", label: "QC database" },
+          { href: "/sneaker-finds", label: "Sneaker finds" },
+        ],
+      },
     ],
     faqs: [
       {
         question: "Are Jordan and Nike finds separate?",
         answer:
           "Jordan is a Nike sub-brand in the catalog — browse both brand pages when hunting specific silhouettes.",
+      },
+      {
+        question: "How do Jordan finds relate to spreadsheets?",
+        answer:
+          "Community LitBuy spreadsheet rows for Jordan become searchable product pages here with QC badges and verified agent links.",
+      },
+      {
+        question: "What should I check in Jordan QC?",
+        answer:
+          "Wings logo embossing, hourglass silhouette on Jordan 1 highs, toe box shape, and sole shape. Compare to reference QC on the product page.",
       },
     ],
     productSectionTitle: "Top Jordan picks",

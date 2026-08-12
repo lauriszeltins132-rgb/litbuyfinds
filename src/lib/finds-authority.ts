@@ -68,7 +68,7 @@ export const CATEGORY_TO_FINDS_PAGE: Record<string, string> = {
   "hoodies-and-pants": "/hoodie-finds",
   "coats-and-jackets": "/jacket-finds",
   "tshirts-and-shorts": "/clothing-finds",
-  accessories: "/clothing-finds",
+  accessories: "/bag-finds",
   "latest-finds": "/latest-finds",
   "trending-now": "/trending",
 };

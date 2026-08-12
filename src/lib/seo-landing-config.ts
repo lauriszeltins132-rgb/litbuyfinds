@@ -276,27 +276,64 @@ export const SEO_LANDING_CONFIG: Record<string, SeoLandingPageEntry> = {
   "shoe-spreadsheet": {
     slug: "shoe-spreadsheet",
     type: "spreadsheet",
-    title: "Shoe Spreadsheet Finds on LitBuy",
+    title: "Shoe Spreadsheet Finds | LitBuy Sneaker Spreadsheet 2026",
     description:
-      "Shoe spreadsheet finds on LitBuy Finds — sneakers and footwear from Weidian and Taobao with QC photos and agent checkout links.",
+      "Shoe spreadsheet finds on LitBuy Finds — Nike, Jordan, Adidas sneakers from Weidian and Taobao with QC photos and agent checkout links.",
     h1: "Shoe spreadsheet finds",
     intro:
-      "Footwear spreadsheets mix Nike, Jordan, Adidas, and budget batches in one long list. This page highlights quality shoe listings you can open individually — without losing mobile usability.",
+      "Footwear spreadsheets mix Nike, Jordan, Adidas, and budget batches in one long list. This page highlights quality shoe listings you can open individually — without losing mobile usability. For the main spreadsheet hub, open LitBuy Spreadsheet.",
     badge: "Spreadsheet",
-    keywords: ["shoe spreadsheet", "sneaker spreadsheet litbuy"],
+    keywords: ["shoe spreadsheet", "sneaker spreadsheet litbuy", "litbuy shoe spreadsheet"],
     updateFrequency: "weekly",
     filter: { categories: ["shoes"] },
     categoryLinks: ["shoes"],
+    sections: [
+      {
+        heading: "How shoe spreadsheets map to LitBuy Finds",
+        paragraphs: [
+          "Each shoe row becomes a searchable product page with photos, prices, QC badges, and agent buy buttons. Use Sneaker finds for the full footwear database.",
+        ],
+        links: [
+          { href: "/sneaker-finds", label: "Sneaker finds" },
+          { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+          { href: "/latest-finds", label: "Latest finds" },
+        ],
+      },
+      {
+        heading: "Popular shoe brands in spreadsheets",
+        paragraphs: [
+          "Nike Dunks, Jordan retros, Adidas Campus, and New Balance runners dominate shoe spreadsheet searches. Open brand find pages when you know the label.",
+        ],
+        links: [
+          { href: "/nike-finds", label: "Nike finds" },
+          { href: "/jordan-finds", label: "Jordan finds" },
+          { href: "/categories/shoes", label: "Shoes category" },
+        ],
+      },
+    ],
     relatedLinks: [
       { href: "/categories/shoes", label: "All shoes" },
+      { href: "/sneaker-finds", label: "Sneaker finds" },
       { href: "/best-shoes", label: "Best shoes" },
       { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+      { href: "/nike-spreadsheet", label: "Nike spreadsheet" },
+      { href: "/litbuy-qc", label: "QC database" },
     ],
     faqs: [
       {
         question: "Which agents work with these links?",
         answer:
           "LitBuy is recommended on this site, but you can switch to MuleBuy, OopBuy, Kakobuy, or ACBuy from the header before you buy.",
+      },
+      {
+        question: "Is this the same as a LitBuy spreadsheet?",
+        answer:
+          "This page focuses on footwear rows from the LitBuy spreadsheet universe. Open the LitBuy spreadsheet hub for the full guide.",
+      },
+      {
+        question: "Should I QC sneakers from spreadsheet finds?",
+        answer:
+          "Yes — check toe box, swoosh placement, and midsole shape in warehouse QC before shipping.",
       },
     ],
     productSectionTitle: "Shoe spreadsheet picks",
@@ -305,28 +342,65 @@ export const SEO_LANDING_CONFIG: Record<string, SeoLandingPageEntry> = {
   "streetwear-spreadsheet": {
     slug: "streetwear-spreadsheet",
     type: "spreadsheet",
-    title: "Streetwear Spreadsheet Finds on LitBuy",
+    title: "Streetwear Spreadsheet Finds | LitBuy Clothing Spreadsheet",
     description:
-      "Streetwear spreadsheet finds — Stussy, Corteiz, Supreme, and hype labels with searchable LitBuy pages and QC references.",
+      "Streetwear spreadsheet finds — Stussy, Corteiz, Supreme, and hype labels with searchable LitBuy pages, QC references, and clothing find links.",
     h1: "Streetwear spreadsheet finds",
     intro:
-      "Streetwear sheets move fast. LitBuy Finds keeps the same discovery value while adding photos, QC badges, and shareable URLs for Discord and Telegram.",
+      "Streetwear sheets move fast. LitBuy Finds keeps the same discovery value while adding photos, QC badges, and shareable URLs — start here for hype clothing rows, or open Clothing finds and Hoodie finds for full databases.",
     badge: "Spreadsheet",
-    keywords: ["streetwear spreadsheet", "hype finds sheet"],
+    keywords: ["streetwear spreadsheet", "hype finds sheet", "clothing spreadsheet litbuy"],
     updateFrequency: "weekly",
     filter: {
       keywords: ["stussy", "corteiz", "supreme", "bape", "hoodie", "cargo"],
     },
+    sections: [
+      {
+        heading: "From streetwear sheet to product pages",
+        paragraphs: [
+          "Stussy, Corteiz, Supreme, and Essentials rows become searchable LitBuy Finds pages. Pair this spreadsheet view with Streetwear finds and Clothing finds for browsing without endless scrolling.",
+        ],
+        links: [
+          { href: "/streetwear-finds", label: "Streetwear finds" },
+          { href: "/clothing-finds", label: "Clothing finds" },
+          { href: "/hoodie-finds", label: "Hoodie finds" },
+          { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+        ],
+      },
+      {
+        heading: "QC tips for streetwear spreadsheet finds",
+        paragraphs: [
+          "Check embroidery, print placement, and fabric weight in warehouse QC. Graphic hoodies and cargos vary between batches — compare reference photos when available.",
+        ],
+        links: [
+          { href: "/litbuy-qc", label: "QC database" },
+          { href: "/what-are-qc-photos", label: "What are QC photos" },
+        ],
+      },
+    ],
     relatedLinks: [
       { href: "/top-streetwear-finds", label: "Top streetwear" },
+      { href: "/streetwear-finds", label: "Streetwear finds" },
+      { href: "/clothing-finds", label: "Clothing finds" },
       { href: "/best-hoodies", label: "Best hoodies" },
       { href: "/litbuy-spreadsheet", label: "Spreadsheet hub" },
+      { href: "/latest-finds", label: "Latest finds" },
     ],
     faqs: [
       {
         question: "How is this different from a Google Sheet?",
         answer:
           "Sheets are static files. This catalog syncs with imports and filters out many broken listings automatically.",
+      },
+      {
+        question: "Where do I browse all clothing finds?",
+        answer:
+          "Open Clothing finds for the full fashion database, or Hoodie finds and Jacket finds for focused lanes.",
+      },
+      {
+        question: "Are streetwear spreadsheet finds the same as LitBuy Finds?",
+        answer:
+          "Same product universe — LitBuy Finds is the searchable catalog built on spreadsheet-style discovery.",
       },
     ],
     productSectionTitle: "Streetwear spreadsheet picks",
