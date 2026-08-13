@@ -30,6 +30,10 @@ export const TELEGRAM_SUPPORTED_AGENTS = [
   "OopBuy",
   "ACBuy",
   "Kakobuy",
+  "HipoBuy",
+  "USFans",
+  "GTBuy",
+  "BoonBuy",
 ] as const;
 
 const AGENT_LIST_TEXT = TELEGRAM_SUPPORTED_AGENTS.join(", ");
@@ -78,7 +82,7 @@ function baseFaqs(agentName?: string): { question: string; answer: string }[] {
     {
       question: "Is RN Finds only for LitBuy?",
       answer:
-        "No. LitBuy may be recommended on the LitBuy Finds website for verified checkout links, but the Telegram community is multi-agent. Members share finds for LitBuy, MuleBuy, OopBuy, ACBuy, and Kakobuy depending on the listing.",
+        "No. LitBuy may be recommended on the LitBuy Finds website for verified checkout links, but the Telegram community is multi-agent. Members share finds for LitBuy, MuleBuy, OopBuy, ACBuy, Kakobuy, HipoBuy, USFans, GTBuy, and BoonBuy depending on the listing.",
     },
     {
       question: "What kind of finds are posted on Telegram?",
@@ -221,7 +225,7 @@ const HUB_PAGE: TelegramSeoPageConfig = {
       heading: "What you get inside RN Finds",
       paragraphs: [
         "Members share daily finds, QC photos, spreadsheet product links, sneaker finds, streetwear picks, and multi-agent checkout URLs. The channel is active enough that many buyers treat it as a supplement to static spreadsheets.",
-        "You will see LitBuy links often because they are verified on this catalog, but the Telegram feed intentionally supports MuleBuy, OopBuy, ACBuy, and Kakobuy when a listing fits that workflow.",
+        "You will see LitBuy links often because they are verified on this catalog, but the Telegram feed intentionally supports MuleBuy, OopBuy, ACBuy, Kakobuy, HipoBuy, USFans, GTBuy, and BoonBuy when a listing fits that workflow.",
       ],
       links: [
         { href: "/rn-finds", label: "About RN Finds" },
@@ -231,8 +235,8 @@ const HUB_PAGE: TelegramSeoPageConfig = {
     {
       heading: "Agent-specific Telegram guides",
       paragraphs: [
-        "Each supported agent has its own landing page explaining how RN Finds covers that platform — from MuleBuy spreadsheet Telegram searches to Kakobuy QC photo threads.",
-        "Use these pages if you arrived from a specific search like OopBuy finds Telegram or ACBuy sneaker finds rather than a generic community query.",
+        "Each supported agent has its own landing page explaining how RN Finds covers that platform — from USFans reps Telegram and OopBuy finds Telegram to HipoBuy, GTBuy, BoonBuy, and Kakobuy spreadsheet Telegram searches.",
+        "Use these pages if you arrived from a specific agent query rather than a generic community search.",
       ],
       links: AGENT_TELEGRAM_LINKS,
     },

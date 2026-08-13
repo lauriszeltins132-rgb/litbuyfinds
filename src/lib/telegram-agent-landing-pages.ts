@@ -72,7 +72,7 @@ function buildResourceAgentConfig(
     metaDescription: meta.metaDescription,
     h1: meta.h1,
     intro: buildAgentTelegramIntro(agent),
-    ctaLabel: `Join ${agent.name} Telegram community ✅`,
+    ctaLabel: `Join ${agent.name} Telegram`,
     telegramUrl: SOCIAL_LINKS.telegram,
     keywords: meta.keywords,
     sections: buildAgentTelegramSections(agent),

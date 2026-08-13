@@ -10,6 +10,7 @@ export const SEO_HUB_LINKS = [
   { href: "/litbuy-coupons", label: "LitBuy coupons" },
   { href: "/litbuy-discord", label: "LitBuy Discord" },
   { href: "/telegram-litbuy", label: "LitBuy Telegram" },
+  { href: "/telegram", label: "Telegram agents hub" },
 ] as const;
 
 export const FINDS_DATABASE_LINKS = [
