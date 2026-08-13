@@ -62,6 +62,10 @@ const SECTIONS = [
     links: [
       { href: "/litbuy-discord", label: "LitBuy Discord" },
       { href: "/telegram-litbuy", label: "LitBuy Telegram" },
+      { href: "/telegram", label: "Telegram agents hub" },
+      { href: "/telegram-usfans", label: "USFans Telegram" },
+      { href: "/telegram-oopbuy", label: "OopBuy Telegram" },
+      { href: "/telegram-kakobuy", label: "Kakobuy Telegram" },
       { href: "/litbuy-coupons", label: "LitBuy coupons" },
     ],
   },

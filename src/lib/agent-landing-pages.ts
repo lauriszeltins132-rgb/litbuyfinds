@@ -14,6 +14,13 @@ const AGENT_LINKS = [
   { href: "/acbuy-finds", label: "ACBuy finds" },
   { href: "/mulebuy-finds", label: "MuleBuy finds" },
   { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+  { href: "/telegram-usfans", label: "USFans Telegram" },
+  { href: "/telegram-oopbuy", label: "OopBuy Telegram" },
+  { href: "/telegram-gtbuy", label: "GTBuy Telegram" },
+  { href: "/telegram-boonbuy", label: "BoonBuy Telegram" },
+  { href: "/telegram-hipobuy", label: "HipoBuy Telegram" },
+  { href: "/telegram-kakobuy", label: "Kakobuy Telegram" },
+  { href: "/telegram", label: "Telegram agents hub" },
 ];
 
 function featuredProducts(limit = 72) {

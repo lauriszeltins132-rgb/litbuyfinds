@@ -194,12 +194,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
     });
   }
 
+  const telegramAgentPriority = new Set([
+    "telegram-usfans",
+    "telegram-oopbuy",
+    "telegram-gtbuy",
+    "telegram-boonbuy",
+    "telegram-hipobuy",
+    "telegram-kakobuy",
+  ]);
   for (const slug of TELEGRAM_AGENT_LANDING_SLUGS) {
     const page = TELEGRAM_AGENT_LANDING_PAGES[slug];
     routes.push({
       url: `${SITE_URL}${page.path}`,
       changeFrequency: "weekly",
-      priority: 0.9,
+      priority: telegramAgentPriority.has(slug) ? 0.92 : 0.9,
+      lastModified: getDatasetSyncedIso(),
     });
   }
 
