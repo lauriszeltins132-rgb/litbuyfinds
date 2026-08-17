@@ -109,10 +109,10 @@ export function getSpreadsheetMetadataCopy() {
   const stats = getFindsAuthorityStats();
   return {
     title: truncateMetaTitle(
-      `LitBuy Spreadsheet 2026: Best Finds, Guide & QC Database`
+      `LitBuy Spreadsheet 2026 | Finds Spreadsheet, QC & Product Database`
     ),
     description: truncateMetaDescription(
-      `LitBuy spreadsheet guide with ${stats.totalFindsLabel}+ searchable rep finds, ${stats.qcFindsLabel} QC-linked listings, category browsing, latest finds sync, and ${META_AGENTS} checkout.`
+      `LitBuy Spreadsheet guide — LitBuy finds spreadsheet and LitBuy QC spreadsheet with ${stats.totalFindsLabel}+ searchable rep finds, category browsing, latest finds sync, and multi-agent checkout.`
     ),
   };
 }

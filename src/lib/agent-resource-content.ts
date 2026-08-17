@@ -47,7 +47,7 @@ function resourceLinks(agent: AgentResourceDefinition) {
 
 export function buildAgentTelegramIntro(agent: AgentResourceDefinition): string {
   const name = agent.name;
-  return `${name} Telegram is the fastest way to catch daily QC photos, spreadsheet-style product updates, and ${name} agent finds without refreshing static files. LitBuy Finds readers use the RN Finds Telegram community for ${name} reps Telegram drops, haul notes, and verified marketplace links you can open on ${name} at checkout. Tap below to join ${name} Telegram.`;
+  return `${name} Telegram is a practical resource for ${name} finds, ${name} reps updates, QC photo discussion, and ${name} spreadsheet shares — without refreshing a raw Google Sheet all day. LitBuy Finds readers use the RN Finds Telegram community for live ${name} drops, then open the same products here with ${name} selected at checkout. ${agent.telegramFocus} Tap below to join ${name} Telegram.`;
 }
 
 export function buildAgentDiscordIntro(agent: AgentResourceDefinition): string {
@@ -62,41 +62,44 @@ export function buildAgentTelegramSections(
     {
       heading: `What is ${name} Telegram?`,
       paragraphs: [
-        `${name} Telegram is the community feed where buyers share ${name} spreadsheet rows, QC warehouse photos, sneaker and streetwear finds, and agent product links. If you searched “${name} Telegram”, “${name} reps Telegram”, or “${name} finds Telegram”, this page is the join guide for that workflow.`,
+        `${name} Telegram is the community feed where buyers share ${name} spreadsheet rows, QC warehouse photos, sneaker and streetwear finds, and agent product links. If you searched “${name} Telegram”, “${name} reps”, “${name} finds”, or “${name} spreadsheet”, this page is the resource guide for that workflow.`,
+        `${agent.telegramFocus}`,
         `Unlike a static Google Sheet, ${name} Telegram pushes new rows and QC discussion in real time so you can react before popular batches sell out — then open the same listing on LitBuy Finds with ${name} selected at checkout.`,
       ],
       links: [
         { href: agentFindsPath(agent), label: `Browse ${name} finds` },
         { href: agentSpreadsheetPath(agent), label: `${name} spreadsheet` },
+        { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
         { href: "/telegram", label: "Telegram finds hub" },
       ],
     },
     {
-      heading: `Why buyers join ${name} Telegram`,
+      heading: `What users share in ${name} Telegram`,
       paragraphs: [
-        `${name} Telegram is useful when you want community QC context, haul discussion, and same-day spreadsheet drops. Members post ${name} finds with notes on batch quality, sizing, restocks, and price changes that are hard to capture in a sheet alone.`,
-        `Shoppers also look for ${name} spreadsheet Telegram updates and discount or shipping announcements when the community shares them — always confirm live terms on ${name} checkout before paying.`,
+        `Expect ${name} finds Telegram posts, ${name} reps links, seller restocks, sizing notes, and short commentary on why a batch is worth opening. Members also share ${name} spreadsheet updates when rows change price or QC coverage.`,
+        `Discount or shipping announcements appear when the community notices them — always confirm live terms on ${name} checkout before paying.`,
       ],
       links: [
-        { href: "/qc-finds-telegram", label: "QC finds on Telegram" },
-        { href: "/spreadsheet-telegram", label: "Spreadsheet Telegram guide" },
         { href: "/latest-finds", label: "Latest LitBuy Finds" },
+        { href: "/best-rep-finds", label: "Best rep finds" },
+        { href: agentFindsPath(agent), label: `${name} finds catalog` },
       ],
     },
     {
-      heading: `Finding products, rep updates & spreadsheet shares`,
+      heading: `Latest ${name} rep finds & product updates`,
       paragraphs: [
-        `A typical ${name} finds Telegram day mixes new product rows, seller restocks, and short commentary on why a link is worth opening. That is how most buyers discover heat faster than scrolling raw spreadsheets.`,
-        `When a row looks promising, search the product on LitBuy Finds, compare related picks, then set ${name} as your preferred agent so Buy links open the same marketplace listing through ${name}.`,
+        `A typical ${name} finds day mixes new product rows with restocks and haul notes. That is how most buyers discover heat faster than scrolling raw spreadsheets alone.`,
+        `When a row looks promising, search it on LitBuy Finds, compare related picks in categories and brands, then set ${name} as your preferred agent so Buy links open the same marketplace listing through ${name}.`,
       ],
       links: [
         { href: agentFindsPath(agent), label: `${name} finds catalog` },
         { href: agentSpreadsheetPath(agent), label: `${name} spreadsheet guide` },
+        { href: "/latest-finds", label: "Latest finds hub" },
         ...CATEGORY_FINDS_LINKS.slice(0, 4),
       ],
     },
     {
-      heading: `${name} QC photos and discussion`,
+      heading: `${name} QC photo discussions`,
       paragraphs: [
         `QC threads are a core reason people join ${name} Telegram communities. Members share warehouse albums, batch comparisons, and sizing notes tied to ${name} checkout workflows.`,
         `Treat community QC as reference — not a guarantee. Open the product on LitBuy Finds, review listing photos, choose ${name}, then request warehouse QC on your exact item before international shipping.`,
@@ -105,16 +108,42 @@ export function buildAgentTelegramSections(
         { href: "/litbuy-qc", label: "QC database" },
         { href: "/collections/best-qc-approved-finds", label: "QC Finds" },
         { href: "/guides/how-to-check-qc-photos", label: "How to read QC photos" },
+        { href: "/qc-finds-telegram", label: "QC finds on Telegram" },
+      ],
+    },
+    {
+      heading: `${name} spreadsheet & product spreadsheet updates`,
+      paragraphs: [
+        `Many ${name} spreadsheet Telegram posts are really product spreadsheet updates — new CNY prices, seller swaps, or QC links attached to a row. LitBuy Finds turns that same universe into searchable pages with photos, filters, and shareable URLs.`,
+        `Use the ${name} spreadsheet guide on this site when you want a cleaned catalog view, and keep ${name} Telegram for same-day chatter.`,
+      ],
+      links: [
+        { href: agentSpreadsheetPath(agent), label: `${name} spreadsheet` },
+        { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
+        { href: "/spreadsheet-telegram", label: "Spreadsheet Telegram guide" },
+      ],
+    },
+    {
+      heading: `Why users join ${name} Telegram`,
+      paragraphs: [
+        `${name} Telegram is useful when you want community QC context, haul discussion, and same-day spreadsheet drops that a static file cannot surface quickly.`,
+        `Shoppers comparing agents also use ${name} finds threads to see which listings people are actually opening — then verify the same item on LitBuy Finds before checkout.`,
+      ],
+      links: [
+        { href: agentReviewPath(agent), label: `${name} review` },
+        { href: "/finds", label: "Finds database hub" },
+        { href: "/how-to-buy", label: "How to buy" },
       ],
     },
     {
       heading: `${name} Telegram vs LitBuy Finds website`,
       paragraphs: [
-        `LitBuy Finds is the searchable product catalog on this website — filters, photos, categories, and stable product URLs with ${name} buy support. ${name} Telegram is the live community layer where members post fresh rows before they are indexed here.`,
-        `Use ${name} Telegram to discover quickly, then save products on LitBuy Finds when you want a permanent link to revisit before checkout.`,
+        `LitBuy Finds is the searchable product database on this website — categories, brands, price filters, QC badges, and stable product URLs with ${name} buy support. ${name} Telegram is the live community layer where members post fresh rows before they are indexed here.`,
+        `Use ${name} Telegram to discover quickly, then save products on LitBuy Finds when you want a permanent litbuy find page to revisit before checkout.`,
       ],
       links: [
         { href: "/", label: "LitBuy Finds homepage" },
+        { href: "/litbuy-finds", label: "LitBuy finds catalog" },
         { href: "/finds", label: "Finds database hub" },
         ...FINDS_DATABASE_LINKS.slice(0, 3),
       ],
@@ -126,8 +155,8 @@ export function buildAgentTelegramSections(
         `After you join, enable notifications if you want alerts for new spreadsheet rows or QC threads, then come back to LitBuy Finds to open verified ${name} buy links and compare related picks.`,
       ],
       links: [
-        { href: agentReviewPath(agent), label: `${name} review` },
         { href: agentDiscordPath(agent), label: `${name} Discord guide` },
+        { href: "/telegram", label: "All Telegram agent guides" },
         { href: "/how-to-buy", label: "How to buy" },
       ],
     },
@@ -184,7 +213,11 @@ export function buildAgentTelegramFaqs(
   return [
     {
       question: `What is ${name} Telegram?`,
-      answer: `${name} Telegram is the community feed LitBuy Finds readers use for daily ${name} finds, ${name} reps Telegram updates, QC photos, and spreadsheet-style product rows — with links you can open on ${name} at checkout.`,
+      answer: `${name} Telegram is the community feed LitBuy Finds readers use for daily ${name} finds, ${name} reps updates, QC photos, and ${name} spreadsheet shares — with links you can open on ${name} at checkout.`,
+    },
+    {
+      question: `What do people share in ${name} Telegram?`,
+      answer: `Expect ${name} finds posts, ${name} reps links, QC albums, restock notes, spreadsheet/product updates, and occasional discount or shipping announcements. Verify live prices on ${name} before paying.`,
     },
     {
       question: `How do I join ${name} Telegram?`,
@@ -195,8 +228,8 @@ export function buildAgentTelegramFaqs(
       answer: `This page is an independent resource guide from LitBuy Finds. We link to the community Telegram channel used for ${name} finds discovery — we are not ${name} and do not claim an official agent partnership.`,
     },
     {
-      question: `What can I find in ${name} Telegram?`,
-      answer: `Expect ${name} finds Telegram posts, spreadsheet shares, QC discussions, restock notes, and occasional discount or shipping announcements. Always verify live prices and coupon terms on ${name} before paying.`,
+      question: `Where can I browse ${name} finds on LitBuy Finds?`,
+      answer: `Open the ${name} finds catalog and ${name} spreadsheet guide on this site, or start from Latest Finds for new spreadsheet imports you can checkout with ${name}.`,
     },
     {
       question: `Can I buy with ${name} from LitBuy Finds?`,
@@ -204,11 +237,11 @@ export function buildAgentTelegramFaqs(
     },
     {
       question: `Is ${name} Telegram the same as LitBuy Finds?`,
-      answer: `No. ${name} Telegram is the live community feed. LitBuy Finds is the searchable product catalog on this website with photos, filters, QC references, and ${name} buy links.`,
+      answer: `No. ${name} Telegram is the live community feed. LitBuy Finds is the searchable product database on this website with photos, filters, QC references, and ${name} buy links — including litbuy finds and lit buy finds style discovery pages.`,
     },
     {
       question: `Where should I start for ${name} spreadsheet finds?`,
-      answer: `Use the ${name} spreadsheet guide on this site for a cleaner front-end to the catalog — then browse Latest Finds and category pages, or follow ${name} spreadsheet Telegram shares in the community feed.`,
+      answer: `Use the ${name} spreadsheet guide on this site for a cleaner front-end to the catalog — then browse Latest Finds and category pages, or follow ${name} spreadsheet shares in the community feed.`,
     },
   ];
 }
@@ -368,20 +401,21 @@ export function buildAgentTelegramMeta(agent: AgentResourceDefinition) {
   const name = agent.name;
   const agentLower = name.toLowerCase();
   return {
-    title: `${name} Telegram – Daily QC Photos & Spreadsheet Finds`,
-    metaDescription: `${name} Telegram is the community feed for daily QC photos, spreadsheet updates, and verified ${name} finds. Join ${name} Telegram for reps drops, haul notes, and agent links — free via LitBuy Finds.`,
+    title: `${name} Telegram – Finds, Reps, QC Photos & Spreadsheet Updates`,
+    metaDescription: `${name} Telegram guide for ${name} finds, ${name} reps, QC photo discussion, and ${name} spreadsheet updates. Join free, then browse the LitBuy Finds product database with ${name} checkout.`,
     h1: `${name} Telegram`,
     keywords: [
       `${agentLower} telegram`,
+      `${agentLower} reps`,
+      `${agentLower} finds`,
+      `${agentLower} spreadsheet`,
       `${agentLower} reps telegram`,
       `${agentLower} finds telegram`,
       `${agentLower} spreadsheet telegram`,
       `telegram ${agentLower}`,
       `join ${agentLower} telegram`,
       `${agentLower} telegram group`,
-      `${agentLower} telegram channel`,
       `${agentLower} qc telegram`,
-      `${agentLower} telegram community`,
     ],
   };
 }

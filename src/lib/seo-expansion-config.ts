@@ -1144,12 +1144,17 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
       "Latest LitBuy finds updated weekly — new rep sneakers, clothing, streetwear, and QC-linked products from the LitBuy spreadsheet catalog with verified agent buy buttons.",
     h1: "Latest LitBuy finds",
     intro:
-      `Discover LitBuy finds organized by category. Our catalog has ${FINDS_STATS.totalFindsLabel}+ products (${FINDS_STATS.qcFindsLabel} with QC photos) updated weekly from the LitBuy spreadsheet. This page shows the newest rep products after each sync — with photos, prices, QC references, and trusted LitBuy, MuleBuy, Kakobuy, OopBuy, and ACBuy links.`,
+      `Latest LitBuy finds are the newest rows in the LitBuy Finds product database — ${FINDS_STATS.totalFindsLabel}+ LitBuy finds (${FINDS_STATS.qcFindsLabel} with QC photos) updated from the LitBuy Spreadsheet. Browse new LitBuy rep finds with photos, prices, QC references, and trusted agent links after each sync.`,
     badge: "Discovery hub",
     keywords: [
       "litbuy finds",
+      "litbuy find",
+      "lit buy finds",
       "latest litbuy finds",
       "litbuy spreadsheet finds",
+      "litbuy rep finds",
+      "litbuy qc finds",
+      "litbuy products",
       "rep finds",
       "qc finds",
       "latest rep finds",
@@ -1212,7 +1217,9 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
     ],
     relatedLinks: [
       { href: "/finds", label: "Finds hub" },
-      { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+      { href: "/litbuy-finds", label: "LitBuy finds catalog" },
+      { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
+      { href: "/best-litbuy-finds", label: "Best LitBuy finds" },
       { href: "/sneaker-finds", label: "Sneaker finds" },
       { href: "/clothing-finds", label: "Clothing finds" },
       { href: "/streetwear-finds", label: "Streetwear finds" },
@@ -1220,31 +1227,42 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
       { href: "/litbuy-qc", label: "QC database" },
       { href: "/brands", label: "Brand finds" },
       { href: "/categories", label: "Categories" },
+      { href: "/telegram-usfans", label: "USFans Telegram" },
+      { href: "/telegram-oopbuy", label: "OopBuy Telegram" },
+      { href: "/telegram-gtbuy", label: "GTBuy Telegram" },
+      { href: "/telegram-boonbuy", label: "BoonBuy Telegram" },
+      { href: "/telegram-hipobuy", label: "HipoBuy Telegram" },
+      { href: "/telegram-kakobuy", label: "Kakobuy Telegram" },
       ...HUB.slice(0, 2),
     ],
     faqs: [
       {
         question: "What are latest LitBuy finds?",
         answer:
-          "Latest finds are the newest products added to the LitBuy Finds catalog after each daily spreadsheet sync — rep sneakers, clothing, streetwear, and accessories with photos, prices, and agent links.",
+          "Latest finds are the newest products added to the LitBuy Finds catalog after each daily spreadsheet sync — LitBuy rep finds, clothing, streetwear, and accessories with photos, prices, and agent links. People also search litbuy find or lit buy finds for this database.",
       },
       {
         question: "How often are LitBuy finds updated?",
         answer: `The catalog syncs daily. This page and the ${FINDS_STATS.totalFindsLabel}-product database refresh after each import — check the homepage sync timestamp for the exact time.`,
       },
       {
-        question: "Are these the same as spreadsheet rows?",
+        question: "Are these the same as LitBuy spreadsheet rows?",
         answer:
-          "They come from the same product universe as LitBuy spreadsheets. LitBuy Finds filters broken listings, adds QC badges, and creates shareable product pages with verified buy buttons.",
+          "They come from the same LitBuy Spreadsheet / LitBuy finds spreadsheet universe. LitBuy Finds filters broken listings, adds QC badges, and creates shareable product pages with verified buy buttons.",
       },
       {
-        question: "Where do I browse QC finds?",
+        question: "Where do I browse LitBuy QC finds?",
         answer: `Open any product with a QC badge or visit the QC database — ${FINDS_STATS.qcFindsLabel} listings currently include QC reference links.`,
+      },
+      {
+        question: "Where is the main LitBuy Spreadsheet guide?",
+        answer:
+          "Open the LitBuy Spreadsheet page for categories, QC spreadsheet context, and agent compatibility — then return here for the newest imports.",
       },
       {
         question: "How do I search older finds?",
         answer:
-          "Use the Finds hub, category pages like sneaker finds or clothing finds, and brand hubs. Latest finds only shows the newest additions — the full database is always searchable.",
+          "Use the Finds hub, LitBuy finds catalog, category pages like sneaker finds or clothing finds, and brand hubs. Latest finds only shows the newest additions — the full database is always searchable.",
       },
     ],
     productSectionTitle: "Newest LitBuy finds",
