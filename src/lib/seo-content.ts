@@ -276,6 +276,8 @@ const CATEGORY_GUIDES: Record<string, { href: string; label: string }[]> = {
   default: [
     { href: "/guides/beginner-guide-to-litbuy", label: "Beginner guide" },
     { href: "/guides/how-to-order-from-litbuy", label: "How to order" },
+    { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
+    { href: "/latest-finds", label: "Latest LitBuy Finds" },
   ],
 };
 

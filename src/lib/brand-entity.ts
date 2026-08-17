@@ -7,13 +7,18 @@ export const SITE_ALTERNATE_NAMES = [
   "litbuyfinds",
   "LitBuy Spreadsheet",
   "litbuy spreadsheet",
+  "lit buy spreadsheet",
   "litbuy finds spreadsheet",
+  "litbuy rep spreadsheet",
   "RN Finds",
   "RN Finds Telegram",
   "litbuyfids",
   "litbuy find",
   "litbuyfind",
   "litbuy finds",
+  "lit buy finds",
+  "litbuy reps",
+  "lit buy reps",
   "litbuy qc finds",
 ] as const;
 
@@ -26,17 +31,17 @@ export const HERO_ENTITY_LINE =
   "Verified listings from Weidian and Taobao — searchable like a litbuy spreadsheet catalog, with litbuy QC finds updated daily.";
 
 /** One muted homepage line — natural phrasing for common misspellings, not a keyword list. */
-export const HOMEPAGE_AKA_LINE = `Also known as ${TELEGRAM_CHANNEL_NAME} on Telegram and often searched as litbuy finds, litbuyfinds, or litbuy spreadsheet.`;
+export const HOMEPAGE_AKA_LINE = `Also known as ${TELEGRAM_CHANNEL_NAME} on Telegram and often searched as litbuy finds, lit buy finds, litbuy spreadsheet, or lit buy spreadsheet.`;
 
 export const HOMEPAGE_ENTITY_FAQS = [
   {
     question: "What is LitBuy Finds?",
-    answer: `${SITE_ENTITY_DESCRIPTION} It turns spreadsheet-style catalogs into searchable pages with QC references, filters, and verified agent buy links.`,
+    answer: `${SITE_ENTITY_DESCRIPTION} It turns spreadsheet-style catalogs into searchable pages with QC references, filters, and verified agent buy links. People also search litbuy find, lit buy finds, or litbuy reps for the same discovery platform.`,
   },
   {
     question: "What is the difference between LitBuy Finds and a spreadsheet?",
     answer:
-      "A raw LitBuy spreadsheet is a long list of links and photos that is hard to search on mobile. LitBuy Finds organizes the same type of products into brand pages, category filters, QC badges, and shareable collection links — so you can find Nike, Moncler, or sneaker picks in seconds instead of scrolling hundreds of rows.",
+      "A raw LitBuy spreadsheet (also searched as lit buy spreadsheet) is a long list of links and photos that is hard to search on mobile. LitBuy Finds organizes the same type of products into brand pages, category filters, QC badges, and shareable collection links — so you can find Nike, Moncler, or sneaker picks in seconds instead of scrolling hundreds of rows.",
   },
   {
     question: "Is LitBuy safe to use?",
