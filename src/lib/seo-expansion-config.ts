@@ -1144,7 +1144,7 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
       "Latest LitBuy finds updated weekly — new rep sneakers, clothing, streetwear, and QC-linked products from the LitBuy spreadsheet catalog with verified agent buy buttons.",
     h1: "Latest LitBuy finds",
     intro:
-      `Discover LitBuy finds organized by category. Our catalog has ${FINDS_STATS.totalFindsLabel}+ products (${FINDS_STATS.qcFindsLabel} with QC photos) updated weekly from the LitBuy spreadsheet. This page shows the newest rep products after each sync — with photos, prices, QC references, and trusted LitBuy, MuleBuy, Kakobuy, OopBuy, and ACBuy links.`,
+      `Explore LitBuy’s handpicked discoveries — from trending sneakers to budget hoodies — all with transparent QC photos and reliable agent links. Over ${FINDS_STATS.totalFindsLabel} LitBuy finds indexed (${FINDS_STATS.qcFindsLabel} with QC photos), updated from the LitBuy Spreadsheet so new arrivals land here first.`,
     badge: "Discovery hub",
     keywords: [
       "litbuy finds",
@@ -1159,15 +1159,28 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
     productLimit: 48,
     sections: [
       {
-        heading: "What this discovery hub includes",
+        heading: "Featured picks on this page",
         paragraphs: [
-          `The LitBuy Finds database currently indexes ${FINDS_STATS.totalFindsLabel} products with ${FINDS_STATS.qcFindsLabel} QC-linked listings across ${FINDS_STATS.brandCount} brands. Latest finds are the newest rows after each spreadsheet sync — sneakers, hoodies, jackets, streetwear, bags, and accessories with shareable product URLs.`,
-          "Each product page connects back to brand hubs, category databases, and the LitBuy spreadsheet resource so you can move from a single find to a full haul shortlist without losing context.",
+          "Browse LitBuy Finds highlights in one place: new arrivals from the latest LitBuy Spreadsheet sync, top brands (Nike, Jordan, Moncler, Stussy), category lanes (sneakers, hoodies, jackets), and QC-linked listings ready for agent checkout.",
         ],
         links: [
-          { href: "/finds", label: "Finds hub" },
-          { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
-          { href: "/litbuy-qc", label: "QC product database" },
+          { href: "/best-litbuy-finds-2026", label: "Best LitBuy finds 2026" },
+          { href: "/sneaker-finds", label: "Sneaker finds" },
+          { href: "/hoodie-finds", label: "Hoodie finds" },
+          { href: "/best-budget-finds", label: "Budget LitBuy finds" },
+          { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
+        ],
+      },
+      {
+        heading: "What this LitBuy Finds discovery hub includes",
+        paragraphs: [
+          `The LitBuy Finds database currently indexes over ${FINDS_STATS.totalFindsLabel} products with ${FINDS_STATS.qcFindsLabel} QC-linked listings across ${FINDS_STATS.brandCount} brands. Latest finds are the newest rows after each LitBuy Spreadsheet sync — sneakers, hoodies, jackets, streetwear, bags, and accessories with shareable product URLs.`,
+          "Each product page connects back to brand hubs, category databases, and the LitBuy Spreadsheet resource so you can move from a single find to a full haul shortlist without losing context.",
+        ],
+        links: [
+          { href: "/finds", label: "LitBuy Finds hub" },
+          { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
+          { href: "/litbuy-qc", label: "QC photo guide" },
           { href: "/categories", label: "Category database" },
         ],
       },
@@ -1226,25 +1239,35 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
       {
         question: "What are latest LitBuy finds?",
         answer:
-          "Latest finds are the newest products added to the LitBuy Finds catalog after each daily spreadsheet sync — rep sneakers, clothing, streetwear, and accessories with photos, prices, and agent links.",
+          "Latest LitBuy finds are the newest products added to the LitBuy Finds catalog after each LitBuy Spreadsheet sync — rep sneakers, clothing, streetwear, and accessories with photos, prices, and agent links.",
       },
       {
         question: "How often are LitBuy finds updated?",
-        answer: `The catalog syncs daily. This page and the ${FINDS_STATS.totalFindsLabel}-product database refresh after each import — check the homepage sync timestamp for the exact time.`,
+        answer: `The catalog syncs regularly. This page and the ${FINDS_STATS.totalFindsLabel}+ LitBuy finds database refresh after each import — check the homepage sync timestamp for the exact time.`,
+      },
+      {
+        question: "How do I buy from LitBuy’s spreadsheet via Latest Finds?",
+        answer:
+          "Open a product on Latest Finds, review QC photos when available, then use the verified agent buy button and confirm live price on LitBuy before paying.",
+      },
+      {
+        question: "Why trust LitBuy QC photos?",
+        answer:
+          "Reference QC on find pages shows batch examples. Warehouse QC on LitBuy photographs your exact item — always review it before international shipping.",
       },
       {
         question: "Are these the same as spreadsheet rows?",
         answer:
-          "They come from the same product universe as LitBuy spreadsheets. LitBuy Finds filters broken listings, adds QC badges, and creates shareable product pages with verified buy buttons.",
+          "They come from the same LitBuy Spreadsheet universe. LitBuy Finds filters broken listings, adds QC badges, and creates shareable LitBuy finds pages.",
       },
       {
         question: "Where do I browse QC finds?",
-        answer: `Open any product with a QC badge or visit the QC database — ${FINDS_STATS.qcFindsLabel} listings currently include QC reference links.`,
+        answer: `Open any product with a QC badge or visit the QC photo guide — ${FINDS_STATS.qcFindsLabel} listings currently include QC reference links.`,
       },
       {
         question: "How do I search older finds?",
         answer:
-          "Use the Finds hub, category pages like sneaker finds or clothing finds, and brand hubs. Latest finds only shows the newest additions — the full database is always searchable.",
+          "Use the LitBuy Finds hub, category pages like sneaker finds or clothing finds, and brand hubs. Latest finds only shows the newest additions — the full database is always searchable.",
       },
     ],
     productSectionTitle: "Newest LitBuy finds",

@@ -17,70 +17,70 @@ const CATEGORY_COPY: Record<string, LandingCopy> = {
     description:
       "Curated hoodie finds on LitBuy — Stussy, Corteiz, Nike tech fleece, and streetwear layers with verified buy links and QC where available.",
     intro:
-      "Hoodies, crewnecks, and sweatshirt layers from across the catalog — from budget graphic tees to designer streetwear. Filter by brand and price, compare QC references on product pages, and buy through verified LitBuy links.",
+      "Browse our hoodies collection with QC photos and verified LitBuy links. LitBuy Finds pulls crewnecks and sweatshirt layers from Weidian and Taobao — from budget graphics to designer streetwear — so you can filter by brand and price before you buy.",
   },
   jackets: {
     title: "LitBuy Jacket Finds",
     description:
       "Jacket and outerwear finds on LitBuy — Moncler, Stone Island, puffers, shells, and seasonal layers with verified links.",
     intro:
-      "Outerwear picks for every season, from lightweight shells to heavy puffers. Moncler, Canada Goose, and Stone Island lead winter searches — every listing links to LitBuy for warehouse QC and international shipping.",
+      "Browse our jackets collection with QC photos and verified LitBuy links. Outerwear picks span lightweight shells to heavy puffers — Moncler, Canada Goose, and Stone Island lead winter searches — with warehouse QC and international shipping through LitBuy.",
   },
   tshirts: {
     title: "T-Shirt Finds",
     description:
       "T-shirt finds on LitBuy — graphic tees, staples, and daily rotation pieces with verified purchase links.",
     intro:
-      "A focused lane for tees and tops. Browse by brand, compare prices, and open product pages for QC references.",
+      "Browse our t-shirts collection with QC photos and verified LitBuy links. A focused lane for graphic tees and daily staples — compare prices, open product pages for QC references, and check out through LitBuy.",
   },
   bags: {
     title: "LitBuy Bag Finds",
     description:
       "Bag and backpack finds on LitBuy — Louis Vuitton, Gucci, Goyard, totes, crossbody bags, and travel pieces with verified agent links.",
     intro:
-      "Backpacks, totes, and designer carry pieces pulled from the accessories catalog. Louis Vuitton, Gucci, and Prada styles are the most searched — request warehouse QC on high-value bags before international shipping.",
+      "Browse our bags collection with QC photos and verified LitBuy links. Backpacks, totes, and designer carry pieces from Louis Vuitton, Gucci, and Prada styles — request warehouse QC on high-value bags before international shipping.",
   },
   shoes: {
     title: "LitBuy Sneakers & Shoe Finds",
     description:
       "Discover curated sneaker and footwear finds on LitBuy — verified links, QC photos, and daily drops across Nike, Jordan, Adidas, and more.",
     intro:
-      "From everyday runners to statement collabs, this collection tracks the strongest shoe finds across the catalog. Nike Dunks, Jordan retros, Adidas Campus, and New Balance runners dominate searches — every listing includes a verified LitBuy agent link. Filter by brand and price, open QC references on product pages, and compare batches before warehouse shipping.",
+      "Browse our sneakers collection with QC photos and verified LitBuy links. Nike Dunks, Jordan retros, Adidas Campus, and New Balance runners dominate LitBuy Finds searches — filter by brand and price, compare batches, and buy through verified agent links.",
   },
   "hoodies-and-pants": {
     title: "Streetwear Finds",
     description:
       "Browse hoodies, sweatpants, and streetwear picks with verified LitBuy links and QC references.",
     intro:
-      "Layer-friendly hoodies, relaxed sweats, and streetwear staples — organized for fast browsing with real product photos and outbound buy links.",
+      "Browse our streetwear collection with QC photos and verified LitBuy links. Layer-friendly hoodies, relaxed sweats, and staples organized for fast browsing with real product photos.",
   },
   "coats-and-jackets": {
     title: "Coats & Jackets",
     description:
       "Outerwear finds including puffers, shells, and designer jackets with LitBuy buy links.",
     intro:
-      "Seasonal outerwear from lightweight layers to heavy puffers. Filter by brand, price, and category to narrow down your next jacket pick.",
+      "Browse our coats and jackets collection with QC photos and verified LitBuy links. Seasonal outerwear from lightweight layers to heavy puffers — filter by brand and price to narrow your next pick.",
   },
   "tshirts-and-shorts": {
     title: "T-Shirts & Shorts",
     description:
       "Tees, shorts, and warm-weather essentials curated from the LitBuy finds catalog.",
     intro:
-      "Graphic tees, minimal staples, and summer shorts — a focused lane for everyday rotation pieces with verified purchase links.",
+      "Browse our t-shirts and shorts collection with QC photos and verified LitBuy links. Graphic tees, minimal staples, and summer shorts for everyday rotation pieces.",
   },
   accessories: {
     title: "LitBuy Accessory Finds",
     description:
       "Bags, belts, jewelry, hats, and accessory finds with LitBuy affiliate links and QC where available.",
     intro:
-      "Small details that complete a fit — belts, hats, eyewear, jewelry, and carry pieces. Accessories are ideal for filling out a haul without heavy shipping weight. Explore with clear pricing and direct LitBuy checkout links.",
+      "Browse our accessories collection with QC photos and verified LitBuy links. Belts, hats, eyewear, jewelry, and carry pieces — ideal for filling out a haul without heavy shipping weight.",
   },
   electronics: {
     title: "LitBuy Electronics Finds",
     description:
       "Tech and electronics picks from the LitBuy finds spreadsheet — headphones, gadgets, and more with verified links.",
     intro:
-      "A dedicated lane for tech and gadget finds from Weidian and Taobao sellers. Compare specs and model numbers carefully, check QC references when available, and buy through verified LitBuy links.",
+      "Browse our electronics collection with QC photos and verified LitBuy links. Tech and gadget finds from Weidian and Taobao sellers — compare specs carefully and check QC when available.",
   },
 };
 
@@ -90,147 +90,147 @@ const BRAND_COPY: Record<string, LandingCopy> = {
     description:
       "Curated Nike finds on LitBuy — Dunks, Air Max, tech fleece, and more with verified buy links.",
     intro:
-      "Nike remains one of the most searched lanes in the catalog. This page surfaces current Nike picks with photos, pricing, and direct LitBuy purchase links.",
+      "Our Nike finds feature top sneakers and sportswear, handpicked from Weidian/Taobao with QC images. Browse Dunks, Air Max, and tech fleece with verified LitBuy links — then jump into sneakers or hoodies when you want a broader LitBuy Finds lane.",
   },
   adidas: {
     title: "Adidas Finds",
     description:
       "Adidas Campus, Samba, Yeezy-style picks, and more — curated LitBuy finds with QC links.",
     intro:
-      "From Campus and Samba silhouettes to seasonal drops, browse Adidas finds organized for quick discovery and easy checkout on LitBuy.",
+      "Our Adidas finds feature Campus, Samba, and seasonal sportswear, handpicked from Weidian/Taobao with QC images. Compare silhouettes, open verified LitBuy links, and explore related sneaker LitBuy Finds when you want more options.",
   },
   jordan: {
     title: "Jordan Finds",
     description:
       "Air Jordan finds curated from the LitBuy catalog — retros, mids, highs, and collabs.",
     intro:
-      "Jordan heat in one place. Explore current listings with product images, pricing in your preferred currency, and verified affiliate links.",
+      "Our Jordan finds feature top retros, mids, highs, and collabs, handpicked from Weidian/Taobao with QC images. Explore current Air Jordan listings with transparent pricing and verified LitBuy agent links alongside broader sneaker LitBuy Finds.",
   },
   asics: {
     title: "Asics Finds",
     description:
       "Asics Gel and sportstyle finds with LitBuy buy links and QC references where available.",
     intro:
-      "Clean runners and sportstyle Asics picks — ideal if you are building a rotation around comfort-first silhouettes.",
+      "Our Asics finds feature Gel runners and sportstyle pairs, handpicked from Weidian/Taobao with QC images. Ideal if you are building a comfort-first rotation with verified LitBuy links.",
   },
   "new-balance": {
     title: "New Balance Finds",
     description:
       "New Balance 550, 2002R, and lifestyle runners curated for LitBuy shoppers.",
     intro:
-      "New Balance continues to dominate everyday wear. This collection highlights current NB finds with transparent pricing and outbound buy links.",
+      "Our New Balance finds feature 550, 2002R, and lifestyle runners, handpicked from Weidian/Taobao with QC images. Transparent pricing and outbound LitBuy links make everyday wear easy to compare.",
   },
   moncler: {
     title: "Moncler Finds",
     description:
       "Moncler puffers and outerwear finds on LitBuy with verified buy links and QC references.",
     intro:
-      "Moncler outerwear from across the catalog — browse current listings with photos, pricing, and direct LitBuy checkout links.",
+      "Our Moncler finds feature puffers and outerwear, handpicked from Weidian/Taobao with QC images. Browse jackets with photos, pricing, and direct LitBuy checkout links.",
   },
   supreme: {
     title: "Supreme Finds",
     description:
       "Supreme streetwear finds curated on LitBuy — hoodies, tees, and accessories with verified links.",
     intro:
-      "Supreme picks organized for quick discovery. Compare prices, check QC when available, and buy through verified LitBuy links.",
+      "Our Supreme finds feature hoodies, tees, and accessories, handpicked from Weidian/Taobao with QC images. Compare prices and buy through verified LitBuy links.",
   },
   "ralph-lauren": {
     title: "Ralph Lauren Finds",
     description:
       "Ralph Lauren finds on LitBuy — polos, knits, and classic pieces with verified purchase links.",
     intro:
-      "Classic Ralph Lauren styles from the catalog, with clear product photos and outbound agent links for easy buying.",
+      "Our Ralph Lauren finds feature polos, knits, and classics, handpicked from Weidian/Taobao with QC images and outbound LitBuy agent links.",
   },
   "louis-vuitton": {
     title: "Louis Vuitton Finds",
     description:
       "Louis Vuitton bag and accessory finds on LitBuy — browse listings with agent links and QC references.",
     intro:
-      "LV-style bags, belts, and accessories from across the catalog. Compare photos, check QC when available, and open agent links on LitBuy.",
+      "Our Louis Vuitton finds feature bags, belts, and accessories, handpicked from Weidian/Taobao with QC images. Compare photos and open verified LitBuy agent links — bags and accessories LitBuy Finds are useful next steps.",
   },
   gucci: {
     title: "Gucci Finds",
     description:
       "Gucci finds on LitBuy — bags, belts, and apparel listings with verified agent links.",
     intro:
-      "Gucci-heavy picks organized for browsing. Filter by price, open product details, and use your own judgment before ordering.",
+      "Our Gucci finds feature bags, belts, and apparel, handpicked from Weidian/Taobao with QC images. Filter by price, open product details, and buy through verified LitBuy links.",
   },
   prada: {
     title: "Prada Finds",
     description:
       "Prada bag and apparel finds curated on LitBuy with product photos and buy links.",
     intro:
-      "Prada listings from the catalog — useful when you want a focused lane instead of scrolling a full spreadsheet.",
+      "Our Prada finds feature bags and apparel, handpicked from Weidian/Taobao with QC images — a focused LitBuy Finds lane instead of scrolling a full spreadsheet.",
   },
   "chrome-hearts": {
     title: "Chrome Hearts Finds",
     description:
       "Chrome Hearts jewelry and apparel finds on LitBuy with agent links and QC references.",
     intro:
-      "Chrome Hearts picks across jewelry, hoodies, and accessories. Check hardware and print details in QC when you can.",
+      "Our Chrome Hearts finds feature jewelry, hoodies, and accessories, handpicked from Weidian/Taobao with QC images. Check hardware and print details before you ship.",
   },
   dior: {
     title: "Dior Finds",
     description:
       "Dior finds on LitBuy — bags, sneakers, and apparel with verified purchase links.",
     intro:
-      "Dior product listings from the catalog with photos and outbound LitBuy links for checkout.",
+      "Our Dior finds feature bags, sneakers, and apparel, handpicked from Weidian/Taobao with QC images and outbound LitBuy links for checkout.",
   },
   balenciaga: {
     title: "Balenciaga Finds",
     description:
       "Balenciaga sneaker and apparel finds on LitBuy — browse with filters and agent links.",
     intro:
-      "Balenciaga runners, hoodies, and statement pieces in one searchable lane.",
+      "Our Balenciaga finds feature runners, hoodies, and statement pieces, handpicked from Weidian/Taobao with QC images in one searchable LitBuy Finds lane.",
   },
   burberry: {
     title: "Burberry Finds",
     description:
       "Burberry finds on LitBuy — outerwear, checks, and accessories with agent links.",
     intro:
-      "Burberry listings with clear pricing. Open QC references on product pages when they are available.",
+      "Our Burberry finds feature outerwear, checks, and accessories, handpicked from Weidian/Taobao with QC images. Open QC references on product pages when available.",
   },
   fendi: {
     title: "Fendi Finds",
     description:
       "Fendi bag and apparel finds curated on LitBuy with verified buy links.",
     intro:
-      "Fendi picks from the catalog — filter by category within the brand page and compare photos before buying.",
+      "Our Fendi finds feature bags and apparel, handpicked from Weidian/Taobao with QC images. Filter within the brand page and compare photos before buying.",
   },
   bape: {
     title: "Bape Finds",
     description:
       "Bape streetwear finds on LitBuy — hoodies, tees, and camo pieces with agent links.",
     intro:
-      "Bape-heavy listings for streetwear browsers. Check print alignment and tags in QC when possible.",
+      "Our Bape finds feature hoodies, tees, and camo pieces, handpicked from Weidian/Taobao with QC images. Check print alignment and tags when possible.",
   },
   "stone-island": {
     title: "Stone Island Finds",
     description:
       "Stone Island jacket and apparel finds on LitBuy with product photos and buy links.",
     intro:
-      "Stone Island outerwear and badges from the catalog — useful for seasonal layer shopping.",
+      "Our Stone Island finds feature jackets and apparel, handpicked from Weidian/Taobao with QC images — useful for seasonal layer shopping alongside jackets LitBuy Finds.",
   },
   stussy: {
     title: "Stussy Finds",
     description:
       "Stussy streetwear finds on LitBuy — hoodies, tees, and logo pieces with verified buy links.",
     intro:
-      "Stüssy remains a core streetwear search on Weidian and Taobao. Browse hoodies, graphic tees, and logo staples with photos, pricing, and LitBuy agent links.",
+      "Our Stussy finds feature hoodies, graphic tees, and logo staples, handpicked from Weidian/Taobao with QC images, pricing, and LitBuy agent links.",
   },
   corteiz: {
     title: "Corteiz Finds",
     description:
       "Corteiz streetwear finds on LitBuy — hoodies, cargos, and Alcatraz pieces with verified links.",
     intro:
-      "Corteiz has become one of the most searched UK streetwear lanes on LitBuy Finds. Explore hoodies, cargos, and graphic pieces with QC references where available.",
+      "Our Corteiz finds feature hoodies, cargos, and graphic pieces, handpicked from Weidian/Taobao with QC images — one of the most searched UK streetwear lanes on LitBuy Finds.",
   },
   ami: {
     title: "Ami Finds",
     description:
       "Ami Paris finds on LitBuy — heart-logo knits, tees, and sweaters with verified agent links.",
     intro:
-      "Ami heart-logo knits and tees are popular designer-streetwear entry points. Compare embroidery and fit in QC before you ship.",
+      "Our Ami finds feature heart-logo knits and tees, handpicked from Weidian/Taobao with QC images. Compare embroidery and fit before you ship.",
   },
 };
 
@@ -239,6 +239,8 @@ const CATEGORY_GUIDES: Record<string, { href: string; label: string }[]> = {
     { href: "/guides/best-rep-sneakers", label: "Best rep sneakers guide" },
     { href: "/guides/qc-checklist-for-shoes", label: "Shoe QC checklist" },
     { href: "/guides/best-nike-finds", label: "Best Nike finds" },
+    { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
+    { href: "/latest-finds", label: "Latest LitBuy Finds" },
   ],
   "hoodies-and-pants": [
     { href: "/guides/best-hoodie-finds", label: "Best hoodie finds" },
@@ -253,10 +255,14 @@ const CATEGORY_GUIDES: Record<string, { href: string; label: string }[]> = {
   hoodies: [
     { href: "/guides/best-hoodie-finds", label: "Best hoodie finds" },
     { href: "/best-litbuy-hoodies", label: "Best LitBuy hoodies" },
+    { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
+    { href: "/latest-finds", label: "Latest LitBuy Finds" },
   ],
   jackets: [
     { href: "/guides/best-jacket-finds", label: "Best jacket finds" },
     { href: "/best-litbuy-jackets", label: "Best LitBuy jackets" },
+    { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
+    { href: "/latest-finds", label: "Latest LitBuy Finds" },
   ],
   tshirts: [
     { href: "/guides/best-tshirt-finds", label: "Best t-shirt finds" },
@@ -276,6 +282,8 @@ const CATEGORY_GUIDES: Record<string, { href: string; label: string }[]> = {
   default: [
     { href: "/guides/beginner-guide-to-litbuy", label: "Beginner guide" },
     { href: "/guides/how-to-order-from-litbuy", label: "How to order" },
+    { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
+    { href: "/latest-finds", label: "Latest LitBuy Finds" },
   ],
 };
 
@@ -283,29 +291,55 @@ const BRAND_GUIDES: Record<string, { href: string; label: string }[]> = {
   nike: [
     { href: "/guides/best-nike-finds", label: "Best Nike finds guide" },
     { href: "/top-nike-finds", label: "Top Nike product list" },
+    { href: "/categories/shoes", label: "Sneaker LitBuy Finds" },
+    { href: "/categories/hoodies", label: "Hoodie LitBuy Finds" },
   ],
-  jordan: [{ href: "/guides/best-jordan-finds", label: "Best Jordan guide" }],
-  adidas: [{ href: "/guides/best-adidas-finds", label: "Best Adidas guide" }],
+  jordan: [
+    { href: "/guides/best-jordan-finds", label: "Best Jordan guide" },
+    { href: "/categories/shoes", label: "Sneaker LitBuy Finds" },
+  ],
+  adidas: [
+    { href: "/guides/best-adidas-finds", label: "Best Adidas guide" },
+    { href: "/categories/shoes", label: "Sneaker LitBuy Finds" },
+  ],
   "new-balance": [
     { href: "/guides/best-new-balance-finds", label: "New Balance guide" },
+    { href: "/categories/shoes", label: "Sneaker LitBuy Finds" },
   ],
-  asics: [{ href: "/guides/best-asics-finds", label: "Asics guide" }],
+  asics: [
+    { href: "/guides/best-asics-finds", label: "Asics guide" },
+    { href: "/categories/shoes", label: "Sneaker LitBuy Finds" },
+  ],
   "louis-vuitton": [
     { href: "/guides/best-louis-vuitton-finds", label: "LV finds guide" },
     { href: "/top-louis-vuitton-finds", label: "Top LV list" },
+    { href: "/categories/bags", label: "Bag LitBuy Finds" },
+    { href: "/categories/accessories", label: "Accessory LitBuy Finds" },
   ],
   gucci: [
     { href: "/guides/best-gucci-finds", label: "Gucci guide" },
     { href: "/top-gucci-finds", label: "Top Gucci list" },
+    { href: "/categories/bags", label: "Bag LitBuy Finds" },
   ],
-  prada: [{ href: "/guides/best-prada-finds", label: "Prada guide" }],
-  moncler: [{ href: "/guides/best-moncler-finds", label: "Moncler guide" }],
-  supreme: [{ href: "/guides/best-supreme-finds", label: "Supreme guide" }],
+  prada: [
+    { href: "/guides/best-prada-finds", label: "Prada guide" },
+    { href: "/categories/bags", label: "Bag LitBuy Finds" },
+  ],
+  moncler: [
+    { href: "/guides/best-moncler-finds", label: "Moncler guide" },
+    { href: "/categories/coats-and-jackets", label: "Jacket LitBuy Finds" },
+  ],
+  supreme: [
+    { href: "/guides/best-supreme-finds", label: "Supreme guide" },
+    { href: "/categories/hoodies", label: "Hoodie LitBuy Finds" },
+  ],
   "ralph-lauren": [
     { href: "/guides/best-ralph-lauren-finds", label: "Ralph Lauren guide" },
+    { href: "/categories/tshirts", label: "T-shirt LitBuy Finds" },
   ],
   "chrome-hearts": [
     { href: "/guides/best-chrome-hearts-finds", label: "Chrome Hearts guide" },
+    { href: "/categories/accessories", label: "Accessory LitBuy Finds" },
   ],
 };
 
@@ -326,6 +360,16 @@ const CATEGORY_FAQS: Record<string, { question: string; answer: string }[]> = {
       answer:
         "Nike Dunks, Jordan 1s, and Adidas Campus lead clicks. See our best sneakers page and Popular Today rail for community-ranked picks.",
     },
+    {
+      question: "How do I buy sneakers from LitBuy’s spreadsheet?",
+      answer:
+        "Open a sneaker LitBuy Finds page from this category or the LitBuy Spreadsheet hub, review QC photos, then use the verified agent buy button and confirm live price on LitBuy.",
+    },
+    {
+      question: "Why trust LitBuy QC photos?",
+      answer:
+        "Reference QC shows batch examples from other buyers. Warehouse QC on LitBuy photographs your exact pair after purchase — use that check before international shipping.",
+    },
   ],
   hoodies: [
     {
@@ -338,6 +382,16 @@ const CATEGORY_FAQS: Record<string, { question: string; answer: string }[]> = {
       answer:
         "Look at print placement, drawstrings, and tag photos in warehouse QC. Compare measurements to a hoodie you already own.",
     },
+    {
+      question: "How do I buy hoodies from LitBuy’s spreadsheet?",
+      answer:
+        "Browse hoodie LitBuy Finds here or open the LitBuy Spreadsheet hub, check QC photos on the product page, then use the verified agent buy button.",
+    },
+    {
+      question: "Why trust LitBuy QC photos?",
+      answer:
+        "Reference QC shows batch examples from other buyers. Warehouse QC on LitBuy photographs your exact hoodie — review that before international shipping.",
+    },
   ],
   jackets: [
     {
@@ -349,6 +403,16 @@ const CATEGORY_FAQS: Record<string, { question: string; answer: string }[]> = {
       question: "When should I order outerwear?",
       answer:
         "Order six to eight weeks before your local cold season to allow warehouse QC and international shipping time.",
+    },
+    {
+      question: "How do I buy jackets from LitBuy’s spreadsheet?",
+      answer:
+        "Browse jacket LitBuy Finds here or via the LitBuy Spreadsheet page, open a listing with QC photos, then check out through the verified agent link.",
+    },
+    {
+      question: "Why trust LitBuy QC photos?",
+      answer:
+        "For outerwear, QC photos help you check logos, zippers, and fill before shipping. Reference QC on find pages plus warehouse QC on LitBuy are the safest combo.",
     },
   ],
   bags: [
@@ -471,7 +535,7 @@ export function getCategorySeo(slug: string, name: string, count: number): Landi
   return {
     title,
     description,
-    intro: `Explore ${name.toLowerCase()} from the LitBuy Finds catalog. Filter by brand and price, open product details for QC references, and buy through verified affiliate links.`,
+    intro: `Browse our ${name.toLowerCase()} collection with QC photos and verified LitBuy links. Filter by brand and price, open product details for QC references, and shop LitBuy Finds through verified affiliate links.`,
   };
 }
 
@@ -493,7 +557,7 @@ export function getBrandSeo(slug: string, name: string, count: number): LandingC
   return {
     title,
     description,
-    intro: `A focused view of ${name} products from the LitBuy Finds catalog. Save favorites, compare prices, and buy through verified LitBuy links.`,
+    intro: `Our ${name} finds are handpicked from Weidian/Taobao with QC images. Save favorites, compare prices, and buy through verified LitBuy links across LitBuy Finds.`,
   };
 }
 

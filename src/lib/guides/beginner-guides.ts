@@ -328,29 +328,53 @@ export const BEGINNER_GUIDES: Record<string, GuidePage> = {
   "litbuy-spreadsheet-guide": buildGuide("litbuy-spreadsheet-guide", "beginner", {
     title: "LitBuy Spreadsheet Guide 2026 | Organized Product Discovery",
     metaDescription:
-      "LitBuy spreadsheet guide — an organized product discovery resource with QC references, category browsing, and searchable rep finds instead of raw spreadsheet rows.",
+      "LitBuy Spreadsheet Guide — a fast visual alternative to Google Sheets with QC photos, organized categories, and searchable LitBuy finds updated regularly.",
     badge: "Spreadsheet guide",
-    h1: "LitBuy spreadsheet guide",
+    h1: "LitBuy Spreadsheet Guide",
     intro:
-      "The LitBuy spreadsheet is a community-maintained list of rep finds — and LitBuy Finds is the organized product discovery resource built on top of it. Rows become searchable pages with QC photos, category filters, brand hubs, and trusted agent links you can share without sending fragile sheet URLs.",
+      "The LitBuy Spreadsheet is a community list of rep finds — and this LitBuy Spreadsheet Guide explains how LitBuy Finds turns those rows into an organized product discovery resource. Think of it as a fast, visual alternative to Google Sheets: QC images, categories, brand hubs, and trusted agent links you can share without fragile sheet URLs.",
     cardDescription:
-      "How sheet rows become browsable product listings here.",
+      "How LitBuy Spreadsheet rows become browsable LitBuy Finds pages.",
     sections: [
+      {
+        heading: "What is the LitBuy Spreadsheet?",
+        paragraphs: [
+          "A LitBuy Spreadsheet typically lists product names, prices, thumbnail links, seller URLs, and sometimes QC references. Power users love the density — but sheets are awkward on phones and hard to share one find at a time.",
+          "LitBuy Finds indexes that same LitBuy Spreadsheet universe into searchable LitBuy finds pages with filters, QC badges, and verified checkout links.",
+        ],
+        links: [
+          { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet hub" },
+          { href: "/latest-finds", label: "Latest LitBuy finds" },
+          { href: "/finds", label: "LitBuy Finds hub" },
+        ],
+      },
+      {
+        heading: "Benefits vs raw Google Sheets",
+        paragraphs: [
+          "Organized categories (sneakers, clothing, jackets, accessories), QC photo references on listings, weekly catalog updates, mobile-friendly search, and stable product URLs for sharing — without downloading a new file every week.",
+        ],
+        links: [
+          { href: "/litbuy-qc", label: "QC photo guide" },
+          { href: "/sneaker-finds", label: "Sneaker finds" },
+          { href: "/clothing-finds", label: "Clothing finds" },
+          { href: "/best-litbuy-finds-2026", label: "Best LitBuy finds 2026" },
+        ],
+      },
       {
         heading: "What a typical row contains",
         paragraphs: [
           "Curators track name, CNY or USD price, image URL, marketplace source, category tags, and a LitBuy agent link. Some rows add a QC reference URL pointing to albums or review threads.",
-          "Rows update when sellers change price or when a batch is replaced. The sheet is the source; the website is a cleaned view.",
+          "Rows update when sellers change price or when a batch is replaced. The sheet is the source; LitBuy Finds is the cleaned, browsable view.",
         ],
       },
       {
         heading: "From row to product page",
         paragraphs: [
-          "We map each row to a URL on LitBuy Finds with brand detection, category placement, and card text for browsing. Agent links on the product page should match the sheet intent — always confirm on LitBuy before paying.",
+          "We map each LitBuy Spreadsheet row to a LitBuy Finds URL with brand detection, category placement, and card text for browsing. Agent links on the product page should match the sheet intent — always confirm on LitBuy before paying.",
         ],
         links: [
           { href: "/recently-added", label: "Recently added imports" },
-          { href: "/guides/how-to-use-litbuy-finds", label: "Site browsing tips" },
+          { href: "/guides/how-to-use-litbuy-finds", label: "How to use LitBuy Finds" },
         ],
       },
       {
@@ -359,10 +383,10 @@ export const BEGINNER_GUIDES: Record<string, GuidePage> = {
           "Sheets are wide and awkward on a phone. Here you get filters, brand pages, trending sorts, and stable links to share. QC references stay visible on the listing when the import includes them.",
         ],
         links: [
-          { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet hub" },
-          { href: "/latest-finds", label: "Latest spreadsheet additions" },
-          { href: "/best-litbuy-finds-2026", label: "Best finds 2026" },
-          { href: "/best-budget-finds", label: "Budget finds" },
+          { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet hub" },
+          { href: "/latest-finds", label: "Latest LitBuy finds" },
+          { href: "/best-litbuy-finds-2026", label: "Best LitBuy finds 2026" },
+          { href: "/best-budget-finds", label: "Budget LitBuy finds" },
           { href: "/trending", label: "Trending finds" },
           { href: "/brands", label: "Brand index" },
         ],
@@ -370,11 +394,31 @@ export const BEGINNER_GUIDES: Record<string, GuidePage> = {
       {
         heading: "When data drifts",
         paragraphs: [
-          "If a seller deletes a listing or changes variants, the find page can lag until the next sync. If checkout looks wrong, search for the same item elsewhere on the site or pick a fresher row from recently added.",
+          "If a seller deletes a listing or changes variants, the find page can lag until the next sync. If checkout looks wrong, search for the same item elsewhere on LitBuy Finds or pick a fresher row from Latest Finds.",
         ],
       },
     ],
     faqs: [
+      {
+        question: "What is the LitBuy Spreadsheet?",
+        answer:
+          "A community-maintained list of Weidian and Taobao finds. LitBuy Finds turns those LitBuy Spreadsheet rows into searchable LitBuy finds with QC photos and agent links.",
+      },
+      {
+        question: "How is the LitBuy Spreadsheet kept updated?",
+        answer:
+          "Catalog imports sync on a regular schedule. New products appear in Latest LitBuy finds after each update — verify live price on your agent before buying.",
+      },
+      {
+        question: "How do I buy from LitBuy’s spreadsheet?",
+        answer:
+          "Open LitBuy Finds, browse Latest Finds or categories, check QC when available, then use the verified agent buy button and confirm details on LitBuy before payment.",
+      },
+      {
+        question: "Why trust LitBuy QC photos?",
+        answer:
+          "Reference QC shows batch examples; warehouse QC on LitBuy photographs your exact item. Always review warehouse QC before international shipping.",
+      },
       {
         question: "Is every sheet row guaranteed to be live?",
         answer:
