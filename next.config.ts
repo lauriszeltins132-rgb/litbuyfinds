@@ -155,6 +155,8 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "**.geilicdn.com" },
     ],
     formats: ["image/avif", "image/webp"],
+    /** Cache optimized next/image responses longer (logos/promo only — catalog uses raw <img>). */
+    minimumCacheTTL: 60 * 60 * 24 * 30,
   },
   async headers() {
     return [
@@ -164,12 +166,30 @@ const nextConfig: NextConfig = {
           {
             key: "Link",
             value: [
-              "<https://i.postimg.cc>; rel=preconnect",
-              "<https://si.geilicdn.com>; rel=preconnect",
-              "<https://cbu01.alicdn.com>; rel=preconnect",
-              "<https://img.alicdn.com>; rel=preconnect",
-              "<https://ae01.alicdn.com>; rel=preconnect",
+              "<https://i.postimg.cc>; rel=preconnect; crossorigin",
+              "<https://si.geilicdn.com>; rel=preconnect; crossorigin",
+              "<https://cbu01.alicdn.com>; rel=preconnect; crossorigin",
+              "<https://img.alicdn.com>; rel=preconnect; crossorigin",
+              "<https://ae01.alicdn.com>; rel=preconnect; crossorigin",
             ].join(", "),
+          },
+        ],
+      },
+      {
+        source: "/logo.svg",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
+        source: "/_next/image",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=2592000, stale-while-revalidate=86400",
           },
         ],
       },
