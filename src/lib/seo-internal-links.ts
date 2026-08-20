@@ -57,6 +57,12 @@ export const AGENT_FINDS_LINKS = [
 ] as const;
 
 export const AGENT_RESOURCE_LINKS = [
+  { href: "/usfans-spreadsheet", label: "USFans spreadsheet" },
+  { href: "/gtbuy-spreadsheet", label: "GTBuy spreadsheet" },
+  { href: "/oopbuy-spreadsheet", label: "OopBuy spreadsheet" },
+  { href: "/boonbuy-spreadsheet", label: "BoonBuy spreadsheet" },
+  { href: "/hipobuy-spreadsheet", label: "HipoBuy spreadsheet" },
+  { href: "/kakobuy-spreadsheet", label: "Kakobuy spreadsheet" },
   { href: "/telegram-oopbuy", label: "OopBuy Telegram" },
   { href: "/telegram-kakobuy", label: "Kakobuy Telegram" },
   { href: "/telegram-hipobuy", label: "HipoBuy Telegram" },

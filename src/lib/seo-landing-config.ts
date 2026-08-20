@@ -1,3 +1,4 @@
+import type { AgentId } from "./agents";
 import type { StaticPageSection } from "./static-pages";
 import { AGENT_RESOURCE_AGENTS } from "./agent-resource-agents";
 import { buildAgentSpreadsheetConfig } from "./agent-resource-content";
@@ -68,6 +69,8 @@ export type SeoLandingPageEntry = {
   productSectionTitle?: string;
   productLimit?: number;
   minProducts?: number;
+  /** Shows the agent logo on multi-agent spreadsheet landings. */
+  agentId?: AgentId;
 };
 
 function pathFor(slug: string): string {
@@ -434,61 +437,6 @@ export const SEO_LANDING_CONFIG: Record<string, SeoLandingPageEntry> = {
       },
     ],
     productSectionTitle: "Trending finds for MuleBuy shoppers",
-  },
-
-  "kakobuy-spreadsheet": {
-    slug: "kakobuy-spreadsheet",
-    type: "spreadsheet",
-    title: "Kakobuy Spreadsheet Finds",
-    description:
-      "Kakobuy spreadsheet-style discovery on LitBuy Finds — searchable catalog with QC references and agent choice at checkout.",
-    h1: "Kakobuy spreadsheet finds",
-    intro:
-      "Use this page like a Kakobuy-friendly spreadsheet view: curated rows become product cards with photos, filters, and your saved agent preference.",
-    badge: "Agent spreadsheet",
-    keywords: ["kakobuy spreadsheet", "kakobuy finds sheet"],
-    updateFrequency: "weekly",
-    filter: { trending: true },
-    relatedLinks: [
-      { href: "/kakobuy-finds", label: "Kakobuy finds hub" },
-      { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
-      { href: "/mulebuy-spreadsheet", label: "MuleBuy spreadsheet" },
-      { href: "/rep-agent-spreadsheets", label: "Agent spreadsheets hub" },
-    ],
-    faqs: [
-      {
-        question: "Can I import links to Kakobuy?",
-        answer:
-          "Open any product and choose Kakobuy as your agent. Import workflows depend on Kakobuy's own tools.",
-      },
-    ],
-    productSectionTitle: "Trending finds for Kakobuy shoppers",
-  },
-
-  "oopbuy-spreadsheet": {
-    slug: "oopbuy-spreadsheet",
-    type: "spreadsheet",
-    title: "OopBuy Spreadsheet Finds",
-    description:
-      "OopBuy spreadsheet finds on LitBuy Finds — browse QC-curated products and open them on OopBuy or LitBuy.",
-    h1: "OopBuy spreadsheet finds",
-    intro:
-      "OopBuy users can treat this as a cleaner spreadsheet front-end: same catalog data, better photos, and agent switching without leaving the site.",
-    badge: "Agent spreadsheet",
-    keywords: ["oopbuy spreadsheet", "oopbuy finds"],
-    updateFrequency: "weekly",
-    filter: { trending: true },
-    relatedLinks: [
-      { href: "/oopbuy-finds", label: "OopBuy finds hub" },
-      { href: "/litbuy-vs-oopbuy", label: "LitBuy vs OopBuy" },
-    ],
-    faqs: [
-      {
-        question: "Which agent is default?",
-        answer: "LitBuy is recommended site-wide, but OopBuy can be selected anytime.",
-      },
-    ],
-    productSectionTitle: "Trending finds for OopBuy shoppers",
   },
 
   "acbuy-spreadsheet": {

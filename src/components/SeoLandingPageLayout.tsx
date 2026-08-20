@@ -77,7 +77,9 @@ export default function SeoLandingPageLayout({ entry }: SeoLandingPageLayoutProp
       ? [{ label: "Finds", href: "/finds" }]
       : entry.type === "freshness"
         ? [{ label: "Finds", href: "/finds" }]
-        : []),
+        : entry.type === "spreadsheet" && entry.agentId
+          ? [{ label: "LitBuy Spreadsheet", href: "/litbuy-spreadsheet" }]
+          : []),
     { label: h1 },
   ];
 
@@ -153,6 +155,7 @@ export default function SeoLandingPageLayout({ entry }: SeoLandingPageLayoutProp
         categoryLinks={entry.categoryLinks ?? []}
         browseSlug={entry.slug}
         browseCategories={entry.filter?.categories ?? entry.categoryLinks ?? []}
+        agentId={entry.agentId}
       />
 
       <RelatedPages currentPath={path} />

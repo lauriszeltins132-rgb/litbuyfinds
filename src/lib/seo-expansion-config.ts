@@ -1205,17 +1205,47 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
   "rep-agent-spreadsheets": {
     slug: "rep-agent-spreadsheets",
     type: "spreadsheet",
-    title: "Rep Agent Spreadsheets | LitBuy, Kakobuy & MuleBuy",
+    title: "Rep Agent Spreadsheets | USFans, GTBuy, OopBuy & More",
     description:
-      "Rep agent spreadsheets compared — LitBuy, Kakobuy, MuleBuy, HipoBuy, OopBuy, and ACBuy spreadsheet-style discovery with QC photos and daily updates.",
+      "Rep agent spreadsheets for USFans, GTBuy, OopBuy, BoonBuy, HipoBuy, Kakobuy, LitBuy, and more — searchable finds with QC photos and agent checkout.",
     h1: "Rep agent spreadsheets",
     intro:
       "Rep agent spreadsheets list thousands of Weidian and Taobao products with prices and QC notes. LitBuy Finds turns those spreadsheet rows into searchable pages — use this hub to jump between agent-specific spreadsheet views.",
     badge: "Spreadsheets",
-    keywords: ["rep agent spreadsheets", "agent spreadsheet", "litbuy spreadsheet", "rep spreadsheet"],
+    keywords: [
+      "rep agent spreadsheets",
+      "agent spreadsheet",
+      "usfans spreadsheet",
+      "gtbuy spreadsheet",
+      "oopbuy spreadsheet",
+      "boonbuy spreadsheet",
+      "hipobuy spreadsheet",
+      "kakobuy spreadsheet",
+      "litbuy spreadsheet",
+      "rep spreadsheet",
+    ],
     updateFrequency: "weekly",
     filter: { freshness: "editorsPicks" },
-    sections: spreadsheetSections("LitBuy, Kakobuy, MuleBuy, HipoBuy, OopBuy, and ACBuy"),
+    sections: [
+      ...spreadsheetSections(
+        "USFans, GTBuy, OopBuy, BoonBuy, HipoBuy, Kakobuy, LitBuy, MuleBuy, and ACBuy"
+      ),
+      {
+        heading: "Agent spreadsheet guides",
+        paragraphs: [
+          "Each agent spreadsheet page targets shoppers who searched for that agent’s sheet — same catalog, agent-specific checkout context, QC notes, and community links.",
+        ],
+        links: [
+          { href: "/usfans-spreadsheet", label: "USFans spreadsheet" },
+          { href: "/gtbuy-spreadsheet", label: "GTBuy spreadsheet" },
+          { href: "/oopbuy-spreadsheet", label: "OopBuy spreadsheet" },
+          { href: "/boonbuy-spreadsheet", label: "BoonBuy spreadsheet" },
+          { href: "/hipobuy-spreadsheet", label: "HipoBuy spreadsheet" },
+          { href: "/kakobuy-spreadsheet", label: "Kakobuy spreadsheet" },
+          { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+        ],
+      },
+    ],
     relatedLinks: [
       ...SPREADSHEETS,
       { href: "/best-rep-spreadsheets", label: "Best rep spreadsheets" },
