@@ -32,14 +32,14 @@ const SECTIONS = [
     title: "New This Week",
     description:
       "Recent arrivals buyers are bookmarking and adding to hauls right now.",
-    getProducts: () => getNewThisWeek(48),
+    getProducts: () => getNewThisWeek(24),
   },
   {
     id: "month",
     title: "New This Month",
     description:
       "The full latest-finds window plus recent high-ID catalog additions.",
-    getProducts: () => getNewThisMonth(96),
+    getProducts: () => getNewThisMonth(48),
   },
 ] as const;
 

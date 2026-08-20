@@ -97,7 +97,7 @@ export default function ProductImage({
     <img
       ref={imgRef}
       key={imgKey}
-      src={displaySrc}
+      src={displaySrc || undefined}
       alt={alt}
       width={IMAGE_LAYOUT[variant].width}
       height={IMAGE_LAYOUT[variant].height}
@@ -106,8 +106,11 @@ export default function ProductImage({
       decoding={decoding}
       referrerPolicy="no-referrer"
       className={assetClass}
-      onLoad={handleLoad}
-      onError={softRetryOrAdvance}
+      onLoad={(event) => {
+        if (!displaySrc) return;
+        handleLoad(event);
+      }}
+      onError={displaySrc ? softRetryOrAdvance : undefined}
     />
   );
 

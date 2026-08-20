@@ -5,6 +5,7 @@ import RelatedPages from "@/components/RelatedPages";
 import {
   getUpdateFrequencyFreshnessVariant,
 } from "@/components/ContentFreshness";
+import { DISCOVERY_PRODUCT_LIMIT } from "@/lib/catalog-page-size";
 import type { SeoLandingPageEntry } from "@/lib/seo-landing-config";
 import {
   getFreshnessSchemaDates,
@@ -37,11 +38,13 @@ function buildProductItemList(
 ) {
   if (products.length === 0) return null;
 
+  const limit = entry.productLimit ?? DISCOVERY_PRODUCT_LIMIT;
+
   return buildItemListSchema({
     name: entry.productSectionTitle ?? entry.h1,
     description: entry.description,
     path,
-    items: products.slice(0, 48).map((product, index) => ({
+    items: products.slice(0, limit).map((product, index) => ({
       name: product.product_name,
       url: getProductHref(product),
       position: index + 1,
@@ -138,7 +141,7 @@ export default function SeoLandingPageLayout({ entry }: SeoLandingPageLayoutProp
         freshnessVariant={freshnessVariant}
         products={products}
         productSectionTitle={entry.productSectionTitle}
-        productLimit={entry.productLimit ?? 48}
+        productLimit={entry.productLimit ?? DISCOVERY_PRODUCT_LIMIT}
         compareGroups={compareGroups.map((group) => ({
           label: group.label,
           products: group.products,

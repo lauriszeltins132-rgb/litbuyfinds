@@ -685,7 +685,7 @@ export const SEO_LANDING_CONFIG: Record<string, SeoLandingPageEntry> = {
     keywords: ["trending litbuy finds", "popular today"],
     updateFrequency: "daily",
     filter: { freshness: "popularToday" },
-    productLimit: 48,
+    productLimit: 24,
     relatedLinks: [
       { href: "/most-popular-finds-now", label: "Most popular now" },
       { href: "/trending-this-week", label: "Trending this week" },
@@ -715,7 +715,7 @@ export const SEO_LANDING_CONFIG: Record<string, SeoLandingPageEntry> = {
     keywords: ["trending this week", "weekly litbuy finds"],
     updateFrequency: "weekly",
     filter: { freshness: "popularWeek" },
-    productLimit: 48,
+    productLimit: 24,
     relatedLinks: [
       { href: "/trending", label: "Trending hub" },
       { href: "/trending-today", label: "Trending today" },
@@ -744,7 +744,7 @@ export const SEO_LANDING_CONFIG: Record<string, SeoLandingPageEntry> = {
     keywords: ["best value finds", "budget litbuy finds"],
     updateFrequency: "weekly",
     filter: { freshness: "bestValue" },
-    productLimit: 48,
+    productLimit: 24,
     relatedLinks: [
       { href: "/best-under-20", label: "Best under $20" },
       { href: "/top-budget-finds", label: "Top budget finds" },

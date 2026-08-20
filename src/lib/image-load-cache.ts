@@ -8,8 +8,8 @@
  */
 const SESSION_STORAGE_KEY = "litbuyf:loaded-images";
 const SESSION_FAILED_KEY = "litbuyf:failed-images";
-const SESSION_STORAGE_MAX = 400;
-const SESSION_FAILED_MAX = 200;
+const SESSION_STORAGE_MAX = 600;
+const SESSION_FAILED_MAX = 240;
 
 const loadedUrls = new Set<string>();
 const failedUrls = new Set<string>();

@@ -75,7 +75,7 @@ export default function ProductCardImage({
       <img
         ref={imgRef}
         key={imgKey}
-        src={displaySrc}
+        src={displaySrc || undefined}
         alt={alt}
         width={400}
         height={400}
@@ -84,8 +84,11 @@ export default function ProductCardImage({
         decoding={decoding}
         referrerPolicy="no-referrer"
         className={`${assetClass} relative z-[1]`}
-        onLoad={(event) => confirmLoaded(event.currentTarget, displaySrc)}
-        onError={softRetryOrAdvance}
+        onLoad={(event) => {
+          if (!displaySrc) return;
+          confirmLoaded(event.currentTarget, displaySrc);
+        }}
+        onError={displaySrc ? softRetryOrAdvance : undefined}
       />
     </div>
   );
