@@ -1,6 +1,7 @@
-import { createAgentCouponLandingPage } from "@/lib/agent-coupon-landing-page";
+import { AuthorityPageView, getAuthorityPageMetadata } from "@/lib/create-authority-page";
 
-const { generateMetadata, Page } = createAgentCouponLandingPage("litbuy-coupons-2026");
+export const metadata = getAuthorityPageMetadata("litbuy-coupons-2026")!;
 
-export { generateMetadata };
-export default Page;
+export default function Page() {
+  return <AuthorityPageView slug="litbuy-coupons-2026" />;
+}

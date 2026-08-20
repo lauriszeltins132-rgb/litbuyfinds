@@ -78,7 +78,7 @@ const EXTRA_LITBUY_VARIANTS: CouponPageVariant[] = [
 ];
 
 function buildVariants(agent: SeoAgentDefinition): CouponPageVariant[] {
-  return [
+  const variants: CouponPageVariant[] = [
     {
       slug: `${agent.slug}-coupons`,
       titleSuffix: `${agent.name} Coupons 2026 | Best Promo & Discount Codes`,
@@ -102,6 +102,13 @@ function buildVariants(agent: SeoAgentDefinition): CouponPageVariant[] {
     },
     ...(agent.slug === "litbuy" ? EXTRA_LITBUY_VARIANTS : []),
   ];
+
+  // Year page is an authority support landing with unique 2026 intent.
+  if (agent.slug === "litbuy") {
+    return variants.filter((variant) => variant.slug !== "litbuy-coupons-2026");
+  }
+
+  return variants;
 }
 
 function buildKeywords(agent: SeoAgentDefinition): string[] {
