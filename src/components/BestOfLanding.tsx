@@ -10,6 +10,7 @@ import {
   type BestOfPageConfig,
 } from "@/lib/best-of-pages";
 import RelatedPages from "@/components/RelatedPages";
+import { DISCOVERY_PRODUCT_LIMIT } from "@/lib/catalog-page-size";
 import { formatDatasetAge } from "@/lib/catalog-meta";
 import { buildCollectionPageSchema, buildFaqSchema } from "@/lib/schema";
 
@@ -64,7 +65,7 @@ export default function BestOfLanding({ config }: BestOfLandingProps) {
         <div className="mx-auto max-w-7xl">
           <h2 className="text-xl font-black">Top products</h2>
           <div className="mt-6">
-            <ProductGrid products={products.slice(0, 48)} />
+            <ProductGrid products={products.slice(0, DISCOVERY_PRODUCT_LIMIT)} />
           </div>
         </div>
       </section>

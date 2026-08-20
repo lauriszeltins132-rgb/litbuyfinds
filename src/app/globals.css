@@ -773,6 +773,8 @@ body::before {
 .product-grid > article {
   animation: card-in 0.45s ease-out both;
   height: 100%;
+  content-visibility: auto;
+  contain-intrinsic-size: 320px 420px;
 }
 
 .product-grid {

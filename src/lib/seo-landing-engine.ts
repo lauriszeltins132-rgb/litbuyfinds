@@ -1,4 +1,5 @@
 import { extractBrand } from "./brands";
+import { DISCOVERY_PRODUCT_LIMIT } from "./catalog-page-size";
 import { getHomepageRails } from "./homepage-rails";
 import { filterFeaturedEligible, sortByVisualQuality } from "./product-media";
 import { hasExactPrice } from "./pricing";
@@ -127,19 +128,22 @@ export function resolveSeoLandingProducts(entry: SeoLandingPageEntry): Product[]
   if (entry.getProducts) {
     return filterQualityProducts(entry.getProducts()).slice(
       0,
-      entry.productLimit ?? 96
+      entry.productLimit ?? DISCOVERY_PRODUCT_LIMIT
     );
   }
 
   if (entry.filter?.freshness) {
     return resolveFreshnessProducts(
       entry.filter.freshness,
-      entry.productLimit ?? 48
+      entry.productLimit ?? DISCOVERY_PRODUCT_LIMIT
     );
   }
 
   if (entry.filter) {
-    return resolveProductsFromFilter(entry.filter, entry.productLimit ?? 96);
+    return resolveProductsFromFilter(
+      entry.filter,
+      entry.productLimit ?? DISCOVERY_PRODUCT_LIMIT
+    );
   }
 
   return [];

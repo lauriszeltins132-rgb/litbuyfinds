@@ -31,6 +31,9 @@ type UseProductImageLoaderArgs = {
   analyticsContext: string;
 };
 
+/** Start fetching when the image is this close to the viewport. */
+const VIEWPORT_ROOT_MARGIN = "280px 0px";
+
 function buildCandidates(
   src: string,
   preferredSrc: string | undefined,
@@ -53,8 +56,9 @@ function buildCandidates(
 }
 
 /**
- * Shared product-image loader: session cache, one soft retry on transient
- * failure/timeout, hung-request abort, and hydration-safe eager/lazy decisions.
+ * Shared product-image loader: session cache, near-viewport fetch gating,
+ * one soft retry on transient failure/timeout, hung-request abort, and
+ * hydration-safe eager/lazy decisions.
  * Does not alter image URLs, dimensions, or visual presentation.
  */
 export function useProductImageLoader({
@@ -78,11 +82,17 @@ export function useProductImageLoader({
   const [loaded, setLoaded] = useState(false);
   /** Client-only: avoid SSR/client mismatch for cache-driven loading attrs. */
   const [cacheBoost, setCacheBoost] = useState(false);
+  /**
+   * Non-priority images wait until near the viewport before attaching src.
+   * Priority / session-cached images fetch immediately.
+   */
+  const [nearViewport, setNearViewport] = useState(priority);
   const imgRef = useRef<HTMLImageElement>(null);
   const loggedRef = useRef(false);
   const retriedRef = useRef(false);
 
   const displaySrc = candidates[srcIndex] ?? "";
+  const allowFetch = priority || nearViewport || cacheBoost;
 
   useEffect(() => {
     const firstSrc = candidates[0] ?? "";
@@ -92,9 +102,34 @@ export function useProductImageLoader({
     setFailed(candidates.length === 0);
     setLoaded(cached);
     setCacheBoost(cached);
+    setNearViewport(priority || cached);
     loggedRef.current = false;
     retriedRef.current = false;
-  }, [candidateKey, candidates]);
+  }, [candidateKey, candidates, priority]);
+
+  useEffect(() => {
+    if (priority || cacheBoost || nearViewport) return;
+
+    const node = imgRef.current;
+    if (!node) return;
+
+    if (typeof IntersectionObserver === "undefined") {
+      setNearViewport(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        setNearViewport(true);
+        observer.disconnect();
+      },
+      { rootMargin: VIEWPORT_ROOT_MARGIN, threshold: 0.01 }
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [cacheBoost, candidateKey, nearViewport, priority, retryToken, srcIndex]);
 
   const failExhausted = useCallback(() => {
     if (displaySrc) markImageUrlFailed(displaySrc);
@@ -146,7 +181,7 @@ export function useProductImageLoader({
 
   useLayoutEffect(() => {
     const img = imgRef.current;
-    if (failed || !displaySrc) return;
+    if (failed || !displaySrc || !allowFetch) return;
 
     if (isImageUrlCached(displaySrc)) {
       setLoaded(true);
@@ -157,11 +192,11 @@ export function useProductImageLoader({
     if (img && isImageElementCached(img)) {
       confirmLoaded(img, displaySrc);
     }
-  }, [confirmLoaded, displaySrc, failed, retryToken, srcIndex]);
+  }, [allowFetch, confirmLoaded, displaySrc, failed, retryToken, srcIndex]);
 
   useEffect(() => {
     const img = imgRef.current;
-    if (!img || failed || !displaySrc || loaded) return;
+    if (!img || failed || !displaySrc || !allowFetch || loaded) return;
 
     const tryConfirm = () => {
       if (img.complete && img.naturalWidth > 0) {
@@ -190,17 +225,25 @@ export function useProductImageLoader({
     return () => {
       cancelled = true;
     };
-  }, [confirmLoaded, displaySrc, failed, loaded, retryToken, srcIndex]);
+  }, [allowFetch, confirmLoaded, displaySrc, failed, loaded, retryToken, srcIndex]);
 
   useEffect(() => {
-    if (failed || !displaySrc || loaded) return;
+    if (!allowFetch || failed || !displaySrc || loaded) return;
 
     const timer = window.setTimeout(() => {
       softRetryOrAdvance();
     }, IMAGE_LOAD_TIMEOUT_MS);
 
     return () => window.clearTimeout(timer);
-  }, [displaySrc, failed, loaded, retryToken, softRetryOrAdvance, srcIndex]);
+  }, [
+    allowFetch,
+    displaySrc,
+    failed,
+    loaded,
+    retryToken,
+    softRetryOrAdvance,
+    srcIndex,
+  ]);
 
   const shouldLazyLoad = !priority && !cacheBoost && !loaded;
   const fetchPriority: "high" | "low" | "auto" = priority
@@ -212,10 +255,11 @@ export function useProductImageLoader({
 
   return {
     imgRef,
-    displaySrc,
+    /** Empty until near viewport (unless priority/cached) — defers network. */
+    displaySrc: allowFetch ? displaySrc : "",
     failed: failed || !displaySrc,
     loaded,
-    imgKey: `${displaySrc}::${retryToken}`,
+    imgKey: `${displaySrc}::${retryToken}::${allowFetch ? "on" : "off"}`,
     shouldLazyLoad,
     fetchPriority,
     decoding,

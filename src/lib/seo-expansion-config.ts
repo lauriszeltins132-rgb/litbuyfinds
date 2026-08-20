@@ -1161,7 +1161,7 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
     ],
     updateFrequency: "daily",
     filter: { freshness: "latestFinds" },
-    productLimit: 48,
+    productLimit: 24,
     sections: [
       {
         heading: "What this discovery hub includes",

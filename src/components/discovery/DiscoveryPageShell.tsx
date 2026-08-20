@@ -5,6 +5,7 @@ import ContentFreshness, {
 import DiscoveryBrowseRails from "@/components/discovery/DiscoveryBrowseRails";
 import DiscoveryRail from "@/components/DiscoveryRail";
 import ProductGrid from "@/components/ProductGrid";
+import { DISCOVERY_PRODUCT_LIMIT } from "@/lib/catalog-page-size";
 import type { StaticPageSection } from "@/lib/static-pages";
 import {
   getDiscoveryHeroStats,
@@ -44,7 +45,7 @@ export default function DiscoveryPageShell({
   freshnessVariant,
   products,
   productSectionTitle,
-  productLimit = 48,
+  productLimit = DISCOVERY_PRODUCT_LIMIT,
   compareGroups = [],
   sections = [],
   faqs,
@@ -121,7 +122,7 @@ export default function DiscoveryPageShell({
               {displayedProducts.length.toLocaleString()} curated listings with verified buy links
             </p>
             <div className="mt-4">
-              <ProductGrid products={displayedProducts} />
+              <ProductGrid products={displayedProducts} priorityCount={0} />
             </div>
           </div>
         </section>

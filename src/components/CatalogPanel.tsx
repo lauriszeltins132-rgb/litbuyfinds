@@ -6,6 +6,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { BrandInfo } from "@/lib/brands";
 import type { CategoryInfo, Product } from "@/lib/types";
 import { buildPageHref } from "@/lib/catalog-url";
+import { CATALOG_PAGE_SIZE } from "@/lib/catalog-page-size";
 import { filterProducts } from "@/lib/filters";
 import { POPULAR_SEARCHES } from "@/lib/constants";
 import {
@@ -22,7 +23,7 @@ import Pagination from "./Pagination";
 import ProductGrid from "./ProductGrid";
 import ProductGridSkeleton from "./ProductGridSkeleton";
 
-const PAGE_SIZE = 48;
+const PAGE_SIZE = CATALOG_PAGE_SIZE;
 
 const SORT_OPTIONS = [
   { value: "featured", label: "Featured order" },
@@ -413,11 +414,11 @@ export default function CatalogPanel({
 
         <div id="catalog-product-grid" className="catalog-product-grid mt-6 scroll-mt-24">
           {catalogLoading ? (
-            <ProductGridSkeleton count={12} />
+            <ProductGridSkeleton count={8} />
           ) : isPending ? (
             <ProductGridSkeleton count={8} />
           ) : paginated.length > 0 ? (
-            <ProductGrid products={paginated} instant />
+            <ProductGrid products={paginated} instant priorityCount={2} />
           ) : (
             <div className="rounded-2xl border border-border bg-surface/30 px-6 py-10 text-center">
               <p className="text-base font-bold text-foreground">No finds matched</p>
@@ -456,6 +457,16 @@ export default function CatalogPanel({
           currentPage={currentPage}
           totalPages={totalPages}
           onPageChange={goToPage}
+          prevHref={
+            currentPage > 1
+              ? buildPageHref(basePath, params, currentPage - 1)
+              : undefined
+          }
+          nextHref={
+            currentPage < totalPages
+              ? buildPageHref(basePath, params, currentPage + 1)
+              : undefined
+          }
         />
       </div>
     </section>
