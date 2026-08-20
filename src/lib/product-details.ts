@@ -70,10 +70,10 @@ export function getProductDescription(product: Product): string {
   const validation = validateProduct(product);
 
   const parts = [
-    `Catalog listing in ${product.category}.`,
+    `Rep find listing in ${product.category} from the LitBuy spreadsheet catalog.`,
     brand ? `Listed brand: ${brand}.` : "Brand not verified in catalog metadata.",
     product.qc_link
-      ? "QC reference is linked for this find."
+      ? "QC reference is linked for this find — review photos before shipping."
       : "No QC reference attached to this listing.",
     `Buy link routes through ${source.toUpperCase()} on LitBuy.`,
     validation.isTitleTrusted
@@ -94,6 +94,7 @@ export function getProductHighlights(product: Product): string[] {
   }
   highlights.push(`Source: ${getProductSource(product.affiliate_link).toUpperCase()}`);
   highlights.push(product.qc_link ? "QC: linked" : "QC: not linked");
+  highlights.push("Catalog: LitBuy spreadsheet sync");
 
   return highlights;
 }

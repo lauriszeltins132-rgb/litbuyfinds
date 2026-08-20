@@ -4,10 +4,9 @@ const QUICK_LINKS = [
   { href: "/categories", label: "Browse categories" },
   { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
   { href: "/latest-finds", label: "Latest finds" },
-  { href: "/best-litbuy-finds-2026", label: "Best finds 2026" },
-  { href: "/best-budget-finds", label: "Budget finds" },
-  { href: "/guides/litbuy-spreadsheet-guide", label: "Spreadsheet guide" },
-  { href: "/litbuy-qc", label: "QC photo guide" },
+  { href: "/rep-finds", label: "Rep finds" },
+  { href: "/best-litbuy-finds", label: "Best LitBuy finds" },
+  { href: "/litbuy-qc", label: "QC finds database" },
   { href: "/finds", label: "Finds database" },
 ] as const;
 

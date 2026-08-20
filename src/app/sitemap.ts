@@ -143,6 +143,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       "hoodie-finds",
       "jacket-finds",
       "streetwear-finds",
+      "rep-finds",
       "best-rep-finds",
       "bag-finds",
       "best-sneaker-finds",
@@ -154,13 +155,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority:
         entry.slug === "latest-finds"
           ? 0.97
-          : discoveryPriority.has(entry.slug)
-            ? 0.92
-            : entry.type === "freshness"
-              ? 0.9
-              : entry.type === "spreadsheet"
+          : entry.slug === "rep-finds"
+            ? 0.93
+            : discoveryPriority.has(entry.slug)
+              ? 0.92
+              : entry.type === "freshness"
                 ? 0.9
-                : 0.87,
+                : entry.type === "spreadsheet"
+                  ? 0.9
+                  : 0.87,
       lastModified: getDatasetSyncedIso(),
     });
   }

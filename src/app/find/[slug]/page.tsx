@@ -245,8 +245,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
           <Link href="/litbuy-spreadsheet" className="text-sm font-bold text-muted hover:text-accent">
             LitBuy spreadsheet →
           </Link>
+          <Link href="/rep-finds" className="text-sm font-bold text-muted hover:text-accent">
+            Rep finds →
+          </Link>
           <Link href="/litbuy-qc" className="text-sm font-bold text-muted hover:text-accent">
-            QC database →
+            QC finds database →
+          </Link>
+          <Link href="/what-are-qc-photos" className="text-sm font-bold text-muted hover:text-accent">
+            What are QC photos →
           </Link>
           <Link href="/trending" className="text-sm font-bold text-muted hover:text-accent">
             Trending finds →
