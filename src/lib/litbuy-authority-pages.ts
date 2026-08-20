@@ -1,33 +1,14 @@
 import { getAgentReviewPage, AGENT_REVIEW_SLUGS } from "./agent-review-pages";
-import type { StaticPageSection } from "./static-pages";
 import { getDatasetSyncedIso } from "./catalog-meta";
 import { SOCIAL_LINKS } from "./constants";
 import {
   LITBUY_AUTHORITY_LINKS,
   LITBUY_HUB_FOOTER_LINKS,
 } from "./litbuy-authority-hub";
+import { LITBUY_COUPON_SUPPORT_PAGES } from "./litbuy-coupon-support-pages";
+import type { AuthorityPage } from "./authority-page-types";
 
-export type AuthorityPage = {
-  slug: string;
-  path: string;
-  title: string;
-  metaDescription: string;
-  badge: string;
-  h1: string;
-  /** 40–70 word direct answer under H1 */
-  directAnswer: string;
-  /** Concise summary box content */
-  summary: string;
-  sections: StaticPageSection[];
-  faqs?: { question: string; answer: string }[];
-  relatedLinks?: { href: string; label: string }[];
-  parentCrumb?: { label: string; href: string };
-  /** Override default Home > H1 breadcrumbs (e.g. Homepage > LitBuy Discord). */
-  breadcrumbItems?: { label: string; href?: string }[];
-  primaryCta?: { href: string; label: string };
-  publishedTime: string;
-  modifiedTime: string;
-};
+export type { AuthorityPage } from "./authority-page-types";
 
 const PUBLISHED = "2026-07-21T00:00:00.000Z";
 const MODIFIED = getDatasetSyncedIso();
@@ -1087,6 +1068,8 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
     publishedTime: PUBLISHED,
     modifiedTime: MODIFIED,
   },
+
+  ...LITBUY_COUPON_SUPPORT_PAGES,
 };
 
 export const AUTHORITY_PAGE_SLUGS = [

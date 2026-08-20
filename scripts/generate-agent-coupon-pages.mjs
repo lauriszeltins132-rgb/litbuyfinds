@@ -10,7 +10,6 @@ const appDir = path.join(root, "src/app");
 const SLUGS = [
   "litbuy-coupons",
   "best-litbuy-coupons",
-  "litbuy-coupons-2026",
   "litbuy-discount",
   "litbuy-promo",
   "kakobuy-coupons",
