@@ -272,50 +272,154 @@ export function buildAgentDiscordFaqs(
 
 export function buildAgentSpreadsheetConfig(agent: AgentResourceDefinition) {
   const name = agent.name;
+  const slug = agent.slug;
+
   return {
-    slug: `${agent.slug}-spreadsheet`,
+    slug: `${slug}-spreadsheet`,
     type: "spreadsheet" as const,
-    title: `${name} Spreadsheet Finds | Searchable Catalog & QC Links`,
-    description: `${name} spreadsheet-style finds on LitBuy Finds — searchable catalog with QC references, category filters, and ${name} checkout on every product page.`,
-    h1: `${name} spreadsheet finds`,
-    intro: `${name} shoppers often start from community spreadsheets. LitBuy Finds indexes the same product universe into searchable pages with photos, QC badges, and your saved agent preference — set ${name} in the header, then browse normally.`,
-    badge: "Agent spreadsheet",
+    agentId: agent.id,
+    title: `${name} Spreadsheet | Finds, QC Photos & Searchable Catalog`,
+    description: `${name} spreadsheet guide — searchable ${name} finds with QC photos, category browsing, and ${name} checkout. A cleaner alternative to raw ${name} spreadsheet rows.`,
+    h1: `${name} spreadsheet`,
+    intro: `The ${name} spreadsheet resource on LitBuy Finds turns community ${name} spreadsheet / ${name} finds spreadsheet rows into a searchable product catalog — photos, QC badges, categories, brands, and ${name} buy links on every listing. ${agent.spreadsheetFocus}`,
+    badge: `${name} spreadsheet`,
     keywords: [
-      `${agent.slug} spreadsheet`,
-      `${agent.slug} finds sheet`,
-      `${agent.slug} spreadsheet finds`,
+      `${slug} spreadsheet`,
+      `${name.toLowerCase()} spreadsheet`,
+      `${slug} finds spreadsheet`,
+      `${slug} spreadsheet finds`,
+      `${slug} finds`,
+      `${slug} qc`,
+      `${slug} qc finds`,
+      `${name.toLowerCase()} finds sheet`,
     ],
     updateFrequency: "weekly" as const,
     filter: { trending: true },
+    productLimit: 24,
+    sections: [
+      {
+        heading: `What is the ${name} spreadsheet?`,
+        paragraphs: [
+          `A ${name} spreadsheet is the community list of Weidian and Taobao product rows shoppers use with ${name} checkout — prices, seller links, and sometimes QC notes. LitBuy Finds indexes that same product universe into stable pages so you can search on mobile without scrolling thousands of cells.`,
+          agent.spreadsheetFocus,
+          `This page is the ${name} spreadsheet authority on LitBuy Finds for ${agent.angleLabel}. It is not a downloadable Google Sheet — it is a searchable discovery database with ${name} selected at buy time.`,
+        ],
+        links: [
+          { href: agentFindsPath(agent), label: `${name} finds catalog` },
+          { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet hub" },
+          { href: "/rep-agent-spreadsheets", label: "All agent spreadsheets" },
+        ],
+      },
+      {
+        heading: `How to use the ${name} spreadsheet on LitBuy Finds`,
+        paragraphs: [
+          `1) Set ${name} as your preferred agent in the site header. 2) Browse the product grid below or open category / brand hubs. 3) Review photos and any QC reference on the product page. 4) Press Buy so the marketplace listing opens through ${name}.`,
+          `Keep a personal sheet for notes if you want — use this ${name} spreadsheet guide when you need filters, shareable product URLs, and Latest Finds syncs.`,
+        ],
+        links: [
+          { href: "/latest-finds", label: "Latest finds" },
+          { href: "/how-to-buy", label: "How to buy" },
+          { href: agentTelegramPath(agent), label: `${name} Telegram` },
+        ],
+      },
+      {
+        heading: `${name} finds discovery by category`,
+        paragraphs: [
+          `${name} spreadsheet rows typically span sneakers, streetwear, hoodies, jackets, bags, and accessories. LitBuy Finds mirrors those lanes as category find pages so ${name} shoppers can jump to a silhouette without re-opening a raw sheet.`,
+          `Pair this ${name} spreadsheet page with ${name} finds when you want the agent-branded catalog landing, and with Best / Latest finds when you want ranked or newest imports.`,
+        ],
+        links: [
+          { href: agentFindsPath(agent), label: `${name} finds` },
+          { href: "/sneaker-finds", label: "Sneaker finds" },
+          { href: "/clothing-finds", label: "Clothing finds" },
+          { href: "/streetwear-finds", label: "Streetwear finds" },
+          { href: "/jacket-finds", label: "Jacket finds" },
+          { href: "/rep-finds", label: "Rep finds hub" },
+        ],
+      },
+      {
+        heading: `${name} QC spreadsheet & quality checks`,
+        paragraphs: [
+          `Many ${name} spreadsheet rows include QC references — that is the ${name} QC signal buyers look for before shipping. LitBuy Finds surfaces QC badges on product pages and links into the shared QC finds database.`,
+          `Reference QC from community albums helps compare batches. Warehouse QC on ${name} photographs your exact item after purchase — still request it before international freight.`,
+        ],
+        links: [
+          { href: "/litbuy-qc", label: "QC finds database" },
+          { href: "/what-are-qc-photos", label: "What are QC photos" },
+          { href: "/litbuy-qc-photos", label: "QC photos guide" },
+          { href: "/collections/best-qc-approved-finds", label: "QC-approved finds" },
+        ],
+      },
+      {
+        heading: `${name} spreadsheet vs LitBuy Spreadsheet`,
+        paragraphs: [
+          `The LitBuy Spreadsheet hub is the primary spreadsheet authority for this site. ${name} spreadsheet pages help shoppers who specifically searched “${name} spreadsheet” or “${name} finds spreadsheet” and want ${name} checkout context on the same catalog.`,
+          `Product data is shared across agents — you are not looking at a separate inventory. Switching agents changes the buy URL builder, not the underlying marketplace listing.`,
+        ],
+        links: [
+          { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet (canonical)" },
+          { href: "/best-rep-spreadsheets", label: "Best rep spreadsheets" },
+          { href: agentReviewPath(agent), label: `${name} review` },
+        ],
+      },
+      {
+        heading: `${name} community resources`,
+        paragraphs: [
+          `For same-day row chatter, open ${name} Telegram. For slower threaded discussion, see ${name} Discord. For strengths and limits, read the ${name} review — then return here for the cleaned spreadsheet-style catalog.`,
+        ],
+        links: [
+          { href: agentTelegramPath(agent), label: `${name} Telegram` },
+          { href: agentDiscordPath(agent), label: `${name} Discord` },
+          { href: agentReviewPath(agent), label: `${name} review` },
+          { href: "/spreadsheet-telegram", label: "Spreadsheet Telegram guide" },
+        ],
+      },
+    ],
     relatedLinks: [
       { href: agentFindsPath(agent), label: `${name} finds hub` },
       { href: agentTelegramPath(agent), label: `${name} Telegram` },
       { href: agentDiscordPath(agent), label: `${name} Discord` },
       { href: agentReviewPath(agent), label: `${name} review` },
-      { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+      { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
+      { href: "/latest-finds", label: "Latest finds" },
+      { href: "/litbuy-qc", label: "QC finds database" },
+      { href: "/rep-finds", label: "Rep finds" },
       { href: "/rep-agent-spreadsheets", label: "Agent spreadsheets hub" },
       ...SPREADSHEET_CLUSTER_LINKS.filter(
-        (link) => !link.href.includes(agent.slug)
-      ).slice(0, 3),
+        (link) => !link.href.includes(slug)
+      ).slice(0, 5),
     ],
     faqs: [
       {
+        question: `What is the ${name} spreadsheet?`,
+        answer: `The ${name} spreadsheet is the community product-row universe shoppers use with ${name}. LitBuy Finds turns those rows into searchable ${name} finds pages with photos, QC badges, and ${name} checkout.`,
+      },
+      {
         question: `How is this different from a raw ${name} spreadsheet?`,
         answer:
-          "Sheets are static rows. LitBuy Finds syncs catalog data into searchable product pages with photos, filters, QC references, and shareable URLs.",
+          "Raw sheets are static rows that are hard to search on mobile. LitBuy Finds syncs catalog data into product pages with filters, shareable URLs, and agent switching.",
       },
       {
-        question: `Is LitBuy required?`,
-        answer: `No. LitBuy is recommended on this site, but you can choose ${name} before pressing Buy on any product.`,
+        question: `Can I open every listing on ${name}?`,
+        answer: `Yes. Select ${name} as your preferred agent in the header or on the product page — buy links rebuild for the same marketplace listing through ${name}.`,
       },
       {
-        question: `Can I open listings on ${name}?`,
-        answer: `Yes. Select ${name} as your preferred agent in the header or on the product page — buy links rebuild for the same marketplace listing.`,
+        question: `Does ${name} have its own QC spreadsheet?`,
+        answer: `QC references attached to spreadsheet rows become QC badges on LitBuy Finds. Use the QC finds database for QC-linked products, then request warehouse QC on ${name} for your exact item.`,
+      },
+      {
+        question: `Is this the same catalog as the LitBuy Spreadsheet?`,
+        answer: `Yes — shared product universe. The LitBuy Spreadsheet hub is the primary spreadsheet guide; this page targets ${name} spreadsheet / ${name} finds spreadsheet searches with ${name} checkout context.`,
+      },
+      {
+        question: `Where do I find ${name} Telegram or Discord?`,
+        answer: `Use the ${name} Telegram and ${name} Discord resource pages linked above for community updates, then return here for the searchable catalog.`,
       },
     ],
-    productSectionTitle: `Trending finds for ${name} shoppers`,
+    productSectionTitle: `${name} spreadsheet picks`,
   };
 }
+
 
 export function buildAgentReviewPage(
   agent: AgentResourceDefinition

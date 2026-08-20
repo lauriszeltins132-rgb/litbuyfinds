@@ -5,7 +5,9 @@ import ContentFreshness, {
 import DiscoveryBrowseRails from "@/components/discovery/DiscoveryBrowseRails";
 import DiscoveryRail from "@/components/DiscoveryRail";
 import ProductGrid from "@/components/ProductGrid";
+import AgentLogo from "@/components/agents/AgentLogo";
 import { DISCOVERY_PRODUCT_LIMIT } from "@/lib/catalog-page-size";
+import type { AgentId } from "@/lib/agents";
 import type { StaticPageSection } from "@/lib/static-pages";
 import {
   getDiscoveryHeroStats,
@@ -35,6 +37,8 @@ type DiscoveryPageShellProps = {
   categoryLinks?: string[];
   browseSlug: string;
   browseCategories?: string[];
+  /** Optional agent logo for agent spreadsheet / finds landings. */
+  agentId?: AgentId;
 };
 
 export default function DiscoveryPageShell({
@@ -54,6 +58,7 @@ export default function DiscoveryPageShell({
   categoryLinks = [],
   browseSlug,
   browseCategories = [],
+  agentId,
 }: DiscoveryPageShellProps) {
   const heroIntro = getHeroIntro(intro);
   const qcCount = products.filter((product) => product.qc_link).length;
@@ -70,9 +75,12 @@ export default function DiscoveryPageShell({
     <>
       <section className="px-4 pb-2 pt-4 sm:px-6">
         <div className="mx-auto max-w-7xl">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
-            {badge}
-          </p>
+          <div className="flex items-center gap-2">
+            {agentId ? <AgentLogo agentId={agentId} size="sm" /> : null}
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
+              {badge}
+            </p>
+          </div>
           <h1 className="mt-2 text-3xl font-black tracking-tight sm:text-4xl">
             {h1}
           </h1>
