@@ -14,6 +14,7 @@ import {
   loadBrowseCatalog,
   type BrowseCatalogPayload,
 } from "@/lib/browse-catalog";
+import { scrollToCatalogResults } from "@/lib/scroll-to-catalog";
 import { useWishlist } from "@/context/WishlistContext";
 import ControlButton from "@/components/ui/ControlButton";
 import Select from "@/components/ui/Select";
@@ -176,6 +177,7 @@ export default function CatalogPanel({
           1
       );
       setPage(nextPage);
+      scrollToCatalogResults();
     };
 
     window.addEventListener("popstate", onPopState);
@@ -230,6 +232,7 @@ export default function CatalogPanel({
 
     const nextUrl = buildPageHref(basePath, params, clamped);
     window.history.pushState({ catalogPage: clamped }, "", nextUrl);
+    scrollToCatalogResults();
   }
 
   useEffect(() => {
