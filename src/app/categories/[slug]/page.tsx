@@ -119,7 +119,7 @@ export default async function CategoryLandingPage({ params }: CategoryPageProps)
               LitBuy spreadsheet →
             </Link>
             <Link
-              href="/guides/litbuy-spreadsheet-guide"
+              href="/litbuy-spreadsheet"
               className="rounded-full border border-border px-3 py-1 text-xs font-bold hover:border-accent/40 hover:text-accent"
             >
               Spreadsheet guide →

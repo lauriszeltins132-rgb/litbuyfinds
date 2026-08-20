@@ -369,7 +369,9 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
       },
     ],
     relatedLinks: [
-      { href: "/litbuy-spreadsheet", label: "Spreadsheet guide" },
+      { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet (canonical)" },
+      { href: "/latest-finds", label: "Latest finds" },
+      { href: "/rep-finds", label: "Rep finds" },
       { href: "/litbuy-finds", label: "LitBuy Finds" },
       ...LITBUY_HUB_FOOTER_LINKS,
     ],

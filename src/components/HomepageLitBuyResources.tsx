@@ -12,19 +12,20 @@ const RESOURCES = [
     description: "Affordable rep picks under $30 from the spreadsheet catalog",
   },
   {
-    href: "/guides/litbuy-spreadsheet-guide",
-    label: "LitBuy Spreadsheet Guide",
-    description: "Organized product discovery resource — rows to browseable pages",
-  },
-  {
     href: "/litbuy-spreadsheet",
-    label: "LitBuy Spreadsheet Hub",
-    description: "Searchable catalog vs raw spreadsheet rows",
+    label: "LitBuy Spreadsheet",
+    description:
+      "Canonical spreadsheet resource — searchable catalog, categories, QC, agent links",
   },
   {
     href: "/litbuy-qc",
-    label: "LitBuy QC Guide",
-    description: "Reference QC and warehouse photo checks",
+    label: "LitBuy QC Finds Database",
+    description: "QC-linked products and quality-check workflow",
+  },
+  {
+    href: "/rep-finds",
+    label: "Rep Finds Hub",
+    description: "Searchable rep finds database — best, cheap, and designer lanes",
   },
   {
     href: "/litbuy-sneakers",
@@ -39,7 +40,7 @@ const RESOURCES = [
   {
     href: "/best-litbuy-finds",
     label: "Best LitBuy Finds",
-    description: "Editor picks updated daily",
+    description: "Editor picks from the LitBuy finds database",
   },
   {
     href: "/brands",

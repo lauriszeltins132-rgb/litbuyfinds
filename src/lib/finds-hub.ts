@@ -26,17 +26,22 @@ export const FINDS_HUB_FAQS = [
   {
     question: "What are LitBuy Finds?",
     answer:
-      "LitBuy Finds is a searchable catalog of rep products from Weidian and Taobao — each listing includes photos, prices, QC references where available, and verified agent buy links.",
+      "LitBuy Finds is a searchable catalog of rep products from Weidian and Taobao — each listing includes photos, prices, QC references where available, and verified agent buy links. People also search lit buy finds for the same database.",
   },
   {
     question: "How is LitBuy Finds different from a LitBuy spreadsheet?",
     answer:
-      "A LitBuy spreadsheet is a long list of product rows. LitBuy Finds indexes that universe into searchable pages with category filters, brand hubs, QC badges, and shareable URLs.",
+      "A LitBuy spreadsheet is a long list of product rows. LitBuy Finds indexes that universe into searchable pages with category filters, brand hubs, QC badges, and shareable URLs. The canonical spreadsheet resource is /litbuy-spreadsheet.",
+  },
+  {
+    question: "Which hub should I use — Finds, Latest, Spreadsheet, or Rep Finds?",
+    answer:
+      "/finds is the browse hub with rails. /latest-finds is newest spreadsheet imports. /litbuy-spreadsheet is the spreadsheet authority guide. /rep-finds is the rep finds discovery map. /litbuy-finds is the branded LitBuy finds catalog landing.",
   },
   {
     question: "How often are finds updated?",
     answer:
-      "The catalog syncs weekly from spreadsheet imports. New products appear in Latest Finds and Trending sections after each sync.",
+      "The catalog syncs from spreadsheet imports. New products appear in Latest Finds and Trending sections after each sync.",
   },
   {
     question: "Can I browse by brand or category?",
@@ -46,7 +51,7 @@ export const FINDS_HUB_FAQS = [
   {
     question: "Where do QC photos come from?",
     answer:
-      "Reference QC links on product pages show batch examples from other buyers. Warehouse QC is requested per order on LitBuy after purchase.",
+      "Reference QC links on product pages show batch examples from other buyers. Warehouse QC is requested per order on LitBuy after purchase. Browse the QC finds database at /litbuy-qc.",
   },
 ] as const;
 

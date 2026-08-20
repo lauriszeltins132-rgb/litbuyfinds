@@ -265,6 +265,7 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
       },
     ],
     relatedLinks: [
+      { href: "/rep-finds", label: "Rep finds hub" },
       { href: "/finds", label: "Finds hub" },
       { href: "/best-rep-finds", label: "Best rep finds" },
       { href: "/top-designer-bags", label: "Designer bags list" },
@@ -272,6 +273,11 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
       { href: "/guides/best-prada-finds", label: "Prada guide" },
     ],
     faqs: [
+      {
+        question: "Are designer finds the same as designer rep finds?",
+        answer:
+          "Yes — this page covers designer / luxury rep finds. Use /rep-finds for the broader rep finds hub and /best-rep-finds for editor-ranked highlights across all lanes.",
+      },
       {
         question: "Are designer finds worth the price?",
         answer:
@@ -846,11 +852,17 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
       },
     ],
     relatedLinks: [
+      { href: "/rep-finds", label: "Rep finds hub" },
       { href: "/deals", label: "Deals hub" },
       { href: "/litbuy-coupons", label: "LitBuy coupons" },
       ...HUB.slice(0, 4),
     ],
     faqs: [
+      {
+        question: "Are cheap finds the same as cheap rep finds?",
+        answer:
+          "Yes — this page covers budget / cheap rep finds under $30. For the full rep finds map, start at /rep-finds.",
+      },
       {
         question: "Are cheap finds lower quality?",
         answer:
@@ -873,28 +885,39 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
       "Best rep finds on LitBuy Finds — sneakers, streetwear, and designer picks with QC references, spreadsheet links, and verified multi-agent checkout.",
     h1: "Best rep finds",
     intro:
-      "Rep finds span sneakers, streetwear, bags, and accessories sourced from Weidian and Taobao through shopping agents. This page highlights editor-ranked picks with photos, QC links where available, and verified buy buttons.",
-    badge: "Rep finds",
-    keywords: ["rep finds", "best rep finds", "replica finds", "chinese agent finds"],
+      "Best rep finds are editor-ranked highlights from the broader rep finds database — sneakers, streetwear, bags, and accessories with photos, QC links where available, and verified buy buttons. For the full rep finds hub, start at /rep-finds.",
+    badge: "Best rep finds",
+    keywords: ["best rep finds", "rep finds", "replica finds", "chinese agent finds"],
     updateFrequency: "weekly",
     filter: { freshness: "editorsPicks" },
     sections: [
+      {
+        heading: "Part of the rep finds hub",
+        paragraphs: [
+          "This page ranks standout picks. The main /rep-finds authority covers cheap rep finds, designer rep finds, category lanes, and how rep finds connect to the LitBuy Spreadsheet and QC database.",
+        ],
+        links: [
+          { href: "/rep-finds", label: "Rep finds hub" },
+          { href: "/cheap-finds", label: "Cheap finds" },
+          { href: "/best-designer-finds", label: "Designer finds" },
+        ],
+      },
       {
         heading: "How to use rep finds safely",
         paragraphs: [
           "Always check reference QC on find pages and request warehouse QC before shipping. Compare batches against product-page QC references and read category guides for sneakers, bags, and jackets.",
         ],
         links: [
-          { href: "/litbuy-qc", label: "QC database" },
+          { href: "/litbuy-qc", label: "QC finds database" },
           { href: "/litbuy-qc-photos", label: "QC photos guide" },
           { href: "/guides/beginner-guide-to-litbuy", label: "Beginner guide" },
-          { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+          { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
         ],
       },
       {
         heading: "Rep find categories",
         paragraphs: [
-          "Sneakers, streetwear, designer outerwear, and bags each have dedicated find pages. Start here for editor-ranked picks, then drill into sneaker finds or clothing finds for full category browsing.",
+          "Sneakers, streetwear, designer outerwear, and bags each have dedicated find pages. Start at the rep finds hub for overview, then drill into sneaker finds or clothing finds for full category browsing.",
         ],
         links: [
           { href: "/sneaker-finds", label: "Sneaker finds" },
@@ -906,27 +929,34 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
       {
         heading: "Rep find database hub",
         paragraphs: [
-          `Best rep finds highlights editor-ranked products from the ${FINDS_STATS.totalFindsLabel}-item LitBuy Finds database. Every listing links to a full product page with brand and category connections — use Latest Finds for new spreadsheet imports and the LitBuy spreadsheet guide for bulk reference.`,
+          `Best rep finds highlights editor-ranked products from the ${FINDS_STATS.totalFindsLabel}-item LitBuy Finds database. Every listing links to a full product page with brand and category connections — use Latest Finds for new spreadsheet imports and the LitBuy Spreadsheet guide for bulk reference.`,
         ],
         links: [
+          { href: "/rep-finds", label: "Rep finds hub" },
           { href: "/latest-finds", label: "Latest finds hub" },
-          { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
-          { href: "/litbuy-qc", label: "QC database" },
+          { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
+          { href: "/litbuy-qc", label: "QC finds database" },
           { href: "/finds", label: "Finds hub" },
         ],
       },
     ],
     relatedLinks: [
+      { href: "/rep-finds", label: "Rep finds hub" },
       { href: "/finds", label: "Finds hub" },
       { href: "/latest-finds", label: "Latest finds" },
-      { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+      { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
       { href: "/best-litbuy-finds", label: "Best LitBuy finds" },
-      { href: "/litbuy-qc", label: "QC database" },
+      { href: "/litbuy-qc", label: "QC finds database" },
       { href: "/sneaker-finds", label: "Sneaker finds" },
       { href: "/clothing-finds", label: "Clothing finds" },
       ...CATEGORIES.slice(0, 3),
     ],
     faqs: [
+      {
+        question: "What are best rep finds?",
+        answer:
+          "Editor-ranked rep finds from the LitBuy Finds database — weighted for photos, QC, and engagement. The broader /rep-finds hub covers all rep find lanes.",
+      },
       {
         question: "What are rep finds?",
         answer:
@@ -944,6 +974,118 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
       },
     ],
     productSectionTitle: "Editor-ranked rep finds",
+  },
+
+  "rep-finds": {
+    slug: "rep-finds",
+    type: "collection",
+    title: "Rep Finds | Searchable Database, QC Photos & Agent Links",
+    description:
+      "Rep finds on LitBuy Finds — a searchable discovery database of sneakers, streetwear, designer, and cheap rep finds with QC photos, spreadsheet sync, and verified agent links.",
+    h1: "Rep finds",
+    intro:
+      `Rep finds are Weidian and Taobao products discovered through shopping agents — indexed here as a searchable database of ${FINDS_STATS.totalFindsLabel}+ listings (${FINDS_STATS.qcFindsLabel} with QC photos). Browse categories and brands, open Best rep finds for ranked picks, and connect to the LitBuy Spreadsheet for catalog context.`,
+    badge: "Rep finds database",
+    keywords: [
+      "rep finds",
+      "best rep finds",
+      "cheap rep finds",
+      "designer rep finds",
+      "replica finds",
+      "rep spreadsheet",
+      "reps spreadsheet",
+    ],
+    updateFrequency: "weekly",
+    filter: { freshness: "editorsPicks" },
+    productLimit: 24,
+    sections: [
+      {
+        heading: "A rep finds discovery database",
+        paragraphs: [
+          "LitBuy Finds organizes rep finds into product pages with photos, prices, QC badges, brand hubs, and multi-agent checkout. This hub is the authority entry for “rep finds” searches — not a blog post.",
+          "Use Latest Finds for new spreadsheet imports, Best rep finds for editor-ranked shortlists, and category find pages when you already know the lane.",
+        ],
+        links: [
+          { href: "/best-rep-finds", label: "Best rep finds" },
+          { href: "/latest-finds", label: "Latest finds" },
+          { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
+          { href: "/finds", label: "Finds hub" },
+        ],
+      },
+      {
+        heading: "Best, cheap, and designer rep finds",
+        paragraphs: [
+          "Best rep finds highlights engagement-weighted picks. Cheap finds and budget rails cover lower price bands. Designer find pages focus on luxury labels — each supports this hub without duplicating the full catalog.",
+        ],
+        links: [
+          { href: "/best-rep-finds", label: "Best rep finds" },
+          { href: "/cheap-finds", label: "Cheap finds" },
+          { href: "/best-designer-finds", label: "Designer finds" },
+          { href: "/best-under-30", label: "Under $30" },
+        ],
+      },
+      {
+        heading: "Browse rep finds by category",
+        paragraphs: [
+          "Sneakers, clothing, streetwear, hoodies, jackets, and bags each have dedicated find databases. Jump into a category when you want filters and volume; return here for the overall rep finds map.",
+        ],
+        links: [
+          { href: "/sneaker-finds", label: "Sneaker finds" },
+          { href: "/clothing-finds", label: "Clothing finds" },
+          { href: "/streetwear-finds", label: "Streetwear finds" },
+          { href: "/jacket-finds", label: "Jacket finds" },
+          { href: "/bag-finds", label: "Bag finds" },
+        ],
+      },
+      {
+        heading: "QC finds and spreadsheet connection",
+        paragraphs: [
+          "Many rep finds include QC references from community or warehouse albums. Open the QC finds database for QC-linked products, then use the LitBuy Spreadsheet guide to understand how rows become searchable pages.",
+        ],
+        links: [
+          { href: "/litbuy-qc", label: "QC finds database" },
+          { href: "/what-are-qc-photos", label: "What are QC photos" },
+          { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
+          { href: "/best-rep-spreadsheets", label: "Rep spreadsheets" },
+        ],
+      },
+    ],
+    relatedLinks: [
+      { href: "/best-rep-finds", label: "Best rep finds" },
+      { href: "/latest-finds", label: "Latest finds" },
+      { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
+      { href: "/litbuy-finds", label: "LitBuy finds" },
+      { href: "/litbuy-qc", label: "QC finds database" },
+      { href: "/finds", label: "Finds hub" },
+      { href: "/cheap-finds", label: "Cheap finds" },
+      { href: "/best-designer-finds", label: "Designer finds" },
+      { href: "/sneaker-finds", label: "Sneaker finds" },
+      { href: "/clothing-finds", label: "Clothing finds" },
+      ...CATEGORIES.slice(0, 3),
+    ],
+    faqs: [
+      {
+        question: "What are rep finds?",
+        answer:
+          "Rep finds are products sourced from Chinese marketplaces through shopping agents — indexed on LitBuy Finds with photos, prices, QC references where available, and verified buy links.",
+      },
+      {
+        question: "Where should I start — rep finds or best rep finds?",
+        answer:
+          "Start here for the full rep finds map. Use /best-rep-finds when you want editor-ranked highlights only.",
+      },
+      {
+        question: "How do rep finds connect to the LitBuy Spreadsheet?",
+        answer:
+          "Many listings originate from LitBuy spreadsheet / lit buy spreadsheet imports. The LitBuy Spreadsheet page explains the catalog; product pages are the shareable endpoints.",
+      },
+      {
+        question: "Where do I find cheap or designer rep finds?",
+        answer:
+          "Open Cheap finds and Best designer finds — both support this hub with unique intent instead of duplicating the full database.",
+      },
+    ],
+    productSectionTitle: "Featured rep finds",
   },
 
   "best-agent-finds": {
@@ -1171,8 +1313,9 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
         ],
         links: [
           { href: "/finds", label: "Finds hub" },
-          { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
-          { href: "/litbuy-qc", label: "QC product database" },
+          { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
+          { href: "/litbuy-qc", label: "QC finds database" },
+          { href: "/rep-finds", label: "Rep finds" },
           { href: "/categories", label: "Category database" },
         ],
       },
@@ -1219,12 +1362,13 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
       { href: "/finds", label: "Finds hub" },
       { href: "/litbuy-finds", label: "LitBuy finds catalog" },
       { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
+      { href: "/rep-finds", label: "Rep finds" },
       { href: "/best-litbuy-finds", label: "Best LitBuy finds" },
       { href: "/sneaker-finds", label: "Sneaker finds" },
       { href: "/clothing-finds", label: "Clothing finds" },
       { href: "/streetwear-finds", label: "Streetwear finds" },
       { href: "/best-rep-finds", label: "Best rep finds" },
-      { href: "/litbuy-qc", label: "QC database" },
+      { href: "/litbuy-qc", label: "QC finds database" },
       { href: "/brands", label: "Brand finds" },
       { href: "/categories", label: "Categories" },
       { href: "/telegram-usfans", label: "USFans Telegram" },
@@ -1242,17 +1386,22 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
           "Latest finds are the newest products added to the LitBuy Finds catalog after each daily spreadsheet sync — LitBuy rep finds, clothing, streetwear, and accessories with photos, prices, and agent links. People also search litbuy find or lit buy finds for this database.",
       },
       {
+        question: "How is Latest Finds different from LitBuy Finds or the Spreadsheet?",
+        answer:
+          "Latest Finds shows newest imports only. /litbuy-finds is the branded catalog landing. /litbuy-spreadsheet is the spreadsheet authority guide. /rep-finds maps all rep find lanes.",
+      },
+      {
         question: "How often are LitBuy finds updated?",
         answer: `The catalog syncs daily. This page and the ${FINDS_STATS.totalFindsLabel}-product database refresh after each import — check the homepage sync timestamp for the exact time.`,
       },
       {
         question: "Are these the same as LitBuy spreadsheet rows?",
         answer:
-          "They come from the same LitBuy Spreadsheet / LitBuy finds spreadsheet universe. LitBuy Finds filters broken listings, adds QC badges, and creates shareable product pages with verified buy buttons.",
+          "They come from the same LitBuy Spreadsheet / LitBuy finds spreadsheet / lit buy spreadsheet universe. LitBuy Finds filters broken listings, adds QC badges, and creates shareable product pages with verified buy buttons.",
       },
       {
         question: "Where do I browse LitBuy QC finds?",
-        answer: `Open any product with a QC badge or visit the QC database — ${FINDS_STATS.qcFindsLabel} listings currently include QC reference links.`,
+        answer: `Open any product with a QC badge or visit the QC finds database — ${FINDS_STATS.qcFindsLabel} listings currently include QC reference links.`,
       },
       {
         question: "Where is the main LitBuy Spreadsheet guide?",

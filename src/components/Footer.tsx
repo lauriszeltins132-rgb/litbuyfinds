@@ -18,9 +18,9 @@ import siteNavigation from "@/data/site-navigation.json";
 const GUIDE_LINKS = [
   { href: "/guides", label: "All guides" },
   { href: "/litbuy-coupons", label: "LitBuy coupons" },
-  { href: "/guides/litbuy-finds", label: "LitBuy finds" },
-  { href: "/guides/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
-  { href: "/guides/litbuy-qc-photos", label: "LitBuy QC photos" },
+  { href: "/litbuy-finds", label: "LitBuy finds" },
+  { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+  { href: "/litbuy-qc-photos", label: "LitBuy QC photos" },
   { href: "/guides/beginner-guide-to-litbuy", label: "Beginner guide" },
   { href: "/how-to-buy", label: "How to buy" },
 ];
@@ -37,10 +37,10 @@ const COLLECTION_LINKS = [
 
 const RESOURCE_LINKS = [
   { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
-  { href: "/guides/litbuy-spreadsheet-guide", label: "Spreadsheet guide" },
   { href: "/latest-finds", label: "Latest finds" },
+  { href: "/rep-finds", label: "Rep finds" },
   { href: "/finds", label: "Finds database" },
-  { href: "/litbuy-qc", label: "QC photo guide" },
+  { href: "/litbuy-qc", label: "QC finds database" },
   { href: "/best-rep-finds", label: "Best rep finds" },
 ];
 
