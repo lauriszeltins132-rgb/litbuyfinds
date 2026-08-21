@@ -14,6 +14,10 @@ import {
   loadBrowseCatalog,
   type BrowseCatalogPayload,
 } from "@/lib/browse-catalog";
+import {
+  CATALOG_SEARCH_EVENT,
+  type CatalogSearchDetail,
+} from "@/lib/catalog-search-sync";
 import { scrollToCatalogResults } from "@/lib/scroll-to-catalog";
 import { useWishlist } from "@/context/WishlistContext";
 import ControlButton from "@/components/ui/ControlButton";
@@ -112,8 +116,8 @@ export default function CatalogPanel({
     : categoriesProp;
   const brands = catalogSource ? (catalogData?.brands ?? []) : brandsProp;
 
-  const search = searchParams.get("q") ?? "";
-  const brand = searchParams.get("brand") ?? "";
+  const searchFromUrl = searchParams.get("q") ?? "";
+  const brandFromUrl = searchParams.get("brand") ?? "";
   const minPrice = searchParams.get("min") ?? "";
   const maxPrice = searchParams.get("max") ?? "";
   const sort = searchParams.get("sort") ?? "featured";
@@ -123,6 +127,11 @@ export default function CatalogPanel({
     1,
     parseInt(searchParams.get("page") ?? "1", 10) || 1
   );
+
+  /** Local filter mirrors URL, but can apply immediately before router catches up. */
+  const [search, setSearch] = useState(searchFromUrl);
+  const [brand, setBrand] = useState(brandFromUrl);
+
   const filterKey = `${search}|${brand}|${minPrice}|${maxPrice}|${sort}|${qcOnly}|${savedOnly}`;
   const [page, setPage] = useState(urlPage);
   const prevFilterKeyRef = useRef(filterKey);
@@ -134,8 +143,30 @@ export default function CatalogPanel({
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   useEffect(() => {
-    setQuery(search);
-  }, [search]);
+    setSearch(searchFromUrl);
+    setQuery(searchFromUrl);
+  }, [searchFromUrl]);
+
+  useEffect(() => {
+    setBrand(brandFromUrl);
+  }, [brandFromUrl]);
+
+  useEffect(() => {
+    function onExternalSearch(event: Event) {
+      const detail = (event as CustomEvent<CatalogSearchDetail>).detail ?? {};
+      const nextQ = detail.q?.trim() ?? "";
+      const nextBrand = detail.brand?.trim() ?? "";
+      setSearch(nextQ);
+      setQuery(nextQ);
+      setBrand(nextBrand);
+      setPage(1);
+    }
+
+    window.addEventListener(CATALOG_SEARCH_EVENT, onExternalSearch);
+    return () => {
+      window.removeEventListener(CATALOG_SEARCH_EVENT, onExternalSearch);
+    };
+  }, []);
 
   useEffect(() => {
     if (!catalogSource) return;
@@ -240,6 +271,13 @@ export default function CatalogPanel({
   }, [currentPage]);
 
   function navigate(url: string) {
+    const next = new URL(url, "https://litbuyfinds.local");
+    const nextQ = next.searchParams.get("q") ?? "";
+    const nextBrand = next.searchParams.get("brand") ?? "";
+    setSearch(nextQ);
+    setQuery(nextQ);
+    setBrand(nextBrand);
+    setPage(1);
     startTransition(() => {
       router.push(url, { scroll: false });
     });
@@ -247,7 +285,8 @@ export default function CatalogPanel({
 
   function handleSearch(event: FormEvent) {
     event.preventDefault();
-    navigate(buildUrl(basePath, params, { q: query.trim() }));
+    // Text replaces brand filter so results aren't AND-narrowed to empty.
+    navigate(buildUrl(basePath, params, { q: query.trim(), brand: "" }));
   }
 
   function applyPrice() {
@@ -372,6 +411,7 @@ export default function CatalogPanel({
             title="Categories"
             allHref="/"
             allActive={pathname === "/" && !onCategoryPage && !onFeaturedPage}
+            onNavigate={navigate}
             items={categories.map((item) => ({
               label: item.name,
               count: item.count,
@@ -382,12 +422,13 @@ export default function CatalogPanel({
 
           <FilterChips
             title="Brands"
-            allHref={buildUrl(basePath, params, { brand: "" })}
+            allHref={buildUrl(basePath, params, { brand: "", q: search })}
             allActive={!brand}
+            onNavigate={navigate}
             items={topBrands.map((item) => ({
               label: item.name,
               count: item.count,
-              href: buildUrl(basePath, params, { brand: item.slug }),
+              href: buildUrl(basePath, params, { brand: item.slug, q: "" }),
               active: brand === item.slug,
             }))}
           />
@@ -430,14 +471,16 @@ export default function CatalogPanel({
               </p>
               <div className="mt-5 flex flex-wrap justify-center gap-2">
                 {POPULAR_SEARCHES.slice(0, 6).map((term) => (
-                  <Link
+                  <button
                     key={term}
-                    href={buildUrl(basePath, params, { q: term })}
-                    scroll={false}
+                    type="button"
+                    onClick={() =>
+                      navigate(buildUrl(basePath, params, { q: term, brand: "" }))
+                    }
                     className="rounded-full border border-border px-3 py-1.5 text-xs font-bold text-foreground/80 hover:border-accent/40 hover:text-accent"
                   >
                     {term}
-                  </Link>
+                  </button>
                 ))}
                 <Link
                   href="/trending"

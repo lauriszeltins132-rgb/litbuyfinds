@@ -5,6 +5,7 @@ import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { POPULAR_SEARCHES } from "@/lib/constants";
 import { trackSearchChipClick, trackSearchSubmit } from "@/lib/analytics-events";
+import { dispatchCatalogSearch } from "@/lib/catalog-search-sync";
 import { scrollToCatalogResults } from "@/lib/scroll-to-catalog";
 import type { SearchSuggestion } from "@/lib/search-suggestions-client";
 
@@ -116,10 +117,12 @@ export default function HeroSearch({ searchIndex }: HeroSearchProps) {
   function pushCatalogSearch(term: string) {
     const trimmed = term.trim();
     if (!trimmed) {
+      dispatchCatalogSearch({ q: "", brand: "" });
       router.push("/", { scroll: false });
       scrollToCatalogResults();
       return;
     }
+    dispatchCatalogSearch({ q: trimmed, brand: "" });
     router.push(`/?q=${encodeURIComponent(trimmed)}`, { scroll: false });
     scrollToCatalogResults();
   }
@@ -140,6 +143,17 @@ export default function HeroSearch({ searchIndex }: HeroSearchProps) {
     trackSearchChipClick(label, "hero_search_autocomplete");
     setOpen(false);
     setQuery("");
+    try {
+      const url = new URL(href, window.location.origin);
+      if (url.pathname === "/") {
+        dispatchCatalogSearch({
+          q: url.searchParams.get("q") ?? "",
+          brand: url.searchParams.get("brand") ?? "",
+        });
+      }
+    } catch {
+      /* ignore invalid hrefs */
+    }
     router.push(href);
   }
 

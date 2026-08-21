@@ -44,7 +44,7 @@ export default function SiteHeader() {
             </span>
           </Link>
 
-          <nav className="hidden items-center gap-0.5 overflow-x-auto lg:flex">
+          <nav className="hidden min-w-0 flex-1 items-center gap-0.5 overflow-x-auto lg:flex">
             {navLinks.map((link) => {
               const isActive =
                 link.href === "/"
@@ -56,7 +56,7 @@ export default function SiteHeader() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`shrink-0 rounded-full px-3 py-2 text-sm font-semibold transition-colors ${
+                  className={`shrink-0 rounded-full px-2.5 py-2 text-sm font-semibold transition-colors xl:px-3 ${
                     isActive ? "chip-active" : "text-muted hover:text-foreground"
                   }`}
                 >
@@ -69,14 +69,14 @@ export default function SiteHeader() {
             })}
           </nav>
 
-          <div className="flex min-w-0 flex-1 items-center justify-end gap-0.5 sm:gap-2">
+          <div className="flex shrink-0 items-center justify-end gap-0.5 sm:gap-1.5 lg:gap-2">
             <CommunityLinks variant="header" location="header" />
             <AgentSelector variant="mobile" className="sm:hidden" />
             <AgentSelector variant="header" className="hidden sm:block" />
             <GlobalSearch className="hidden sm:inline-flex" />
             <RegisterLink
               location="header"
-              className="inline-flex shrink-0 rounded-full bg-accent px-2 py-1.5 text-[10px] font-black leading-none text-background sm:px-4 sm:py-2 sm:text-sm"
+              className="inline-flex shrink-0 rounded-full bg-accent px-2 py-1.5 text-[10px] font-black leading-none text-background sm:px-3 sm:py-2 sm:text-sm lg:px-4"
             >
               {REGISTER_HEADER_CTA_LABEL}
             </RegisterLink>
