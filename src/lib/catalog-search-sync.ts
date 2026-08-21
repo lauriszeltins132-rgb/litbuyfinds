@@ -5,6 +5,8 @@ export const CATALOG_SEARCH_EVENT = "litbuy:catalog-search";
 export type CatalogSearchDetail = {
   q?: string;
   brand?: string;
+  /** When true (default), catalog should scroll to results after applying. */
+  scrollToResults?: boolean;
 };
 
 export function dispatchCatalogSearch(detail: CatalogSearchDetail) {

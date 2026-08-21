@@ -64,7 +64,8 @@ export default function GlobalSearch({
     if (!trimmed) return;
     dispatchCatalogSearch({ q: trimmed, brand: "" });
     router.push(`/?q=${encodeURIComponent(trimmed)}`, { scroll: false });
-    scrollToCatalogResults();
+    // Fallback when catalog isn't mounted yet (search from another page).
+    window.setTimeout(() => scrollToCatalogResults(), 120);
     setOpen(false);
     setQuery("");
   }
@@ -72,7 +73,7 @@ export default function GlobalSearch({
   function searchPopular(term: string) {
     dispatchCatalogSearch({ q: term, brand: "" });
     router.push(`/?q=${encodeURIComponent(term)}`, { scroll: false });
-    scrollToCatalogResults();
+    window.setTimeout(() => scrollToCatalogResults(), 120);
     setOpen(false);
     setQuery("");
   }

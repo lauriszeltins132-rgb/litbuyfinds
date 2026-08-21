@@ -136,6 +136,8 @@ export default function CatalogPanel({
   const [page, setPage] = useState(urlPage);
   const prevFilterKeyRef = useRef(filterKey);
   const prevPageRef = useRef(page);
+  /** Bumps after user-driven filter changes so we scroll once results re-render. */
+  const [scrollRequestId, setScrollRequestId] = useState(0);
 
   const [query, setQuery] = useState(search);
   const [minInput, setMinInput] = useState(minPrice);
@@ -160,6 +162,9 @@ export default function CatalogPanel({
       setQuery(nextQ);
       setBrand(nextBrand);
       setPage(1);
+      if (detail.scrollToResults !== false) {
+        setScrollRequestId((id) => id + 1);
+      }
     }
 
     window.addEventListener(CATALOG_SEARCH_EVENT, onExternalSearch);
@@ -167,6 +172,22 @@ export default function CatalogPanel({
       window.removeEventListener(CATALOG_SEARCH_EVENT, onExternalSearch);
     };
   }, []);
+
+  // Landed on catalog with ?q= / ?brand= (e.g. header search from another page).
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const sp = new URLSearchParams(window.location.search);
+    if (sp.get("q") || sp.get("brand")) {
+      setScrollRequestId((id) => id + 1);
+    }
+    // Mount-only: scroll when opening a filtered catalog URL.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (scrollRequestId === 0) return;
+    scrollToCatalogResults();
+  }, [scrollRequestId]);
 
   useEffect(() => {
     if (!catalogSource) return;
@@ -274,10 +295,17 @@ export default function CatalogPanel({
     const next = new URL(url, "https://litbuyfinds.local");
     const nextQ = next.searchParams.get("q") ?? "";
     const nextBrand = next.searchParams.get("brand") ?? "";
+    const staysOnCatalog =
+      next.pathname === basePath ||
+      (basePath === "/" && (next.pathname === "/" || next.pathname === ""));
+
     setSearch(nextQ);
     setQuery(nextQ);
     setBrand(nextBrand);
     setPage(1);
+    if (staysOnCatalog) {
+      setScrollRequestId((id) => id + 1);
+    }
     startTransition(() => {
       router.push(url, { scroll: false });
     });
