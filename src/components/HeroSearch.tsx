@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { POPULAR_SEARCHES } from "@/lib/constants";
 import { trackSearchChipClick, trackSearchSubmit } from "@/lib/analytics-events";
 import { dispatchCatalogSearch } from "@/lib/catalog-search-sync";
+import { scrollToCatalogResults } from "@/lib/scroll-to-catalog";
 import type { SearchSuggestion } from "@/lib/search-suggestions-client";
 
 type HeroSearchProps = {
@@ -118,10 +119,13 @@ export default function HeroSearch({ searchIndex }: HeroSearchProps) {
     if (!trimmed) {
       dispatchCatalogSearch({ q: "", brand: "" });
       router.push("/", { scroll: false });
+      window.setTimeout(() => scrollToCatalogResults(), 120);
       return;
     }
     dispatchCatalogSearch({ q: trimmed, brand: "" });
     router.push(`/?q=${encodeURIComponent(trimmed)}`, { scroll: false });
+    // Fallback if catalog event/scroll timing misses (keeps hero chips reliable).
+    window.setTimeout(() => scrollToCatalogResults(), 120);
   }
 
   function handleSubmit(event: FormEvent) {

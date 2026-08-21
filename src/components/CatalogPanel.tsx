@@ -138,11 +138,17 @@ export default function CatalogPanel({
   const prevPageRef = useRef(page);
   /** Bumps after user-driven filter changes so we scroll once results re-render. */
   const [scrollRequestId, setScrollRequestId] = useState(0);
+  const pendingScrollRef = useRef(false);
 
   const [query, setQuery] = useState(search);
   const [minInput, setMinInput] = useState(minPrice);
   const [maxInput, setMaxInput] = useState(maxPrice);
   const [filtersOpen, setFiltersOpen] = useState(false);
+
+  function requestScrollToResults() {
+    pendingScrollRef.current = true;
+    setScrollRequestId((id) => id + 1);
+  }
 
   useEffect(() => {
     setSearch(searchFromUrl);
@@ -163,7 +169,7 @@ export default function CatalogPanel({
       setBrand(nextBrand);
       setPage(1);
       if (detail.scrollToResults !== false) {
-        setScrollRequestId((id) => id + 1);
+        requestScrollToResults();
       }
     }
 
@@ -178,16 +184,11 @@ export default function CatalogPanel({
     if (typeof window === "undefined") return;
     const sp = new URLSearchParams(window.location.search);
     if (sp.get("q") || sp.get("brand")) {
-      setScrollRequestId((id) => id + 1);
+      requestScrollToResults();
     }
     // Mount-only: scroll when opening a filtered catalog URL.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    if (scrollRequestId === 0) return;
-    scrollToCatalogResults();
-  }, [scrollRequestId]);
 
   useEffect(() => {
     if (!catalogSource) return;
@@ -275,6 +276,15 @@ export default function CatalogPanel({
     [filtered, currentPage]
   );
 
+  // Scroll only after filtered results are ready (not during skeleton/pending).
+  useEffect(() => {
+    if (!pendingScrollRef.current) return;
+    if (scrollRequestId === 0) return;
+    if (catalogLoading || isPending) return;
+    pendingScrollRef.current = false;
+    scrollToCatalogResults();
+  }, [scrollRequestId, catalogLoading, isPending, filterKey, paginated]);
+
   function goToPage(nextPage: number) {
     const clamped = Math.max(1, Math.min(nextPage, totalPages));
     if (clamped === currentPage) return;
@@ -304,7 +314,7 @@ export default function CatalogPanel({
     setBrand(nextBrand);
     setPage(1);
     if (staysOnCatalog) {
-      setScrollRequestId((id) => id + 1);
+      requestScrollToResults();
     }
     startTransition(() => {
       router.push(url, { scroll: false });

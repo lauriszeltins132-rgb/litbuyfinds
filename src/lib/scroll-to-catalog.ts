@@ -4,12 +4,18 @@ export function scrollToCatalogResults(behavior: ScrollBehavior = "smooth") {
     const target =
       document.getElementById("catalog-product-grid") ??
       document.getElementById("browse");
-    if (!target) return;
+    if (!target) return false;
     target.scrollIntoView({ behavior, block: "start" });
+    return true;
   };
 
-  // Double rAF waits until after React commits + paints filtered results.
+  // Wait for React commit/paint; retry briefly if the grid isn't mounted yet.
   requestAnimationFrame(() => {
-    requestAnimationFrame(run);
+    requestAnimationFrame(() => {
+      if (run()) return;
+      window.setTimeout(() => {
+        run();
+      }, 50);
+    });
   });
 }
