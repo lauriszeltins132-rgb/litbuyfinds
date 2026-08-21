@@ -33,20 +33,44 @@ function normalizeSearchText(value: string): string {
   return value.toLowerCase().trim().replace(/\s+/g, " ");
 }
 
+/** Map common shopper terms onto catalog category / title language. */
+const SEARCH_TOKEN_ALIASES: Record<string, string[]> = {
+  sneakers: ["sneaker", "shoes", "shoe"],
+  sneaker: ["sneakers", "shoes", "shoe"],
+  shoes: ["shoe", "sneaker", "sneakers"],
+  shoe: ["shoes", "sneaker", "sneakers"],
+  jackets: ["jacket", "coat", "coats"],
+  jacket: ["jackets", "coat", "coats"],
+  coats: ["coat", "jacket", "jackets"],
+  bags: ["bag", "accessories", "accessory"],
+  bag: ["bags", "accessories", "accessory"],
+  hoodies: ["hoodie", "hoodies and pants"],
+  hoodie: ["hoodies", "hoodies and pants"],
+};
+
+function tokenCandidates(token: string): string[] {
+  const candidates = [token, ...(SEARCH_TOKEN_ALIASES[token] ?? [])];
+  if (token.length >= 4 && token.endsWith("s")) {
+    candidates.push(token.slice(0, -1));
+  }
+  return candidates;
+}
+
 function matchesSearch(product: Product, search: string): boolean {
   const haystack = normalizeSearchText(
-    `${product.product_name} ${product.category} ${getDisplayBrand(product) ?? ""}`
+    [
+      product.product_name,
+      product.category,
+      product.category_slug?.replace(/-/g, " ") ?? "",
+      getDisplayBrand(product) ?? "",
+    ].join(" ")
   );
   const tokens = normalizeSearchText(search).split(" ").filter(Boolean);
   if (tokens.length === 0) return true;
 
-  return tokens.every((token) => {
-    if (haystack.includes(token)) return true;
-    if (token.length >= 4 && token.endsWith("s") && haystack.includes(token.slice(0, -1))) {
-      return true;
-    }
-    return false;
-  });
+  return tokens.every((token) =>
+    tokenCandidates(token).some((candidate) => haystack.includes(candidate))
+  );
 }
 
 let popularRankMap: Map<string, number> | null = null;

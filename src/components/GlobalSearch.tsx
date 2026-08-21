@@ -7,6 +7,7 @@ import ControlButton from "@/components/ui/ControlButton";
 import TextInput from "@/components/ui/TextInput";
 import { POPULAR_SEARCHES } from "@/lib/constants";
 import { getClientSearchIndex } from "@/lib/search-suggestions-client";
+import { dispatchCatalogSearch } from "@/lib/catalog-search-sync";
 import { scrollToCatalogResults } from "@/lib/scroll-to-catalog";
 
 function SearchIcon({ className = "h-5 w-5" }: { className?: string }) {
@@ -61,7 +62,16 @@ export default function GlobalSearch({
     event.preventDefault();
     const trimmed = query.trim();
     if (!trimmed) return;
+    dispatchCatalogSearch({ q: trimmed, brand: "" });
     router.push(`/?q=${encodeURIComponent(trimmed)}`, { scroll: false });
+    scrollToCatalogResults();
+    setOpen(false);
+    setQuery("");
+  }
+
+  function searchPopular(term: string) {
+    dispatchCatalogSearch({ q: term, brand: "" });
+    router.push(`/?q=${encodeURIComponent(term)}`, { scroll: false });
     scrollToCatalogResults();
     setOpen(false);
     setQuery("");
@@ -136,7 +146,7 @@ export default function GlobalSearch({
                     <button
                       key={term}
                       type="button"
-                      onClick={() => setQuery(term)}
+                      onClick={() => searchPopular(term)}
                       className="rounded-full border border-border px-2.5 py-1 text-xs font-bold text-foreground/80"
                     >
                       {term}

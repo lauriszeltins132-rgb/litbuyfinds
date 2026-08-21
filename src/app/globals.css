@@ -1989,7 +1989,7 @@ body::before {
 
 .agent-selector-trigger--desktop {
   padding: 0.35rem 1.6rem 0.35rem 0.45rem;
-  max-width: 13rem;
+  max-width: 11.5rem;
 }
 
 .agent-selector-trigger--mobile {
@@ -2039,9 +2039,13 @@ body::before {
   color: var(--color-accent);
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1280px) {
   .agent-selector-trigger__pill {
     display: inline-flex;
+  }
+
+  .agent-selector-trigger--desktop {
+    max-width: 13rem;
   }
 }
 
