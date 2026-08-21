@@ -136,11 +136,19 @@ export default function CatalogPanel({
   const [page, setPage] = useState(urlPage);
   const prevFilterKeyRef = useRef(filterKey);
   const prevPageRef = useRef(page);
+  /** Bumps after user-driven filter changes so we scroll once results re-render. */
+  const [scrollRequestId, setScrollRequestId] = useState(0);
+  const pendingScrollRef = useRef(false);
 
   const [query, setQuery] = useState(search);
   const [minInput, setMinInput] = useState(minPrice);
   const [maxInput, setMaxInput] = useState(maxPrice);
   const [filtersOpen, setFiltersOpen] = useState(false);
+
+  function requestScrollToResults() {
+    pendingScrollRef.current = true;
+    setScrollRequestId((id) => id + 1);
+  }
 
   useEffect(() => {
     setSearch(searchFromUrl);
@@ -160,12 +168,26 @@ export default function CatalogPanel({
       setQuery(nextQ);
       setBrand(nextBrand);
       setPage(1);
+      if (detail.scrollToResults !== false) {
+        requestScrollToResults();
+      }
     }
 
     window.addEventListener(CATALOG_SEARCH_EVENT, onExternalSearch);
     return () => {
       window.removeEventListener(CATALOG_SEARCH_EVENT, onExternalSearch);
     };
+  }, []);
+
+  // Landed on catalog with ?q= / ?brand= (e.g. header search from another page).
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const sp = new URLSearchParams(window.location.search);
+    if (sp.get("q") || sp.get("brand")) {
+      requestScrollToResults();
+    }
+    // Mount-only: scroll when opening a filtered catalog URL.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -254,6 +276,15 @@ export default function CatalogPanel({
     [filtered, currentPage]
   );
 
+  // Scroll only after filtered results are ready (not during skeleton/pending).
+  useEffect(() => {
+    if (!pendingScrollRef.current) return;
+    if (scrollRequestId === 0) return;
+    if (catalogLoading || isPending) return;
+    pendingScrollRef.current = false;
+    scrollToCatalogResults();
+  }, [scrollRequestId, catalogLoading, isPending, filterKey, paginated]);
+
   function goToPage(nextPage: number) {
     const clamped = Math.max(1, Math.min(nextPage, totalPages));
     if (clamped === currentPage) return;
@@ -274,10 +305,17 @@ export default function CatalogPanel({
     const next = new URL(url, "https://litbuyfinds.local");
     const nextQ = next.searchParams.get("q") ?? "";
     const nextBrand = next.searchParams.get("brand") ?? "";
+    const staysOnCatalog =
+      next.pathname === basePath ||
+      (basePath === "/" && (next.pathname === "/" || next.pathname === ""));
+
     setSearch(nextQ);
     setQuery(nextQ);
     setBrand(nextBrand);
     setPage(1);
+    if (staysOnCatalog) {
+      requestScrollToResults();
+    }
     startTransition(() => {
       router.push(url, { scroll: false });
     });

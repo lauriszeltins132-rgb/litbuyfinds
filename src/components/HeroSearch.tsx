@@ -119,12 +119,13 @@ export default function HeroSearch({ searchIndex }: HeroSearchProps) {
     if (!trimmed) {
       dispatchCatalogSearch({ q: "", brand: "" });
       router.push("/", { scroll: false });
-      scrollToCatalogResults();
+      window.setTimeout(() => scrollToCatalogResults(), 120);
       return;
     }
     dispatchCatalogSearch({ q: trimmed, brand: "" });
     router.push(`/?q=${encodeURIComponent(trimmed)}`, { scroll: false });
-    scrollToCatalogResults();
+    // Fallback if catalog event/scroll timing misses (keeps hero chips reliable).
+    window.setTimeout(() => scrollToCatalogResults(), 120);
   }
 
   function handleSubmit(event: FormEvent) {
@@ -150,6 +151,8 @@ export default function HeroSearch({ searchIndex }: HeroSearchProps) {
           q: url.searchParams.get("q") ?? "",
           brand: url.searchParams.get("brand") ?? "",
         });
+        router.push(href, { scroll: false });
+        return;
       }
     } catch {
       /* ignore invalid hrefs */
