@@ -38,7 +38,6 @@ import TelegramDailyFindsCta from "@/components/TelegramDailyFindsCta";
 import { getRelatedGuidesForProduct } from "@/lib/related-guides";
 import { buildBreadcrumbSchema } from "@/lib/schema";
 import { getCategoryFindsPagePath } from "@/lib/finds-authority";
-import { getQcImagesPoc } from "@/lib/qc-images-poc";
 
 type ProductPageProps = {
   params: Promise<{ slug: string }>;
@@ -152,7 +151,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
         engagementViews={engagement.views}
         engagementSaves={engagement.saves}
         engagementTrending={showTrending}
-        qcImages={getQcImagesPoc(product.id)}
       />
 
       {similar.length > 0 ? (
