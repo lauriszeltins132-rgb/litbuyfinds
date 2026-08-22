@@ -42,6 +42,8 @@ type ProductDetailViewProps = {
   engagementViews?: number;
   engagementSaves?: number;
   engagementTrending?: boolean;
+  /** PoC only — optional QC gallery URLs for a single test product. */
+  qcImages?: string[];
 };
 
 export default function ProductDetailView({
@@ -54,6 +56,7 @@ export default function ProductDetailView({
   engagementViews = 0,
   engagementSaves = 0,
   engagementTrending = false,
+  qcImages = [],
 }: ProductDetailViewProps) {
   const { currency } = usePreferences();
   const { isInWishlist, toggleWishlist } = useWishlist();
@@ -67,7 +70,7 @@ export default function ProductDetailView({
   const badges = useMemo(() => getProductBadges(product, { maxBadges: 3 }), [product]);
   const rnScore = useMemo(() => getRnScore(product), [product]);
   const freshnessLabel = useMemo(() => getProductFreshnessLabel(product), [product]);
-  const qcImagesPoc = useMemo(() => getQcImagesPoc(product.id), [product.id]);
+  const qcImagesPoc = qcImages.length > 0 ? qcImages : getQcImagesPoc(product.id);
 
   useEffect(() => {
     const node = buySentinelRef.current;
@@ -151,8 +154,8 @@ export default function ProductDetailView({
 
       <section className="product-detail-hero px-4 pb-6 pt-2 sm:px-6 sm:pt-3">
         <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-2 lg:gap-12">
-          <div className="flex flex-col gap-4 lg:sticky lg:top-[4.75rem] lg:self-start">
-            <div className="product-image-shell product-image-shell--featured product-image-hover relative overflow-hidden rounded-3xl border border-border">
+          <div className="flex flex-col gap-4">
+            <div className="product-image-shell product-image-shell--featured product-image-hover relative overflow-hidden rounded-3xl border border-border lg:sticky lg:top-[4.75rem] lg:self-start">
               <ProductImage
                 src={product.image}
                 preferredSrc={displayImage?.displaySrc}
@@ -165,11 +168,19 @@ export default function ProductDetailView({
               />
               <ProductBadges badges={badges} className="!left-auto !right-3 !top-3 !items-end" />
             </div>
-            <ProductQcPhotosPoc
-              images={qcImagesPoc}
-              productName={facts.displayName}
-              telegramUrl={product.qc_link || undefined}
-            />
+            {qcImagesPoc.length > 0 ? (
+              <div
+                id="qc-photos-poc"
+                data-qc-poc-product={product.id}
+                className="rounded-3xl border border-border bg-surface/40 p-4 sm:p-5"
+              >
+                <ProductQcPhotosPoc
+                  images={qcImagesPoc}
+                  productName={facts.displayName}
+                  telegramUrl={product.qc_link || undefined}
+                />
+              </div>
+            ) : null}
           </div>
 
           <div className="product-detail-panel flex flex-col lg:sticky lg:top-[4.75rem] lg:max-h-[calc(100dvh-5rem)] lg:self-start">
