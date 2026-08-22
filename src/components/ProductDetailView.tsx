@@ -7,7 +7,6 @@ import type { ProductFacts } from "@/lib/product-details";
 import { getProductImageAlt } from "@/lib/product-details";
 import DataFreshness from "@/components/DataFreshness";
 import MemberBenefitsStrip from "@/components/conversion/MemberBenefitsStrip";
-import ProductEngagementStats from "@/components/ProductEngagementStats";
 import ProductBadges from "@/components/ProductBadges";
 import ProductTrustPanel from "@/components/ProductTrustPanel";
 import ProductPurchaseSignals from "@/components/ProductPurchaseSignals";
@@ -29,6 +28,8 @@ import ProductAiActions from "./ai/ProductAiActions";
 import BuyWithAgentButton, {
   BuyingAgentPanel,
 } from "./agents/BuyWithAgentButton";
+import { ProductPopularitySection } from "./ProductSaveSignal";
+import { formatSaveCount, getVisibleSaveCount } from "@/lib/product-popularity";
 
 type ProductDetailViewProps = {
   product: Product;
@@ -49,7 +50,7 @@ export default function ProductDetailView({
   highlights,
   brand,
   categoryHref,
-  engagementViews = 0,
+  engagementViews: _engagementViews = 0,
   engagementSaves = 0,
   engagementTrending = false,
 }: ProductDetailViewProps) {
@@ -209,16 +210,21 @@ export default function ProductDetailView({
 
               <div className="mt-4">{priceBlock}</div>
 
-              <div ref={buySentinelRef} className="mt-5">
-                {purchaseActions}
+              <div className="mt-4">
+                <ProductPopularitySection
+                  product={product}
+                  isSaved={saved}
+                  analyticsSaves={engagementSaves}
+                  forceTrending={engagementTrending}
+                  onToggleSave={() => {
+                    if (!saved) trackSaveClick(product.id, "product_page");
+                    toggleWishlist(product.id);
+                  }}
+                />
               </div>
 
-              <div className="mt-4">
-                <ProductEngagementStats
-                  views={engagementViews}
-                  saves={engagementSaves}
-                  trending={engagementTrending}
-                />
+              <div ref={buySentinelRef} className="mt-5">
+                {purchaseActions}
               </div>
 
               <div className="mt-6 flex flex-wrap gap-2">
@@ -228,13 +234,17 @@ export default function ProductDetailView({
                     if (!saved) trackSaveClick(product.id, "product_page");
                     toggleWishlist(product.id);
                   }}
+                  aria-pressed={saved}
                   className={`rounded-full border px-4 py-2 text-sm font-bold ${
                     saved
                       ? "border-accent bg-accent text-background"
                       : "border-border text-foreground hover:border-accent/40"
                   }`}
                 >
-                  {saved ? "Saved" : "Save"}
+                  {saved ? "❤️ Saved" : "❤️ Save"} ·{" "}
+                  {formatSaveCount(
+                    getVisibleSaveCount(product, saved, engagementSaves)
+                  )}
                 </button>
                 <button
                   type="button"

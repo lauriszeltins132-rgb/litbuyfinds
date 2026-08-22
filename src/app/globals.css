@@ -2360,6 +2360,66 @@ body::before {
   color: var(--color-muted);
 }
 
+.product-save-signal {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--color-muted);
+  text-align: left;
+}
+
+.product-save-signal--compact {
+  font-size: 0.68rem;
+}
+
+.product-save-signal--interactive {
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.product-save-signal--interactive:hover,
+.product-save-signal--saved {
+  color: var(--color-foreground);
+}
+
+.product-popularity {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.product-popularity__label {
+  margin: 0;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.product-popularity__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem 0.85rem;
+}
+
+.product-popularity__trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
 .agent-modal__option--recommended {
   border-color: rgba(124, 181, 24, 0.22);
 }

@@ -16,6 +16,7 @@ import { trackProductContext, trackSaveClick } from "@/lib/analytics-events";
 import LitBuyMicroCta from "./LitBuyMicroCta";
 import ProductBadges from "./ProductBadges";
 import ProductCardImage from "./ProductCardImage";
+import ProductSaveSignal from "./ProductSaveSignal";
 import BuyWithAgentButton from "./agents/BuyWithAgentButton";
 
 type ProductCardProps = {
@@ -143,6 +144,17 @@ function ProductCard({
           >
             {formatProductPrice(product.price, currency)}
           </p>
+
+          <ProductSaveSignal
+            product={product}
+            isSaved={saved}
+            compact={compact}
+            onToggleSave={() => {
+              if (!saved) trackSaveClick(product.id, "product_card");
+              toggleWishlist(product.id);
+            }}
+            className="mt-0.5"
+          />
         </div>
 
         <div
