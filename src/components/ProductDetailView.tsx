@@ -29,6 +29,8 @@ import ProductAiActions from "./ai/ProductAiActions";
 import BuyWithAgentButton, {
   BuyingAgentPanel,
 } from "./agents/BuyWithAgentButton";
+import ProductQcPhotosPoc from "./ProductQcPhotosPoc";
+import { getQcImagesPoc } from "@/lib/qc-images-poc";
 
 type ProductDetailViewProps = {
   product: Product;
@@ -65,6 +67,7 @@ export default function ProductDetailView({
   const badges = useMemo(() => getProductBadges(product, { maxBadges: 3 }), [product]);
   const rnScore = useMemo(() => getRnScore(product), [product]);
   const freshnessLabel = useMemo(() => getProductFreshnessLabel(product), [product]);
+  const qcImagesPoc = useMemo(() => getQcImagesPoc(product.id), [product.id]);
 
   useEffect(() => {
     const node = buySentinelRef.current;
@@ -148,18 +151,25 @@ export default function ProductDetailView({
 
       <section className="product-detail-hero px-4 pb-6 pt-2 sm:px-6 sm:pt-3">
         <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-2 lg:gap-12">
-          <div className="product-image-shell product-image-shell--featured product-image-hover relative overflow-hidden rounded-3xl border border-border lg:sticky lg:top-[4.75rem] lg:self-start">
-            <ProductImage
-              src={product.image}
-              preferredSrc={displayImage?.displaySrc}
-              fallbacks={displayImage?.fallbacks}
-              fillClass={displayImage?.fillClass}
-              alt={imageAlt}
-              priority
-              variant="featured"
-              productHref={getProductHref(product)}
+          <div className="flex flex-col gap-4 lg:sticky lg:top-[4.75rem] lg:self-start">
+            <div className="product-image-shell product-image-shell--featured product-image-hover relative overflow-hidden rounded-3xl border border-border">
+              <ProductImage
+                src={product.image}
+                preferredSrc={displayImage?.displaySrc}
+                fallbacks={displayImage?.fallbacks}
+                fillClass={displayImage?.fillClass}
+                alt={imageAlt}
+                priority
+                variant="featured"
+                productHref={getProductHref(product)}
+              />
+              <ProductBadges badges={badges} className="!left-auto !right-3 !top-3 !items-end" />
+            </div>
+            <ProductQcPhotosPoc
+              images={qcImagesPoc}
+              productName={facts.displayName}
+              telegramUrl={product.qc_link || undefined}
             />
-            <ProductBadges badges={badges} className="!left-auto !right-3 !top-3 !items-end" />
           </div>
 
           <div className="product-detail-panel flex flex-col lg:sticky lg:top-[4.75rem] lg:max-h-[calc(100dvh-5rem)] lg:self-start">
