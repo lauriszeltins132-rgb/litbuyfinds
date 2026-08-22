@@ -174,6 +174,7 @@ export default function ProductDetailView({
                 data-qc-poc-product={product.id}
                 data-qc-lightbox-section="1"
                 className="relative z-10 rounded-3xl border border-border bg-surface/40 p-4 sm:p-5"
+                data-qc-build="css-target-v1"
               >
                 <ProductQcPhotosPoc
                   images={qcImagesPoc}
