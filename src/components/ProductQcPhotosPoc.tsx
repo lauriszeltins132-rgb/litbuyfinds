@@ -11,7 +11,7 @@ type ProductQcPhotosPocProps = {
 
 /**
  * Temporary single-product experiment — renders only when images are provided.
- * Thumbnails open a lightweight fullscreen QC viewer (no layout/SEO changes).
+ * Gallery markup stays the same; thumbnails open a lightweight fullscreen viewer.
  */
 export default function ProductQcPhotosPoc({
   images,
@@ -82,6 +82,7 @@ export default function ProductQcPhotosPoc({
             role="dialog"
             aria-modal="true"
             aria-labelledby={titleId}
+            data-qc-lightbox-open="true"
             onClick={close}
           >
             <p id={titleId} className="sr-only">
@@ -92,7 +93,10 @@ export default function ProductQcPhotosPoc({
               type="button"
               aria-label="Close QC viewer"
               className="absolute right-3 top-3 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/50 text-xl text-white hover:bg-black/70 sm:right-5 sm:top-5"
-              onClick={close}
+              onClick={(event) => {
+                event.stopPropagation();
+                close();
+              }}
             >
               ×
             </button>
@@ -160,7 +164,7 @@ export default function ProductQcPhotosPoc({
       : null;
 
   return (
-    <div className="space-y-3">
+    <div className="relative z-10 space-y-3" data-qc-lightbox="1">
       <p className="text-sm font-bold text-foreground">QC Photos Available</p>
       <ul className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         {images.map((src, index) => (
@@ -170,8 +174,9 @@ export default function ProductQcPhotosPoc({
           >
             <button
               type="button"
+              data-qc-thumb={index + 1}
               onClick={() => setActiveIndex(index)}
-              className="block w-full cursor-zoom-in text-left"
+              className="block w-full cursor-zoom-in text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
               aria-label={`Open ${productName} QC photo ${index + 1}`}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -182,7 +187,8 @@ export default function ProductQcPhotosPoc({
                 height={600}
                 loading="lazy"
                 decoding="async"
-                className="h-auto w-full object-cover"
+                draggable={false}
+                className="pointer-events-none h-auto w-full object-cover"
               />
             </button>
           </li>
