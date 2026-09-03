@@ -9,6 +9,7 @@ import {
   useState,
 } from "react";
 import { trackBrokenImage } from "@/lib/analytics-events";
+import { logProductImageFailure } from "@/lib/image-load-debug";
 import {
   hasPlausibleImageDimensions,
   validateImageUrl,
@@ -22,6 +23,10 @@ import {
   markImageUrlFailed,
   rememberLoadedImageUrl,
 } from "@/lib/image-load-cache";
+import {
+  acquireImageLoadSlot,
+  releaseImageLoadSlot,
+} from "@/lib/image-load-queue";
 
 type UseProductImageLoaderArgs = {
   src: string;
@@ -31,8 +36,16 @@ type UseProductImageLoaderArgs = {
   analyticsContext: string;
 };
 
-/** Start fetching when the image is this close to the viewport. */
-const VIEWPORT_ROOT_MARGIN = "280px 0px";
+type FailReason = "error" | "timeout" | "implausible" | "exhausted";
+
+/** Prefetch only when close to the viewport — avoids loading several rows early. */
+const VIEWPORT_ROOT_MARGIN = "160px 0px";
+
+/** Soft retries of the same URL before advancing candidates. */
+const MAX_SOFT_RETRIES = 2;
+
+/** Backoff before remounting the same URL (ms × attempt). */
+const RETRY_BACKOFF_MS = 280;
 
 function buildCandidates(
   src: string,
@@ -57,7 +70,7 @@ function buildCandidates(
 
 /**
  * Shared product-image loader: session cache, near-viewport fetch gating,
- * one soft retry on transient failure/timeout, hung-request abort, and
+ * concurrency limiting, soft retries with backoff, hung-request abort, and
  * hydration-safe eager/lazy decisions.
  * Does not alter image URLs, dimensions, or visual presentation.
  */
@@ -87,12 +100,24 @@ export function useProductImageLoader({
    * Priority / session-cached images fetch immediately.
    */
   const [nearViewport, setNearViewport] = useState(priority);
+  /** Non-priority images also wait for a concurrency slot. */
+  const [slotReady, setSlotReady] = useState(priority);
   const imgRef = useRef<HTMLImageElement>(null);
   const loggedRef = useRef(false);
-  const retriedRef = useRef(false);
+  const softRetryCountRef = useRef(0);
+  const holdingSlotRef = useRef(false);
+  const backoffActiveRef = useRef(false);
+  const retryTimerRef = useRef<number | null>(null);
 
-  const displaySrc = candidates[srcIndex] ?? "";
-  const allowFetch = priority || nearViewport || cacheBoost;
+  const candidateSrc = candidates[srcIndex] ?? "";
+  const wantsNetwork = priority || cacheBoost || nearViewport;
+  const allowFetch = wantsNetwork && (priority || cacheBoost || slotReady);
+
+  const releaseSlotIfHeld = useCallback(() => {
+    if (!holdingSlotRef.current) return;
+    holdingSlotRef.current = false;
+    releaseImageLoadSlot();
+  }, []);
 
   useEffect(() => {
     const firstSrc = candidates[0] ?? "";
@@ -103,9 +128,16 @@ export function useProductImageLoader({
     setLoaded(cached);
     setCacheBoost(cached);
     setNearViewport(priority || cached);
+    setSlotReady(priority || cached);
     loggedRef.current = false;
-    retriedRef.current = false;
-  }, [candidateKey, candidates, priority]);
+    softRetryCountRef.current = 0;
+    backoffActiveRef.current = false;
+    if (retryTimerRef.current != null) {
+      window.clearTimeout(retryTimerRef.current);
+      retryTimerRef.current = null;
+    }
+    releaseSlotIfHeld();
+  }, [candidateKey, candidates, priority, releaseSlotIfHeld]);
 
   useEffect(() => {
     if (priority || cacheBoost || nearViewport) return;
@@ -131,76 +163,169 @@ export function useProductImageLoader({
     return () => observer.disconnect();
   }, [cacheBoost, candidateKey, nearViewport, priority, retryToken, srcIndex]);
 
+  useEffect(() => {
+    if (priority || cacheBoost) {
+      setSlotReady(true);
+      return;
+    }
+
+    if (!nearViewport) {
+      setSlotReady(false);
+      releaseSlotIfHeld();
+      return;
+    }
+
+    if (holdingSlotRef.current) {
+      setSlotReady(true);
+      return;
+    }
+
+    let cancelled = false;
+    void acquireImageLoadSlot().then(() => {
+      if (cancelled) {
+        releaseImageLoadSlot();
+        return;
+      }
+      holdingSlotRef.current = true;
+      setSlotReady(true);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [cacheBoost, nearViewport, priority, releaseSlotIfHeld, srcIndex]);
+
+  useEffect(() => {
+    if (loaded) releaseSlotIfHeld();
+  }, [loaded, releaseSlotIfHeld]);
+
+  useEffect(() => {
+    return () => {
+      if (retryTimerRef.current != null) {
+        window.clearTimeout(retryTimerRef.current);
+        retryTimerRef.current = null;
+      }
+      releaseSlotIfHeld();
+    };
+  }, [releaseSlotIfHeld]);
+
   const failExhausted = useCallback(() => {
-    if (displaySrc) markImageUrlFailed(displaySrc);
+    if (candidateSrc) {
+      markImageUrlFailed(candidateSrc);
+      logProductImageFailure({
+        url: candidateSrc,
+        attempt: softRetryCountRef.current,
+        reason: "exhausted",
+      });
+    }
+    releaseSlotIfHeld();
     setFailed(true);
     setLoaded(false);
     if (!loggedRef.current) {
       loggedRef.current = true;
       trackBrokenImage(validation.normalized || src, analyticsContext);
     }
-  }, [analyticsContext, displaySrc, src, validation.normalized]);
+  }, [
+    analyticsContext,
+    candidateSrc,
+    releaseSlotIfHeld,
+    src,
+    validation.normalized,
+  ]);
 
-  const softRetryOrAdvance = useCallback(() => {
-    abortImageElementLoad(imgRef.current);
+  const softRetryOrAdvance = useCallback(
+    (reason: FailReason = "error") => {
+      if (backoffActiveRef.current) return;
 
-    if (!retriedRef.current) {
-      retriedRef.current = true;
-      setLoaded(false);
-      setRetryToken((token) => token + 1);
-      return;
-    }
+      abortImageElementLoad(imgRef.current);
 
-    setSrcIndex((currentIndex) => {
-      const nextIndex = currentIndex + 1;
-      if (nextIndex < candidates.length) {
-        if (displaySrc) markImageUrlFailed(displaySrc);
-        const nextSrc = candidates[nextIndex] ?? "";
-        retriedRef.current = false;
-        setRetryToken(0);
-        setLoaded(isImageUrlCached(nextSrc));
-        return nextIndex;
+      if (candidateSrc) {
+        logProductImageFailure({
+          url: candidateSrc,
+          attempt: softRetryCountRef.current + 1,
+          reason,
+        });
       }
-      failExhausted();
-      return currentIndex;
-    });
-  }, [candidates, displaySrc, failExhausted]);
+
+      if (softRetryCountRef.current < MAX_SOFT_RETRIES) {
+        softRetryCountRef.current += 1;
+        setLoaded(false);
+        backoffActiveRef.current = true;
+        const delay = RETRY_BACKOFF_MS * softRetryCountRef.current;
+        if (retryTimerRef.current != null) {
+          window.clearTimeout(retryTimerRef.current);
+        }
+        retryTimerRef.current = window.setTimeout(() => {
+          retryTimerRef.current = null;
+          backoffActiveRef.current = false;
+          setRetryToken((token) => token + 1);
+        }, delay);
+        return;
+      }
+
+      setSrcIndex((currentIndex) => {
+        const nextIndex = currentIndex + 1;
+        if (nextIndex < candidates.length) {
+          if (candidateSrc) markImageUrlFailed(candidateSrc);
+          const nextSrc = candidates[nextIndex] ?? "";
+          softRetryCountRef.current = 0;
+          backoffActiveRef.current = false;
+          setRetryToken(0);
+          setLoaded(isImageUrlCached(nextSrc));
+          return nextIndex;
+        }
+        failExhausted();
+        return currentIndex;
+      });
+    },
+    [candidateSrc, candidates, failExhausted]
+  );
 
   const confirmLoaded = useCallback(
     (img: HTMLImageElement, url: string) => {
       if (!hasPlausibleImageDimensions(img.naturalWidth, img.naturalHeight)) {
-        softRetryOrAdvance();
+        softRetryOrAdvance("implausible");
         return;
       }
       rememberLoadedImageUrl(url);
       setLoaded(true);
       setCacheBoost(true);
+      releaseSlotIfHeld();
     },
-    [softRetryOrAdvance]
+    [releaseSlotIfHeld, softRetryOrAdvance]
   );
 
   useLayoutEffect(() => {
     const img = imgRef.current;
-    if (failed || !displaySrc || !allowFetch) return;
+    if (failed || !candidateSrc || !allowFetch) return;
 
-    if (isImageUrlCached(displaySrc)) {
+    if (isImageUrlCached(candidateSrc)) {
       setLoaded(true);
       setCacheBoost(true);
+      releaseSlotIfHeld();
       return;
     }
 
     if (img && isImageElementCached(img)) {
-      confirmLoaded(img, displaySrc);
+      confirmLoaded(img, candidateSrc);
     }
-  }, [allowFetch, confirmLoaded, displaySrc, failed, retryToken, srcIndex]);
+  }, [
+    allowFetch,
+    candidateSrc,
+    confirmLoaded,
+    failed,
+    releaseSlotIfHeld,
+    retryToken,
+    srcIndex,
+  ]);
 
   useEffect(() => {
     const img = imgRef.current;
-    if (!img || failed || !displaySrc || !allowFetch || loaded) return;
+    if (!img || failed || !candidateSrc || !allowFetch || loaded) return;
 
     const tryConfirm = () => {
       if (img.complete && img.naturalWidth > 0) {
-        confirmLoaded(img, displaySrc);
+        confirmLoaded(img, candidateSrc);
         return true;
       }
       return false;
@@ -216,28 +341,39 @@ export function useProductImageLoader({
       })
       .catch(() => {
         if (!cancelled && img.complete && img.naturalWidth > 0) {
-          rememberLoadedImageUrl(displaySrc);
+          rememberLoadedImageUrl(candidateSrc);
           setLoaded(true);
           setCacheBoost(true);
+          releaseSlotIfHeld();
         }
       });
 
     return () => {
       cancelled = true;
     };
-  }, [allowFetch, confirmLoaded, displaySrc, failed, loaded, retryToken, srcIndex]);
+  }, [
+    allowFetch,
+    candidateSrc,
+    confirmLoaded,
+    failed,
+    loaded,
+    releaseSlotIfHeld,
+    retryToken,
+    srcIndex,
+  ]);
 
   useEffect(() => {
-    if (!allowFetch || failed || !displaySrc || loaded) return;
+    if (!allowFetch || failed || !candidateSrc || loaded) return;
+    if (backoffActiveRef.current) return;
 
     const timer = window.setTimeout(() => {
-      softRetryOrAdvance();
+      softRetryOrAdvance("timeout");
     }, IMAGE_LOAD_TIMEOUT_MS);
 
     return () => window.clearTimeout(timer);
   }, [
     allowFetch,
-    displaySrc,
+    candidateSrc,
     failed,
     loaded,
     retryToken,
@@ -255,16 +391,16 @@ export function useProductImageLoader({
 
   return {
     imgRef,
-    /** Empty until near viewport (unless priority/cached) — defers network. */
-    displaySrc: allowFetch ? displaySrc : "",
-    failed: failed || !displaySrc,
+    /** Empty until near viewport + slot (unless priority/cached) — defers network. */
+    displaySrc: allowFetch ? candidateSrc : "",
+    failed: failed || !candidateSrc,
     loaded,
-    imgKey: `${displaySrc}::${retryToken}::${allowFetch ? "on" : "off"}`,
+    imgKey: `${candidateSrc}::${retryToken}::${allowFetch ? "on" : "off"}`,
     shouldLazyLoad,
     fetchPriority,
     decoding,
     confirmLoaded,
-    softRetryOrAdvance,
+    softRetryOrAdvance: () => softRetryOrAdvance("error"),
     validation,
   };
 }
