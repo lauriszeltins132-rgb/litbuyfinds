@@ -1,5 +1,4 @@
 import type { StaticPageSection } from "./static-pages";
-import { PUBLIC_CATALOG_COUNT } from "./catalog-count-public";
 import { getFindsAuthorityStats } from "./finds-authority";
 import { TOP_LISTS } from "./top-lists";
 import type { SeoLandingPageEntry } from "./seo-landing-config";
@@ -21,14 +20,15 @@ function spreadsheetSections(agentLine: string): StaticPageSection[] {
     {
       heading: "Quick answer",
       paragraphs: [
-        `LitBuy spreadsheet contains thousands of curated products with QC photos, prices, and agent links. LitBuy Finds turns that spreadsheet universe into ${PUBLIC_CATALOG_COUNT} searchable pages — updated daily with verified buy buttons for ${agentLine}.`,
+        `Agent spreadsheet views on LitBuy Finds share one searchable catalog with checkout context for ${agentLine}. For the primary LitBuy Spreadsheet database (LitBuy finds spreadsheet / LitBuy product spreadsheet), open the LitBuy Spreadsheet hub.`,
       ],
+      links: [{ href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" }],
     },
     {
-      heading: "How to use this spreadsheet view",
+      heading: "How to use an agent spreadsheet view",
       paragraphs: [
-        "Search by brand or category, open a product page for QC references, then click through to your preferred agent. Switch agents in the site header without losing your shortlist.",
-        "Spreadsheet rows are great for bulk reference; LitBuy Finds is better for mobile discovery, sharing single products, and filtering by price or QC status.",
+        "Search by brand or category, open a product page for QC references, then click through with your preferred agent selected. Switch agents in the site header without losing your shortlist.",
+        "Agent spreadsheet pages target that agent’s sheet intent. They support — and do not replace — the main LitBuy Spreadsheet authority page.",
       ],
       links: SPREADSHEETS.slice(0, 6),
     },
@@ -42,20 +42,21 @@ function spreadsheetSections(agentLine: string): StaticPageSection[] {
   ];
 }
 
-const SPREADSHEET_FAQS = [
+const AGENT_SPREADSHEET_DIR_FAQS = [
   {
-    question: "How many products are in the LitBuy spreadsheet catalog?",
-    answer: `LitBuy Finds indexes ${PUBLIC_CATALOG_COUNT} curated finds with daily syncs. The underlying spreadsheet universe is larger, but we filter broken images and missing prices before publishing.`,
+    question: "Where is the main LitBuy Spreadsheet?",
+    answer:
+      "The canonical LitBuy Spreadsheet database is /litbuy-spreadsheet. Agent spreadsheet pages here are directories for agent-specific sheet searches (USFans, GTBuy, OopBuy, and more).",
   },
   {
-    question: "How often is the spreadsheet updated?",
+    question: "How often do agent spreadsheet views update?",
     answer:
-      "The catalog syncs daily. New finds appear in Latest Finds and collection pages after each import — check the homepage timestamp for the last sync.",
+      "The shared catalog syncs daily. New finds appear in Latest Finds and collection pages after each import — check the homepage timestamp for the last sync.",
   },
   {
-    question: "Can I use Kakobuy or MuleBuy with spreadsheet finds?",
+    question: "Can I use Kakobuy or MuleBuy with these finds?",
     answer:
-      "Yes. Set your preferred agent in the header or open each product through the agent button you already use. Spreadsheet links and LitBuy Finds product pages support the same marketplace URLs.",
+      "Yes. Set your preferred agent in the header or open each product through the agent button you already use. Product pages support the same marketplace URLs across agents.",
   },
 ] as const;
 
@@ -1207,11 +1208,11 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
     type: "spreadsheet",
     title: "Rep Agent Spreadsheets | USFans, GTBuy, OopBuy & More",
     description:
-      "Rep agent spreadsheets for USFans, GTBuy, OopBuy, BoonBuy, HipoBuy, Kakobuy, LitBuy, and more — searchable finds with QC photos and agent checkout.",
+      "Rep agent spreadsheets for USFans, GTBuy, OopBuy, BoonBuy, HipoBuy, Kakobuy, and more — agent-specific sheet views with QC photos and checkout. For LitBuy Spreadsheet, open the main hub.",
     h1: "Rep agent spreadsheets",
     intro:
-      "Rep agent spreadsheets list thousands of Weidian and Taobao products with prices and QC notes. LitBuy Finds turns those spreadsheet rows into searchable pages — use this hub to jump between agent-specific spreadsheet views.",
-    badge: "Spreadsheets",
+      "Rep agent spreadsheets help shoppers who searched for a specific agent’s sheet. Use this directory to jump between USFans, GTBuy, OopBuy, BoonBuy, HipoBuy, and Kakobuy spreadsheet views. For the primary LitBuy Spreadsheet database, open the LitBuy Spreadsheet hub.",
+    badge: "Agent sheets",
     keywords: [
       "rep agent spreadsheets",
       "agent spreadsheet",
@@ -1221,8 +1222,6 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
       "boonbuy spreadsheet",
       "hipobuy spreadsheet",
       "kakobuy spreadsheet",
-      "litbuy spreadsheet",
-      "rep spreadsheet",
     ],
     updateFrequency: "weekly",
     filter: { freshness: "editorsPicks" },
@@ -1233,20 +1232,21 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
       {
         heading: "Agent spreadsheet guides",
         paragraphs: [
-          "Each agent spreadsheet page targets shoppers who searched for that agent’s sheet — same catalog, agent-specific checkout context, QC notes, and community links.",
+          "Each agent spreadsheet page targets shoppers who searched for that agent’s sheet — same catalog, agent-specific checkout context, QC notes, and community links. They link up to the LitBuy Spreadsheet hub for LitBuy-branded spreadsheet intent.",
         ],
         links: [
+          { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
           { href: "/usfans-spreadsheet", label: "USFans spreadsheet" },
           { href: "/gtbuy-spreadsheet", label: "GTBuy spreadsheet" },
           { href: "/oopbuy-spreadsheet", label: "OopBuy spreadsheet" },
           { href: "/boonbuy-spreadsheet", label: "BoonBuy spreadsheet" },
           { href: "/hipobuy-spreadsheet", label: "HipoBuy spreadsheet" },
           { href: "/kakobuy-spreadsheet", label: "Kakobuy spreadsheet" },
-          { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
         ],
       },
     ],
     relatedLinks: [
+      { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
       ...SPREADSHEETS,
       { href: "/best-rep-spreadsheets", label: "Best rep spreadsheets" },
       { href: "/sneaker-finds", label: "Sneaker finds" },
@@ -1255,7 +1255,7 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
       { href: "/litbuy-discord", label: "LitBuy Discord" },
       ...AGENTS.slice(0, 4),
     ],
-    faqs: [...SPREADSHEET_FAQS],
+    faqs: [...AGENT_SPREADSHEET_DIR_FAQS],
     productSectionTitle: "Spreadsheet picks",
   },
 
@@ -1264,30 +1264,31 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
     type: "spreadsheet",
     title: "Best Rep Spreadsheets 2026 | Updated Finds & QC",
     description:
-      "Best rep spreadsheets for 2026 — LitBuy, Kakobuy, MuleBuy, and community sheets with QC photos, prices, and agent links updated daily.",
+      "Best rep spreadsheets for 2026 — community and agent sheet alternatives with QC photos, prices, and buy links. LitBuy Spreadsheet remains the primary LitBuy sheet database.",
     h1: "Best rep spreadsheets",
     intro:
-      "The best rep spreadsheets combine fresh finds, QC references, and working agent links. LitBuy Finds is the searchable front-end for the LitBuy spreadsheet universe — with daily syncs and mobile-friendly product pages.",
+      "The best rep spreadsheets combine fresh finds, QC references, and working agent links. This page compares that landscape — for the primary LitBuy Spreadsheet product database, open the LitBuy Spreadsheet hub.",
     badge: "Spreadsheets",
-    keywords: ["best rep spreadsheets", "updated finds spreadsheet", "litbuy finds spreadsheet"],
+    keywords: ["best rep spreadsheets", "updated finds spreadsheet", "community rep sheets"],
     updateFrequency: "weekly",
     getProducts: TOP_LISTS["best-qc-approved-finds"].getProducts,
     sections: [
       ...spreadsheetSections("LitBuy and supported agents"),
       {
-        heading: "Spreadsheet vs LitBuy Finds",
+        heading: "Best sheets vs LitBuy Spreadsheet",
         paragraphs: [
-          "Keep your spreadsheet for seller notes and batch comparisons. Use LitBuy Finds when you need search, filters, shareable product URLs, and QC badges without downloading a new file every week.",
+          "Keep community sheets for seller notes and batch comparisons. Use the LitBuy Spreadsheet hub when you need search, filters, shareable product URLs, and QC badges without downloading a new file every week.",
         ],
         links: [
+          { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
           { href: "/collections/litbuy-spreadsheet-alternative", label: "Spreadsheet alternative" },
           { href: "/litbuy-finds", label: "LitBuy finds catalog" },
         ],
       },
     ],
     relatedLinks: [
+      { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
       { href: "/finds", label: "Finds hub" },
-      { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
       { href: "/latest-finds", label: "Latest finds" },
       { href: "/sneaker-finds", label: "Sneaker finds" },
       { href: "/clothing-finds", label: "Clothing finds" },
@@ -1297,11 +1298,11 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
       { href: "/litbuy-discord", label: "LitBuy Discord" },
     ],
     faqs: [
-      ...SPREADSHEET_FAQS,
+      ...AGENT_SPREADSHEET_DIR_FAQS,
       {
         question: "Where can I find new spreadsheet drops?",
         answer:
-          "Join the LitBuy Discord and Telegram communities for daily find alerts — or browse Latest Finds after each catalog sync.",
+          "Join the LitBuy Discord and Telegram communities for daily find alerts — or browse Latest Finds after each catalog sync. For the main LitBuy Spreadsheet database, open /litbuy-spreadsheet.",
       },
     ],
     productSectionTitle: "Top spreadsheet finds",
@@ -1311,12 +1312,12 @@ export const SEO_EXPANSION_PAGES: Record<string, SeoLandingPageEntry> = {
     slug: "latest-finds",
     type: "freshness",
     freshnessDisplay: "latestFinds",
-    title: "Latest LitBuy Finds | 2026 Spreadsheet Products & QC Photos",
+    title: "Latest LitBuy Finds | New Products & QC Photos",
     description:
-      "Latest LitBuy finds updated weekly — new rep sneakers, clothing, streetwear, and QC-linked products from the LitBuy spreadsheet catalog with verified agent buy buttons.",
+      "Latest LitBuy finds updated weekly — new rep sneakers, clothing, streetwear, and QC-linked products from the catalog with verified agent buy buttons.",
     h1: "Latest LitBuy finds",
     intro:
-      `Latest LitBuy finds are the newest rows in the LitBuy Finds product database — ${FINDS_STATS.totalFindsLabel}+ LitBuy finds (${FINDS_STATS.qcFindsLabel} with QC photos) updated from the LitBuy Spreadsheet. Browse new LitBuy rep finds with photos, prices, QC references, and trusted agent links after each sync.`,
+      `Latest LitBuy finds are the newest rows in the LitBuy Finds product database — ${FINDS_STATS.totalFindsLabel}+ LitBuy finds (${FINDS_STATS.qcFindsLabel} with QC photos) after each catalog sync. For spreadsheet-style browsing of the full database, open the LitBuy Spreadsheet hub.`,
     badge: "Discovery hub",
     keywords: [
       "litbuy finds",

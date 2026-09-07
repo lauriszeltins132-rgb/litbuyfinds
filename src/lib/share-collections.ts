@@ -217,17 +217,18 @@ export const SHARE_COLLECTIONS: Record<string, SeoListConfig> = {
     ],
   }),
   "litbuy-spreadsheet-alternative": wrap("litbuy-spreadsheet-alternative", {
-    title: "Best LitBuy Spreadsheet Alternative",
+    title: "Searchable LitBuy Spreadsheet Alternative",
     metaDescription:
-      "LitBuy Finds is a searchable alternative to raw LitBuy spreadsheets — browse 10,000+ finds with photos, filters, and QC links.",
+      "A searchable alternative to raw spreadsheet rows — browse LitBuy Finds with photos, filters, and QC links. Pair with the LitBuy Spreadsheet hub for full catalog context.",
     badge: "Collection",
-    h1: "LitBuy spreadsheet alternative",
+    h1: "Searchable spreadsheet alternative",
     intro:
-      "Skip endless rows. Search by brand, open product pages with QC badges, and share collection links instead of fragile sheet URLs.",
+      "Skip endless rows. Search by brand, open product pages with QC badges, and share collection links instead of fragile sheet URLs. For the primary LitBuy Spreadsheet database, open the LitBuy Spreadsheet hub.",
     getProducts: () => getEditorsPicks(72),
     relatedLinks: [
-      { href: "/guides/litbuy-spreadsheet", label: "Spreadsheet guide" },
-      { href: "/guides/litbuy-finds", label: "LitBuy finds guide" },
+      { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
+      { href: "/litbuy-finds", label: "LitBuy finds catalog" },
+      { href: "/latest-finds", label: "Latest finds" },
     ],
     clusterLinks: [
       { href: "/collections/best-litbuy-finds-2026", label: "Best finds 2026" },
