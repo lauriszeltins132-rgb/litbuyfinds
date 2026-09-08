@@ -1,6 +1,5 @@
 import { getAgentReviewPage, AGENT_REVIEW_SLUGS } from "./agent-review-pages";
 import { getDatasetSyncedIso } from "./catalog-meta";
-import { SOCIAL_LINKS } from "./constants";
 import {
   LITBUY_AUTHORITY_LINKS,
   LITBUY_HUB_FOOTER_LINKS,
@@ -658,108 +657,120 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
   "litbuy-discord": {
     slug: "litbuy-discord",
     path: "/litbuy-discord",
-    title: "LitBuy Discord Server | Join the LitBuy Finds Community",
+    title: "LitBuy Discord — Finds, QC, Spreadsheets & Community",
     metaDescription:
-      "LitBuy Discord — join the LitBuy Finds Discord server for new finds, QC photos, spreadsheets, shipping tips, and community updates from buyers.",
-    badge: "Community",
-    h1: "LitBuy Discord Server",
+      "Join the LitBuy Discord community for product finds, QC photos, spreadsheet updates, fit checks, hauls and agent discussions.",
+    badge: "LitBuy Discord",
+    h1: "Join the LitBuy Discord Community",
     directAnswer:
-      "LitBuy Discord is the community hub for LitBuy Finds users. The LitBuy Finds Discord server connects buyers who share new product finds, QC photos, spreadsheets, shipping tips, and coupon updates every day. Join the LitBuy Discord server to get real-time alerts, batch comparisons, and haul advice alongside the searchable LitBuy Finds catalog. Whether you are hunting sneakers, clothing, or designer picks, the LitBuy Discord community helps you spot spreadsheet drops and QC threads between daily catalog syncs. Membership is free — use LitBuy agent links from product pages when you are ready to purchase.",
+      "The LitBuy Discord is the LitBuyFinds community for product finds, QC photos, spreadsheet updates, fit checks, haul sharing, and agent discussion. Join free at discord.gg/litbuys, then use LitBuy Finds when you want a searchable catalog page instead of scrolling chat.",
     summary:
-      "The LitBuy Discord is a free buyer community for daily find alerts, QC checks, spreadsheet links, haul advice, and coupon updates — alongside LitBuy Finds catalog discovery.",
+      "A growing LitBuy community for finds, QC, spreadsheet updates, fit checks, and hauls — paired with the LitBuy Finds product database.",
     breadcrumbItems: [
       { label: "Homepage", href: "/" },
       { label: "LitBuy Discord" },
     ],
     primaryCta: {
-      href: SOCIAL_LINKS.discord,
-      label: "Join LitBuy Discord",
+      href: "https://discord.gg/litbuys",
+      label: "Join Discord",
     },
     sections: [
       {
-        heading: "What is the LitBuy Discord?",
+        heading: "What’s inside the community",
         paragraphs: [
-          "The LitBuy Finds Discord is a community server where buyers share new clothing finds, QC photo threads, spreadsheet drops, and shipping advice. It complements the LitBuy Finds website — discovery happens here on the catalog; discussion and alerts happen on Discord.",
-          "The server is independent from LitBuy checkout. Use Discord for community tips; use LitBuy agent links from product pages when you are ready to purchase.",
+          "Members share product finds, QC photos, spreadsheet updates, rep finds, fit checks, haul photos, agent discussion, and new drop alerts. Use Discord for live conversation; use LitBuy Finds when you need a stable product page with photos, price, and buy links.",
         ],
         links: [
-          { href: "/discord-litbuy", label: "Quick join page" },
-          { href: "/litbuy-finds", label: "LitBuy finds catalog" },
+          { href: "https://discord.gg/litbuys", label: "Join Discord" },
+          { href: "/latest-finds", label: "Latest finds" },
         ],
       },
       {
-        heading: "Why join the Discord community?",
+        heading: "Why join",
         paragraphs: [
-          "Spreadsheets move fast — new rows, price changes, and batch updates appear daily. Discord gives you real-time alerts, QC opinions from experienced buyers, and shipping line recommendations for your country.",
-          "If you are new to agents, Discord is often the fastest place to ask whether a batch is worth shipping before you pay international freight.",
+          "Discover new finds as they circulate, check QC opinions before shipping, share outfits and fit checks, discuss shopping agents, and stay updated when spreadsheet-style additions land in the catalog.",
+          "The LitBuyFinds Discord community complements the website — chat for speed, catalog pages for search and sharing.",
         ],
         links: [
-          { href: "/guides/beginner-guide-to-litbuy", label: "Beginner guide" },
-          { href: "/how-to-use-litbuy", label: "How to use LitBuy" },
-        ],
-      },
-      {
-        heading: "What you can find inside",
-        paragraphs: [
-          "New finds posted from community spreadsheets and catalog syncs. QC checks and batch comparisons for sneakers, jackets, and bags. Agent discussions covering LitBuy, Kakobuy, MuleBuy, and other supported agents. Shipping advice for EMS, DHL, and economy lines. Coupon and promo updates when registration offers change.",
-        ],
-        links: [
-          { href: "/finds", label: "Finds hub" },
-          { href: "/sneaker-finds", label: "Sneaker finds" },
-          { href: "/clothing-finds", label: "Clothing finds" },
-          { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
-          { href: "/litbuy-coupons", label: "LitBuy coupons" },
-          { href: "/telegram-litbuy", label: "LitBuy Telegram" },
-        ],
-      },
-      {
-        heading: "Discord vs LitBuy Finds website",
-        paragraphs: [
-          "LitBuy Finds is the searchable catalog with product pages, filters, and SEO guides. Discord is the live community layer — best for questions, haul reviews, and same-day find alerts. Many buyers use both daily.",
-        ],
-        links: [
+          { href: "/litbuy-finds", label: "LitBuy finds" },
           { href: "/", label: "Homepage" },
-          { href: "/litbuy-qc-photos", label: "QC photos guide" },
+        ],
+      },
+      {
+        heading: "Community areas",
+        paragraphs: [
+          "Expect spaces for finds, QC discussion, fit checks, haul sharing, general chat, and agent conversation. Channel names can change over time — join the server to see the live layout.",
+        ],
+      },
+      {
+        heading: "LitBuy spreadsheet connection",
+        paragraphs: [
+          "Discord is great for fast spreadsheet drops and QC chat. The LitBuy Spreadsheet hub on LitBuy Finds is the searchable spreadsheet-style product database — browse categories, brands, prices, and QC-linked listings without digging through chat history.",
+        ],
+        links: [
+          { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
+          { href: "/latest-finds", label: "Latest spreadsheet finds" },
+        ],
+      },
+      {
+        heading: "LitBuy finds connection",
+        paragraphs: [
+          "When you spot something in Discord, open LitBuy Finds to search the same product universe with filters and shareable URLs. Start from the LitBuy finds catalog or Latest finds after each sync.",
+        ],
+        links: [
+          { href: "/litbuy-finds", label: "LitBuy finds" },
+          { href: "/latest-finds", label: "Latest finds" },
+        ],
+      },
+      {
+        heading: "Join LitBuy Discord",
+        paragraphs: [
+          "Ready to hang out with the LitBuyFinds community? Use the invite below — membership is free.",
+        ],
+        links: [
+          { href: "https://discord.gg/litbuys", label: "Join LitBuy Discord" },
+          { href: "/", label: "Back to LitBuy Finds" },
         ],
       },
     ],
     faqs: [
       {
-        question: "What is the LitBuy Discord server?",
+        question: "What is the LitBuy Discord?",
         answer:
-          "The LitBuy Discord server is a community for LitBuy Finds users to share products, QC photos, spreadsheets, and updates.",
+          "The LitBuy Discord is the LitBuyFinds community server for product finds, QC photos, spreadsheet updates, fit checks, hauls, and agent discussion.",
       },
       {
-        question: "Where can I join LitBuy Discord?",
+        question: "Is the LitBuy Discord free to join?",
         answer:
-          "Users can join the LitBuy Discord community through the official LitBuy Finds Discord page.",
+          "Yes. Joining is free. You only pay when you purchase through a shopping agent.",
       },
       {
-        question: "Is the LitBuy Discord free?",
+        question: "Where is the LitBuyFinds Discord?",
         answer:
-          "Yes. Joining is free. You only pay when purchasing through a shopping agent like LitBuy.",
+          "This page is the LitBuyFinds Discord landing. Join with the invite https://discord.gg/litbuys.",
       },
       {
-        question: "Where can I find LitBuy spreadsheets?",
+        question: "Does the Discord include QC photos?",
         answer:
-          "Browse the LitBuy spreadsheet guide on LitBuy Finds or check the LitBuy Discord for fresh spreadsheet drops shared by the community.",
+          "Members often share QC photos and batch opinions in QC-related channels. For catalog QC links on product pages, browse LitBuy Finds as well.",
       },
       {
-        question: "Are new finds posted daily?",
+        question: "Does the Discord share spreadsheet finds?",
         answer:
-          "Yes. The catalog syncs daily and community members post new rows, QC threads, and deal alerts throughout the day on the LitBuy Discord server.",
+          "Yes — spreadsheet-style finds and updates are a common topic. For searchable browsing of the spreadsheet database, open the LitBuy Spreadsheet hub on LitBuy Finds.",
+      },
+      {
+        question: "What is the LitBuy Discord invite?",
+        answer:
+          "The invite is https://discord.gg/litbuys.",
       },
     ],
     relatedLinks: [
       { href: "/", label: "Homepage" },
-      { href: "/finds", label: "Finds hub" },
-      { href: "/latest-finds", label: "Latest finds" },
       { href: "/litbuy-finds", label: "LitBuy finds" },
-      { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
-      { href: "/litbuy-coupons", label: "LitBuy coupons" },
-      { href: "/telegram-litbuy", label: "LitBuy Telegram" },
-      { href: "/sneaker-finds", label: "Sneaker finds" },
-      { href: "/best-rep-finds", label: "Rep finds" },
+      { href: "/latest-finds", label: "Latest finds" },
+      { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
+      { href: "https://discord.gg/litbuys", label: "Join Discord" },
     ],
     publishedTime: PUBLISHED,
     modifiedTime: getDatasetSyncedIso(),
