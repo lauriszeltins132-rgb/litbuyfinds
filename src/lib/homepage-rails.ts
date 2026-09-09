@@ -5,6 +5,7 @@ import {
   getDealProducts,
   getAllProducts,
   getLatestProducts,
+  getProductsByCategorySlug,
   getTrendingProducts,
 } from "./products";
 import { passesCardDisplayGate, resolveProductDisplayImage } from "./product-image-presentation";
@@ -355,6 +356,43 @@ function pickRisingWeek(
   );
 }
 
+/** Category discovery rails — existing catalog products with displayable cards. */
+function pickCategoryRail(
+  categorySlug: string,
+  limit: number,
+  used: Set<string>,
+  usedListingKeys: Set<string>,
+  seed: number,
+  salt: string
+): Product[] {
+  const pool = sortByProductQuality(
+    getProductsByCategorySlug(categorySlug).filter(
+      (product) =>
+        isHomepageFashionProduct(product) &&
+        hasExactPrice(product.price) &&
+        passesCardDisplayGate(product) &&
+        !used.has(product.id) &&
+        !usedListingKeys.has(getListingDedupeKey(product))
+    )
+  );
+
+  // Light weekly rotation across a top quality window — avoid ultra-strict
+  // homepage curation starving category discovery rails.
+  const window = pool.slice(0, Math.max(limit * 6, 48));
+  const rotated = [...window].sort((a, b) => {
+    const aKey = (Number(a.id) + seed) % 997;
+    const bKey = (Number(b.id) + seed + salt.length) % 997;
+    return aKey - bKey;
+  });
+
+  return dedupeListingRail(rotated).slice(0, limit);
+}
+
+/** Independent latest grid — true newest rows for marketplace discovery. */
+function pickLatestLitBuyFindsGrid(limit: number): Product[] {
+  return pickLatestFinds(limit, new Set(), new Set());
+}
+
 function pickTrendingBrand(
   used: Set<string>,
   usedListingKeys: Set<string>,
@@ -393,6 +431,12 @@ export type HomepageRails = {
   editorsPicks: Product[];
   bestUnder20: Product[];
   popularWeek: Product[];
+  /** Marketplace grid after Weekly Finds (~24 newest finds). */
+  latestLitBuyFinds: Product[];
+  trendingSneakers: Product[];
+  jacketsOuterwear: Product[];
+  hoodiesPants: Product[];
+  accessories: Product[];
   recentlyAdded: Product[];
   topQcFinds: Product[];
   popularMonth: Product[];
@@ -442,6 +486,46 @@ export function getHomepageRails(limit = 12): HomepageRails {
     pickPopularWeek(limit, used, usedListingKeys, week),
     used,
     usedListingKeys
+  );
+
+  const latestLitBuyFinds = pickLatestLitBuyFindsGrid(24);
+
+  // Category rails use their own dedupe sets so earlier homepage rails
+  // do not starve sneakers / jackets / hoodies / accessories discovery.
+  const trendingSneakers = pickCategoryRail(
+    "shoes",
+    limit,
+    new Set(),
+    new Set(),
+    week,
+    "trending-sneakers"
+  );
+
+  const jacketsOuterwear = pickCategoryRail(
+    "coats-and-jackets",
+    limit,
+    new Set(),
+    new Set(),
+    week,
+    "jackets-outerwear"
+  );
+
+  const hoodiesPants = pickCategoryRail(
+    "hoodies-and-pants",
+    limit,
+    new Set(),
+    new Set(),
+    week,
+    "hoodies-pants"
+  );
+
+  const accessories = pickCategoryRail(
+    "accessories",
+    limit,
+    new Set(),
+    new Set(),
+    week,
+    "accessories"
   );
 
   const recentlyAdded = registerRailProducts(
@@ -506,6 +590,11 @@ export function getHomepageRails(limit = 12): HomepageRails {
     editorsPicks,
     bestUnder20,
     popularWeek,
+    latestLitBuyFinds,
+    trendingSneakers,
+    jacketsOuterwear,
+    hoodiesPants,
+    accessories,
     recentlyAdded,
     topQcFinds,
     popularMonth,
