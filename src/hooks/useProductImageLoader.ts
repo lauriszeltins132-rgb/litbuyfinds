@@ -32,7 +32,9 @@ type UseProductImageLoaderArgs = {
 };
 
 /** Start fetching when the image is this close to the viewport. */
-const VIEWPORT_ROOT_MARGIN = "280px 0px";
+const VIEWPORT_ROOT_MARGIN = "600px 0px";
+/** Transient network/decode failures get a couple of soft retries before fallbacks. */
+const MAX_SOFT_RETRIES = 2;
 
 function buildCandidates(
   src: string,
@@ -89,7 +91,7 @@ export function useProductImageLoader({
   const [nearViewport, setNearViewport] = useState(priority);
   const imgRef = useRef<HTMLImageElement>(null);
   const loggedRef = useRef(false);
-  const retriedRef = useRef(false);
+  const softRetryCountRef = useRef(0);
 
   const displaySrc = candidates[srcIndex] ?? "";
   const allowFetch = priority || nearViewport || cacheBoost;
@@ -104,7 +106,7 @@ export function useProductImageLoader({
     setCacheBoost(cached);
     setNearViewport(priority || cached);
     loggedRef.current = false;
-    retriedRef.current = false;
+    softRetryCountRef.current = 0;
   }, [candidateKey, candidates, priority]);
 
   useEffect(() => {
@@ -144,8 +146,8 @@ export function useProductImageLoader({
   const softRetryOrAdvance = useCallback(() => {
     abortImageElementLoad(imgRef.current);
 
-    if (!retriedRef.current) {
-      retriedRef.current = true;
+    if (softRetryCountRef.current < MAX_SOFT_RETRIES) {
+      softRetryCountRef.current += 1;
       setLoaded(false);
       setRetryToken((token) => token + 1);
       return;
@@ -156,7 +158,7 @@ export function useProductImageLoader({
       if (nextIndex < candidates.length) {
         if (displaySrc) markImageUrlFailed(displaySrc);
         const nextSrc = candidates[nextIndex] ?? "";
-        retriedRef.current = false;
+        softRetryCountRef.current = 0;
         setRetryToken(0);
         setLoaded(isImageUrlCached(nextSrc));
         return nextIndex;

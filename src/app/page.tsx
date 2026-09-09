@@ -6,6 +6,7 @@ import DiscoveryHero from "@/components/DiscoveryHero";
 import DiscoveryRail from "@/components/DiscoveryRail";
 import HomepageDiscoveryTools from "@/components/HomepageDiscoveryTools";
 import HomepageFindsDatabaseHub from "@/components/HomepageFindsDatabaseHub";
+import HomepageLatestFindsGrid from "@/components/HomepageLatestFindsGrid";
 import RevealOnScroll from "@/components/RevealOnScroll";
 import HomepageAuthorityHub from "@/components/HomepageAuthorityHub";
 import HomepageBrands from "@/components/HomepageBrands";
@@ -108,6 +109,54 @@ export default async function HomePage() {
           freshness="updated-weekly"
         />
       </RevealOnScroll>
+
+      <RevealOnScroll>
+        <HomepageLatestFindsGrid products={rails.latestLitBuyFinds} />
+      </RevealOnScroll>
+
+      {rails.trendingSneakers.length > 0 ? (
+        <RevealOnScroll>
+          <DiscoveryRail
+            title="Trending Sneakers"
+            subtitle="Shoes from the LitBuy Finds catalog"
+            href="/categories/shoes"
+            products={rails.trendingSneakers}
+          />
+        </RevealOnScroll>
+      ) : null}
+
+      {rails.jacketsOuterwear.length > 0 ? (
+        <RevealOnScroll>
+          <DiscoveryRail
+            title="Jackets & Outerwear"
+            subtitle="Coats and jackets ready to browse"
+            href="/categories/coats-and-jackets"
+            products={rails.jacketsOuterwear}
+          />
+        </RevealOnScroll>
+      ) : null}
+
+      {rails.hoodiesPants.length > 0 ? (
+        <RevealOnScroll>
+          <DiscoveryRail
+            title="Hoodies & Pants"
+            subtitle="Everyday layers from the catalog"
+            href="/categories/hoodies-and-pants"
+            products={rails.hoodiesPants}
+          />
+        </RevealOnScroll>
+      ) : null}
+
+      {rails.accessories.length > 0 ? (
+        <RevealOnScroll>
+          <DiscoveryRail
+            title="Accessories"
+            subtitle="Bags, belts, and finishing pieces"
+            href="/categories/accessories"
+            products={rails.accessories}
+          />
+        </RevealOnScroll>
+      ) : null}
 
       <HomepageCategories categories={categories} />
       <HomepageCollections />
