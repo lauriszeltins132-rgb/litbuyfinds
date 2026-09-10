@@ -159,17 +159,6 @@ export default async function HomePage() {
       ) : null}
 
       <HomepageCategories categories={categories} />
-      <HomepageCollections />
-      <HomepageBrands hideSpotlight />
-
-      <RecentlyViewedRail />
-
-      <HomepageConversion />
-      <HomepageLitBuyResources />
-      <HomepageAuthorityHub />
-      <HomepageInternalLinks />
-      <HomepageSeoContent />
-      <HomepageFaq />
 
       <section className="px-4 pb-2 sm:px-6">
         <div className="mx-auto max-w-7xl text-center">
@@ -197,6 +186,17 @@ export default async function HomePage() {
       >
         <HomepageCatalogSection />
       </Suspense>
+
+      <HomepageCollections />
+      <HomepageBrands hideSpotlight />
+      <RecentlyViewedRail />
+
+      <HomepageConversion />
+      <HomepageLitBuyResources />
+      <HomepageAuthorityHub />
+      <HomepageInternalLinks />
+      <HomepageSeoContent />
+      <HomepageFaq />
     </>
   );
 }
