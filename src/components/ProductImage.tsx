@@ -3,7 +3,7 @@
 import { useCallback } from "react";
 import { getImageFillClass } from "@/lib/image-quality";
 import { validateImageUrl } from "@/lib/image-url";
-import { useProductImageLoader } from "@/hooks/useProductImageLoader";
+import { useProductImageLoader, EMPTY_IMAGE_FALLBACKS } from "@/hooks/useProductImageLoader";
 import ImageUnavailablePlaceholder from "./ImageUnavailablePlaceholder";
 
 type ProductImageVariant = "card" | "featured" | "hero";
@@ -38,7 +38,7 @@ export default function ProductImage({
   variant = "card",
   productHref,
   preferredSrc,
-  fallbacks = [],
+  fallbacks = EMPTY_IMAGE_FALLBACKS,
   fillClass,
 }: ProductImageProps) {
   const validation = validateImageUrl(src);

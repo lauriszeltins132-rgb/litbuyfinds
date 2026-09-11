@@ -9,6 +9,7 @@ import { formatProductPrice, getPriceStatus } from "@/lib/pricing";
 import { getCardDisplayProps } from "@/lib/card-props";
 import { getProductSource } from "@/lib/affiliate-source";
 import { getProductHref } from "@/lib/slugs";
+import { EMPTY_IMAGE_FALLBACKS } from "@/hooks/useProductImageLoader";
 import BrandMark from "./BrandMark";
 import { usePreferences } from "@/context/PreferencesContext";
 import { useWishlist } from "@/context/WishlistContext";
@@ -26,6 +27,29 @@ type ProductCardProps = {
   showTrendingScore?: boolean;
   priority?: boolean;
 };
+
+/**
+ * Isolated preferences consumer so agent changes do not re-render the full
+ * ProductCard (and remount / reset product images).
+ */
+function ProductCardPrice({
+  price,
+  compact,
+}: {
+  price: Product["price"];
+  compact: boolean;
+}) {
+  const { currency } = usePreferences();
+  return (
+    <p
+      className={`product-card-price font-black ${
+        getPriceStatus(price) === "exact" ? "text-accent" : "text-muted text-sm"
+      } ${compact ? "text-sm" : "text-base"}`}
+    >
+      {formatProductPrice(price, currency)}
+    </p>
+  );
+}
 
 async function shareProduct(product: Product, title: string) {
   const url = `${window.location.origin}${getProductHref(product)}`;
@@ -47,7 +71,6 @@ function ProductCard({
   showTrendingScore = false,
   priority = false,
 }: ProductCardProps) {
-  const { currency } = usePreferences();
   const { isInWishlist, toggleWishlist } = useWishlist();
   const [copied, setCopied] = useState(false);
   const saved = isInWishlist(product.id);
@@ -94,7 +117,7 @@ function ProductCard({
           <ProductCardImage
             src={product.image}
             preferredSrc={cardProps?.displaySrc}
-            fallbacks={cardProps?.fallbacks}
+            fallbacks={cardProps?.fallbacks ?? EMPTY_IMAGE_FALLBACKS}
             fillClass={cardProps?.fillClass}
             alt={imageAlt}
             productHref={productHref}
@@ -135,15 +158,7 @@ function ProductCard({
             ) : null}
           </div>
 
-          <p
-            className={`product-card-price font-black ${
-              getPriceStatus(product.price) === "exact"
-                ? "text-accent"
-                : "text-muted text-sm"
-            } ${compact ? "text-sm" : "text-base"}`}
-          >
-            {formatProductPrice(product.price, currency)}
-          </p>
+          <ProductCardPrice price={product.price} compact={compact} />
 
           <ProductSaveSignal
             product={product}

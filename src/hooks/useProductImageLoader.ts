@@ -31,10 +31,18 @@ type UseProductImageLoaderArgs = {
   analyticsContext: string;
 };
 
+/** Stable empty list — never use a fresh `[]` default (it remounts loaders). */
+export const EMPTY_IMAGE_FALLBACKS: string[] = [];
+
 /** Start fetching when the image is this close to the viewport. */
 const VIEWPORT_ROOT_MARGIN = "600px 0px";
-/** Transient network/decode failures get a couple of soft retries before fallbacks. */
+/**
+ * Transient network/timeout failures: original attempt + up to 2 soft retries
+ * (3 total) before advancing candidates / showing the existing fallback.
+ */
 const MAX_SOFT_RETRIES = 2;
+/** Short backoff between soft retries to avoid hammering remote hosts. */
+const SOFT_RETRY_DELAY_MS = 350;
 
 function buildCandidates(
   src: string,
@@ -59,24 +67,30 @@ function buildCandidates(
 
 /**
  * Shared product-image loader: session cache, near-viewport fetch gating,
- * one soft retry on transient failure/timeout, hung-request abort, and
- * hydration-safe eager/lazy decisions.
+ * soft retries with short delay, hung-request abort, and hydration-safe
+ * eager/lazy decisions.
  * Does not alter image URLs, dimensions, or visual presentation.
  */
 export function useProductImageLoader({
   src,
   preferredSrc,
-  fallbacks = [],
+  fallbacks = EMPTY_IMAGE_FALLBACKS,
   priority = false,
   analyticsContext,
 }: UseProductImageLoaderArgs) {
   const validation = useMemo(() => validateImageUrl(src), [src]);
 
+  // Depend on fallback *contents*, not array identity (avoids remount on
+  // parent re-renders that pass a fresh empty array).
+  const fallbackKey = fallbacks.join("|");
   const candidates = useMemo(
     () => buildCandidates(src, preferredSrc, fallbacks),
-    [src, preferredSrc, fallbacks]
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- fallbackKey tracks contents
+    [src, preferredSrc, fallbackKey]
   );
   const candidateKey = candidates.join("|");
+  const candidatesRef = useRef(candidates);
+  candidatesRef.current = candidates;
 
   const [srcIndex, setSrcIndex] = useState(0);
   const [retryToken, setRetryToken] = useState(0);
@@ -92,22 +106,33 @@ export function useProductImageLoader({
   const imgRef = useRef<HTMLImageElement>(null);
   const loggedRef = useRef(false);
   const softRetryCountRef = useRef(0);
+  const softRetryTimerRef = useRef<number | null>(null);
 
   const displaySrc = candidates[srcIndex] ?? "";
   const allowFetch = priority || nearViewport || cacheBoost;
 
+  const clearSoftRetryTimer = useCallback(() => {
+    if (softRetryTimerRef.current != null) {
+      window.clearTimeout(softRetryTimerRef.current);
+      softRetryTimerRef.current = null;
+    }
+  }, []);
+
   useEffect(() => {
-    const firstSrc = candidates[0] ?? "";
+    const firstSrc = candidatesRef.current[0] ?? "";
     const cached = isImageUrlCached(firstSrc);
+    clearSoftRetryTimer();
     setSrcIndex(0);
     setRetryToken(0);
-    setFailed(candidates.length === 0);
+    setFailed(candidatesRef.current.length === 0);
     setLoaded(cached);
     setCacheBoost(cached);
     setNearViewport(priority || cached);
     loggedRef.current = false;
     softRetryCountRef.current = 0;
-  }, [candidateKey, candidates, priority]);
+  }, [candidateKey, priority, clearSoftRetryTimer]);
+
+  useEffect(() => () => clearSoftRetryTimer(), [clearSoftRetryTimer]);
 
   useEffect(() => {
     if (priority || cacheBoost || nearViewport) return;
@@ -134,6 +159,7 @@ export function useProductImageLoader({
   }, [cacheBoost, candidateKey, nearViewport, priority, retryToken, srcIndex]);
 
   const failExhausted = useCallback(() => {
+    clearSoftRetryTimer();
     if (displaySrc) markImageUrlFailed(displaySrc);
     setFailed(true);
     setLoaded(false);
@@ -141,32 +167,42 @@ export function useProductImageLoader({
       loggedRef.current = true;
       trackBrokenImage(validation.normalized || src, analyticsContext);
     }
-  }, [analyticsContext, displaySrc, src, validation.normalized]);
+  }, [
+    analyticsContext,
+    clearSoftRetryTimer,
+    displaySrc,
+    src,
+    validation.normalized,
+  ]);
 
   const softRetryOrAdvance = useCallback(() => {
     abortImageElementLoad(imgRef.current);
+    clearSoftRetryTimer();
 
     if (softRetryCountRef.current < MAX_SOFT_RETRIES) {
       softRetryCountRef.current += 1;
       setLoaded(false);
-      setRetryToken((token) => token + 1);
+      softRetryTimerRef.current = window.setTimeout(() => {
+        softRetryTimerRef.current = null;
+        setRetryToken((token) => token + 1);
+      }, SOFT_RETRY_DELAY_MS * softRetryCountRef.current);
       return;
     }
 
     setSrcIndex((currentIndex) => {
+      const list = candidatesRef.current;
       const nextIndex = currentIndex + 1;
-      if (nextIndex < candidates.length) {
-        if (displaySrc) markImageUrlFailed(displaySrc);
-        const nextSrc = candidates[nextIndex] ?? "";
+      if (nextIndex < list.length) {
+        // Do not session-blacklist on soft timeout — only failExhausted does.
         softRetryCountRef.current = 0;
         setRetryToken(0);
-        setLoaded(isImageUrlCached(nextSrc));
+        setLoaded(isImageUrlCached(list[nextIndex] ?? ""));
         return nextIndex;
       }
       failExhausted();
       return currentIndex;
     });
-  }, [candidates, displaySrc, failExhausted]);
+  }, [clearSoftRetryTimer, failExhausted]);
 
   const confirmLoaded = useCallback(
     (img: HTMLImageElement, url: string) => {
@@ -174,11 +210,12 @@ export function useProductImageLoader({
         softRetryOrAdvance();
         return;
       }
+      clearSoftRetryTimer();
       rememberLoadedImageUrl(url);
       setLoaded(true);
       setCacheBoost(true);
     },
-    [softRetryOrAdvance]
+    [clearSoftRetryTimer, softRetryOrAdvance]
   );
 
   useLayoutEffect(() => {
@@ -255,11 +292,14 @@ export function useProductImageLoader({
       : "low";
   const decoding: "sync" | "async" = priority ? "sync" : "async";
 
+  // Only treat as failed when we have no usable candidate — never while gated.
+  const hasCandidate = Boolean(displaySrc);
+
   return {
     imgRef,
     /** Empty until near viewport (unless priority/cached) — defers network. */
     displaySrc: allowFetch ? displaySrc : "",
-    failed: failed || !displaySrc,
+    failed: failed || !hasCandidate,
     loaded,
     imgKey: `${displaySrc}::${retryToken}::${allowFetch ? "on" : "off"}`,
     shouldLazyLoad,
