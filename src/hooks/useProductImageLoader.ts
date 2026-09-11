@@ -14,6 +14,7 @@ import {
   validateImageUrl,
 } from "@/lib/image-url";
 import { IMAGE_LOAD_TIMEOUT_MS } from "@/lib/image-load-timeout";
+import { acquireImageLoadSlot } from "@/lib/image-load-queue";
 import {
   abortImageElementLoad,
   filterFailedImageCandidates,
@@ -34,15 +35,20 @@ type UseProductImageLoaderArgs = {
 /** Stable empty list — never use a fresh `[]` default (it remounts loaders). */
 export const EMPTY_IMAGE_FALLBACKS: string[] = [];
 
-/** Start fetching when the image is this close to the viewport. */
-const VIEWPORT_ROOT_MARGIN = "600px 0px";
+/**
+ * Only start loading shortly before the card enters view.
+ * Tighter than before so far-below rows do not compete with the first row.
+ */
+const VIEWPORT_ROOT_MARGIN = "220px 0px";
+
 /**
  * Transient network/timeout failures: original attempt + up to 2 soft retries
  * (3 total) before advancing candidates / showing the existing fallback.
  */
 const MAX_SOFT_RETRIES = 2;
-/** Short backoff between soft retries to avoid hammering remote hosts. */
-const SOFT_RETRY_DELAY_MS = 350;
+
+/** Backoff between soft retries (ms). */
+const SOFT_RETRY_BACKOFF_MS = [700, 1600] as const;
 
 function buildCandidates(
   src: string,
@@ -66,10 +72,8 @@ function buildCandidates(
 }
 
 /**
- * Shared product-image loader: session cache, near-viewport fetch gating,
- * soft retries with short delay, hung-request abort, and hydration-safe
- * eager/lazy decisions.
- * Does not alter image URLs, dimensions, or visual presentation.
+ * Shared product-image loader: viewport gating, concurrency slots, session
+ * cache, soft retries with backoff. Does not alter image URLs or presentation.
  */
 export function useProductImageLoader({
   src,
@@ -80,8 +84,6 @@ export function useProductImageLoader({
 }: UseProductImageLoaderArgs) {
   const validation = useMemo(() => validateImageUrl(src), [src]);
 
-  // Depend on fallback *contents*, not array identity (avoids remount on
-  // parent re-renders that pass a fresh empty array).
   const fallbackKey = fallbacks.join("|");
   const candidates = useMemo(
     () => buildCandidates(src, preferredSrc, fallbacks),
@@ -96,20 +98,20 @@ export function useProductImageLoader({
   const [retryToken, setRetryToken] = useState(0);
   const [failed, setFailed] = useState(candidates.length === 0);
   const [loaded, setLoaded] = useState(false);
-  /** Client-only: avoid SSR/client mismatch for cache-driven loading attrs. */
   const [cacheBoost, setCacheBoost] = useState(false);
-  /**
-   * Non-priority images wait until near the viewport before attaching src.
-   * Priority / session-cached images fetch immediately.
-   */
   const [nearViewport, setNearViewport] = useState(priority);
+  /** Concurrency slot acquired — required before attaching network src. */
+  const [slotReady, setSlotReady] = useState(false);
+
   const imgRef = useRef<HTMLImageElement>(null);
   const loggedRef = useRef(false);
   const softRetryCountRef = useRef(0);
   const softRetryTimerRef = useRef<number | null>(null);
+  const releaseSlotRef = useRef<(() => void) | null>(null);
 
   const displaySrc = candidates[srcIndex] ?? "";
-  const allowFetch = priority || nearViewport || cacheBoost;
+  const nearReady = priority || nearViewport || cacheBoost;
+  const allowFetch = nearReady && (slotReady || cacheBoost);
 
   const clearSoftRetryTimer = useCallback(() => {
     if (softRetryTimerRef.current != null) {
@@ -118,10 +120,19 @@ export function useProductImageLoader({
     }
   }, []);
 
+  const releaseSlot = useCallback(() => {
+    if (releaseSlotRef.current) {
+      releaseSlotRef.current();
+      releaseSlotRef.current = null;
+    }
+    setSlotReady(false);
+  }, []);
+
   useEffect(() => {
     const firstSrc = candidatesRef.current[0] ?? "";
     const cached = isImageUrlCached(firstSrc);
     clearSoftRetryTimer();
+    releaseSlot();
     setSrcIndex(0);
     setRetryToken(0);
     setFailed(candidatesRef.current.length === 0);
@@ -130,9 +141,12 @@ export function useProductImageLoader({
     setNearViewport(priority || cached);
     loggedRef.current = false;
     softRetryCountRef.current = 0;
-  }, [candidateKey, priority, clearSoftRetryTimer]);
+  }, [candidateKey, priority, clearSoftRetryTimer, releaseSlot]);
 
-  useEffect(() => () => clearSoftRetryTimer(), [clearSoftRetryTimer]);
+  useEffect(() => () => {
+    clearSoftRetryTimer();
+    releaseSlot();
+  }, [clearSoftRetryTimer, releaseSlot]);
 
   useEffect(() => {
     if (priority || cacheBoost || nearViewport) return;
@@ -158,8 +172,42 @@ export function useProductImageLoader({
     return () => observer.disconnect();
   }, [cacheBoost, candidateKey, nearViewport, priority, retryToken, srcIndex]);
 
+  // Acquire a concurrency slot once near viewport (skip if session-cached).
+  useEffect(() => {
+    if (!nearReady || failed || !displaySrc) return;
+    if (cacheBoost || isImageUrlCached(displaySrc)) {
+      setSlotReady(true);
+      return;
+    }
+    if (slotReady || releaseSlotRef.current) return;
+
+    let cancelled = false;
+    void acquireImageLoadSlot(priority).then((release) => {
+      if (cancelled) {
+        release();
+        return;
+      }
+      releaseSlotRef.current = release;
+      setSlotReady(true);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [
+    nearReady,
+    failed,
+    displaySrc,
+    cacheBoost,
+    slotReady,
+    priority,
+    retryToken,
+    srcIndex,
+  ]);
+
   const failExhausted = useCallback(() => {
     clearSoftRetryTimer();
+    releaseSlot();
     if (displaySrc) markImageUrlFailed(displaySrc);
     setFailed(true);
     setLoaded(false);
@@ -171,6 +219,7 @@ export function useProductImageLoader({
     analyticsContext,
     clearSoftRetryTimer,
     displaySrc,
+    releaseSlot,
     src,
     validation.normalized,
   ]);
@@ -182,10 +231,23 @@ export function useProductImageLoader({
     if (softRetryCountRef.current < MAX_SOFT_RETRIES) {
       softRetryCountRef.current += 1;
       setLoaded(false);
+      // Release slot during backoff so other visible images can load.
+      if (releaseSlotRef.current) {
+        releaseSlotRef.current();
+        releaseSlotRef.current = null;
+      }
+      setSlotReady(false);
+      const delay =
+        SOFT_RETRY_BACKOFF_MS[
+          Math.min(
+            softRetryCountRef.current - 1,
+            SOFT_RETRY_BACKOFF_MS.length - 1
+          )
+        ] ?? 1600;
       softRetryTimerRef.current = window.setTimeout(() => {
         softRetryTimerRef.current = null;
         setRetryToken((token) => token + 1);
-      }, SOFT_RETRY_DELAY_MS * softRetryCountRef.current);
+      }, delay);
       return;
     }
 
@@ -193,8 +255,12 @@ export function useProductImageLoader({
       const list = candidatesRef.current;
       const nextIndex = currentIndex + 1;
       if (nextIndex < list.length) {
-        // Do not session-blacklist on soft timeout — only failExhausted does.
         softRetryCountRef.current = 0;
+        if (releaseSlotRef.current) {
+          releaseSlotRef.current();
+          releaseSlotRef.current = null;
+        }
+        setSlotReady(false);
         setRetryToken(0);
         setLoaded(isImageUrlCached(list[nextIndex] ?? ""));
         return nextIndex;
@@ -214,6 +280,11 @@ export function useProductImageLoader({
       rememberLoadedImageUrl(url);
       setLoaded(true);
       setCacheBoost(true);
+      // Free the slot once bytes are in — browser cache handles revisits.
+      if (releaseSlotRef.current) {
+        releaseSlotRef.current();
+        releaseSlotRef.current = null;
+      }
     },
     [clearSoftRetryTimer, softRetryOrAdvance]
   );
@@ -292,12 +363,11 @@ export function useProductImageLoader({
       : "low";
   const decoding: "sync" | "async" = priority ? "sync" : "async";
 
-  // Only treat as failed when we have no usable candidate — never while gated.
   const hasCandidate = Boolean(displaySrc);
 
   return {
     imgRef,
-    /** Empty until near viewport (unless priority/cached) — defers network. */
+    /** Empty until near viewport + concurrency slot (unless cached). */
     displaySrc: allowFetch ? displaySrc : "",
     failed: failed || !hasCandidate,
     loaded,

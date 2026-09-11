@@ -488,7 +488,7 @@ export function getHomepageRails(limit = 12): HomepageRails {
     usedListingKeys
   );
 
-  const latestLitBuyFinds = pickLatestLitBuyFindsGrid(24);
+  const latestLitBuyFinds = pickLatestLitBuyFindsGrid(12);
 
   // Category rails use their own dedupe sets so earlier homepage rails
   // do not starve sneakers / jackets / hoodies / accessories discovery.

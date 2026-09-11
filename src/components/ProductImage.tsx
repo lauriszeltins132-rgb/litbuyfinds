@@ -104,7 +104,6 @@ export default function ProductImage({
       loading={shouldLazyLoad ? "lazy" : "eager"}
       fetchPriority={fetchPriority}
       decoding={decoding}
-      referrerPolicy="no-referrer"
       className={assetClass}
       onLoad={(event) => {
         if (!displaySrc) return;
