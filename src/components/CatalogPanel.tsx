@@ -500,7 +500,7 @@ export default function CatalogPanel({
           ) : isPending ? (
             <ProductGridSkeleton count={8} />
           ) : paginated.length > 0 ? (
-            <ProductGrid products={paginated} instant priorityCount={2} />
+            <ProductGrid products={paginated} instant priorityCount={4} />
           ) : (
             <div className="rounded-2xl border border-border bg-surface/30 px-6 py-10 text-center">
               <p className="text-base font-bold text-foreground">No finds matched</p>

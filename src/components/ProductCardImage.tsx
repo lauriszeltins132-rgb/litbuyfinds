@@ -82,7 +82,6 @@ export default function ProductCardImage({
         loading={shouldLazyLoad ? "lazy" : "eager"}
         fetchPriority={fetchPriority}
         decoding={decoding}
-        referrerPolicy="no-referrer"
         className={`${assetClass} relative z-[1]`}
         onLoad={(event) => {
           if (!displaySrc) return;
