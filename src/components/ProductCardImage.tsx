@@ -1,6 +1,6 @@
 "use client";
 
-import { useProductImageLoader } from "@/hooks/useProductImageLoader";
+import { useProductImageLoader, EMPTY_IMAGE_FALLBACKS } from "@/hooks/useProductImageLoader";
 import ImageUnavailablePlaceholder from "./ImageUnavailablePlaceholder";
 
 type ProductCardImageProps = {
@@ -21,7 +21,7 @@ export default function ProductCardImage({
   priority = false,
   productHref,
   preferredSrc,
-  fallbacks = [],
+  fallbacks = EMPTY_IMAGE_FALLBACKS,
   fillClass = "product-float-asset--fill-balanced",
 }: ProductCardImageProps) {
   const {
