@@ -1,0 +1,17 @@
+{
+  "imageHosts": [
+    "i.postimg.cc",
+    "postimg.cc",
+    "postimages.org",
+    "i.postimages.org",
+    "si.geilicdn.com",
+    "cbu01.alicdn.com",
+    "img.alicdn.com",
+    "ae01.alicdn.com",
+    "sc04.alicdn.com",
+    "gd4.alicdn.com"
+  ],
+  "imageHostSuffixes": [".alicdn.com", ".geilicdn.com", ".postimg.cc", ".postimages.org"],
+  "qcHosts": ["t.me", "www.t.me", "telegram.me", "www.telegram.me", "telegram.org"],
+  "affiliateHosts": ["litbuy.com", "www.litbuy.com"]
+}

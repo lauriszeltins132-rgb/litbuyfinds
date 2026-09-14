@@ -3,6 +3,7 @@
 import { useState } from "react";
 import RegisterLink from "@/components/RegisterLink";
 import { REGISTER_QC_CTA_LABEL } from "@/lib/constants";
+import { safeHref } from "@/lib/security/url-policy";
 
 type QcAccessGateProps = {
   qcLink: string;
@@ -16,12 +17,19 @@ export default function QcAccessGate({
   onTrackQc,
 }: QcAccessGateProps) {
   const [open, setOpen] = useState(false);
+  const safeQc = safeHref(qcLink, "qc");
 
   function continueToQc() {
+    if (!safeQc) {
+      setOpen(false);
+      return;
+    }
     onTrackQc();
-    window.open(qcLink, "_blank", "noopener,noreferrer");
+    window.open(safeQc, "_blank", "noopener,noreferrer");
     setOpen(false);
   }
+
+  if (!safeQc) return null;
 
   return (
     <>

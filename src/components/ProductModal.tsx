@@ -22,6 +22,7 @@ import { resolveProductDisplayImage } from "@/lib/product-image-presentation";
 import ProductBadges from "./ProductBadges";
 import ProductImage from "./ProductImage";
 import BuyWithAgentButton from "./agents/BuyWithAgentButton";
+import { safeHref } from "@/lib/security/url-policy";
 
 type ProductModalProps = {
   product: Product | null;
@@ -60,6 +61,7 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
   const displayImage = resolveProductDisplayImage(product);
   const imageAlt = getProductImageAlt(product);
   const saved = isInWishlist(product.id);
+  const qcHref = safeHref(product.qc_link, "qc");
 
   return (
     <div className="fixed inset-0 z-[150] flex items-end justify-center sm:items-center sm:p-4">
@@ -99,9 +101,9 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
               />
               <ProductBadges badges={badges} />
             </div>
-            {product.qc_link && (
+            {qcHref ? (
               <a
-                href={product.qc_link}
+                href={qcHref}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => trackProductContext("qc_click", product, "product_modal")}
@@ -109,7 +111,7 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
               >
                 View QC on Telegram →
               </a>
-            )}
+            ) : null}
           </div>
 
           <div className="flex flex-col p-5">

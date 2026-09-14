@@ -30,6 +30,7 @@ import BuyWithAgentButton, {
 } from "./agents/BuyWithAgentButton";
 import { ProductPopularitySection } from "./ProductSaveSignal";
 import { formatSaveCount, getVisibleSaveCount } from "@/lib/product-popularity";
+import { safeHref } from "@/lib/security/url-policy";
 
 type ProductDetailViewProps = {
   product: Product;
@@ -61,6 +62,7 @@ export default function ProductDetailView({
   const buySentinelRef = useRef<HTMLDivElement>(null);
   const saved = isInWishlist(product.id);
   const source = getProductSource(product.affiliate_link);
+  const qcHref = safeHref(product.qc_link, "qc");
   const displayImage = resolveProductDisplayImage(product);
   const imageAlt = getProductImageAlt(product);
   const badges = useMemo(() => getProductBadges(product, { maxBadges: 3 }), [product]);
@@ -126,9 +128,9 @@ export default function ProductDetailView({
         {product.affiliate_link ? (
           <BuyWithAgentButton product={product} location="product_page" />
         ) : null}
-        {product.qc_link ? (
+        {qcHref ? (
           <QcAccessGate
-            qcLink={product.qc_link}
+            qcLink={qcHref}
             productName={facts.displayName}
             onTrackQc={() =>
               trackProductContext("qc_click", product, "product_page")

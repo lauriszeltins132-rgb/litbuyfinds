@@ -67,16 +67,14 @@ export async function GET(request: Request) {
       note:
         "Dry-run check only. Production imports: GitHub Actions workflow 'Spreadsheet sync' (monthly) or `npm run spreadsheet:sync` locally.",
     });
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "Unknown error";
+  } catch {
     return Response.json(
       {
         ok: false,
         job: "spreadsheet-check",
         checkedAt: startedAt,
         catalogProductCount: getAllProducts().length,
-        lastAutomatedImport: readLastImportLog(),
-        error: message,
+        error: "Spreadsheet check failed",
       },
       { status: 500 }
     );
