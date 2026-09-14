@@ -1,10 +1,38 @@
 import HeroSearch from "@/components/HeroSearch";
 import DiscoveryQuickLinks from "@/components/DiscoveryQuickLinks";
 import LiveSiteSignals from "@/components/LiveSiteSignals";
-import { HERO_HEADLINE, HERO_SUBHEADLINE } from "@/lib/constants";
+import SmartLink from "@/components/SmartLink";
+import { HERO_HEADLINE, HERO_SUBHEADLINE, SOCIAL_LINKS } from "@/lib/constants";
 import { HERO_ENTITY_LINE } from "@/lib/brand-entity";
 import { getFindsAuthorityStats } from "@/lib/finds-authority";
 import { getSearchIndex } from "@/lib/search-suggestions";
+
+/** External Google Sheet — View LitBuy Spreadsheet hero CTA. */
+const LITBUY_SPREADSHEET_SHEET_URL =
+  "https://docs.google.com/spreadsheets/d/1uCskcK_kpAjJ82uAbHJ-do8jqLZ2_WBx4SRnhKDMmTA/edit?pli=1&gid=470997016#gid=470997016";
+
+const HERO_CTA_BUTTONS = [
+  {
+    href: "/litbuy-coupons",
+    label: "Claim LitBuy Coupon",
+    primary: true,
+  },
+  {
+    href: SOCIAL_LINKS.telegram,
+    label: "Join LitBuy Telegram",
+    primary: false,
+  },
+  {
+    href: SOCIAL_LINKS.discord,
+    label: "Join LitBuy Discord",
+    primary: false,
+  },
+  {
+    href: LITBUY_SPREADSHEET_SHEET_URL,
+    label: "View LitBuy Spreadsheet",
+    primary: false,
+  },
+] as const;
 
 type DiscoveryHeroProps = {
   /** Compact mode shows headline + search only — AI and trust strip render elsewhere. */
@@ -44,6 +72,22 @@ export default function DiscoveryHero({ compact = false }: DiscoveryHeroProps) {
         ) : null}
 
         <LiveSiteSignals />
+
+        <div className="mx-auto mt-3 grid max-w-xl grid-cols-1 gap-2 sm:grid-cols-2">
+          {HERO_CTA_BUTTONS.map((cta) => (
+            <SmartLink
+              key={cta.label}
+              href={cta.href}
+              className={
+                cta.primary
+                  ? "control-btn-primary w-full text-sm"
+                  : "control-btn w-full text-sm"
+              }
+            >
+              {cta.label}
+            </SmartLink>
+          ))}
+        </div>
 
         {!compact ? <DiscoveryQuickLinks /> : null}
 
