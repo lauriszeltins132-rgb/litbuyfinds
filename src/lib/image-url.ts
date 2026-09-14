@@ -1,9 +1,19 @@
+import {
+  isPrivateOrBlockedHost,
+  sanitizeCatalogUrl,
+  validateCatalogUrl,
+} from "@/lib/security/url-policy";
+import allowlists from "@/data/url-allowlists.json";
+
 export type ImageUrlIssue =
   | "empty"
   | "malformed"
   | "invalid_protocol"
   | "invalid_host"
-  | "suspicious_path";
+  | "suspicious_path"
+  | "credentials"
+  | "private_host"
+  | "nonstandard_port";
 
 export type ImageUrlValidation = {
   valid: boolean;
@@ -11,36 +21,21 @@ export type ImageUrlValidation = {
   issue?: ImageUrlIssue;
 };
 
-const ALLOWED_HOSTS = new Set([
-  "i.postimg.cc",
-  "postimg.cc",
-  "postimages.org",
-  "i.postimages.org",
-  "si.geilicdn.com",
-  "cbu01.alicdn.com",
-  "img.alicdn.com",
-  "ae01.alicdn.com",
-  "sc04.alicdn.com",
-  "gd4.alicdn.com",
-]);
+const ALLOWED_HOSTS = new Set(
+  allowlists.imageHosts.map((host) => host.toLowerCase())
+);
 
 /** Strip junk characters often pasted into spreadsheet image fields. */
 export function sanitizeImageUrl(raw: string | null | undefined): string {
   if (!raw) return "";
 
-  let url = raw.trim();
+  let url = sanitizeCatalogUrl(raw);
   if (!url) return "";
 
-  // Remove wrapping quotes and trailing punctuation from bad imports.
-  url = url.replace(/^['"“”‘’]+|['"“”‘’]+$/g, "");
-  url = url.replace(/[，。、；]+$/g, "");
+  // Keep extension-focused cleanup used by catalog imports.
   url = url.replace(/(\.(?:png|jpe?g|webp|gif)).*$/i, "$1");
   url = url.replace(/[^a-zA-Z0-9/_%.?=&-]+$/g, "");
   url = url.replace(/[)"']+$/g, "");
-
-  if (url.startsWith("//")) {
-    url = `https:${url}`;
-  }
 
   return url.trim();
 }
@@ -51,31 +46,41 @@ export function validateImageUrl(raw: string | null | undefined): ImageUrlValida
     return { valid: false, normalized: "", issue: "empty" };
   }
 
-  let parsed: URL;
+  const result = validateCatalogUrl(normalized, "image", {
+    httpsOnly: false,
+    requirePath: true,
+  });
+
+  if (!result.valid) {
+    return {
+      valid: false,
+      normalized: result.normalized || normalized,
+      issue: (result.issue as ImageUrlIssue) ?? "malformed",
+    };
+  }
+
+  // Extra guard: reject credentialed / private hosts even if allowlist matched oddly.
   try {
-    parsed = new URL(normalized);
+    const parsed = new URL(result.normalized);
+    if (parsed.username || parsed.password) {
+      return { valid: false, normalized, issue: "credentials" };
+    }
+    if (isPrivateOrBlockedHost(parsed.hostname)) {
+      return { valid: false, normalized, issue: "private_host" };
+    }
   } catch {
     return { valid: false, normalized, issue: "malformed" };
   }
 
-  if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
-    return { valid: false, normalized, issue: "invalid_protocol" };
-  }
-
-  const host = parsed.hostname.toLowerCase();
-  if (!ALLOWED_HOSTS.has(host)) {
-    return { valid: false, normalized, issue: "invalid_host" };
-  }
-
-  if (!parsed.pathname || parsed.pathname === "/") {
-    return { valid: false, normalized, issue: "suspicious_path" };
-  }
-
-  return { valid: true, normalized };
+  return { valid: true, normalized: result.normalized };
 }
 
 export function isUsableImageUrl(raw: string | null | undefined): boolean {
   return validateImageUrl(raw).valid;
+}
+
+export function getAllowedImageHosts(): string[] {
+  return [...ALLOWED_HOSTS];
 }
 
 /** Reject tiny/error placeholder responses that still decode as images. */

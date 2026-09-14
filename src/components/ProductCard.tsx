@@ -19,6 +19,7 @@ import ProductBadges from "./ProductBadges";
 import ProductCardImage from "./ProductCardImage";
 import ProductSaveSignal from "./ProductSaveSignal";
 import BuyWithAgentButton from "./agents/BuyWithAgentButton";
+import { safeHref } from "@/lib/security/url-policy";
 
 type ProductCardProps = {
   product: Product;
@@ -89,7 +90,8 @@ function ProductCard({
   );
   const freshness = cardProps?.freshness ?? null;
   const hasBuyLink = Boolean(product.affiliate_link);
-  const hasQc = Boolean(product.qc_link);
+  const qcHref = safeHref(product.qc_link, "qc");
+  const hasQc = Boolean(qcHref);
   const showMicroCta = hasBuyLink && !compact;
 
   async function handleCopy() {
@@ -199,7 +201,7 @@ function ProductCard({
 
               {hasQc ? (
                 <a
-                  href={product.qc_link!}
+                  href={qcHref}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => trackProductContext("qc_click", product, "product_card")}

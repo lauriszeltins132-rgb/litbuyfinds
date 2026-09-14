@@ -1,7 +1,44 @@
 import type { NextConfig } from "next";
 
+/**
+ * Production security headers.
+ * CSP includes 'unsafe-inline' for script/style because Next.js App Router
+ * hydration and JSON-LD embedding currently require it without a nonce
+ * middleware. frame-ancestors is enforced here (preferred over X-Frame-Options).
+ * Future enforcement step: add nonce middleware, then remove 'unsafe-inline'
+ * from script-src.
+ */
+const CONTENT_SECURITY_POLICY = [
+  "default-src 'self'",
+  "base-uri 'self'",
+  "object-src 'none'",
+  "frame-ancestors 'none'",
+  "form-action 'self'",
+  "script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob: https://i.postimg.cc https://postimg.cc https://i.postimages.org https://postimages.org https://si.geilicdn.com https://*.geilicdn.com https://cbu01.alicdn.com https://img.alicdn.com https://ae01.alicdn.com https://sc04.alicdn.com https://gd4.alicdn.com https://*.alicdn.com",
+  "font-src 'self' data:",
+  "connect-src 'self' https://va.vercel-scripts.com https://vitals.vercel-insights.com https://*.vercel-insights.com",
+  "worker-src 'self' blob:",
+  "media-src 'self'",
+  "upgrade-insecure-requests",
+].join("; ");
+
+const SECURITY_HEADERS = [
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  {
+    key: "Permissions-Policy",
+    value:
+      "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()",
+  },
+  { key: "X-Frame-Options", value: "DENY" },
+  { key: "Content-Security-Policy", value: CONTENT_SECURITY_POLICY },
+];
+
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  productionBrowserSourceMaps: false,
   staticPageGenerationTimeout: 300,
   async redirects() {
     return [
@@ -163,6 +200,7 @@ const nextConfig: NextConfig = {
       {
         source: "/:path*",
         headers: [
+          ...SECURITY_HEADERS,
           {
             key: "Link",
             value: [

@@ -28,7 +28,8 @@
     "process:remaining": "node scripts/process-remaining-images.mjs",
     "generate:banner": "node scripts/generate-promo-banner.mjs",
     "generate:image-quality": "node scripts/generate-image-quality-manifest.mjs",
-    "audit:og": "node scripts/audit-og-images.mjs"
+    "audit:og": "node scripts/audit-og-images.mjs",
+    "security:health": "node scripts/security-health-check.mjs"
   },
   "dependencies": {
     "@ai-sdk/gateway": "^4.0.24",
@@ -36,10 +37,10 @@
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
     "ai": "^7.0.32",
-    "next": "^15.3.3",
+    "next": "^15.5.25",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "sharp": "^0.35.0",
+    "sharp": "^0.35.4",
     "xlsx": "^0.18.5",
     "zod": "^4.4.3"
   },
@@ -50,7 +51,7 @@
     "@types/react": "^19.1.6",
     "@types/react-dom": "^19.1.5",
     "eslint": "^9.28.0",
-    "eslint-config-next": "^15.3.3",
+    "eslint-config-next": "^15.5.25",
     "png-to-ico": "^3.0.1",
     "tailwindcss": "^4.1.8",
     "tsx": "^4.23.1",

@@ -11,6 +11,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import XLSX from "xlsx";
+import { logRejectedUrl, validateCatalogUrl } from "./url-policy.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
@@ -211,6 +212,40 @@ function parseSheet(sheet, sheetName) {
       const price = findUsdPrice(sheet, row, col);
       const { image, qc_link } = findImageAndQc(sheet, row, col);
 
+      const affiliateValidation = validateCatalogUrl(affiliate_link, "affiliate", {
+        httpsOnly: true,
+      });
+      if (!affiliateValidation.valid) {
+        logRejectedUrl("affiliate", affiliate_link, affiliateValidation.issue);
+        continue;
+      }
+
+      let safeImage = "";
+      if (image) {
+        const imageValidation = validateCatalogUrl(image, "image", {
+          httpsOnly: false,
+          requirePath: true,
+        });
+        if (imageValidation.valid) {
+          safeImage = imageValidation.normalized;
+        } else {
+          logRejectedUrl("image", image, imageValidation.issue);
+        }
+      }
+
+      let safeQc = "";
+      if (qc_link) {
+        const qcValidation = validateCatalogUrl(qc_link, "qc", {
+          httpsOnly: true,
+          requirePath: false,
+        });
+        if (qcValidation.valid) {
+          safeQc = qcValidation.normalized;
+        } else {
+          logRejectedUrl("qc", qc_link, qcValidation.issue);
+        }
+      }
+
       products.push({
         product_name,
         category: meta.category,
@@ -218,9 +253,9 @@ function parseSheet(sheet, sheetName) {
         sheet: sheetName,
         group: meta.group,
         price,
-        affiliate_link,
-        qc_link,
-        image,
+        affiliate_link: affiliateValidation.normalized,
+        qc_link: safeQc,
+        image: safeImage,
       });
     }
   }

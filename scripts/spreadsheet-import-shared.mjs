@@ -5,6 +5,10 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import {
+  logRejectedUrl,
+  validateCatalogUrl,
+} from "./url-policy.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const ROOT = path.join(__dirname, "..");
@@ -118,14 +122,14 @@ export function isSocialAsset(image = "", name = "") {
 export function isUsableImage(url) {
   if (!url) return false;
   const value = url.toLowerCase();
-  if (!/^https?:\/\//i.test(value)) return false;
   if (value.endsWith(".svg")) return false;
   if (isSocialAsset(value)) return false;
-  return (
-    value.includes("postimg.cc") ||
-    value.includes("geilicdn.com") ||
-    value.includes("alicdn.com")
-  );
+  const result = validateCatalogUrl(url, "image", {
+    httpsOnly: false,
+    requirePath: true,
+  });
+  if (!result.valid) return false;
+  return true;
 }
 
 export function isValidProductName(name) {
@@ -280,20 +284,46 @@ export function parseSheetHtml(html) {
 
       let qc_link = "";
       const qcMatch = after.match(
-        /qcphotos\.com\/[^\s"\\]+|imgur\.com\/[^\s"\\]+/i
+        /(?:https?:\/\/)?(?:t\.me|telegram\.me)\/[^\s"\\]+/i
       );
       if (qcMatch) {
         const candidate = qcMatch[0].startsWith("http")
           ? qcMatch[0]
           : `https://${qcMatch[0]}`;
-        if (/^https?:\/\//i.test(candidate)) qc_link = candidate;
+        const qcValidation = validateCatalogUrl(candidate, "qc", {
+          httpsOnly: true,
+          requirePath: false,
+        });
+        if (qcValidation.valid) {
+          qc_link = qcValidation.normalized;
+        } else {
+          logRejectedUrl("qc", candidate, qcValidation.issue);
+        }
+      }
+
+      const imageClean = sanitizeImageUrl(image);
+      const imageValidation = validateCatalogUrl(imageClean, "image", {
+        httpsOnly: false,
+        requirePath: true,
+      });
+      if (imageClean && !imageValidation.valid) {
+        logRejectedUrl("image", imageClean, imageValidation.issue);
+      }
+
+      const affiliateValidation = validateCatalogUrl(affiliate_link, "affiliate", {
+        httpsOnly: true,
+      });
+      if (!affiliateValidation.valid) {
+        logRejectedUrl("affiliate", affiliate_link, affiliateValidation.issue);
+        idx = end + 8;
+        continue;
       }
 
       products.push({
         product_name: normalizeProductName(product_name),
         price,
-        affiliate_link,
-        image: sanitizeImageUrl(image),
+        affiliate_link: affiliateValidation.normalized,
+        image: imageValidation.valid ? imageValidation.normalized : "",
         qc_link,
       });
 
@@ -317,18 +347,45 @@ export function dedupeByLink(products) {
 }
 
 export function validateImportRow(row) {
-  if (!normalizeLitbuyLink(row.affiliate_link)) {
+  const affiliate = validateCatalogUrl(row.affiliate_link, "affiliate", {
+    httpsOnly: true,
+  });
+  if (!affiliate.valid || !normalizeLitbuyLink(row.affiliate_link)) {
+    if (!affiliate.valid) {
+      logRejectedUrl("affiliate", row.affiliate_link, affiliate.issue);
+    }
     return { ok: false, reason: "invalid_link" };
   }
   if (!isValidProductName(row.product_name)) {
     return { ok: false, reason: "invalid_name" };
   }
-  if (!isUsableImage(row.image)) {
+  const image = validateCatalogUrl(row.image, "image", {
+    httpsOnly: false,
+    requirePath: true,
+  });
+  if (!image.valid || !isUsableImage(row.image)) {
+    if (!image.valid) {
+      logRejectedUrl("image", row.image, image.issue);
+    }
     return { ok: false, reason: "missing_image" };
   }
   if (isSocialAsset(row.image, row.product_name)) {
     return { ok: false, reason: "social_asset" };
   }
+  if (row.qc_link) {
+    const qc = validateCatalogUrl(row.qc_link, "qc", {
+      httpsOnly: true,
+      requirePath: false,
+    });
+    if (!qc.valid) {
+      logRejectedUrl("qc", row.qc_link, qc.issue);
+      row.qc_link = "";
+    } else {
+      row.qc_link = qc.normalized;
+    }
+  }
+  row.affiliate_link = affiliate.normalized;
+  row.image = image.normalized;
   return { ok: true };
 }
 
