@@ -7,9 +7,12 @@ import { dedupeListingRail } from "@/lib/listing-dedupe";
 import ContentFreshness from "@/components/ContentFreshness";
 import type { ContentFreshnessVariant } from "@/lib/freshness-dates";
 import ProductCard from "./ProductCard";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const ProductModal = dynamic(() => import("./ProductModal"), { ssr: false });
+
+/** First N cards may load when the rail nears the viewport; rest wait for scroll. */
+const EAGER_IMAGE_COUNT = 4;
 
 type DiscoveryRailProps = {
   title: string;
@@ -35,12 +38,39 @@ export default function DiscoveryRail({
   tight = false,
 }: DiscoveryRailProps) {
   const [selected, setSelected] = useState<Product | null>(null);
+  const [railNearViewport, setRailNearViewport] = useState(preloadImages);
+  const sectionRef = useRef<HTMLElement>(null);
+  const scrollerRef = useRef<HTMLDivElement>(null);
   const railProducts = dedupeListingRail(products);
+
+  useEffect(() => {
+    if (preloadImages) {
+      setRailNearViewport(true);
+      return;
+    }
+    const node = sectionRef.current;
+    if (!node) return;
+    if (typeof IntersectionObserver === "undefined") {
+      setRailNearViewport(true);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        setRailNearViewport(true);
+        observer.disconnect();
+      },
+      { rootMargin: "280px 0px", threshold: 0.01 }
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [preloadImages]);
 
   if (railProducts.length === 0) return null;
 
   return (
     <section
+      ref={sectionRef}
       className={`discovery-section px-3 sm:px-6 ${tight ? "py-3 sm:py-5" : "py-5 sm:py-8"}`}
     >
       <div className="discovery-section__panel mx-auto max-w-7xl">
@@ -72,21 +102,31 @@ export default function DiscoveryRail({
           </div>
         )}
 
-        <div className="discovery-rail -mx-0.5 flex gap-2.5 overflow-x-auto px-0.5 pb-1 sm:gap-4">
-          {railProducts.map((product, index) => (
-            <div
-              key={product.id}
-              className="discovery-rail__item w-[calc(50vw-1.25rem)] max-w-[178px] shrink-0 sm:w-[240px] sm:max-w-none"
-            >
-              <ProductCard
-                product={product}
-                onOpen={setSelected}
-                compact
-                showTrendingScore={showTrendingScore}
-                priority={preloadImages && index < 2}
-              />
-            </div>
-          ))}
+        <div
+          ref={scrollerRef}
+          className="discovery-rail -mx-0.5 flex gap-2.5 overflow-x-auto px-0.5 pb-1 sm:gap-4"
+        >
+          {railProducts.map((product, index) => {
+            const eager = index < EAGER_IMAGE_COUNT;
+            return (
+              <div
+                key={product.id}
+                className="discovery-rail__item w-[calc(50vw-1.25rem)] max-w-[178px] shrink-0 sm:w-[240px] sm:max-w-none"
+              >
+                <ProductCard
+                  product={product}
+                  onOpen={setSelected}
+                  compact
+                  showTrendingScore={showTrendingScore}
+                  priority={preloadImages && index < 2}
+                  suspendImage={!railNearViewport}
+                  imageObserveRoot={
+                    railNearViewport && !eager ? scrollerRef.current : null
+                  }
+                />
+              </div>
+            );
+          })}
         </div>
       </div>
 

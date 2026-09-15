@@ -28,6 +28,10 @@ const deadManifest = JSON.parse(
 const brightBgManifest = JSON.parse(
   fs.readFileSync(path.join(dataDir, "bright-bg-manifest.json"), "utf8")
 );
+const mirrorMapPath = path.join(dataDir, "image-mirror-map.json");
+const mirrorManifest = fs.existsSync(mirrorMapPath)
+  ? JSON.parse(fs.readFileSync(mirrorMapPath, "utf8"))
+  : { urls: {} };
 
 const damagedUrls = new Set(damagedManifest.urls ?? []);
 const damagedPaths = new Set(damagedManifest.paths ?? []);
@@ -35,6 +39,14 @@ const deadUrls = new Set(deadManifest.urls ?? []);
 const processedUrls = processedMap.urls ?? {};
 const qualityUrls = qualityManifest.urls ?? {};
 const brightBgUrls = brightBgManifest.urls ?? {};
+const mirroredUrls = mirrorManifest.urls ?? {};
+
+function getMirroredUrl(sourceUrl) {
+  const entry = mirroredUrls[sourceUrl];
+  if (!entry) return "";
+  if (typeof entry === "string") return entry;
+  return entry.url || "";
+}
 
 const FORCE_ORIGINAL = new Set([
   "https://i.postimg.cc/zzMm64y4/1.png",
@@ -112,6 +124,15 @@ function resolveImage(sourceUrl) {
         fc,
       };
     }
+  }
+
+  const mirrored = getMirroredUrl(sourceUrl);
+  if (mirrored) {
+    return {
+      src: mirrored,
+      fb: [sourceUrl],
+      fc,
+    };
   }
 
   return {

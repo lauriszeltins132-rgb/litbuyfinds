@@ -12,6 +12,8 @@ type ProductCardImageProps = {
   preferredSrc?: string;
   fallbacks?: string[];
   fillClass?: string;
+  suspend?: boolean;
+  observeRoot?: Element | null;
 };
 
 export default function ProductCardImage({
@@ -23,6 +25,8 @@ export default function ProductCardImage({
   preferredSrc,
   fallbacks = EMPTY_IMAGE_FALLBACKS,
   fillClass = "product-float-asset--fill-balanced",
+  suspend = false,
+  observeRoot = null,
 }: ProductCardImageProps) {
   const {
     imgRef,
@@ -41,6 +45,8 @@ export default function ProductCardImage({
     fallbacks,
     priority,
     analyticsContext: "card",
+    suspend,
+    observeRoot,
   });
 
   if (failed) {

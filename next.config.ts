@@ -16,7 +16,7 @@ const CONTENT_SECURITY_POLICY = [
   "form-action 'self'",
   "script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com",
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://i.postimg.cc https://postimg.cc https://i.postimages.org https://postimages.org https://si.geilicdn.com https://*.geilicdn.com https://cbu01.alicdn.com https://img.alicdn.com https://ae01.alicdn.com https://sc04.alicdn.com https://gd4.alicdn.com https://*.alicdn.com",
+  "img-src 'self' data: blob: https://i.postimg.cc https://postimg.cc https://i.postimages.org https://postimages.org https://si.geilicdn.com https://*.geilicdn.com https://cbu01.alicdn.com https://img.alicdn.com https://ae01.alicdn.com https://sc04.alicdn.com https://gd4.alicdn.com https://*.alicdn.com https://*.public.blob.vercel-storage.com https://*.blob.vercel-storage.com",
   "font-src 'self' data:",
   "connect-src 'self' https://va.vercel-scripts.com https://vitals.vercel-insights.com https://*.vercel-insights.com",
   "worker-src 'self' blob:",
@@ -190,6 +190,8 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "cbu01.alicdn.com" },
       { protocol: "https", hostname: "**.alicdn.com" },
       { protocol: "https", hostname: "**.geilicdn.com" },
+      { protocol: "https", hostname: "*.public.blob.vercel-storage.com" },
+      { protocol: "https", hostname: "*.blob.vercel-storage.com" },
     ],
     formats: ["image/avif", "image/webp"],
     /** Cache optimized next/image responses longer (logos/promo only — catalog uses raw <img>). */
