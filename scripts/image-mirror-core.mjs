@@ -132,13 +132,15 @@ async function fetchValidatedImage(sourceUrl) {
 
   // Re-validate final URL host after redirects
   try {
-    const finalHost = new URL(response.url).hostname;
     const recheck = validateCatalogUrl(response.url, "image", {
       httpsOnly: true,
       requirePath: true,
     });
     if (!recheck.valid) {
-      return { ok: false, reason: `redirect_host:${finalHost}` };
+      return {
+        ok: false,
+        reason: `redirect_host:${new URL(response.url).hostname}`,
+      };
     }
   } catch {
     return { ok: false, reason: "redirect_parse" };
@@ -172,11 +174,18 @@ async function fetchValidatedImage(sourceUrl) {
   };
 }
 
+function rememberEntry(map, sourceUrl, entry) {
+  map.urls[sourceUrl] = entry;
+}
+
 /**
  * Mirror one catalog image exactly once (idempotent).
- * @returns {{ status: 'skipped'|'exists'|'uploaded'|'failed'|'dry_run', url?: string, reason?: string }}
+ * Pass shared `map` from mirrorMany to avoid concurrent map clobbering.
  */
-export async function mirrorCatalogImage(sourceUrl, { dryRun = false } = {}) {
+export async function mirrorCatalogImage(
+  sourceUrl,
+  { dryRun = false, map: sharedMap = null } = {}
+) {
   const validation = validateCatalogUrl(sourceUrl, "image", {
     httpsOnly: true,
     requirePath: true,
@@ -185,7 +194,7 @@ export async function mirrorCatalogImage(sourceUrl, { dryRun = false } = {}) {
     return { status: "failed", reason: `allowlist:${validation.issue}` };
   }
 
-  const map = loadMirrorMap();
+  const map = sharedMap ?? loadMirrorMap();
   const existing = map.urls[validation.normalized] || map.urls[sourceUrl];
   if (existing) {
     const url = typeof existing === "string" ? existing : existing.url;
@@ -205,22 +214,21 @@ export async function mirrorCatalogImage(sourceUrl, { dryRun = false } = {}) {
     };
   }
 
-  // If a deterministic object already exists, reuse it.
   try {
     const existingBlob = await head(pathnameBase);
     if (existingBlob?.url) {
-      map.urls[validation.normalized] = {
+      rememberEntry(map, validation.normalized, {
         url: existingBlob.url,
         pathname: pathnameBase,
         contentType: existingBlob.contentType,
         bytes: existingBlob.size,
         mirroredAt: new Date().toISOString(),
-      };
-      saveMirrorMap(map);
+      });
+      if (!sharedMap) saveMirrorMap(map);
       return { status: "exists", url: existingBlob.url };
     }
   } catch {
-    // head throws when missing — continue to upload
+    // missing — continue
   }
 
   const fetched = await fetchValidatedImage(validation.normalized);
@@ -233,31 +241,55 @@ export async function mirrorCatalogImage(sourceUrl, { dryRun = false } = {}) {
     .digest("hex")
     .slice(0, 40)}.${fetched.ext}`;
 
-  const blob = await put(pathname, fetched.buffer, {
-    access: "public",
-    addRandomSuffix: false,
-    contentType: fetched.contentType,
-    cacheControlMaxAge: 60 * 60 * 24 * 365,
-  });
+  let blob;
+  try {
+    blob = await put(pathname, fetched.buffer, {
+      access: "public",
+      addRandomSuffix: false,
+      contentType: fetched.contentType,
+      cacheControlMaxAge: 60 * 60 * 24 * 365,
+    });
+  } catch (error) {
+    try {
+      const existingBlob = await head(pathname);
+      if (existingBlob?.url) {
+        rememberEntry(map, validation.normalized, {
+          url: existingBlob.url,
+          pathname,
+          contentType: existingBlob.contentType,
+          bytes: existingBlob.size,
+          mirroredAt: new Date().toISOString(),
+        });
+        if (!sharedMap) saveMirrorMap(map);
+        return { status: "exists", url: existingBlob.url };
+      }
+    } catch {
+      /* fall through */
+    }
+    return {
+      status: "failed",
+      reason: error instanceof Error ? error.message : String(error),
+    };
+  }
 
-  map.urls[validation.normalized] = {
+  rememberEntry(map, validation.normalized, {
     url: blob.url,
     pathname,
     contentType: fetched.contentType,
     bytes: fetched.buffer.byteLength,
     mirroredAt: new Date().toISOString(),
-  };
-  saveMirrorMap(map);
+  });
+  if (!sharedMap) saveMirrorMap(map);
 
   return { status: "uploaded", url: blob.url };
 }
 
-export async function mirrorMany(urls, {
-  concurrency = 8,
-  dryRun = false,
-  onProgress,
-} = {}) {
+export async function mirrorMany(
+  urls,
+  { concurrency = 8, dryRun = false, onProgress } = {}
+) {
   const state = loadMirrorState();
+  const map = loadMirrorMap();
   const unique = [...new Set(urls.filter(Boolean))];
   let index = 0;
   let uploaded = 0;
@@ -265,11 +297,12 @@ export async function mirrorMany(urls, {
   let failed = 0;
   let skipped = 0;
   let dry = 0;
+  let dirty = false;
 
   async function worker() {
     while (index < unique.length) {
       const current = unique[index++];
-      if (state.completed[current] && !dryRun) {
+      if (state.completed[current] && map.urls[current] && !dryRun) {
         skipped += 1;
         onProgress?.({ url: current, status: "skipped" });
         continue;
@@ -280,8 +313,11 @@ export async function mirrorMany(urls, {
       while (attempt < 3) {
         attempt += 1;
         try {
-          result = await mirrorCatalogImage(current, { dryRun });
-          if (result.status !== "failed" || !/http_5|timeout|network/i.test(result.reason || "")) {
+          result = await mirrorCatalogImage(current, { dryRun, map });
+          if (
+            result.status !== "failed" ||
+            !/http_5|timeout|network/i.test(result.reason || "")
+          ) {
             break;
           }
         } catch (error) {
@@ -295,6 +331,7 @@ export async function mirrorMany(urls, {
 
       if (result.status === "uploaded") {
         uploaded += 1;
+        dirty = true;
         state.completed[current] = {
           url: result.url,
           at: new Date().toISOString(),
@@ -302,6 +339,7 @@ export async function mirrorMany(urls, {
         delete state.failed[current];
       } else if (result.status === "exists") {
         exists += 1;
+        dirty = true;
         state.completed[current] = {
           url: result.url,
           at: new Date().toISOString(),
@@ -320,8 +358,6 @@ export async function mirrorMany(urls, {
       }
 
       onProgress?.({ url: current, ...result });
-
-      // Gentle pacing so we do not hammer PostImg
       await new Promise((r) => setTimeout(r, dryRun ? 0 : 120));
     }
   }
@@ -333,6 +369,7 @@ export async function mirrorMany(urls, {
   await Promise.all(workers);
 
   if (!dryRun) {
+    if (dirty) saveMirrorMap(map);
     saveMirrorState(state);
   }
 
