@@ -392,7 +392,7 @@ const TOPIC_PAGES: Record<string, TelegramSeoPageConfig> = {
     metaDescription: `Get spreadsheet Telegram updates from ${TELEGRAM_CHANNEL_NAME} — ${TELEGRAM_MEMBER_LABEL} sharing spreadsheet finds, LitBuy rows, agent product links, QC photos, sneaker picks, and fashion finds daily.`,
     badge: "Spreadsheet finds",
     h1: "Spreadsheet finds on Telegram",
-    intro: `Spreadsheet Telegram groups are how many buyers first discover reps finds — rows of links, thumbnails, and QC notes. ${TELEGRAM_CHANNEL_NAME} turns that spreadsheet energy into a ${TELEGRAM_MEMBER_LABEL} channel with daily updates across LitBuy, MuleBuy, OopBuy, ACBuy, and Kakobuy.`,
+    intro: `Spreadsheet Telegram groups are how many buyers first discover reps finds — rows of links, thumbnails, and QC notes. ${TELEGRAM_CHANNEL_NAME} turns that spreadsheet energy into a ${TELEGRAM_MEMBER_LABEL} channel with daily updates across LitBuy, MuleBuy, OopBuy, ACBuy, and Kakobuy. For the searchable LitBuy Spreadsheet product database on this site, open the LitBuy Spreadsheet hub.`,
     focus: "topic",
     keywords: [
       "spreadsheet telegram",
@@ -406,17 +406,18 @@ const TOPIC_PAGES: Record<string, TelegramSeoPageConfig> = {
         heading: "From static sheets to live Telegram rows",
         paragraphs: [
           "Traditional spreadsheets are powerful but hard to browse on mobile and painful to search. Telegram spreadsheet finds push new rows to you — often with QC photos and agent links attached.",
-          "RN Finds sits in the middle: community speed on Telegram, structured catalog pages on LitBuy Finds.",
+          "RN Finds sits in the middle: community speed on Telegram, structured catalog pages on LitBuy Finds. The LitBuy Spreadsheet hub is the on-site database for spreadsheet-style browsing.",
         ],
+        links: [{ href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" }],
       },
       {
         heading: "Agent spreadsheet Telegram variations",
         paragraphs: [
           "Searchers look for LitBuy spreadsheet Telegram, MuleBuy spreadsheet Telegram, OopBuy spreadsheet Telegram, and similar phrases because each agent formats links differently. RN Finds includes multi-agent rows so you are not locked to one template.",
-          "When you need a stable product page, search the item here after you spot it on Telegram.",
+          "When you need a stable product page or the full spreadsheet database, open the LitBuy Spreadsheet hub after you spot an item on Telegram.",
         ],
         links: [
-          { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet guide" },
+          { href: "/litbuy-spreadsheet", label: "browse the LitBuy spreadsheet" },
           { href: "/collections/litbuy-spreadsheet-alternative", label: "Sheet alternative" },
         ],
       },
@@ -442,8 +443,9 @@ const TOPIC_PAGES: Record<string, TelegramSeoPageConfig> = {
     faqs: baseFaqs(),
     relatedLinks: [
       { href: SOCIAL_LINKS.telegram, label: "Join for spreadsheet updates" },
-      { href: "/telegram-litbuy", label: "LitBuy spreadsheet Telegram" },
-      { href: "/telegram-mulebuy", label: "MuleBuy spreadsheet Telegram" },
+      { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet database" },
+      { href: "/telegram-litbuy", label: "LitBuy Telegram" },
+      { href: "/telegram-mulebuy", label: "MuleBuy Telegram" },
       { href: "/telegram", label: "Telegram hub" },
     ],
   },
