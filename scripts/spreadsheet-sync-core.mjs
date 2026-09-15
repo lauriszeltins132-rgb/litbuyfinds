@@ -130,6 +130,7 @@ export async function runSpreadsheetSync({
       name: p.product_name,
       category_slug: p.category_slug,
       affiliate_link: p.affiliate_link,
+      image: p.image || "",
     }));
   } else if (dryRun && report.added > 0) {
     report.newProducts = pendingProducts.map((p) => ({
@@ -137,6 +138,7 @@ export async function runSpreadsheetSync({
       name: p.product_name,
       category_slug: p.category_slug,
       affiliate_link: p.affiliate_link,
+      image: p.image || "",
     }));
   }
 

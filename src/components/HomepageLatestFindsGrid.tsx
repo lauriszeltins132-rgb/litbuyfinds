@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import ProductGrid from "@/components/ProductGrid";
 import type { Product } from "@/lib/types";
 
@@ -12,10 +13,35 @@ type HomepageLatestFindsGridProps = {
 export default function HomepageLatestFindsGrid({
   products,
 }: HomepageLatestFindsGridProps) {
+  const sectionRef = useRef<HTMLElement>(null);
+  const [nearViewport, setNearViewport] = useState(false);
+
+  useEffect(() => {
+    const node = sectionRef.current;
+    if (!node) return;
+    if (typeof IntersectionObserver === "undefined") {
+      setNearViewport(true);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        setNearViewport(true);
+        observer.disconnect();
+      },
+      { rootMargin: "280px 0px", threshold: 0.01 }
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
   if (products.length === 0) return null;
 
   return (
-    <section className="discovery-section px-3 py-5 sm:px-6 sm:py-8">
+    <section
+      ref={sectionRef}
+      className="discovery-section px-3 py-5 sm:px-6 sm:py-8"
+    >
       <div className="discovery-section__panel mx-auto max-w-7xl">
         <div className="discovery-section__header mb-4 flex items-end justify-between gap-3 sm:gap-4">
           <div className="min-w-0">
@@ -34,7 +60,10 @@ export default function HomepageLatestFindsGrid({
           </Link>
         </div>
 
-        <ProductGrid products={products} priorityCount={4} />
+        <ProductGrid
+          products={products}
+          priorityCount={nearViewport ? 4 : 0}
+        />
       </div>
     </section>
   );

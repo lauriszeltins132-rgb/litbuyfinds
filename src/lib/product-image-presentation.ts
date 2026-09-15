@@ -4,6 +4,7 @@ import {
   getImageFillClass,
   getImageQualityScore,
 } from "./image-quality";
+import { resolveMirroredDisplay } from "./image-mirror";
 import type { Product } from "./types";
 
 export type ResolvedProductImage = {
@@ -15,7 +16,10 @@ export type ResolvedProductImage = {
   fallbacks: string[];
 };
 
-/** Always serve the catalog original on white card panels. */
+/**
+ * Prefer controlled CDN mirror when available; keep original as source/fallback.
+ * Does not alter product.image in the catalog.
+ */
 export function resolveProductDisplayImage(
   product: Product
 ): ResolvedProductImage | null {
@@ -24,13 +28,16 @@ export function resolveProductDisplayImage(
   const sourceUrl = product.image;
   if (isDeadImageUrl(sourceUrl)) return null;
 
+  const mirrored = resolveMirroredDisplay(sourceUrl);
+  if (!mirrored) return null;
+
   return {
-    displaySrc: sourceUrl,
+    displaySrc: mirrored.displaySrc,
     sourceUrl,
     score: getImageQualityScore(sourceUrl),
     fillClass: getImageFillClass(sourceUrl),
     isProcessed: false,
-    fallbacks: [],
+    fallbacks: mirrored.fallbacks,
   };
 }
 

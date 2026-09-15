@@ -30,6 +30,10 @@ type UseProductImageLoaderArgs = {
   fallbacks?: string[];
   priority?: boolean;
   analyticsContext: string;
+  /** When true, do not start network loads (rail below fold / deferred slots). */
+  suspend?: boolean;
+  /** Optional IntersectionObserver root (e.g. horizontal rail scroller). */
+  observeRoot?: Element | null;
 };
 
 /** Stable empty list — never use a fresh `[]` default (it remounts loaders). */
@@ -81,6 +85,8 @@ export function useProductImageLoader({
   fallbacks = EMPTY_IMAGE_FALLBACKS,
   priority = false,
   analyticsContext,
+  suspend = false,
+  observeRoot = null,
 }: UseProductImageLoaderArgs) {
   const validation = useMemo(() => validateImageUrl(src), [src]);
 
@@ -110,7 +116,7 @@ export function useProductImageLoader({
   const releaseSlotRef = useRef<(() => void) | null>(null);
 
   const displaySrc = candidates[srcIndex] ?? "";
-  const nearReady = priority || nearViewport || cacheBoost;
+  const nearReady = !suspend && (priority || nearViewport || cacheBoost);
   const allowFetch = nearReady && (slotReady || cacheBoost);
 
   const clearSoftRetryTimer = useCallback(() => {
@@ -138,10 +144,10 @@ export function useProductImageLoader({
     setFailed(candidatesRef.current.length === 0);
     setLoaded(cached);
     setCacheBoost(cached);
-    setNearViewport(priority || cached);
+    setNearViewport((!suspend && priority) || cached);
     loggedRef.current = false;
     softRetryCountRef.current = 0;
-  }, [candidateKey, priority, clearSoftRetryTimer, releaseSlot]);
+  }, [candidateKey, priority, suspend, clearSoftRetryTimer, releaseSlot]);
 
   useEffect(() => () => {
     clearSoftRetryTimer();
@@ -149,7 +155,7 @@ export function useProductImageLoader({
   }, [clearSoftRetryTimer, releaseSlot]);
 
   useEffect(() => {
-    if (priority || cacheBoost || nearViewport) return;
+    if (suspend || priority || cacheBoost || nearViewport) return;
 
     const node = imgRef.current;
     if (!node) return;
@@ -165,12 +171,25 @@ export function useProductImageLoader({
         setNearViewport(true);
         observer.disconnect();
       },
-      { rootMargin: VIEWPORT_ROOT_MARGIN, threshold: 0.01 }
+      {
+        root: observeRoot ?? null,
+        rootMargin: observeRoot ? "40px 80px" : VIEWPORT_ROOT_MARGIN,
+        threshold: 0.01,
+      }
     );
 
     observer.observe(node);
     return () => observer.disconnect();
-  }, [cacheBoost, candidateKey, nearViewport, priority, retryToken, srcIndex]);
+  }, [
+    cacheBoost,
+    candidateKey,
+    nearViewport,
+    observeRoot,
+    priority,
+    retryToken,
+    srcIndex,
+    suspend,
+  ]);
 
   // Acquire a concurrency slot once near viewport (skip if session-cached).
   useEffect(() => {

@@ -27,6 +27,10 @@ type ProductCardProps = {
   compact?: boolean;
   showTrendingScore?: boolean;
   priority?: boolean;
+  /** Defer network image loads until parent enables (below-fold rails). */
+  suspendImage?: boolean;
+  /** IntersectionObserver root for horizontal rails. */
+  imageObserveRoot?: Element | null;
 };
 
 /**
@@ -71,6 +75,8 @@ function ProductCard({
   compact = false,
   showTrendingScore = false,
   priority = false,
+  suspendImage = false,
+  imageObserveRoot = null,
 }: ProductCardProps) {
   const { isInWishlist, toggleWishlist } = useWishlist();
   const [copied, setCopied] = useState(false);
@@ -124,6 +130,8 @@ function ProductCard({
             alt={imageAlt}
             productHref={productHref}
             priority={priority}
+            suspend={suspendImage}
+            observeRoot={imageObserveRoot}
           />
           <div className="product-card-hover-hint bg-gradient-to-t from-white/90 to-transparent px-3 py-2 opacity-0 transition-opacity group-hover:opacity-100">
             <p className="text-[10px] font-bold uppercase tracking-wider text-accent">

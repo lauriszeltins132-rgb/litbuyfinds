@@ -34,6 +34,9 @@ yarn-error.log*
 # runtime analytics aggregates
 /data/analytics-stats.json
 
+# local image mirror migration progress (map JSON in src/data is committed)
+/data/image-mirror-state.json
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

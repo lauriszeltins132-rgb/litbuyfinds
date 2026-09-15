@@ -29,12 +29,14 @@
     "generate:banner": "node scripts/generate-promo-banner.mjs",
     "generate:image-quality": "node scripts/generate-image-quality-manifest.mjs",
     "audit:og": "node scripts/audit-og-images.mjs",
-    "security:health": "node scripts/security-health-check.mjs"
+    "security:health": "node scripts/security-health-check.mjs",
+    "images:mirror": "node scripts/mirror-catalog-images.mjs"
   },
   "dependencies": {
     "@ai-sdk/gateway": "^4.0.24",
     "@ai-sdk/react": "^4.0.35",
     "@vercel/analytics": "^2.0.1",
+    "@vercel/blob": "^2.8.0",
     "@vercel/speed-insights": "^2.0.0",
     "ai": "^7.0.32",
     "next": "^15.5.25",
