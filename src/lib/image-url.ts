@@ -25,6 +25,10 @@ const ALLOWED_HOSTS = new Set(
   allowlists.imageHosts.map((host) => host.toLowerCase())
 );
 
+/** Same-origin static assets for curated rails (not spreadsheet-sourced). */
+const LOCAL_STATIC_IMAGE_PATH =
+  /^\/sellers-collaboration\/[a-zA-Z0-9._-]+\.(?:jpe?g|png|webp)$/i;
+
 /** Strip junk characters often pasted into spreadsheet image fields. */
 export function sanitizeImageUrl(raw: string | null | undefined): string {
   if (!raw) return "";
@@ -44,6 +48,10 @@ export function validateImageUrl(raw: string | null | undefined): ImageUrlValida
   const normalized = sanitizeImageUrl(raw);
   if (!normalized) {
     return { valid: false, normalized: "", issue: "empty" };
+  }
+
+  if (LOCAL_STATIC_IMAGE_PATH.test(normalized)) {
+    return { valid: true, normalized };
   }
 
   const result = validateCatalogUrl(normalized, "image", {

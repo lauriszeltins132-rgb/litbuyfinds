@@ -32,6 +32,10 @@ function toAffiliateLink(weidianId: string): string {
 }
 
 function normalizeImage(raw: string): string {
+  if (raw.startsWith("/sellers-collaboration/")) {
+    const validation = validateImageUrl(raw);
+    return validation.valid ? validation.normalized : "";
+  }
   const validation = validateImageUrl(raw);
   if (!validation.valid || !validation.normalized) return "";
   if (isDeadImageUrl(validation.normalized)) return "";
