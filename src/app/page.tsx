@@ -29,6 +29,10 @@ import {
 import { getCategories } from "@/lib/products";
 import { buildWebPageSchema } from "@/lib/schema";
 import { buildHomepageMetadata } from "@/lib/seo";
+import {
+  getSellersCollaborationMeta,
+  getSellersCollaborationProducts,
+} from "@/lib/sellers-collaboration";
 
 export const metadata: Metadata = buildHomepageMetadata();
 
@@ -38,6 +42,8 @@ export const revalidate = 3600;
 export default async function HomePage() {
   const categories = getCategories();
   const rails = getHomepageRails(12);
+  const collaborationMeta = getSellersCollaborationMeta();
+  const collaborationProducts = getSellersCollaborationProducts();
 
   return (
     <>
@@ -52,13 +58,22 @@ export default async function HomePage() {
 
       <DiscoveryHero compact />
 
+      {collaborationProducts.length > 0 ? (
+        <DiscoveryRail
+          title={collaborationMeta.title}
+          subtitle={collaborationMeta.subtitle}
+          products={collaborationProducts}
+          preloadImages
+          tight
+        />
+      ) : null}
+
       <DiscoveryRail
         title={getDailyFindsTitle()}
         subtitle="Most viewed and clicked in the last 24 hours"
         href="/trending-today"
         products={rails.popularToday}
         showTrendingScore
-        preloadImages
         freshness="updated-daily"
         tight
       />

@@ -1,6 +1,7 @@
 import type { Product } from "./types";
 import { getEffectiveProductTitle } from "./product-title-quality";
 import { products } from "./products";
+import { getSellersCollaborationProductById } from "./sellers-collaboration";
 
 export function slugify(text: string): string {
   return text
@@ -10,7 +11,7 @@ export function slugify(text: string): string {
 }
 
 export function getProductSlug(product: Product): string {
-  const base = slugify(getEffectiveProductTitle(product)).slice(0, 55);
+  const base = slugify(getEffectiveProductTitle(product)).slice(0, 55) || "find";
   return `${base}-${product.id}`;
 }
 
@@ -24,6 +25,9 @@ export function getProductBySlug(slug: string): Product | undefined {
 
   const byId = products.find((product) => product.id === id);
   if (byId) return byId;
+
+  const collaboration = getSellersCollaborationProductById(id);
+  if (collaboration) return collaboration;
 
   return products.find((product) => getProductSlug(product) === slug);
 }
