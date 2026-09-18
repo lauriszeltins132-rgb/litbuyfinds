@@ -17,6 +17,11 @@ type FilterChipsProps = {
   allActive?: boolean;
   /** When set, chip clicks update filters immediately without waiting on the router. */
   onNavigate?: (href: string) => void;
+  /** Optional non-route action chip (e.g. scroll to sponsored section). */
+  actionChip?: {
+    label: string;
+    onClick: () => void;
+  };
 };
 
 export default function FilterChips({
@@ -25,6 +30,7 @@ export default function FilterChips({
   allHref,
   allActive = false,
   onNavigate,
+  actionChip,
 }: FilterChipsProps) {
   function handleClick(event: MouseEvent<HTMLAnchorElement>, href: string) {
     if (!onNavigate) return;
@@ -59,6 +65,16 @@ export default function FilterChips({
             )}
           </Link>
         ))}
+
+        {actionChip ? (
+          <button
+            type="button"
+            onClick={actionChip.onClick}
+            className="control-chip"
+          >
+            {actionChip.label}
+          </button>
+        ) : null}
       </div>
     </div>
   );

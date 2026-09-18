@@ -1288,6 +1288,81 @@ body::before {
   display: none;
 }
 
+.sellers-collab-rail-wrap {
+  position: relative;
+}
+
+.sellers-collab-arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  margin-top: -2.75rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(26, 29, 22, 0.12);
+  background: #ffffff;
+  color: var(--color-foreground);
+  box-shadow: 0 4px 14px rgba(26, 29, 22, 0.1);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease, border-color 0.18s ease;
+}
+
+.sellers-collab-arrow--visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sellers-collab-arrow:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--color-accent) 40%, transparent);
+  transform: scale(1.04);
+}
+
+.sellers-collab-arrow:disabled {
+  opacity: 0;
+}
+
+.sellers-collab-arrow--prev {
+  left: 0.15rem;
+}
+
+.sellers-collab-arrow--next {
+  right: 0.15rem;
+}
+
+.sellers-collab-fade {
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0.92)
+  );
+}
+
+.sellers-collab-section--flash .discovery-section__panel {
+  animation: sellers-collab-flash 1.2s ease;
+}
+
+@keyframes sellers-collab-flash {
+  0% {
+    box-shadow:
+      0 2px 8px rgba(26, 29, 22, 0.04),
+      0 12px 32px rgba(26, 29, 22, 0.05);
+  }
+  30% {
+    box-shadow:
+      0 0 0 3px color-mix(in srgb, var(--color-accent) 40%, transparent),
+      0 12px 32px rgba(26, 29, 22, 0.08);
+  }
+  100% {
+    box-shadow:
+      0 2px 8px rgba(26, 29, 22, 0.04),
+      0 12px 32px rgba(26, 29, 22, 0.05);
+  }
+}
+
 @keyframes dropdown-in {
   from {
     opacity: 0;

@@ -79,6 +79,11 @@ export function getSellersCollaborationMeta(): {
   };
 }
 
+/** Dynamic product count for “View all X” / swipe helper copy. */
+export function getSellersCollaborationCount(): number {
+  return collaborationProducts.length;
+}
+
 /** Homepage rail products — static JSON only, no runtime API calls. */
 export function getSellersCollaborationProducts(): Product[] {
   return collaborationProducts;

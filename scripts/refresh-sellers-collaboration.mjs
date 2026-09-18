@@ -123,9 +123,9 @@ async function main() {
   }
 
   const payload = {
-    title: existing.title || "Other Sellers Collaboration Link",
+    title: existing.title || "Other Sellers Collaboration",
     subtitle:
-      existing.subtitle || "Curated finds from collaborating sellers",
+      existing.subtitle || "Sponsored seller picks and partner products",
     updatedAt: new Date().toISOString().slice(0, 10),
     products,
   };
