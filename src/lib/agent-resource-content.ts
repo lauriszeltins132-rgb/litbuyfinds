@@ -281,7 +281,7 @@ export function buildAgentSpreadsheetConfig(agent: AgentResourceDefinition) {
     title: `${name} Spreadsheet | Finds, QC Photos & Searchable Catalog`,
     description: `${name} spreadsheet guide — searchable ${name} finds with QC photos, category browsing, and ${name} checkout. A cleaner alternative to raw ${name} spreadsheet rows.`,
     h1: `${name} spreadsheet`,
-    intro: `The ${name} spreadsheet resource on LitBuy Finds turns community ${name} spreadsheet / ${name} finds spreadsheet rows into a searchable product catalog — photos, QC badges, categories, brands, and ${name} buy links on every listing. ${agent.spreadsheetFocus}`,
+    intro: `The ${name} spreadsheet resource on LitBuy Finds turns community ${name} spreadsheet / ${name} finds spreadsheet rows into a searchable product catalog — photos, QC badges, categories, brands, and ${name} buy links on every listing. ${agent.spreadsheetFocus} For the wider LitBuy Spreadsheet product database on this site, open the LitBuy Spreadsheet hub.`,
     badge: `${name} spreadsheet`,
     keywords: [
       `${slug} spreadsheet`,

@@ -140,7 +140,7 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
         ],
         links: [
           { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet guide" },
-          { href: "/litbuy-spreadsheet-2026", label: "Spreadsheet 2026" },
+          { href: "/litbuy-spreadsheet-2026", label: "2026 spreadsheet workflow" },
           { href: "/guides/litbuy-spreadsheet-guide", label: "Extended spreadsheet guide" },
         ],
       },
@@ -313,25 +313,36 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
   "litbuy-spreadsheet-2026": {
     slug: "litbuy-spreadsheet-2026",
     path: "/litbuy-spreadsheet-2026",
-    title: "LitBuy Spreadsheet 2026 – Current Guide & Catalog Access",
+    title: "Spreadsheet Workflow 2026 – Pair Sheets with LitBuy Finds",
     metaDescription:
-      "The 2026 guide to LitBuy spreadsheets — what changed, how to browse finds without spreadsheet fatigue, and where to search the live LitBuy Finds catalog.",
-    badge: "2026 guide",
-    h1: "LitBuy spreadsheet 2026",
+      "How to use community spreadsheets with LitBuy Finds in 2026 — keep personal sheets for notes, then browse the LitBuy Spreadsheet hub for searchable product pages, filters, and QC links.",
+    badge: "2026 workflow",
+    h1: "Spreadsheet workflow in 2026",
     directAnswer:
-      "The LitBuy spreadsheet in 2026 still lists thousands of Weidian and Taobao finds with prices and QC notes, but most buyers pair it with LitBuy Finds for searchable pages, filters, and shareable product URLs. This guide explains how to use both without duplicating work.",
+      "In 2026, most buyers still keep a personal spreadsheet for notes, but discover products through LitBuy Finds. The primary LitBuy Spreadsheet database lives at /litbuy-spreadsheet — this page explains the recommended workflow for pairing both.",
     summary:
-      "Keep your spreadsheet for raw reference. Use LitBuy Finds and LitBuy AI for daily discovery, mobile browsing, and link sharing in 2026.",
+      "Keep your sheet for raw reference. Use the LitBuy Spreadsheet hub and LitBuy AI for daily discovery, mobile browsing, and link sharing in 2026.",
     sections: [
       {
-        heading: "What spreadsheets still do best",
+        heading: "Start with the LitBuy Spreadsheet hub",
         paragraphs: [
-          "Power users keep spreadsheets for seller notes, batch comparisons, and offline reference. Community sheets update frequently and may include columns LitBuy Finds does not display.",
-          "If you already have a trusted 2026 sheet, bookmark it — but use LitBuy Finds when you need to search by brand or share a single product link.",
+          "If you searched for LitBuy Spreadsheet, LitBuy finds spreadsheet, or LitBuy spreadsheet 2026, open the main LitBuy Spreadsheet page first — that is the searchable product database authority on this site.",
+          "This supporting page covers the 2026 workflow only: when to keep a personal sheet, when to use LitBuy Finds, and how the two fit together.",
         ],
         links: [
-          { href: "/litbuy-spreadsheet", label: "Main spreadsheet guide" },
+          { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
           { href: "/collections/litbuy-spreadsheet-alternative", label: "Spreadsheet alternative" },
+        ],
+      },
+      {
+        heading: "What personal spreadsheets still do best",
+        paragraphs: [
+          "Power users keep spreadsheets for seller notes, batch comparisons, and offline reference. Community sheets update frequently and may include columns LitBuy Finds does not display.",
+          "If you already have a trusted sheet, bookmark it — but use the LitBuy Spreadsheet hub when you need to search by brand or share a single product link.",
+        ],
+        links: [
+          { href: "/litbuy-spreadsheet", label: "Browse the LitBuy spreadsheet" },
+          { href: "/latest-finds", label: "Latest spreadsheet finds" },
         ],
       },
       {
@@ -343,14 +354,16 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
         links: [
           { href: "/litbuy-finds", label: "LitBuy Finds" },
           { href: "/ai", label: "LitBuy AI" },
+          { href: "/litbuy-spreadsheet", label: "Spreadsheet database" },
         ],
       },
       {
         heading: "Recommended 2026 workflow",
         paragraphs: [
-          "Shortlist on LitBuy Finds or LitBuy AI, save wishlist items, open LitBuy buy links to confirm live price, request warehouse QC, then ship when your haul is ready. Refer back to your spreadsheet only when you need a specific seller note or batch column.",
+          "Shortlist on the LitBuy Spreadsheet hub or LitBuy AI, save wishlist items, open LitBuy buy links to confirm live price, request warehouse QC, then ship when your haul is ready. Refer back to your personal spreadsheet only when you need a specific seller note or batch column.",
         ],
         links: [
+          { href: "/litbuy-spreadsheet", label: "LitBuy product spreadsheet" },
           { href: "/how-to-use-litbuy", label: "How to use LitBuy" },
           { href: "/trending-litbuy-finds", label: "Trending finds" },
         ],
@@ -358,7 +371,12 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
     ],
     faqs: [
       {
-        question: "Is there one official LitBuy spreadsheet for 2026?",
+        question: "Where is the main LitBuy Spreadsheet page?",
+        answer:
+          "The canonical LitBuy Spreadsheet database is /litbuy-spreadsheet. Use that page for spreadsheet-style product browsing; this page only explains the 2026 sheet-plus-catalog workflow.",
+      },
+      {
+        question: "Is there one official LitBuy spreadsheet file for 2026?",
         answer:
           "Community spreadsheets vary by curator. LitBuy Finds indexes catalog data from public find sources — not a single official sheet file hosted here.",
       },

@@ -279,14 +279,14 @@ export const SEO_LANDING_CONFIG: Record<string, SeoLandingPageEntry> = {
   "shoe-spreadsheet": {
     slug: "shoe-spreadsheet",
     type: "spreadsheet",
-    title: "Shoe Spreadsheet Finds | LitBuy Sneaker Spreadsheet 2026",
+    title: "Shoe Spreadsheet Finds | Sneakers & Footwear Rows",
     description:
       "Shoe spreadsheet finds on LitBuy Finds — Nike, Jordan, Adidas sneakers from Weidian and Taobao with QC photos and agent checkout links.",
     h1: "Shoe spreadsheet finds",
     intro:
-      "Footwear spreadsheets mix Nike, Jordan, Adidas, and budget batches in one long list. This page highlights quality shoe listings you can open individually — without losing mobile usability. For the main spreadsheet hub, open LitBuy Spreadsheet.",
+      "Footwear spreadsheets mix Nike, Jordan, Adidas, and budget batches in one long list. This page highlights quality shoe listings you can open individually — without losing mobile usability. For the main LitBuy Spreadsheet database, open the LitBuy Spreadsheet hub.",
     badge: "Spreadsheet",
-    keywords: ["shoe spreadsheet", "sneaker spreadsheet litbuy", "litbuy shoe spreadsheet"],
+    keywords: ["shoe spreadsheet", "sneaker spreadsheet", "footwear spreadsheet finds"],
     updateFrequency: "weekly",
     filter: { categories: ["shoes"] },
     categoryLinks: ["shoes"],
@@ -345,14 +345,14 @@ export const SEO_LANDING_CONFIG: Record<string, SeoLandingPageEntry> = {
   "streetwear-spreadsheet": {
     slug: "streetwear-spreadsheet",
     type: "spreadsheet",
-    title: "Streetwear Spreadsheet Finds | LitBuy Clothing Spreadsheet",
+    title: "Streetwear Spreadsheet Finds | Clothing & Hype Rows",
     description:
       "Streetwear spreadsheet finds — Stussy, Corteiz, Supreme, and hype labels with searchable LitBuy pages, QC references, and clothing find links.",
     h1: "Streetwear spreadsheet finds",
     intro:
-      "Streetwear sheets move fast. LitBuy Finds keeps the same discovery value while adding photos, QC badges, and shareable URLs — start here for hype clothing rows, or open Clothing finds and Hoodie finds for full databases.",
+      "Streetwear sheets move fast. LitBuy Finds keeps the same discovery value while adding photos, QC badges, and shareable URLs — start here for hype clothing rows, or open the LitBuy Spreadsheet hub for the full spreadsheet database.",
     badge: "Spreadsheet",
-    keywords: ["streetwear spreadsheet", "hype finds sheet", "clothing spreadsheet litbuy"],
+    keywords: ["streetwear spreadsheet", "hype finds sheet", "clothing spreadsheet finds"],
     updateFrequency: "weekly",
     filter: {
       keywords: ["stussy", "corteiz", "supreme", "bape", "hoodie", "cargo"],
