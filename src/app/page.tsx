@@ -4,6 +4,7 @@ import HomepageCatalogSection from "@/components/HomepageCatalogSection";
 import ContentFreshness from "@/components/ContentFreshness";
 import DiscoveryHero from "@/components/DiscoveryHero";
 import DiscoveryRail from "@/components/DiscoveryRail";
+import SellersCollaborationRail from "@/components/SellersCollaborationRail";
 import HomepageDiscoveryTools from "@/components/HomepageDiscoveryTools";
 import HomepageFindsDatabaseHub from "@/components/HomepageFindsDatabaseHub";
 import HomepageLatestFindsGrid from "@/components/HomepageLatestFindsGrid";
@@ -59,11 +60,10 @@ export default async function HomePage() {
       <DiscoveryHero compact />
 
       {collaborationProducts.length > 0 ? (
-        <DiscoveryRail
+        <SellersCollaborationRail
           title={collaborationMeta.title}
           subtitle={collaborationMeta.subtitle}
           products={collaborationProducts}
-          preloadImages
           tight
         />
       ) : null}
