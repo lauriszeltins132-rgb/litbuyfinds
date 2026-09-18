@@ -1,10 +1,11 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Product } from "@/lib/types";
 import { dedupeListingRail } from "@/lib/listing-dedupe";
 import { SELLERS_COLLABORATION_SECTION_ID } from "@/lib/scroll-to-sellers-collaboration";
+import HorizontalScrollArea from "@/components/HorizontalScrollArea";
 import ProductCard from "./ProductCard";
 
 const ProductModal = dynamic(() => import("./ProductModal"), { ssr: false });
@@ -20,25 +21,6 @@ type SellersCollaborationRailProps = {
   tight?: boolean;
 };
 
-function ChevronIcon({ direction }: { direction: "left" | "right" }) {
-  return (
-    <svg
-      aria-hidden
-      className="h-4 w-4"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      strokeWidth={2.5}
-    >
-      {direction === "left" ? (
-        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-      ) : (
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-      )}
-    </svg>
-  );
-}
-
 export default function SellersCollaborationRail({
   title,
   subtitle,
@@ -48,24 +30,10 @@ export default function SellersCollaborationRail({
   const [selected, setSelected] = useState<Product | null>(null);
   const [expanded, setExpanded] = useState(false);
   const [railNearViewport, setRailNearViewport] = useState(true);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
   const scrollerRef = useRef<HTMLDivElement>(null);
   const railProducts = dedupeListingRail(products);
   const count = railProducts.length;
-
-  const updateScrollState = useCallback(() => {
-    const node = scrollerRef.current;
-    if (!node) {
-      setCanScrollLeft(false);
-      setCanScrollRight(false);
-      return;
-    }
-    const maxScroll = node.scrollWidth - node.clientWidth;
-    setCanScrollLeft(node.scrollLeft > 4);
-    setCanScrollRight(maxScroll - node.scrollLeft > 4);
-  }, []);
 
   useEffect(() => {
     const node = sectionRef.current;
@@ -84,26 +52,6 @@ export default function SellersCollaborationRail({
     );
     observer.observe(node);
     return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (expanded) return;
-    const node = scrollerRef.current;
-    if (!node) return;
-    updateScrollState();
-    node.addEventListener("scroll", updateScrollState, { passive: true });
-    window.addEventListener("resize", updateScrollState);
-    return () => {
-      node.removeEventListener("scroll", updateScrollState);
-      window.removeEventListener("resize", updateScrollState);
-    };
-  }, [expanded, count, updateScrollState]);
-
-  const scrollByPage = useCallback((direction: -1 | 1) => {
-    const node = scrollerRef.current;
-    if (!node) return;
-    const amount = Math.max(node.clientWidth * 0.85, 240);
-    node.scrollBy({ left: direction * amount, behavior: "smooth" });
   }, []);
 
   if (count === 0) return null;
@@ -160,66 +108,36 @@ export default function SellersCollaborationRail({
             ))}
           </div>
         ) : (
-          <div className="sellers-collab-rail-wrap relative">
-            <button
-              type="button"
-              className={`sellers-collab-arrow sellers-collab-arrow--prev hidden sm:flex ${
-                canScrollLeft ? "sellers-collab-arrow--visible" : ""
-              }`}
-              aria-label="Previous sponsored products"
-              disabled={!canScrollLeft}
-              onClick={() => scrollByPage(-1)}
-            >
-              <ChevronIcon direction="left" />
-            </button>
-
-            <div
-              ref={scrollerRef}
-              className="discovery-rail sellers-collab-rail -mx-0.5 flex gap-2.5 overflow-x-auto px-0.5 pb-1 sm:gap-4"
-            >
-              {railProducts.map((product, index) => {
-                const eager = index < EAGER_IMAGE_COUNT;
-                return (
-                  <div
-                    key={product.id}
-                    className="discovery-rail__item w-[calc(50vw-1.25rem)] max-w-[178px] shrink-0 sm:w-[240px] sm:max-w-none"
-                  >
-                    <ProductCard
-                      product={product}
-                      onOpen={setSelected}
-                      compact
-                      priority={index < 2}
-                      suspendImage={!railNearViewport}
-                      imageObserveRoot={
-                        railNearViewport && !eager
-                          ? scrollerRef.current
-                          : null
-                      }
-                    />
-                  </div>
-                );
-              })}
-            </div>
-
-            <button
-              type="button"
-              className={`sellers-collab-arrow sellers-collab-arrow--next hidden sm:flex ${
-                canScrollRight ? "sellers-collab-arrow--visible" : ""
-              }`}
-              aria-label="Next sponsored products"
-              disabled={!canScrollRight}
-              onClick={() => scrollByPage(1)}
-            >
-              <ChevronIcon direction="right" />
-            </button>
-
-            {canScrollRight ? (
-              <div
-                className="sellers-collab-fade pointer-events-none absolute inset-y-0 right-0 hidden w-12 sm:block"
-                aria-hidden
-              />
-            ) : null}
-          </div>
+          <HorizontalScrollArea
+            scrollerRef={scrollerRef}
+            contentKey={count}
+            prevLabel="Previous sponsored products"
+            nextLabel="Next sponsored products"
+            className="discovery-rail sellers-collab-rail -mx-0.5 flex gap-2.5 overflow-x-auto px-0.5 pb-1 sm:gap-4"
+          >
+            {railProducts.map((product, index) => {
+              const eager = index < EAGER_IMAGE_COUNT;
+              return (
+                <div
+                  key={product.id}
+                  className="discovery-rail__item w-[calc(50vw-1.25rem)] max-w-[178px] shrink-0 sm:w-[240px] sm:max-w-none"
+                >
+                  <ProductCard
+                    product={product}
+                    onOpen={setSelected}
+                    compact
+                    priority={index < 2}
+                    suspendImage={!railNearViewport}
+                    imageObserveRoot={
+                      railNearViewport && !eager
+                        ? scrollerRef.current
+                        : null
+                    }
+                  />
+                </div>
+              );
+            })}
+          </HorizontalScrollArea>
         )}
       </div>
 

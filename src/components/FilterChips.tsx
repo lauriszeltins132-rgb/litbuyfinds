@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import type { MouseEvent } from "react";
+import HorizontalScrollArea from "@/components/HorizontalScrollArea";
 
 type ChipItem = {
   label: string;
@@ -38,15 +39,29 @@ export default function FilterChips({
     onNavigate(href);
   }
 
+  const contentKey = `${items.length}-${actionChip ? 1 : 0}-${allActive ? 1 : 0}`;
+  const labels =
+    title.toLowerCase() === "brands"
+      ? { prev: "Previous brands", next: "Next brands" }
+      : title.toLowerCase() === "categories"
+        ? { prev: "Previous categories", next: "Next categories" }
+        : { prev: `Previous ${title.toLowerCase()}`, next: `Next ${title.toLowerCase()}` };
+
   return (
     <div>
       <p className="control-label mb-3">{title}</p>
-      <div className="flex flex-wrap gap-2">
+      <HorizontalScrollArea
+        contentKey={contentKey}
+        prevLabel={labels.prev}
+        nextLabel={labels.next}
+        compact
+        className="flex flex-nowrap gap-2 overflow-x-auto pb-1"
+      >
         <Link
           href={allHref}
           scroll={false}
           onClick={(event) => handleClick(event, allHref)}
-          className={`control-chip ${allActive ? "control-chip-active" : ""}`}
+          className={`control-chip shrink-0 ${allActive ? "control-chip-active" : ""}`}
         >
           All {title.toLowerCase()}
         </Link>
@@ -57,7 +72,7 @@ export default function FilterChips({
             href={item.href}
             scroll={false}
             onClick={(event) => handleClick(event, item.href)}
-            className={`control-chip ${item.active ? "control-chip-active" : ""}`}
+            className={`control-chip shrink-0 ${item.active ? "control-chip-active" : ""}`}
           >
             <span>{item.label}</span>
             {item.count !== undefined && (
@@ -70,12 +85,12 @@ export default function FilterChips({
           <button
             type="button"
             onClick={actionChip.onClick}
-            className="control-chip"
+            className="control-chip shrink-0"
           >
             {actionChip.label}
           </button>
         ) : null}
-      </div>
+      </HorizontalScrollArea>
     </div>
   );
 }
