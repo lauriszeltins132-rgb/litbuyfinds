@@ -1288,18 +1288,29 @@ body::before {
   display: none;
 }
 
-.sellers-collab-rail-wrap {
+.h-scroll-wrap {
   position: relative;
 }
 
-.sellers-collab-arrow {
+.h-scroll-scroller {
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+
+.h-scroll-scroller::-webkit-scrollbar {
+  display: none;
+}
+
+.h-scroll-arrow {
   position: absolute;
   top: 50%;
   z-index: 2;
+  display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.25rem;
-  height: 2.25rem;
+  width: 2.5rem;
+  height: 2.5rem;
   margin-top: -2.75rem;
   border-radius: 9999px;
   border: 1px solid rgba(26, 29, 22, 0.12);
@@ -1311,34 +1322,63 @@ body::before {
   transition: opacity 0.18s ease, transform 0.18s ease, border-color 0.18s ease;
 }
 
-.sellers-collab-arrow--visible {
+.h-scroll-wrap--compact .h-scroll-arrow {
+  width: 2rem;
+  height: 2rem;
+  margin-top: -1rem;
+}
+
+@media (min-width: 640px) {
+  .h-scroll-arrow {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+}
+
+.h-scroll-arrow--visible {
   opacity: 1;
   pointer-events: auto;
 }
 
-.sellers-collab-arrow:hover:not(:disabled) {
+.h-scroll-arrow:hover:not(:disabled) {
   border-color: color-mix(in srgb, var(--color-accent) 40%, transparent);
   transform: scale(1.04);
 }
 
-.sellers-collab-arrow:disabled {
+.h-scroll-arrow:disabled {
   opacity: 0;
 }
 
-.sellers-collab-arrow--prev {
+.h-scroll-arrow--prev {
   left: 0.15rem;
 }
 
-.sellers-collab-arrow--next {
+.h-scroll-arrow--next {
   right: 0.15rem;
 }
 
-.sellers-collab-fade {
+.h-scroll-fade {
+  pointer-events: none;
+  position: absolute;
+  inset-block: 0;
+  right: 0;
+  width: 2.5rem;
   background: linear-gradient(
     to right,
     rgba(255, 255, 255, 0),
     rgba(255, 255, 255, 0.92)
   );
+}
+
+@media (min-width: 640px) {
+  .h-scroll-fade {
+    width: 3rem;
+  }
+}
+
+/* Legacy aliases used by seller collaboration section flash styling */
+.sellers-collab-rail-wrap {
+  position: relative;
 }
 
 .sellers-collab-section--flash .discovery-section__panel {

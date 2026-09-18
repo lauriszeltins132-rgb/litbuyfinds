@@ -6,6 +6,7 @@ import type { Product } from "@/lib/types";
 import { dedupeListingRail } from "@/lib/listing-dedupe";
 import ContentFreshness from "@/components/ContentFreshness";
 import type { ContentFreshnessVariant } from "@/lib/freshness-dates";
+import HorizontalScrollArea from "@/components/HorizontalScrollArea";
 import ProductCard from "./ProductCard";
 import { useEffect, useRef, useState } from "react";
 
@@ -105,8 +106,11 @@ export default function DiscoveryRail({
           </div>
         )}
 
-        <div
-          ref={scrollerRef}
+        <HorizontalScrollArea
+          scrollerRef={scrollerRef}
+          contentKey={railProducts.length}
+          prevLabel="Previous products"
+          nextLabel="Next products"
           className="discovery-rail -mx-0.5 flex gap-2.5 overflow-x-auto px-0.5 pb-1 sm:gap-4"
         >
           {railProducts.map((product, index) => {
@@ -130,7 +134,7 @@ export default function DiscoveryRail({
               </div>
             );
           })}
-        </div>
+        </HorizontalScrollArea>
       </div>
 
       <ProductModal product={selected} onClose={() => setSelected(null)} />
