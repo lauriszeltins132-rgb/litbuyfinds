@@ -17,7 +17,8 @@ const EAGER_IMAGE_COUNT = 4;
 type DiscoveryRailProps = {
   title: string;
   subtitle?: string;
-  href: string;
+  /** When omitted, the "View all" control is hidden. */
+  href?: string;
   products: Product[];
   showTrendingScore?: boolean;
   /** Only the first rail should preload card images. */
@@ -93,12 +94,14 @@ export default function DiscoveryRail({
                 </div>
               ) : null}
             </div>
-            <Link
-              href={href}
-              className="discovery-section__cta shrink-0 rounded-full border border-border/70 bg-white px-3 py-1.5 text-xs font-bold text-accent shadow-sm transition hover:border-accent/35 sm:text-sm"
-            >
-              View all →
-            </Link>
+            {href ? (
+              <Link
+                href={href}
+                className="discovery-section__cta shrink-0 rounded-full border border-border/70 bg-white px-3 py-1.5 text-xs font-bold text-accent shadow-sm transition hover:border-accent/35 sm:text-sm"
+              >
+                View all →
+              </Link>
+            ) : null}
           </div>
         )}
 
