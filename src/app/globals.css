@@ -1376,33 +1376,6 @@ body::before {
   }
 }
 
-/* Legacy aliases used by seller collaboration section flash styling */
-.sellers-collab-rail-wrap {
-  position: relative;
-}
-
-.sellers-collab-section--flash .discovery-section__panel {
-  animation: sellers-collab-flash 1.2s ease;
-}
-
-@keyframes sellers-collab-flash {
-  0% {
-    box-shadow:
-      0 2px 8px rgba(26, 29, 22, 0.04),
-      0 12px 32px rgba(26, 29, 22, 0.05);
-  }
-  30% {
-    box-shadow:
-      0 0 0 3px color-mix(in srgb, var(--color-accent) 40%, transparent),
-      0 12px 32px rgba(26, 29, 22, 0.08);
-  }
-  100% {
-    box-shadow:
-      0 2px 8px rgba(26, 29, 22, 0.04),
-      0 12px 32px rgba(26, 29, 22, 0.05);
-  }
-}
-
 @keyframes dropdown-in {
   from {
     opacity: 0;
