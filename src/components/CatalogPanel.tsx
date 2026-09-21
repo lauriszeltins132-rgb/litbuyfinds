@@ -19,7 +19,6 @@ import {
   type CatalogSearchDetail,
 } from "@/lib/catalog-search-sync";
 import { scrollToCatalogResults } from "@/lib/scroll-to-catalog";
-import { scrollToSellersCollaboration } from "@/lib/scroll-to-sellers-collaboration";
 import { useWishlist } from "@/context/WishlistContext";
 import ControlButton from "@/components/ui/ControlButton";
 import Select from "@/components/ui/Select";
@@ -457,14 +456,6 @@ export default function CatalogPanel({
               href: item.href,
               active: pathname === item.href,
             }))}
-            actionChip={
-              basePath === "/"
-                ? {
-                    label: "Sponsored Seller Picks",
-                    onClick: () => scrollToSellersCollaboration(),
-                  }
-                : undefined
-            }
           />
 
           <FilterChips
