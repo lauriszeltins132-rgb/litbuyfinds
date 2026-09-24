@@ -85,6 +85,7 @@ export default function ProductCardImage({
         alt={alt}
         width={400}
         height={400}
+        /* Gated by useProductImageLoader — never also native-lazy (Safari rails). */
         loading={shouldLazyLoad ? "lazy" : "eager"}
         fetchPriority={fetchPriority}
         decoding={decoding}

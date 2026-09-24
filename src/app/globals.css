@@ -1226,6 +1226,15 @@ body::before {
   align-items: stretch;
 }
 
+/* Mobile Safari: content-visibility on overflow-x rails can leave painted
+   cards with images that never start loading. Desktop keeps the optimization. */
+@media (max-width: 767px) {
+  .discovery-rail {
+    content-visibility: visible;
+    contain-intrinsic-size: none;
+  }
+}
+
 .discovery-rail__item {
   display: flex;
   height: auto;
