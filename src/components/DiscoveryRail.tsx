@@ -9,11 +9,16 @@ import type { ContentFreshnessVariant } from "@/lib/freshness-dates";
 import HorizontalScrollArea from "@/components/HorizontalScrollArea";
 import ProductCard from "./ProductCard";
 import { useEffect, useRef, useState } from "react";
+import { isMobileViewport } from "@/lib/is-mobile-viewport";
 
 const ProductModal = dynamic(() => import("./ProductModal"), { ssr: false });
 
 /** First N cards may load when the rail nears the viewport; rest wait for scroll. */
 const EAGER_IMAGE_COUNT = 4;
+/** Mobile: first visible pair should load immediately with high priority. */
+const MOBILE_PRIORITY_COUNT = 2;
+/** Mobile: next pair still uses viewport IO (no scroller root). */
+const MOBILE_EAGER_COUNT = 4;
 
 type DiscoveryRailProps = {
   title: string;
@@ -41,9 +46,18 @@ export default function DiscoveryRail({
 }: DiscoveryRailProps) {
   const [selected, setSelected] = useState<Product | null>(null);
   const [railNearViewport, setRailNearViewport] = useState(preloadImages);
+  const [isMobile, setIsMobile] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
   const scrollerRef = useRef<HTMLDivElement>(null);
   const railProducts = dedupeListingRail(products);
+
+  useEffect(() => {
+    setIsMobile(isMobileViewport());
+    const mq = window.matchMedia("(max-width: 767px)");
+    const onChange = () => setIsMobile(mq.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
 
   useEffect(() => {
     if (preloadImages) {
@@ -114,7 +128,23 @@ export default function DiscoveryRail({
           className="discovery-rail -mx-0.5 flex gap-2.5 overflow-x-auto px-0.5 pb-1 sm:gap-4"
         >
           {railProducts.map((product, index) => {
-            const eager = index < EAGER_IMAGE_COUNT;
+            const eagerDesktop = index < EAGER_IMAGE_COUNT;
+            const eagerMobile = index < MOBILE_EAGER_COUNT;
+            const eager = isMobile ? eagerMobile : eagerDesktop;
+            const priority =
+              (preloadImages && index < 2) ||
+              (isMobile && railNearViewport && index < MOBILE_PRIORITY_COUNT);
+
+            /**
+             * Desktop: non-eager cards observe the rail scroller.
+             * Mobile: never use the scroller as IO root (Safari blank-image bug);
+             * viewport IO + sync rect check handles horizontal swipe.
+             */
+            const imageObserveRoot =
+              !isMobile && railNearViewport && !eager
+                ? scrollerRef.current
+                : null;
+
             return (
               <div
                 key={product.id}
@@ -125,11 +155,9 @@ export default function DiscoveryRail({
                   onOpen={setSelected}
                   compact
                   showTrendingScore={showTrendingScore}
-                  priority={preloadImages && index < 2}
+                  priority={priority}
                   suspendImage={!railNearViewport}
-                  imageObserveRoot={
-                    railNearViewport && !eager ? scrollerRef.current : null
-                  }
+                  imageObserveRoot={imageObserveRoot}
                 />
               </div>
             );

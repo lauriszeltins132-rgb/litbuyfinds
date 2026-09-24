@@ -15,6 +15,7 @@ import {
 } from "@/lib/image-url";
 import { IMAGE_LOAD_TIMEOUT_MS } from "@/lib/image-load-timeout";
 import { acquireImageLoadSlot } from "@/lib/image-load-queue";
+import { isMobileViewport } from "@/lib/is-mobile-viewport";
 import {
   abortImageElementLoad,
   filterFailedImageCandidates,
@@ -45,6 +46,9 @@ export const EMPTY_IMAGE_FALLBACKS: string[] = [];
  */
 const VIEWPORT_ROOT_MARGIN = "220px 0px";
 
+/** Mobile: include horizontal margin so overflow-x rail cards wake reliably. */
+const MOBILE_VIEWPORT_ROOT_MARGIN = "180px 72px";
+
 /**
  * Transient network/timeout failures: original attempt + up to 2 soft retries
  * (3 total) before advancing candidates / showing the existing fallback.
@@ -53,6 +57,9 @@ const MAX_SOFT_RETRIES = 2;
 
 /** Backoff between soft retries (ms). */
 const SOFT_RETRY_BACKOFF_MS = [700, 1600] as const;
+
+/** Faster mobile timeout so blank visible cards recover sooner. */
+const MOBILE_IMAGE_LOAD_TIMEOUT_MS = 10_000;
 
 function buildCandidates(
   src: string,
@@ -73,6 +80,11 @@ function buildCandidates(
     unique.push(url);
   }
   return filterFailedImageCandidates(unique);
+}
+
+function getObserveTarget(img: HTMLImageElement | null): Element | null {
+  if (!img) return null;
+  return img.closest(".product-float-stage") ?? img;
 }
 
 /**
@@ -108,12 +120,15 @@ export function useProductImageLoader({
   const [nearViewport, setNearViewport] = useState(priority);
   /** Concurrency slot acquired — required before attaching network src. */
   const [slotReady, setSlotReady] = useState(false);
+  /** Bumps to re-run IntersectionObserver after Safari bfcache / tab return. */
+  const [visibilityEpoch, setVisibilityEpoch] = useState(0);
 
   const imgRef = useRef<HTMLImageElement>(null);
   const loggedRef = useRef(false);
   const softRetryCountRef = useRef(0);
   const softRetryTimerRef = useRef<number | null>(null);
   const releaseSlotRef = useRef<(() => void) | null>(null);
+  const mobileRef = useRef(false);
 
   const displaySrc = candidates[srcIndex] ?? "";
   const nearReady = !suspend && (priority || nearViewport || cacheBoost);
@@ -132,6 +147,10 @@ export function useProductImageLoader({
       releaseSlotRef.current = null;
     }
     setSlotReady(false);
+  }, []);
+
+  useEffect(() => {
+    mobileRef.current = isMobileViewport();
   }, []);
 
   useEffect(() => {
@@ -154,16 +173,54 @@ export function useProductImageLoader({
     releaseSlot();
   }, [clearSoftRetryTimer, releaseSlot]);
 
+  // Safari / iOS: re-arm visibility after bfcache restore, tab return, resume.
+  useEffect(() => {
+    if (suspend || priority || cacheBoost) return;
+
+    const bump = () => {
+      if (document.visibilityState === "hidden") return;
+      setVisibilityEpoch((value) => value + 1);
+    };
+
+    const onPageShow = (event: PageTransitionEvent) => {
+      if (event.persisted) bump();
+    };
+
+    window.addEventListener("pageshow", onPageShow);
+    document.addEventListener("visibilitychange", bump);
+    window.addEventListener("orientationchange", bump);
+    return () => {
+      window.removeEventListener("pageshow", onPageShow);
+      document.removeEventListener("visibilitychange", bump);
+      window.removeEventListener("orientationchange", bump);
+    };
+  }, [cacheBoost, priority, suspend]);
+
   useEffect(() => {
     if (suspend || priority || cacheBoost || nearViewport) return;
 
-    const node = imgRef.current;
-    if (!node) return;
+    const target = getObserveTarget(imgRef.current);
+    if (!target) return;
 
     if (typeof IntersectionObserver === "undefined") {
       setNearViewport(true);
       return;
     }
+
+    const mobile = isMobileViewport();
+    mobileRef.current = mobile;
+
+    /**
+     * Mobile Safari is unreliable with IntersectionObserver roots inside
+     * overflow-x scrollers. Prefer the viewport root on mobile even when a
+     * rail scroller root is provided.
+     */
+    const root = mobile ? null : observeRoot ?? null;
+    const rootMargin = mobile
+      ? MOBILE_VIEWPORT_ROOT_MARGIN
+      : root
+        ? "40px 80px"
+        : VIEWPORT_ROOT_MARGIN;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -172,14 +229,63 @@ export function useProductImageLoader({
         observer.disconnect();
       },
       {
-        root: observeRoot ?? null,
-        rootMargin: observeRoot ? "40px 80px" : VIEWPORT_ROOT_MARGIN,
+        root,
+        rootMargin,
         threshold: 0.01,
       }
     );
 
-    observer.observe(node);
-    return () => observer.disconnect();
+    observer.observe(target);
+
+    const markVisibleIfInRange = () => {
+      try {
+        const rect = target.getBoundingClientRect();
+        const vw = window.innerWidth || 0;
+        const vh = window.innerHeight || 0;
+        const marginX = mobile ? 72 : root ? 80 : 0;
+        const marginY = mobile ? 180 : root ? 40 : 220;
+        const visible =
+          rect.bottom >= -marginY &&
+          rect.top <= vh + marginY &&
+          rect.right >= -marginX &&
+          rect.left <= vw + marginX &&
+          rect.width > 0 &&
+          rect.height > 0;
+        if (visible) {
+          setNearViewport(true);
+          observer.disconnect();
+          return true;
+        }
+      } catch {
+        // Ignore measurement errors.
+      }
+      return false;
+    };
+
+    // Immediate sync check — IO callbacks can lag on iOS after layout/swipe.
+    markVisibleIfInRange();
+
+    // Mobile: overflow-x swipe may not deliver IO promptly — re-check on scroll.
+    let scrollParent: Element | null = null;
+    let onScroll: (() => void) | null = null;
+    if (mobile) {
+      scrollParent = target.closest(".h-scroll-scroller, .discovery-rail");
+      if (scrollParent) {
+        onScroll = () => {
+          if (markVisibleIfInRange() && onScroll && scrollParent) {
+            scrollParent.removeEventListener("scroll", onScroll);
+          }
+        };
+        scrollParent.addEventListener("scroll", onScroll, { passive: true });
+      }
+    }
+
+    return () => {
+      observer.disconnect();
+      if (scrollParent && onScroll) {
+        scrollParent.removeEventListener("scroll", onScroll);
+      }
+    };
   }, [
     cacheBoost,
     candidateKey,
@@ -189,6 +295,7 @@ export function useProductImageLoader({
     retryToken,
     srcIndex,
     suspend,
+    visibilityEpoch,
   ]);
 
   // Acquire a concurrency slot once near viewport (skip if session-cached).
@@ -200,8 +307,13 @@ export function useProductImageLoader({
     }
     if (slotReady || releaseSlotRef.current) return;
 
+    const mobile = isMobileViewport();
+    // Visible / near-viewport mobile cards jump ahead of off-screen waits.
+    const preferPriority = priority || (mobile && nearViewport);
+    const lease = acquireImageLoadSlot(preferPriority);
     let cancelled = false;
-    void acquireImageLoadSlot(priority).then((release) => {
+
+    void lease.promise.then((release) => {
       if (cancelled) {
         release();
         return;
@@ -212,6 +324,9 @@ export function useProductImageLoader({
 
     return () => {
       cancelled = true;
+      lease.cancel();
+      releaseSlotRef.current = null;
+      setSlotReady(false);
     };
   }, [
     nearReady,
@@ -220,6 +335,7 @@ export function useProductImageLoader({
     cacheBoost,
     slotReady,
     priority,
+    nearViewport,
     retryToken,
     srcIndex,
   ]);
@@ -359,9 +475,13 @@ export function useProductImageLoader({
   useEffect(() => {
     if (!allowFetch || failed || !displaySrc || loaded) return;
 
+    const timeoutMs = isMobileViewport()
+      ? MOBILE_IMAGE_LOAD_TIMEOUT_MS
+      : IMAGE_LOAD_TIMEOUT_MS;
+
     const timer = window.setTimeout(() => {
       softRetryOrAdvance();
-    }, IMAGE_LOAD_TIMEOUT_MS);
+    }, timeoutMs);
 
     return () => window.clearTimeout(timer);
   }, [
@@ -374,12 +494,19 @@ export function useProductImageLoader({
     srcIndex,
   ]);
 
-  const shouldLazyLoad = !priority && !cacheBoost && !loaded;
+  /**
+   * Authority for when to fetch is our IntersectionObserver + queue gate.
+   * Never also apply native loading="lazy" after we attach src — Safari iOS
+   * often never starts lazy images inside overflow-x rails.
+   */
+  const shouldLazyLoad = false;
   const fetchPriority: "high" | "low" | "auto" = priority
     ? "high"
     : cacheBoost || loaded
       ? "auto"
-      : "low";
+      : nearViewport
+        ? "auto"
+        : "low";
   const decoding: "sync" | "async" = priority ? "sync" : "async";
 
   const hasCandidate = Boolean(displaySrc);
