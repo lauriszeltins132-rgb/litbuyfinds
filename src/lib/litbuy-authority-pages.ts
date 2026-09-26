@@ -319,18 +319,18 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
     badge: "2026 guide",
     h1: "LitBuy spreadsheet 2026",
     directAnswer:
-      "The LitBuy spreadsheet in 2026 still lists thousands of Weidian and Taobao finds with prices and QC notes, but most buyers pair it with LitBuy Finds for searchable pages, filters, and shareable product URLs. This guide explains how to use both without duplicating work.",
+      "Looking for the LitBuy spreadsheet? Start on the complete LitBuy spreadsheet hub — searchable catalog, QC badges, categories, and a direct Google Sheet link. This 2026 guide explains how to pair that hub with your own sheet notes without duplicating work.",
     summary:
-      "Keep your spreadsheet for raw reference. Use LitBuy Finds and LitBuy AI for daily discovery, mobile browsing, and link sharing in 2026.",
+      "Start on the main LitBuy spreadsheet page for catalog access. Keep a personal sheet for seller notes. Use LitBuy Finds and LitBuy AI for daily discovery and shareable product URLs in 2026.",
     sections: [
       {
         heading: "What spreadsheets still do best",
         paragraphs: [
           "Power users keep spreadsheets for seller notes, batch comparisons, and offline reference. Community sheets update frequently and may include columns LitBuy Finds does not display.",
-          "If you already have a trusted 2026 sheet, bookmark it — but use LitBuy Finds when you need to search by brand or share a single product link.",
+          "If you already have a trusted 2026 sheet, bookmark it — but use the main LitBuy spreadsheet hub when you need to search by brand or share a single product link.",
         ],
         links: [
-          { href: "/litbuy-spreadsheet", label: "Main spreadsheet guide" },
+          { href: "/litbuy-spreadsheet", label: "Complete LitBuy spreadsheet" },
           { href: "/collections/litbuy-spreadsheet-alternative", label: "Spreadsheet alternative" },
         ],
       },
@@ -341,6 +341,7 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
           "LitBuy AI understands budgets, colors, and haul requests — returning only real catalog products with validated prices and links.",
         ],
         links: [
+          { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
           { href: "/litbuy-finds", label: "LitBuy Finds" },
           { href: "/ai", label: "LitBuy AI" },
         ],
@@ -348,9 +349,10 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
       {
         heading: "Recommended 2026 workflow",
         paragraphs: [
-          "Shortlist on LitBuy Finds or LitBuy AI, save wishlist items, open LitBuy buy links to confirm live price, request warehouse QC, then ship when your haul is ready. Refer back to your spreadsheet only when you need a specific seller note or batch column.",
+          "Open the main LitBuy spreadsheet hub first, shortlist finds or use LitBuy AI, save wishlist items, open agent buy links to confirm live price, request warehouse QC, then ship when your haul is ready. Refer back to your personal spreadsheet only when you need a specific seller note or batch column.",
         ],
         links: [
+          { href: "/litbuy-spreadsheet", label: "Main LitBuy spreadsheet" },
           { href: "/how-to-use-litbuy", label: "How to use LitBuy" },
           { href: "/trending-litbuy-finds", label: "Trending finds" },
         ],

@@ -359,7 +359,7 @@ export const BEGINNER_GUIDES: Record<string, GuidePage> = {
           "Sheets are wide and awkward on a phone. Here you get filters, brand pages, trending sorts, and stable links to share. QC references stay visible on the listing when the import includes them.",
         ],
         links: [
-          { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet hub" },
+          { href: "/litbuy-spreadsheet", label: "Complete LitBuy spreadsheet" },
           { href: "/latest-finds", label: "Latest spreadsheet additions" },
           { href: "/best-litbuy-finds-2026", label: "Best finds 2026" },
           { href: "/best-budget-finds", label: "Budget finds" },
