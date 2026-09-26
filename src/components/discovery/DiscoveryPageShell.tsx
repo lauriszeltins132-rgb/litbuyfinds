@@ -20,12 +20,23 @@ export type DiscoveryCompareGroup = {
   products: Product[];
 };
 
+export type DiscoveryPageActionLink = {
+  href: string;
+  label: string;
+  /** Open in a new tab (e.g. Google Sheet). */
+  external?: boolean;
+  /** Emphasize primary CTA styling. */
+  primary?: boolean;
+};
+
 type DiscoveryPageShellProps = {
   path: string;
   badge: string;
   h1: string;
   intro: string;
   freshnessVariant?: ContentFreshnessVariant | null;
+  /** Optional hero CTAs (e.g. Google Sheet + catalog browse). */
+  actionLinks?: DiscoveryPageActionLink[];
   products: Product[];
   productSectionTitle?: string;
   productLimit?: number;
@@ -47,6 +58,7 @@ export default function DiscoveryPageShell({
   h1,
   intro,
   freshnessVariant,
+  actionLinks = [],
   products,
   productSectionTitle,
   productLimit = DISCOVERY_PRODUCT_LIMIT,
@@ -93,6 +105,37 @@ export default function DiscoveryPageShell({
               <ContentFreshness variant={freshnessVariant} display="badge" />
             ) : null}
           </div>
+          {actionLinks.length > 0 ? (
+            <div className="mt-4 flex flex-wrap gap-2">
+              {actionLinks.map((action) => {
+                const className = action.primary
+                  ? "rounded-full bg-accent px-4 py-2 text-xs font-bold text-white shadow-sm transition hover:opacity-90 sm:text-sm"
+                  : "rounded-full border border-border bg-white px-4 py-2 text-xs font-bold text-foreground/85 shadow-sm transition hover:border-accent/40 hover:text-accent sm:text-sm";
+                if (action.external) {
+                  return (
+                    <a
+                      key={action.href + action.label}
+                      href={action.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={className}
+                    >
+                      {action.label}
+                    </a>
+                  );
+                }
+                return (
+                  <Link
+                    key={action.href + action.label}
+                    href={action.href}
+                    className={className}
+                  >
+                    {action.label}
+                  </Link>
+                );
+              })}
+            </div>
+          ) : null}
         </div>
       </section>
 

@@ -284,7 +284,7 @@ export const SEO_LANDING_CONFIG: Record<string, SeoLandingPageEntry> = {
       "Shoe spreadsheet finds on LitBuy Finds — Nike, Jordan, Adidas sneakers from Weidian and Taobao with QC photos and agent checkout links.",
     h1: "Shoe spreadsheet finds",
     intro:
-      "Footwear spreadsheets mix Nike, Jordan, Adidas, and budget batches in one long list. This page highlights quality shoe listings you can open individually — without losing mobile usability. For the main spreadsheet hub, open LitBuy Spreadsheet.",
+      "Footwear spreadsheets mix Nike, Jordan, Adidas, and budget batches in one long list. This page highlights quality shoe listings you can open individually — without losing mobile usability. For the complete LitBuy spreadsheet hub (Google Sheet + full catalog), open LitBuy Spreadsheet.",
     badge: "Spreadsheet",
     keywords: ["shoe spreadsheet", "sneaker spreadsheet litbuy", "litbuy shoe spreadsheet"],
     updateFrequency: "weekly",
@@ -294,11 +294,11 @@ export const SEO_LANDING_CONFIG: Record<string, SeoLandingPageEntry> = {
       {
         heading: "How shoe spreadsheets map to LitBuy Finds",
         paragraphs: [
-          "Each shoe row becomes a searchable product page with photos, prices, QC badges, and agent buy buttons. Use Sneaker finds for the full footwear database.",
+          "Each shoe row becomes a searchable product page with photos, prices, QC badges, and agent buy buttons. Use Sneaker finds for the full footwear database, or the main LitBuy spreadsheet for the complete catalog.",
         ],
         links: [
           { href: "/sneaker-finds", label: "Sneaker finds" },
-          { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+          { href: "/litbuy-spreadsheet", label: "Complete LitBuy spreadsheet" },
           { href: "/latest-finds", label: "Latest finds" },
         ],
       },
@@ -331,7 +331,7 @@ export const SEO_LANDING_CONFIG: Record<string, SeoLandingPageEntry> = {
       {
         question: "Is this the same as a LitBuy spreadsheet?",
         answer:
-          "This page focuses on footwear rows from the LitBuy spreadsheet universe. Open the LitBuy spreadsheet hub for the full guide.",
+          "This page focuses on footwear rows from the LitBuy spreadsheet universe. Open the complete LitBuy spreadsheet hub for the full guide, Google Sheet CTA, and all categories.",
       },
       {
         question: "Should I QC sneakers from spreadsheet finds?",
@@ -350,7 +350,7 @@ export const SEO_LANDING_CONFIG: Record<string, SeoLandingPageEntry> = {
       "Streetwear spreadsheet finds — Stussy, Corteiz, Supreme, and hype labels with searchable LitBuy pages, QC references, and clothing find links.",
     h1: "Streetwear spreadsheet finds",
     intro:
-      "Streetwear sheets move fast. LitBuy Finds keeps the same discovery value while adding photos, QC badges, and shareable URLs — start here for hype clothing rows, or open Clothing finds and Hoodie finds for full databases.",
+      "Streetwear sheets move fast. LitBuy Finds keeps the same discovery value while adding photos, QC badges, and shareable URLs — start here for hype clothing rows, or open the complete LitBuy spreadsheet for the full catalog hub.",
     badge: "Spreadsheet",
     keywords: ["streetwear spreadsheet", "hype finds sheet", "clothing spreadsheet litbuy"],
     updateFrequency: "weekly",
@@ -361,13 +361,13 @@ export const SEO_LANDING_CONFIG: Record<string, SeoLandingPageEntry> = {
       {
         heading: "From streetwear sheet to product pages",
         paragraphs: [
-          "Stussy, Corteiz, Supreme, and Essentials rows become searchable LitBuy Finds pages. Pair this spreadsheet view with Streetwear finds and Clothing finds for browsing without endless scrolling.",
+          "Stussy, Corteiz, Supreme, and Essentials rows become searchable LitBuy Finds pages. Pair this spreadsheet view with Streetwear finds and Clothing finds for browsing without endless scrolling — or return to the main LitBuy spreadsheet for all categories.",
         ],
         links: [
           { href: "/streetwear-finds", label: "Streetwear finds" },
           { href: "/clothing-finds", label: "Clothing finds" },
           { href: "/hoodie-finds", label: "Hoodie finds" },
-          { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+          { href: "/litbuy-spreadsheet", label: "Complete LitBuy spreadsheet" },
         ],
       },
       {

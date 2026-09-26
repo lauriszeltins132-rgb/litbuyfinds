@@ -9,25 +9,44 @@ import {
   buildFaqSchema,
   buildWebPageSchema,
 } from "@/lib/schema";
+import { LITBUY_GOOGLE_SPREADSHEET_URL } from "@/lib/litbuy-spreadsheet-url";
 
 type SeoLandingLayoutProps = {
   config: SeoLandingConfig;
 };
 
+const SPREADSHEET_CATEGORY_LINKS = [
+  "shoes",
+  "hoodies-and-pants",
+  "coats-and-jackets",
+  "tshirts-and-shorts",
+  "accessories",
+  "electronics",
+];
+
+const SPREADSHEET_BRAND_LINKS = [
+  "nike",
+  "jordan",
+  "adidas",
+  "moncler",
+  "stussy",
+  "canada-goose",
+];
+
 export default function SeoLandingLayout({ config }: SeoLandingLayoutProps) {
   const products = config.getProducts();
   const faqs = config.faqs.length > 0 ? config.faqs : undefined;
-  const breadcrumbs =
-    config.slug === "litbuy-spreadsheet"
-      ? [
-          { label: "Home", href: "/" },
-          { label: "Finds", href: "/finds" },
-          { label: config.h1 },
-        ]
-      : [
-          { label: "Home", href: "/" },
-          { label: config.h1 },
-        ];
+  const isSpreadsheetHub = config.slug === "litbuy-spreadsheet";
+  const breadcrumbs = isSpreadsheetHub
+    ? [
+        { label: "Home", href: "/" },
+        { label: "Finds", href: "/finds" },
+        { label: config.h1 },
+      ]
+    : [
+        { label: "Home", href: "/" },
+        { label: config.h1 },
+      ];
 
   return (
     <>
@@ -62,6 +81,30 @@ export default function SeoLandingLayout({ config }: SeoLandingLayoutProps) {
         faqs={faqs}
         relatedLinks={config.relatedLinks}
         browseSlug={config.slug}
+        freshnessVariant={isSpreadsheetHub ? "catalog-sync" : null}
+        categoryLinks={isSpreadsheetHub ? SPREADSHEET_CATEGORY_LINKS : []}
+        brandLinks={isSpreadsheetHub ? SPREADSHEET_BRAND_LINKS : []}
+        browseCategories={isSpreadsheetHub ? SPREADSHEET_CATEGORY_LINKS : []}
+        actionLinks={
+          isSpreadsheetHub
+            ? [
+                {
+                  href: LITBUY_GOOGLE_SPREADSHEET_URL,
+                  label: "View LitBuy Spreadsheet",
+                  external: true,
+                  primary: true,
+                },
+                {
+                  href: "/latest-finds",
+                  label: "Browse Latest Finds",
+                },
+                {
+                  href: "/finds",
+                  label: "Search Catalog",
+                },
+              ]
+            : []
+        }
       />
 
       <RelatedPages currentPath={config.path} />
