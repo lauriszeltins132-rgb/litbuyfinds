@@ -59,6 +59,7 @@ function getAgent(id: SeoAgentId) {
 export const SEO_AGENTS: SeoAgentDefinition[] = SEO_AGENT_IDS.map((id) => {
   const agent = getAgent(id);
   const isLitBuy = id === "litbuy";
+  const isBoonBuy = id === "boonbuy";
 
   return {
     id,
@@ -68,10 +69,14 @@ export const SEO_AGENTS: SeoAgentDefinition[] = SEO_AGENT_IDS.map((id) => {
     findsPath: `/${agent.slug}-finds`,
     offerHeadline: isLitBuy
       ? LITBUY_OFFER_HEADLINE
-      : `Start shopping with ${agent.name}`,
+      : isBoonBuy
+        ? "Claim BoonBuy registration savings with invite JOINUP"
+        : `Start shopping with ${agent.name}`,
     offerDescription: isLitBuy
       ? LITBUY_OFFER_DESCRIPTION
-      : `Create a free ${agent.name} account to import finds, track orders, and save on your next haul.`,
+      : isBoonBuy
+        ? "Register through the verified BoonBuy invite link (code JOINUP) to create your account, import finds, and unlock any current new-user promo shown at signup or checkout. Confirm the live offer on BoonBuy before paying."
+        : `Create a free ${agent.name} account to import finds, track orders, and save on your next haul.`,
     useRegisterLink: isLitBuy,
   };
 });
@@ -119,6 +124,7 @@ export function buildTelegramFooterLinks(currentSlug: string) {
     links.push(
       { href: paths.finds, label: `${agent.name} finds` },
       { href: paths.spreadsheet, label: `${agent.name} spreadsheet` },
+      { href: paths.coupons, label: `${agent.name} coupons` },
       { href: paths.discord, label: `${agent.name} Discord` },
       { href: paths.review, label: `${agent.name} review` }
     );
@@ -148,6 +154,7 @@ export function buildDiscordFooterLinks(currentSlug: string) {
     links.push(
       { href: paths.finds, label: `${agent.name} finds` },
       { href: paths.spreadsheet, label: `${agent.name} spreadsheet` },
+      { href: paths.coupons, label: `${agent.name} coupons` },
       { href: paths.telegram, label: `${agent.name} Telegram` },
       { href: paths.review, label: `${agent.name} review` }
     );

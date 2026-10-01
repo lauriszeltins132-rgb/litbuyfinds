@@ -33,6 +33,7 @@ export default function AgentCouponLandingLayout({
           couponUrl: config.couponUrl,
           offerHeadline: config.offerHeadline,
           offerDescription: config.offerDescription,
+          claimActionName: config.ctaLabel.replace(/\s*✅\s*$/, "").trim(),
         })}
       />
       <SchemaScript
