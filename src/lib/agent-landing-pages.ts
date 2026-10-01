@@ -53,6 +53,7 @@ type AgentLandingSeed = {
 function buildAgentLandingConfig(seed: AgentLandingSeed): SeoLandingConfig {
   const path = `/${seed.slug}`;
   const isLitBuy = seed.agentName === "LitBuy";
+  const isBoonBuy = seed.agentName === "BoonBuy";
   const spreadsheetHref = `/${seed.slug.replace(/-finds$/, "-spreadsheet")}`;
   const hasDedicatedSheet =
     !isLitBuy &&
@@ -64,6 +65,10 @@ function buildAgentLandingConfig(seed: AgentLandingSeed): SeoLandingConfig {
       "hipobuy",
       "kakobuy",
     ].some((slug) => seed.slug.startsWith(`${slug}-`));
+
+  const boonbuyCouponLinks = isBoonBuy
+    ? [{ href: "/boonbuy-coupons", label: "BoonBuy coupons" }]
+    : [];
 
   return {
     slug: seed.slug,
@@ -81,6 +86,7 @@ function buildAgentLandingConfig(seed: AgentLandingSeed): SeoLandingConfig {
           "Browse the same verified catalog on LitBuy Finds — photos, QC references where available, and filters by brand or category. Pick your preferred agent from the header before you buy.",
         ],
         links: [
+          ...boonbuyCouponLinks,
           ...(hasDedicatedSheet
             ? [
                 {
@@ -119,8 +125,18 @@ function buildAgentLandingConfig(seed: AgentLandingSeed): SeoLandingConfig {
           ? `Use the dedicated ${seed.agentName} spreadsheet page for spreadsheet-style discovery with ${seed.agentName} checkout context. This finds page focuses on browsing the catalog.`
           : "This is an independent curated finds directory. It helps you discover products and open them on your chosen agent — not a replacement for each agent's own tools.",
       },
+      ...(isBoonBuy
+        ? [
+            {
+              question: "Where are BoonBuy coupons?",
+              answer:
+                "Open the BoonBuy coupons hub for invite JOINUP registration, current promo claim steps, and related BoonBuy coupon guides.",
+            },
+          ]
+        : []),
     ],
     relatedLinks: [
+      ...boonbuyCouponLinks,
       ...(hasDedicatedSheet
         ? [
             {

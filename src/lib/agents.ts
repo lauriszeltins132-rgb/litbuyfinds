@@ -4,8 +4,8 @@ import type { Product } from "./types";
 const LITBUY_SIGNUP_URL = "https://litbuy.com/register?inviteCode=SMKS";
 const LITBUY_INVITE_CODE = "SMKS";
 const BOONBUY_SIGNUP_URL =
-  "https://boonbuy.com/register?inviteCode=32IJIHM6P";
-const BOONBUY_INVITE_CODE = "32IJIHM6P";
+  "https://boonbuy.com/register?inviteCode=JOINUP";
+const BOONBUY_INVITE_CODE = "JOINUP";
 
 export type AgentId =
   | "litbuy"

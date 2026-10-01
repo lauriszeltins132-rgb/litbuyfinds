@@ -295,6 +295,7 @@ export function buildAgentCouponWebPageSchema({
   couponUrl,
   offerHeadline,
   offerDescription,
+  claimActionName = "Claim LitBuy Coupon",
 }: {
   name: string;
   description: string;
@@ -302,12 +303,14 @@ export function buildAgentCouponWebPageSchema({
   couponUrl: string;
   offerHeadline: string;
   offerDescription: string;
+  /** Visible CTA wording — must match on-page claim button. */
+  claimActionName?: string;
 }) {
   const url = `${SITE_URL}${path}`;
   const claimAction = {
     "@type": "ClaimAction",
     target: couponUrl,
-    name: "Claim LitBuy Coupon",
+    name: claimActionName,
   };
 
   return {
