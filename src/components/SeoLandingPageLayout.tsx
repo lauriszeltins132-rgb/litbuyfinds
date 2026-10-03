@@ -67,9 +67,11 @@ export default function SeoLandingPageLayout({ entry }: SeoLandingPageLayoutProp
     entry.freshnessDisplay
   );
   const freshnessVariant =
-    entry.freshnessDisplay === "latestFinds"
-      ? "latest-updated"
-      : getUpdateFrequencyFreshnessVariant(entry.updateFrequency);
+    entry.freshnessVariant !== undefined
+      ? entry.freshnessVariant
+      : entry.freshnessDisplay === "latestFinds"
+        ? "latest-updated"
+        : getUpdateFrequencyFreshnessVariant(entry.updateFrequency);
 
   const breadcrumbItems = [
     { label: "Home", href: "/" },
@@ -141,6 +143,7 @@ export default function SeoLandingPageLayout({ entry }: SeoLandingPageLayoutProp
         h1={h1}
         intro={entry.intro}
         freshnessVariant={freshnessVariant}
+        actionLinks={entry.actionLinks ?? []}
         products={products}
         productSectionTitle={entry.productSectionTitle}
         productLimit={entry.productLimit ?? DISCOVERY_PRODUCT_LIMIT}

@@ -1,10 +1,15 @@
 import type { AgentId } from "./agents";
 import type { StaticPageSection } from "./static-pages";
 import { AGENT_RESOURCE_AGENTS } from "./agent-resource-agents";
-import { buildAgentSpreadsheetConfig } from "./agent-resource-content";
+import {
+  buildAgentSpreadsheetConfig,
+  buildBoonbuySpreadsheetSupportPages,
+} from "./agent-resource-content";
 import { SEO_EXPANSION_PAGES } from "./seo-expansion-config";
 import { TOP_LISTS } from "./top-lists";
 import type { Product } from "./types";
+import type { DiscoveryPageActionLink } from "@/components/discovery/DiscoveryPageShell";
+import type { ContentFreshnessVariant } from "./freshness-dates";
 
 const AGENT_RESOURCE_SPREADSHEET_PAGES = Object.fromEntries(
   AGENT_RESOURCE_AGENTS.map((agent) => [
@@ -12,6 +17,8 @@ const AGENT_RESOURCE_SPREADSHEET_PAGES = Object.fromEntries(
     buildAgentSpreadsheetConfig(agent),
   ])
 );
+
+const BOONBUY_SPREADSHEET_SUPPORT_PAGES = buildBoonbuySpreadsheetSupportPages();
 
 export type SeoLandingPageType =
   | "collection"
@@ -71,6 +78,10 @@ export type SeoLandingPageEntry = {
   minProducts?: number;
   /** Shows the agent logo on multi-agent spreadsheet landings. */
   agentId?: AgentId;
+  /** Optional hero CTAs (external signup, catalog browse, etc.). */
+  actionLinks?: DiscoveryPageActionLink[];
+  /** Override default update-frequency freshness badge. */
+  freshnessVariant?: ContentFreshnessVariant | null;
 };
 
 function pathFor(slug: string): string {
@@ -829,6 +840,7 @@ export const SEO_LANDING_CONFIG: Record<string, SeoLandingPageEntry> = {
 
   ...AGENT_RESOURCE_SPREADSHEET_PAGES,
   ...SEO_EXPANSION_PAGES,
+  ...BOONBUY_SPREADSHEET_SUPPORT_PAGES,
 };
 
 export const SEO_LANDING_CONFIG_SLUGS = Object.keys(SEO_LANDING_CONFIG);
