@@ -1,6 +1,8 @@
 import type { StaticPageSection } from "./static-pages";
 import type { AuthorityPage } from "./litbuy-authority-pages";
 import { getDatasetSyncedIso } from "./catalog-meta";
+import { getFindsAuthorityStats } from "./finds-authority";
+import { getAgentById } from "./agents";
 import {
   CATEGORY_FINDS_LINKS,
   FINDS_DATABASE_LINKS,
@@ -8,6 +10,8 @@ import {
   SPREADSHEET_CLUSTER_LINKS,
 } from "./seo-internal-links";
 import type { AgentResourceDefinition } from "./agent-resource-agents";
+import type { DiscoveryPageActionLink } from "@/components/discovery/DiscoveryPageShell";
+import type { ContentFreshnessVariant } from "./freshness-dates";
 
 const PUBLISHED = "2026-08-07T00:00:00.000Z";
 const MODIFIED = getDatasetSyncedIso();
@@ -273,85 +277,173 @@ export function buildAgentDiscordFaqs(
 export function buildAgentSpreadsheetConfig(agent: AgentResourceDefinition) {
   const name = agent.name;
   const slug = agent.slug;
+  const isBoonBuy = slug === "boonbuy";
+  const stats = isBoonBuy ? getFindsAuthorityStats() : null;
+  const boonbuySignup = isBoonBuy ? getAgentById("boonbuy").signupUrl : null;
 
-  return {
+  const base = {
     slug: `${slug}-spreadsheet`,
     type: "spreadsheet" as const,
     agentId: agent.id,
-    title: `${name} Spreadsheet | Finds, QC Photos & Searchable Catalog`,
-    description: `${name} spreadsheet guide — searchable ${name} finds with QC photos, category browsing, and ${name} checkout. A cleaner alternative to raw ${name} spreadsheet rows.`,
-    h1: `${name} spreadsheet`,
-    intro: `The ${name} spreadsheet resource on LitBuy Finds turns community ${name} spreadsheet / ${name} finds spreadsheet rows into a searchable product catalog — photos, QC badges, categories, brands, and ${name} buy links on every listing. ${agent.spreadsheetFocus}`,
-    badge: `${name} spreadsheet`,
+    title: isBoonBuy
+      ? "BoonBuy Spreadsheet 2026 | Finds, QC Photos & Product Links"
+      : `${name} Spreadsheet | Finds, QC Photos & Searchable Catalog`,
+    description: isBoonBuy
+      ? `Browse the BoonBuy spreadsheet on LitBuy Finds — ${stats!.totalFindsLabel}+ searchable finds (${stats!.qcFindsLabel} with QC photos), real categories, latest sync (${stats!.lastSyncLabel}), and BoonBuy checkout with invite JOINUP.`
+      : `${name} spreadsheet guide — searchable ${name} finds with QC photos, category browsing, and ${name} checkout. A cleaner alternative to raw ${name} spreadsheet rows.`,
+    h1: isBoonBuy ? "BoonBuy Spreadsheet – Product Finds & QC Photos" : `${name} spreadsheet`,
+    intro: isBoonBuy
+      ? `The BoonBuy Spreadsheet is the searchable catalog of product finds you can open with BoonBuy checkout — ${stats!.totalFindsLabel} indexed listings (${stats!.qcFindsLabel} with QC photos), covering shoes, hoodies, jackets, tees, accessories, and electronics. Updated ${stats!.lastSyncLabel}. Set BoonBuy in the header, browse filters here, then confirm live price on BoonBuy before paying.`
+      : `The ${name} spreadsheet resource on LitBuy Finds turns community ${name} spreadsheet / ${name} finds spreadsheet rows into a searchable product catalog — photos, QC badges, categories, brands, and ${name} buy links on every listing. ${agent.spreadsheetFocus}`,
+    badge: isBoonBuy ? "BoonBuy spreadsheet hub" : `${name} spreadsheet`,
     keywords: [
       `${slug} spreadsheet`,
       `${name.toLowerCase()} spreadsheet`,
       `${slug} finds spreadsheet`,
       `${slug} spreadsheet finds`,
+      `${slug} product spreadsheet`,
       `${slug} finds`,
       `${slug} qc`,
       `${slug} qc finds`,
       `${name.toLowerCase()} finds sheet`,
+      ...(isBoonBuy
+        ? ["boonbuy spreadsheet 2026", "best boonbuy spreadsheet", "boonbuy finds spreadsheet"]
+        : []),
     ],
-    updateFrequency: "weekly" as const,
+    updateFrequency: (isBoonBuy ? "daily" : "weekly") as "daily" | "weekly",
+    freshnessVariant: (isBoonBuy ? "catalog-sync" : undefined) as
+      | ContentFreshnessVariant
+      | undefined,
     filter: { trending: true },
-    productLimit: 24,
+    productLimit: isBoonBuy ? 48 : 24,
+    categoryLinks: isBoonBuy
+      ? [
+          "shoes",
+          "hoodies-and-pants",
+          "coats-and-jackets",
+          "tshirts-and-shorts",
+          "accessories",
+          "electronics",
+        ]
+      : undefined,
+    brandLinks: isBoonBuy
+      ? ["nike", "jordan", "adidas", "moncler", "stussy", "canada-goose"]
+      : undefined,
+    actionLinks: (isBoonBuy && boonbuySignup
+      ? [
+          {
+            href: boonbuySignup,
+            label: "Register on BoonBuy",
+            external: true,
+            primary: true,
+          },
+          { href: "/boonbuy-finds", label: "Browse BoonBuy Finds" },
+          { href: "/latest-finds", label: "Latest Finds" },
+          { href: "/boonbuy-coupons", label: "BoonBuy Coupons" },
+        ]
+      : undefined) as DiscoveryPageActionLink[] | undefined,
     sections: [
       {
-        heading: `What is the ${name} spreadsheet?`,
-        paragraphs: [
-          `A ${name} spreadsheet is the community list of Weidian and Taobao product rows shoppers use with ${name} checkout — prices, seller links, and sometimes QC notes. LitBuy Finds indexes that same product universe into stable pages so you can search on mobile without scrolling thousands of cells.`,
-          agent.spreadsheetFocus,
-          `This page is the ${name} spreadsheet authority on LitBuy Finds for ${agent.angleLabel}. It is not a downloadable Google Sheet — it is a searchable discovery database with ${name} selected at buy time.`,
-        ],
+        heading: isBoonBuy ? "What is the BoonBuy spreadsheet?" : `What is the ${name} spreadsheet?`,
+        paragraphs: isBoonBuy
+          ? [
+              `The BoonBuy spreadsheet is the community list of Weidian and Taobao product finds shoppers open with BoonBuy — prices, images, and optional QC notes. LitBuy Finds indexes that universe into ${stats!.totalFindsLabel} searchable pages so you can browse on mobile without scrolling endless sheet cells.`,
+              "Use this page as the main BoonBuy spreadsheet hub: search the catalog, open categories, review QC badges where available, then select BoonBuy at checkout. Register with invite JOINUP when you need a new BoonBuy account.",
+            ]
+          : [
+              `A ${name} spreadsheet is the community list of Weidian and Taobao product rows shoppers use with ${name} checkout — prices, seller links, and sometimes QC notes. LitBuy Finds indexes that same product universe into stable pages so you can search on mobile without scrolling thousands of cells.`,
+              agent.spreadsheetFocus,
+              `This page is the ${name} spreadsheet authority on LitBuy Finds for ${agent.angleLabel}. It is not a downloadable Google Sheet — it is a searchable discovery database with ${name} selected at buy time.`,
+            ],
         links: [
           { href: agentFindsPath(agent), label: `${name} finds catalog` },
-          { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet hub" },
-          { href: "/rep-agent-spreadsheets", label: "All agent spreadsheets" },
+          ...(isBoonBuy
+            ? [
+                { href: "/boonbuy-coupons", label: "BoonBuy coupons" },
+                { href: "/boonbuy-spreadsheet-2026", label: "BoonBuy spreadsheet 2026" },
+                { href: "/best-boonbuy-spreadsheet", label: "Best BoonBuy spreadsheet" },
+              ]
+            : [
+                { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet hub" },
+                { href: "/rep-agent-spreadsheets", label: "All agent spreadsheets" },
+              ]),
         ],
       },
       {
-        heading: `How to use the ${name} spreadsheet on LitBuy Finds`,
-        paragraphs: [
-          `1) Set ${name} as your preferred agent in the site header. 2) Browse the product grid below or open category / brand hubs. 3) Review photos and any QC reference on the product page. 4) Press Buy so the marketplace listing opens through ${name}.`,
-          `Keep a personal sheet for notes if you want — use this ${name} spreadsheet guide when you need filters, shareable product URLs, and Latest Finds syncs.`,
-        ],
+        heading: isBoonBuy ? "How to use it with BoonBuy" : `How to use the ${name} spreadsheet on LitBuy Finds`,
+        paragraphs: isBoonBuy
+          ? [
+              "1) Register on BoonBuy with invite JOINUP if you need an account. 2) Set BoonBuy as your preferred agent in the site header. 3) Browse the product grid, categories, or brands below. 4) Open a product for photos and any QC reference. 5) Press Buy so the marketplace listing opens through BoonBuy with current attribution.",
+              "New spreadsheet imports land in Latest Finds after each catalog sync. Keep a personal sheet for notes if you want — use this hub for search, filters, and shareable product URLs.",
+            ]
+          : [
+              `1) Set ${name} as your preferred agent in the site header. 2) Browse the product grid below or open category / brand hubs. 3) Review photos and any QC reference on the product page. 4) Press Buy so the marketplace listing opens through ${name}.`,
+              `Keep a personal sheet for notes if you want — use this ${name} spreadsheet guide when you need filters, shareable product URLs, and Latest Finds syncs.`,
+            ],
         links: [
           { href: "/latest-finds", label: "Latest finds" },
           { href: "/how-to-buy", label: "How to buy" },
           { href: agentTelegramPath(agent), label: `${name} Telegram` },
+          ...(isBoonBuy
+            ? [{ href: "/boonbuy-coupons", label: "BoonBuy coupons" }]
+            : []),
         ],
       },
       {
-        heading: `${name} finds discovery by category`,
-        paragraphs: [
-          `${name} spreadsheet rows typically span sneakers, streetwear, hoodies, jackets, bags, and accessories. LitBuy Finds mirrors those lanes as category find pages so ${name} shoppers can jump to a silhouette without re-opening a raw sheet.`,
-          `Pair this ${name} spreadsheet page with ${name} finds when you want the agent-branded catalog landing, and with Best / Latest finds when you want ranked or newest imports.`,
-        ],
-        links: [
-          { href: agentFindsPath(agent), label: `${name} finds` },
-          { href: "/sneaker-finds", label: "Sneaker finds" },
-          { href: "/clothing-finds", label: "Clothing finds" },
-          { href: "/streetwear-finds", label: "Streetwear finds" },
-          { href: "/jacket-finds", label: "Jacket finds" },
-          { href: "/rep-finds", label: "Rep finds hub" },
-        ],
+        heading: isBoonBuy
+          ? "Categories in the BoonBuy spreadsheet catalog"
+          : `${name} finds discovery by category`,
+        paragraphs: isBoonBuy
+          ? [
+              "The catalog mirrors real spreadsheet lanes: Shoes, Hoodies and Pants, Coats and Jackets, T-shirt and Shorts, Accessories, and Electronic Products. Open a category page when you know the lane; use brand pages when you know the label.",
+              "Pair this BoonBuy spreadsheet hub with BoonBuy finds for the agent-branded catalog landing, and with Latest Finds for newest imports.",
+            ]
+          : [
+              `${name} spreadsheet rows typically span sneakers, streetwear, hoodies, jackets, bags, and accessories. LitBuy Finds mirrors those lanes as category find pages so ${name} shoppers can jump to a silhouette without re-opening a raw sheet.`,
+              `Pair this ${name} spreadsheet page with ${name} finds when you want the agent-branded catalog landing, and with Best / Latest finds when you want ranked or newest imports.`,
+            ],
+        links: isBoonBuy
+          ? [
+              { href: "/categories/shoes", label: "Shoes" },
+              { href: "/categories/hoodies-and-pants", label: "Hoodies and Pants" },
+              { href: "/categories/coats-and-jackets", label: "Coats and Jackets" },
+              { href: "/categories/tshirts-and-shorts", label: "T-shirt and Shorts" },
+              { href: "/categories/accessories", label: "Accessories" },
+              { href: "/categories/electronics", label: "Electronic Products" },
+              { href: "/categories", label: "All categories" },
+            ]
+          : [
+              { href: agentFindsPath(agent), label: `${name} finds` },
+              { href: "/sneaker-finds", label: "Sneaker finds" },
+              { href: "/clothing-finds", label: "Clothing finds" },
+              { href: "/streetwear-finds", label: "Streetwear finds" },
+              { href: "/jacket-finds", label: "Jacket finds" },
+              { href: "/rep-finds", label: "Rep finds hub" },
+            ],
       },
       {
-        heading: `${name} QC spreadsheet & quality checks`,
-        paragraphs: [
-          `Many ${name} spreadsheet rows include QC references — that is the ${name} QC signal buyers look for before shipping. LitBuy Finds surfaces QC badges on product pages and links into the shared QC finds database.`,
-          `Reference QC from community albums helps compare batches. Warehouse QC on ${name} photographs your exact item after purchase — still request it before international freight.`,
-        ],
+        heading: isBoonBuy
+          ? "QC photos and BoonBuy spreadsheet finds"
+          : `${name} QC spreadsheet & quality checks`,
+        paragraphs: isBoonBuy
+          ? [
+              `Many spreadsheet rows include QC references from previous buyers. LitBuy Finds shows those as QC badges on product pages and keeps a QC database of ${stats!.qcFindsLabel} listings. Reference QC shows batch examples; warehouse QC on BoonBuy photographs your exact item after purchase.`,
+              "Use QC-linked finds when you want fewer surprises on sneakers, jackets, and bags — then still request warehouse QC before international shipping.",
+            ]
+          : [
+              `Many ${name} spreadsheet rows include QC references — that is the ${name} QC signal buyers look for before shipping. LitBuy Finds surfaces QC badges on product pages and links into the shared QC finds database.`,
+              `Reference QC from community albums helps compare batches. Warehouse QC on ${name} photographs your exact item after purchase — still request it before international freight.`,
+            ],
         links: [
           { href: "/litbuy-qc", label: "QC finds database" },
           { href: "/what-are-qc-photos", label: "What are QC photos" },
-          { href: "/litbuy-qc-photos", label: "QC photos guide" },
           { href: "/collections/best-qc-approved-finds", label: "QC-approved finds" },
         ],
       },
       {
-        heading: `${name} spreadsheet vs LitBuy Spreadsheet`,
+        heading: isBoonBuy
+          ? "BoonBuy spreadsheet vs LitBuy Spreadsheet"
+          : `${name} spreadsheet vs LitBuy Spreadsheet`,
         paragraphs: [
           `The LitBuy Spreadsheet hub is the primary spreadsheet authority for this site. ${name} spreadsheet pages help shoppers who specifically searched “${name} spreadsheet” or “${name} finds spreadsheet” and want ${name} checkout context on the same catalog.`,
           `Product data is shared across agents — you are not looking at a separate inventory. Switching agents changes the buy URL builder, not the underlying marketplace listing.`,
@@ -365,18 +457,29 @@ export function buildAgentSpreadsheetConfig(agent: AgentResourceDefinition) {
       {
         heading: `${name} community resources`,
         paragraphs: [
-          `For same-day row chatter, open ${name} Telegram. For slower threaded discussion, see ${name} Discord. For strengths and limits, read the ${name} review — then return here for the cleaned spreadsheet-style catalog.`,
+          isBoonBuy
+            ? "For same-day row chatter, open BoonBuy Telegram. For slower threaded discussion, see BoonBuy Discord. Claim BoonBuy coupons with invite JOINUP when you need registration savings — then return here for the cleaned spreadsheet-style catalog."
+            : `For same-day row chatter, open ${name} Telegram. For slower threaded discussion, see ${name} Discord. For strengths and limits, read the ${name} review — then return here for the cleaned spreadsheet-style catalog.`,
         ],
         links: [
           { href: agentTelegramPath(agent), label: `${name} Telegram` },
           { href: agentDiscordPath(agent), label: `${name} Discord` },
           { href: agentReviewPath(agent), label: `${name} review` },
-          { href: "/spreadsheet-telegram", label: "Spreadsheet Telegram guide" },
+          ...(isBoonBuy
+            ? [{ href: "/boonbuy-coupons", label: "BoonBuy coupons" }]
+            : [{ href: "/spreadsheet-telegram", label: "Spreadsheet Telegram guide" }]),
         ],
       },
     ],
     relatedLinks: [
       { href: agentFindsPath(agent), label: `${name} finds hub` },
+      ...(isBoonBuy
+        ? [
+            { href: "/boonbuy-coupons", label: "BoonBuy coupons" },
+            { href: "/boonbuy-spreadsheet-2026", label: "BoonBuy spreadsheet 2026" },
+            { href: "/best-boonbuy-spreadsheet", label: "Best BoonBuy spreadsheet" },
+          ]
+        : []),
       { href: agentTelegramPath(agent), label: `${name} Telegram` },
       { href: agentDiscordPath(agent), label: `${name} Discord` },
       { href: agentReviewPath(agent), label: `${name} review` },
@@ -389,34 +492,198 @@ export function buildAgentSpreadsheetConfig(agent: AgentResourceDefinition) {
         (link) => !link.href.includes(slug)
       ).slice(0, 5),
     ],
-    faqs: [
-      {
-        question: `What is the ${name} spreadsheet?`,
-        answer: `The ${name} spreadsheet is the community product-row universe shoppers use with ${name}. LitBuy Finds turns those rows into searchable ${name} finds pages with photos, QC badges, and ${name} checkout.`,
-      },
-      {
-        question: `How is this different from a raw ${name} spreadsheet?`,
-        answer:
-          "Raw sheets are static rows that are hard to search on mobile. LitBuy Finds syncs catalog data into product pages with filters, shareable URLs, and agent switching.",
-      },
-      {
-        question: `Can I open every listing on ${name}?`,
-        answer: `Yes. Select ${name} as your preferred agent in the header or on the product page — buy links rebuild for the same marketplace listing through ${name}.`,
-      },
-      {
-        question: `Does ${name} have its own QC spreadsheet?`,
-        answer: `QC references attached to spreadsheet rows become QC badges on LitBuy Finds. Use the QC finds database for QC-linked products, then request warehouse QC on ${name} for your exact item.`,
-      },
-      {
-        question: `Is this the same catalog as the LitBuy Spreadsheet?`,
-        answer: `Yes — shared product universe. The LitBuy Spreadsheet hub is the primary spreadsheet guide; this page targets ${name} spreadsheet / ${name} finds spreadsheet searches with ${name} checkout context.`,
-      },
-      {
-        question: `Where do I find ${name} Telegram or Discord?`,
-        answer: `Use the ${name} Telegram and ${name} Discord resource pages linked above for community updates, then return here for the searchable catalog.`,
-      },
-    ],
-    productSectionTitle: `${name} spreadsheet picks`,
+    faqs: isBoonBuy
+      ? [
+          {
+            question: "What is the BoonBuy spreadsheet?",
+            answer: `The BoonBuy spreadsheet is the community product-find list that LitBuy Finds indexes into ${stats!.totalFindsLabel} searchable listings with photos, categories, and BoonBuy checkout. This page is the main hub for browsing that catalog with BoonBuy selected.`,
+          },
+          {
+            question: "Is the BoonBuy spreadsheet updated?",
+            answer: `Yes. The LitBuy Finds catalog syncs from spreadsheet imports — last sync ${stats!.lastSyncLabel}. New rows appear in Latest Finds after each import.`,
+          },
+          {
+            question: "Does the BoonBuy spreadsheet include QC photos?",
+            answer: `Many rows include QC references. LitBuy Finds surfaces ${stats!.qcFindsLabel} QC-linked listings with badges on product pages. Reference QC shows batch examples; warehouse QC on BoonBuy photographs your exact item after purchase.`,
+          },
+          {
+            question: "How do I open products through BoonBuy?",
+            answer:
+              "Set BoonBuy in the site header or on the product page, then press Buy. Destination links use the current JOINUP invite attribution while keeping the same marketplace product identity.",
+          },
+          {
+            question: "Where are BoonBuy coupons?",
+            answer:
+              "Open the BoonBuy coupons hub for invite JOINUP registration and current promo claim steps. Spreadsheet browsing and coupon signup are separate resources.",
+          },
+          {
+            question: "Is this the same catalog as the LitBuy Spreadsheet?",
+            answer:
+              "Yes — shared product universe. The LitBuy Spreadsheet hub is the primary site-wide spreadsheet guide; this page targets BoonBuy spreadsheet / BoonBuy finds spreadsheet searches with BoonBuy checkout context.",
+          },
+        ]
+      : [
+          {
+            question: `What is the ${name} spreadsheet?`,
+            answer: `The ${name} spreadsheet is the community product-row universe shoppers use with ${name}. LitBuy Finds turns those rows into searchable ${name} finds pages with photos, QC badges, and ${name} checkout.`,
+          },
+          {
+            question: `How is this different from a raw ${name} spreadsheet?`,
+            answer:
+              "Raw sheets are static rows that are hard to search on mobile. LitBuy Finds syncs catalog data into product pages with filters, shareable URLs, and agent switching.",
+          },
+          {
+            question: `Can I open every listing on ${name}?`,
+            answer: `Yes. Select ${name} as your preferred agent in the header or on the product page — buy links rebuild for the same marketplace listing through ${name}.`,
+          },
+          {
+            question: `Does ${name} have its own QC spreadsheet?`,
+            answer: `QC references attached to spreadsheet rows become QC badges on LitBuy Finds. Use the QC finds database for QC-linked products, then request warehouse QC on ${name} for your exact item.`,
+          },
+          {
+            question: `Is this the same catalog as the LitBuy Spreadsheet?`,
+            answer: `Yes — shared product universe. The LitBuy Spreadsheet hub is the primary spreadsheet guide; this page targets ${name} spreadsheet / ${name} finds spreadsheet searches with ${name} checkout context.`,
+          },
+          {
+            question: `Where do I find ${name} Telegram or Discord?`,
+            answer: `Use the ${name} Telegram and ${name} Discord resource pages linked above for community updates, then return here for the searchable catalog.`,
+          },
+        ],
+    productSectionTitle: isBoonBuy
+      ? "Featured BoonBuy spreadsheet picks"
+      : `${name} spreadsheet picks`,
+  };
+
+  return base;
+}
+
+/** Supporting BoonBuy spreadsheet landings — distinct intents that point at the primary hub. */
+export function buildBoonbuySpreadsheetSupportPages() {
+  const hub = "/boonbuy-spreadsheet";
+  const stats = getFindsAuthorityStats();
+  const signup = getAgentById("boonbuy").signupUrl;
+
+  return {
+    "boonbuy-spreadsheet-2026": {
+      slug: "boonbuy-spreadsheet-2026",
+      type: "spreadsheet" as const,
+      agentId: "boonbuy" as const,
+      title: "BoonBuy Spreadsheet 2026 | Latest Finds & QC Catalog",
+      description: `BoonBuy spreadsheet 2026 — latest searchable BoonBuy finds with QC photos where available, category browsing, and JOINUP registration. Last catalog sync ${stats.lastSyncLabel}.`,
+      h1: "BoonBuy Spreadsheet 2026",
+      intro: `Looking for the BoonBuy spreadsheet 2026 or the latest BoonBuy spreadsheet? Start on the main BoonBuy spreadsheet hub for the full catalog (${stats.totalFindsLabel} finds, ${stats.qcFindsLabel} QC-linked). This page covers 2026 wording and freshness — last sync ${stats.lastSyncLabel}.`,
+      badge: "2026 guide",
+      keywords: [
+        "boonbuy spreadsheet 2026",
+        "latest boonbuy spreadsheet",
+        "boonbuy finds spreadsheet 2026",
+      ],
+      updateFrequency: "weekly" as const,
+      filter: { latest: true },
+      productLimit: 24,
+      actionLinks: [
+        { href: hub, label: "Complete BoonBuy spreadsheet", primary: true },
+        {
+          href: signup,
+          label: "Register on BoonBuy",
+          external: true,
+        },
+      ] as DiscoveryPageActionLink[],
+      sections: [
+        {
+          heading: "2026 BoonBuy spreadsheet workflow",
+          paragraphs: [
+            "Open the main BoonBuy spreadsheet hub first for categories, QC badges, and the full product grid. Use this 2026 page when you specifically searched year-focused wording.",
+            "Set BoonBuy in the header so buy links use current JOINUP attribution while keeping the same Weidian/Taobao product identity.",
+          ],
+          links: [
+            { href: hub, label: "Main BoonBuy spreadsheet" },
+            { href: "/boonbuy-finds", label: "BoonBuy finds" },
+            { href: "/boonbuy-coupons", label: "BoonBuy coupons" },
+            { href: "/latest-finds", label: "Latest finds" },
+          ],
+        },
+      ],
+      relatedLinks: [
+        { href: hub, label: "BoonBuy Spreadsheet" },
+        { href: "/best-boonbuy-spreadsheet", label: "Best BoonBuy spreadsheet" },
+        { href: "/boonbuy-finds", label: "BoonBuy finds" },
+        { href: "/boonbuy-coupons", label: "BoonBuy coupons" },
+        { href: "/telegram-boonbuy", label: "BoonBuy Telegram" },
+        { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
+      ],
+      faqs: [
+        {
+          question: "Where is the complete BoonBuy spreadsheet?",
+          answer:
+            "The primary BoonBuy spreadsheet hub is /boonbuy-spreadsheet — searchable catalog, categories, QC badges, and BoonBuy checkout context.",
+        },
+        {
+          question: "Is the 2026 catalog current?",
+          answer: `Yes. Catalog data syncs from spreadsheet imports — last sync ${stats.lastSyncLabel}. Check Latest Finds for the newest rows.`,
+        },
+      ],
+      productSectionTitle: "Latest BoonBuy spreadsheet picks",
+    },
+    "best-boonbuy-spreadsheet": {
+      slug: "best-boonbuy-spreadsheet",
+      type: "spreadsheet" as const,
+      agentId: "boonbuy" as const,
+      title: "Best BoonBuy Spreadsheet 2026 | Top Finds & QC Picks",
+      description:
+        "Best BoonBuy spreadsheet picks — editor-style finds with QC photos where available, strong presentation, and BoonBuy checkout. Links back to the complete BoonBuy spreadsheet hub.",
+      h1: "Best BoonBuy Spreadsheet",
+      intro:
+        "Searching for the best BoonBuy spreadsheet or best BoonBuy finds spreadsheet? This page highlights stronger product picks from the shared catalog. For the complete BoonBuy product spreadsheet — categories, freshness, and claim CTAs — open the main BoonBuy spreadsheet hub.",
+      badge: "Best picks",
+      keywords: [
+        "best boonbuy spreadsheet",
+        "best boonbuy finds spreadsheet",
+        "best boonbuy spreadsheet 2026",
+      ],
+      updateFrequency: "weekly" as const,
+      filter: { trending: true },
+      productLimit: 24,
+      actionLinks: [
+        { href: hub, label: "See complete BoonBuy spreadsheet", primary: true },
+        { href: "/boonbuy-finds", label: "BoonBuy finds" },
+      ] as DiscoveryPageActionLink[],
+      sections: [
+        {
+          heading: "Best BoonBuy spreadsheet options",
+          paragraphs: [
+            "The strongest BoonBuy spreadsheet experience on LitBuy Finds is the main hub: full catalog search, category chips, QC badges, and BoonBuy agent switching with JOINUP attribution.",
+            "Use this page for ranked/trending picks; return to the complete BoonBuy spreadsheet when you want the full resource.",
+          ],
+          links: [
+            { href: hub, label: "Complete BoonBuy product spreadsheet" },
+            { href: "/boonbuy-spreadsheet-2026", label: "BoonBuy spreadsheet 2026" },
+            { href: "/boonbuy-coupons", label: "BoonBuy coupons" },
+          ],
+        },
+      ],
+      relatedLinks: [
+        { href: hub, label: "BoonBuy Spreadsheet" },
+        { href: "/boonbuy-spreadsheet-2026", label: "BoonBuy spreadsheet 2026" },
+        { href: "/boonbuy-finds", label: "BoonBuy finds" },
+        { href: "/boonbuy-coupons", label: "BoonBuy coupons" },
+        { href: "/discord-boonbuy", label: "BoonBuy Discord" },
+        { href: "/boonbuy-review", label: "BoonBuy review" },
+      ],
+      faqs: [
+        {
+          question: "What is the best BoonBuy spreadsheet?",
+          answer:
+            "On LitBuy Finds, the main /boonbuy-spreadsheet hub is the complete BoonBuy finds spreadsheet resource. This page surfaces stronger picks and links back there.",
+        },
+        {
+          question: "How do I checkout with BoonBuy?",
+          answer:
+            "Select BoonBuy in the header or on a product page. Buy links keep the same marketplace listing and apply current JOINUP invite attribution.",
+        },
+      ],
+      productSectionTitle: "Best BoonBuy spreadsheet picks",
+    },
   };
 }
 
