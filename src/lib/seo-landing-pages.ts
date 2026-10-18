@@ -184,11 +184,35 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
         answer:
           "LitBuy, MuleBuy, Kakobuy, HipoBuy, OopBuy, ACBuy, USFans, GTBuy, and BoonBuy — switch agents in the site header or on each product page.",
       },
+      {
+        question: "Is there a LitBuy spreadsheet for clothing?",
+        answer:
+          "Yes. Clothing rows live in the same LitBuy spreadsheet catalog — open Hoodies and Pants, Coats and Jackets, or T-shirt and Shorts category pages, or use Clothing finds for a filtered clothing database.",
+      },
+      {
+        question: "Is there a LitBuy shoe or sneaker spreadsheet?",
+        answer:
+          "Shoe and sneaker finds are part of the main LitBuy spreadsheet hub. Use the Shoes category, Sneaker finds, or the dedicated shoe spreadsheet page for a footwear-focused view.",
+      },
+      {
+        question: "How do I search the LitBuy spreadsheet?",
+        answer:
+          "On LitBuy Finds, use search and brand/category filters on the spreadsheet hub and catalog pages. The Google Sheet still works for Ctrl/Cmd+F on raw rows if you prefer offline sorting.",
+      },
+      {
+        question: "Where can I find the latest LitBuy spreadsheet?",
+        answer: `Open /litbuy-spreadsheet for the current hub (last sync ${SPREADSHEET_STATS.lastSyncLabel}), then Latest Finds for newest imports. The 2026 guide and best-spreadsheet pages link back to the same canonical hub.`,
+      },
+      {
+        question: "What is the best LitBuy spreadsheet for 2026?",
+        answer: `The best path for most shoppers is this LitBuy spreadsheet hub — ${SPREADSHEET_STATS.totalFindsLabel} searchable finds with QC links and a Google Sheet button. See /best-litbuy-spreadsheet if you want a short comparison of catalog vs raw sheet.`,
+      },
     ],
     relatedLinks: [
       { href: "/finds", label: "Finds database hub" },
       { href: "/latest-finds", label: "Latest finds hub" },
       { href: "/litbuy-spreadsheet-2026", label: "Spreadsheet 2026 guide" },
+      { href: "/best-litbuy-spreadsheet", label: "Best LitBuy spreadsheet" },
       { href: "/shoe-spreadsheet", label: "Shoe spreadsheet" },
       { href: "/streetwear-spreadsheet", label: "Streetwear spreadsheet" },
       { href: "/rep-finds", label: "Rep finds" },
@@ -449,6 +473,24 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
         answer:
           "Use Clothing finds, Sneaker finds, Hoodie finds, and Jacket finds for category databases — or open Latest Finds for new spreadsheet imports.",
       },
+      {
+        question: "What are the latest LitBuy finds in 2026?",
+        answer: `New LitBuy product finds land in Latest Finds after each catalog sync (last sync ${SPREADSHEET_STATS.lastSyncLabel}). This LitBuy finds page stays the branded catalog hub; Latest Finds is the freshness feed.`,
+      },
+      {
+        question: "Are there budget LitBuy finds under $20 or $50?",
+        answer:
+          "Yes. Use the under-$20, under-$30, and under-$50 LitBuy finds pages for price-filtered catalogs, or apply price filters while browsing the main finds hub.",
+      },
+      {
+        question: "Do LitBuy finds include Weidian, Taobao, and 1688 products?",
+        answer:
+          "Most LitBuy finds originate from Weidian or Taobao sellers; 1688 links appear when the agent listing supports them. Open the Weidian and Taobao guides for marketplace tips, then confirm the live agent page before paying.",
+      },
+      {
+        question: "What are LitBuy finds with QC?",
+        answer: `LitBuy finds with QC are catalog products that carry QC photo references — ${SPREADSHEET_STATS.qcFindsLabel} QC-linked listings in the database. Reference QC is batch context; warehouse QC on your agent photographs your exact item after purchase.`,
+      },
     ],
     relatedLinks: [
       { href: "/finds", label: "Finds hub" },
@@ -462,6 +504,8 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
       { href: "/best-rep-finds", label: "Best rep finds" },
       { href: "/litbuy-qc", label: "QC database" },
       { href: "/litbuy-products", label: "All LitBuy products" },
+      { href: "/litbuy-finds-under-20", label: "Finds under $20" },
+      { href: "/litbuy-finds-under-50", label: "Finds under $50" },
       { href: "/telegram-usfans", label: "USFans Telegram" },
       { href: "/telegram-oopbuy", label: "OopBuy Telegram" },
       { href: "/telegram-kakobuy", label: "Kakobuy Telegram" },

@@ -34,6 +34,7 @@ export const LITBUY_AUTHORITY_LINKS = [
 export const LITBUY_HUB_FOOTER_LINKS = [
   { href: "/litbuy-guide", label: "LitBuy guide hub" },
   { href: "/litbuy-spreadsheet-2026", label: "Spreadsheet 2026" },
+  { href: "/best-litbuy-spreadsheet", label: "Best LitBuy spreadsheet" },
   { href: "/guides", label: "All guides" },
   { href: "/about", label: "About LitBuy Finds" },
 ] as const;

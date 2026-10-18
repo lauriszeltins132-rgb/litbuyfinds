@@ -1,6 +1,7 @@
 import { getAgentReviewPage, AGENT_REVIEW_SLUGS } from "./agent-review-pages";
 import { getDatasetSyncedIso } from "./catalog-meta";
 import { SOCIAL_LINKS } from "./constants";
+import { getFindsAuthorityStats } from "./finds-authority";
 import {
   LITBUY_AUTHORITY_LINKS,
   LITBUY_HUB_FOOTER_LINKS,
@@ -12,6 +13,7 @@ export type { AuthorityPage } from "./authority-page-types";
 
 const PUBLISHED = "2026-07-21T00:00:00.000Z";
 const MODIFIED = getDatasetSyncedIso();
+const SPREADSHEET_STATS = getFindsAuthorityStats();
 
 const CORE_RELATED = LITBUY_AUTHORITY_LINKS.filter(
   (l) =>
@@ -372,9 +374,111 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
     ],
     relatedLinks: [
       { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet (canonical)" },
+      { href: "/best-litbuy-spreadsheet", label: "Best LitBuy spreadsheet" },
       { href: "/latest-finds", label: "Latest finds" },
       { href: "/rep-finds", label: "Rep finds" },
       { href: "/litbuy-finds", label: "LitBuy Finds" },
+      ...LITBUY_HUB_FOOTER_LINKS,
+    ],
+    publishedTime: PUBLISHED,
+    modifiedTime: MODIFIED,
+  },
+
+  "best-litbuy-spreadsheet": {
+    slug: "best-litbuy-spreadsheet",
+    path: "/best-litbuy-spreadsheet",
+    title: "Best LitBuy Spreadsheet 2026 | Finds Catalog & QC Photos",
+    metaDescription:
+      "What makes the best LitBuy spreadsheet for 2026: searchable LitBuy finds, QC photo links, category filters, and a direct Google Sheet — not endless unfiltered rows. Start on the main LitBuy spreadsheet hub.",
+    badge: "Best spreadsheet",
+    h1: "Best LitBuy spreadsheet",
+    directAnswer: `The best LitBuy spreadsheet experience for most shoppers is the LitBuy Finds catalog hub — ${SPREADSHEET_STATS.totalFindsLabel} searchable product finds (${SPREADSHEET_STATS.qcFindsLabel} with QC photos), updated ${SPREADSHEET_STATS.lastSyncLabel}. Use /litbuy-spreadsheet for the full hub and Google Sheet link; this page explains why a searchable catalog beats raw sheet scrolling.`,
+    summary:
+      "Best LitBuy spreadsheet = searchable finds + QC badges + categories + a Google Sheet you can still open. The canonical hub remains /litbuy-spreadsheet.",
+    parentCrumb: { label: "LitBuy spreadsheet", href: "/litbuy-spreadsheet" },
+    primaryCta: {
+      href: "/litbuy-spreadsheet",
+      label: "Open LitBuy spreadsheet hub",
+    },
+    sections: [
+      {
+        heading: "What “best LitBuy spreadsheet” usually means",
+        paragraphs: [
+          "Shoppers searching for the best LitBuy spreadsheet or best LitBuy finds spreadsheet usually want three things: current product rows, photos (ideally with QC), and a way to open a buy link without hunting broken cells.",
+          `LitBuy Finds indexes that universe into ${SPREADSHEET_STATS.totalFindsLabel} browsable listings across shoes, hoodies, jackets, tees, accessories, and electronics — then keeps the Google Sheet available for power users who still want raw rows.`,
+        ],
+        links: [
+          { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet hub" },
+          { href: "/litbuy-finds", label: "LitBuy finds catalog" },
+        ],
+      },
+      {
+        heading: "Why a searchable catalog beats a lone sheet file",
+        paragraphs: [
+          "A Google Sheet is excellent for notes and offline sorting. It is weak for mobile search, shareable product URLs, QC badges, and multi-agent checkout. The LitBuy spreadsheet hub keeps both: View LitBuy Spreadsheet for the sheet, then browse filters here.",
+          "If a “best spreadsheet” list only dumps an outdated file URL with no QC or category lanes, treat it as incomplete — verify live prices and photos before you pay.",
+        ],
+        links: [
+          { href: "/latest-finds", label: "Latest spreadsheet finds" },
+          { href: "/litbuy-qc", label: "QC finds database" },
+          { href: "/litbuy-spreadsheet-2026", label: "Spreadsheet 2026 guide" },
+        ],
+      },
+      {
+        heading: "Category lanes inside the spreadsheet catalog",
+        paragraphs: [
+          "Clothing, shoe / sneaker, hoodie, jacket, accessories, and streetwear spreadsheet intents all map to real category pages on LitBuy Finds — not separate thin keyword URLs. Open the hub first, then jump into the lane you need.",
+        ],
+        links: [
+          { href: "/shoe-spreadsheet", label: "Shoe spreadsheet" },
+          { href: "/streetwear-spreadsheet", label: "Streetwear spreadsheet" },
+          { href: "/sneaker-finds", label: "Sneaker finds" },
+          { href: "/clothing-finds", label: "Clothing finds" },
+          { href: "/hoodie-finds", label: "Hoodie finds" },
+          { href: "/jacket-finds", label: "Jacket finds" },
+        ],
+      },
+      {
+        heading: "Recommended workflow",
+        paragraphs: [
+          "1) Open the LitBuy spreadsheet hub. 2) Search or filter by brand/category. 3) Check QC badges when present. 4) Open the agent buy link and confirm live price/size. 5) Keep a personal sheet only for your own haul notes.",
+        ],
+        links: [
+          { href: "/litbuy-spreadsheet", label: "Main LitBuy spreadsheet" },
+          { href: "/how-to-use-litbuy", label: "How to use LitBuy" },
+          { href: "/litbuy-coupons", label: "LitBuy coupons" },
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: "What is the best LitBuy spreadsheet for 2026?",
+        answer: `For most shoppers, the best LitBuy spreadsheet path is the LitBuy Finds hub at /litbuy-spreadsheet — ${SPREADSHEET_STATS.totalFindsLabel} indexed finds with search, QC links, and a Google Sheet button. Last catalog sync: ${SPREADSHEET_STATS.lastSyncLabel}.`,
+      },
+      {
+        question: "Is the best LitBuy finds spreadsheet a Google Sheet or a website?",
+        answer:
+          "Both. Power users still open the Google Sheet for raw rows; LitBuy Finds is the searchable website built from that spreadsheet universe. Start on /litbuy-spreadsheet either way.",
+      },
+      {
+        question: "Does the best LitBuy spreadsheet include QC photos?",
+        answer: `Many rows do. LitBuy Finds surfaces ${SPREADSHEET_STATS.qcFindsLabel} QC-linked listings. Reference QC is batch context; warehouse QC on your agent photographs your exact item after purchase.`,
+      },
+      {
+        question: "Where is the main LitBuy spreadsheet page?",
+        answer:
+          "The canonical LitBuy spreadsheet hub is /litbuy-spreadsheet. This “best spreadsheet” page supports comparison intent and links back there for catalog access.",
+      },
+    ],
+    relatedLinks: [
+      { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet (canonical)" },
+      { href: "/litbuy-spreadsheet-2026", label: "Spreadsheet 2026" },
+      { href: "/litbuy-finds", label: "LitBuy finds" },
+      { href: "/latest-finds", label: "Latest finds" },
+      { href: "/litbuy-qc", label: "QC finds" },
+      { href: "/shoe-spreadsheet", label: "Shoe spreadsheet" },
+      { href: "/streetwear-spreadsheet", label: "Streetwear spreadsheet" },
+      { href: "/telegram-litbuy", label: "LitBuy Telegram" },
       ...LITBUY_HUB_FOOTER_LINKS,
     ],
     publishedTime: PUBLISHED,

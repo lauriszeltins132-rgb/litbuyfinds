@@ -144,6 +144,21 @@ const nextConfig: NextConfig = {
       { source: "/litbuy-promo", destination: "/litbuy-coupons", permanent: true },
       { source: "/best-litbuy-coupon", destination: "/litbuy-coupons", permanent: true },
       {
+        source: "/litbuy-invitation-code",
+        destination: "/litbuy-invite-code",
+        permanent: true,
+      },
+      {
+        source: "/litbuy-signup-code",
+        destination: "/litbuy-invite-code",
+        permanent: true,
+      },
+      {
+        source: "/litbuy-registration-code",
+        destination: "/litbuy-invite-code",
+        permanent: true,
+      },
+      {
         source: "/guides/what-is-litbuy",
         destination: "/what-is-litbuy",
         permanent: true,

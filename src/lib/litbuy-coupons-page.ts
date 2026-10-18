@@ -141,6 +141,20 @@ export const LITBUY_COUPONS_FAQS = [
     answer:
       "Click the registration button on this page, create a LitBuy account, and confirm the welcome coupon pack and shipping discount appear at checkout before paying for your haul.",
   },
+  {
+    question: "What is a LitBuy invitation code?",
+    answer: `A LitBuy invitation code (also called invite, referral, signup, or registration code) is entered when you create a LitBuy account. LitBuy Finds tracks invite ${LITBUY_INVITE_CODE} via the verified registration link on this page. For a focused walkthrough, see /litbuy-invite-code.`,
+  },
+  {
+    question: "Where do I enter a LitBuy invite code?",
+    answer:
+      "Enter it during LitBuy registration — or open the verified signup button on this coupons hub so the invite attaches automatically. It is not usually typed as a freight coupon after your haul is already packed. Details: /litbuy-invite-code.",
+  },
+  {
+    question: "Are there LitBuy coupons for new users in 2026?",
+    answer:
+      "Yes. Eligible new accounts can unlock the welcome coupon pack plus shipping savings when registering through the verified link on this page. Confirm the live total on LitBuy checkout — offers can vary by region and account type.",
+  },
 ] as const;
 
 export const LITBUY_COUPONS_INTERNAL_LINKS = [
@@ -148,6 +162,7 @@ export const LITBUY_COUPONS_INTERNAL_LINKS = [
   { href: "/finds", label: "Finds hub" },
   { href: "/litbuy-finds", label: "LitBuy finds" },
   { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+  { href: "/litbuy-invite-code", label: "LitBuy invite code" },
   { href: "/litbuy-discord", label: "LitBuy Discord" },
   { href: "/telegram-litbuy", label: "LitBuy Telegram" },
   { href: "/litbuy-shipping-coupon", label: "Shipping coupon guide" },
