@@ -1,6 +1,69 @@
 {
   "runs": [
     {
+      "timestamp": "2026-10-19T15:17:50.382Z",
+      "trigger": "github-actions",
+      "dryRun": false,
+      "added": 0,
+      "duplicatesSkipped": 1335,
+      "failed": 5,
+      "failuresByReason": {
+        "invalid_name": 5
+      },
+      "catalogTotalBefore": 3685,
+      "catalogTotalAfter": 3685,
+      "perSheet": {
+        "trending-now": {
+          "parsed": 187,
+          "added": 0,
+          "duplicates": 187,
+          "failed": 0
+        },
+        "latest-finds": {
+          "parsed": 198,
+          "added": 0,
+          "duplicates": 198,
+          "failed": 0
+        },
+        "shoes": {
+          "parsed": 150,
+          "added": 0,
+          "duplicates": 150,
+          "failed": 0
+        },
+        "hoodies-and-pants": {
+          "parsed": 147,
+          "added": 0,
+          "duplicates": 147,
+          "failed": 0
+        },
+        "coats-and-jackets": {
+          "parsed": 127,
+          "added": 0,
+          "duplicates": 127,
+          "failed": 0
+        },
+        "tshirts-and-shorts": {
+          "parsed": 134,
+          "added": 0,
+          "duplicates": 134,
+          "failed": 0
+        },
+        "accessories": {
+          "parsed": 153,
+          "added": 0,
+          "duplicates": 153,
+          "failed": 0
+        },
+        "electronics": {
+          "parsed": 244,
+          "added": 0,
+          "duplicates": 239,
+          "failed": 5
+        }
+      }
+    },
+    {
       "timestamp": "2026-10-12T17:23:08.538Z",
       "trigger": "github-actions",
       "dryRun": false,
