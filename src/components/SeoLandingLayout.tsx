@@ -85,6 +85,7 @@ export default function SeoLandingLayout({ config }: SeoLandingLayoutProps) {
         categoryLinks={isSpreadsheetHub ? SPREADSHEET_CATEGORY_LINKS : []}
         brandLinks={isSpreadsheetHub ? SPREADSHEET_BRAND_LINKS : []}
         browseCategories={isSpreadsheetHub ? SPREADSHEET_CATEGORY_LINKS : []}
+        fullCatalogBasePath={isSpreadsheetHub ? config.path : undefined}
         actionLinks={
           isSpreadsheetHub
             ? [
