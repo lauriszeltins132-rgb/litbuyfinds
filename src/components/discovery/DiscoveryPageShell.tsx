@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { Suspense } from "react";
+import BrowseCatalogPrefetch from "@/components/BrowseCatalogPrefetch";
+import CatalogPanel from "@/components/CatalogPanel";
 import ContentFreshness, {
   type ContentFreshnessVariant,
 } from "@/components/ContentFreshness";
@@ -6,6 +9,7 @@ import DiscoveryBrowseRails from "@/components/discovery/DiscoveryBrowseRails";
 import DiscoveryRail from "@/components/DiscoveryRail";
 import ProductGrid from "@/components/ProductGrid";
 import AgentLogo from "@/components/agents/AgentLogo";
+import { BROWSE_CATALOG_URL } from "@/lib/browse-catalog";
 import { DISCOVERY_PRODUCT_LIMIT } from "@/lib/catalog-page-size";
 import type { AgentId } from "@/lib/agents";
 import type { StaticPageSection } from "@/lib/static-pages";
@@ -50,6 +54,12 @@ type DiscoveryPageShellProps = {
   browseCategories?: string[];
   /** Optional agent logo for agent spreadsheet / finds landings. */
   agentId?: AgentId;
+  /**
+   * When set, replace the curated "All picks" grid with the shared full
+   * CatalogPanel (search/filters/pagination) bound to this base path.
+   * Featured picks above stay unchanged. SEO copy/schema stay outside this.
+   */
+  fullCatalogBasePath?: string;
 };
 
 export default function DiscoveryPageShell({
@@ -71,6 +81,7 @@ export default function DiscoveryPageShell({
   browseSlug,
   browseCategories = [],
   agentId,
+  fullCatalogBasePath,
 }: DiscoveryPageShellProps) {
   const heroIntro = getHeroIntro(intro);
   const qcCount = products.filter((product) => product.qc_link).length;
@@ -81,6 +92,7 @@ export default function DiscoveryPageShell({
   const displayedProducts = products.slice(0, productLimit);
   const hasCompareGroups = compareGroups.some((group) => group.products.length > 0);
   const hasPrimaryProducts = displayedProducts.length > 0 && !hasCompareGroups;
+  const showFullCatalog = Boolean(fullCatalogBasePath);
   const heroStatLine = heroStats.map((stat) => stat.value).join(" · ");
 
   return (
@@ -165,7 +177,7 @@ export default function DiscoveryPageShell({
           )
         : null}
 
-      {hasPrimaryProducts ? (
+      {hasPrimaryProducts && !showFullCatalog ? (
         <section className="px-4 pb-6 pt-2 sm:px-6">
           <div className="mx-auto max-w-7xl">
             <h2 className="text-lg font-black sm:text-xl">All picks</h2>
@@ -176,6 +188,33 @@ export default function DiscoveryPageShell({
               <ProductGrid products={displayedProducts} priorityCount={0} />
             </div>
           </div>
+        </section>
+      ) : null}
+
+      {showFullCatalog && fullCatalogBasePath ? (
+        <section className="pt-2" aria-label="All LitBuy spreadsheet finds">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6">
+            <h2 className="text-lg font-black sm:text-xl">
+              All LitBuy spreadsheet finds
+            </h2>
+            <p className="mt-1 text-sm text-muted">
+              Browse the full catalog with search, filters, and pagination — same
+              products as LitBuy Finds.
+            </p>
+          </div>
+          <BrowseCatalogPrefetch />
+          <Suspense
+            fallback={
+              <div className="px-4 py-16 text-center text-sm text-muted sm:px-6">
+                Loading catalog…
+              </div>
+            }
+          >
+            <CatalogPanel
+              basePath={fullCatalogBasePath}
+              catalogSource={BROWSE_CATALOG_URL}
+            />
+          </Suspense>
         </section>
       ) : null}
 
