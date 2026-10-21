@@ -47,6 +47,11 @@ type CatalogPanelProps = {
   basePath?: string;
   /** Fetch the full browse catalog client-side (homepage performance). */
   catalogSource?: string;
+  /**
+   * Keep category chips on `basePath` (`?category=`) instead of navigating
+   * to category pages. Default preserves homepage and category-page behavior.
+   */
+  inlineCategories?: boolean;
 };
 
 function currentParams(searchParams: URLSearchParams) {
@@ -96,6 +101,7 @@ export default function CatalogPanel({
   brands: brandsProp = [],
   basePath = "/",
   catalogSource,
+  inlineCategories = false,
 }: CatalogPanelProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -118,6 +124,9 @@ export default function CatalogPanel({
 
   const searchFromUrl = searchParams.get("q") ?? "";
   const brandFromUrl = searchParams.get("brand") ?? "";
+  const categoryFromUrl = inlineCategories
+    ? (searchParams.get("category") ?? "")
+    : "";
   const minPrice = searchParams.get("min") ?? "";
   const maxPrice = searchParams.get("max") ?? "";
   const sort = searchParams.get("sort") ?? "featured";
@@ -131,8 +140,9 @@ export default function CatalogPanel({
   /** Local filter mirrors URL, but can apply immediately before router catches up. */
   const [search, setSearch] = useState(searchFromUrl);
   const [brand, setBrand] = useState(brandFromUrl);
+  const [category, setCategory] = useState(categoryFromUrl);
 
-  const filterKey = `${search}|${brand}|${minPrice}|${maxPrice}|${sort}|${qcOnly}|${savedOnly}`;
+  const filterKey = `${search}|${category}|${brand}|${minPrice}|${maxPrice}|${sort}|${qcOnly}|${savedOnly}`;
   const [page, setPage] = useState(urlPage);
   const prevFilterKeyRef = useRef(filterKey);
   const prevPageRef = useRef(page);
@@ -158,6 +168,11 @@ export default function CatalogPanel({
   useEffect(() => {
     setBrand(brandFromUrl);
   }, [brandFromUrl]);
+
+  useEffect(() => {
+    if (!inlineCategories) return;
+    setCategory(categoryFromUrl);
+  }, [inlineCategories, categoryFromUrl]);
 
   useEffect(() => {
     function onExternalSearch(event: Event) {
@@ -243,7 +258,7 @@ export default function CatalogPanel({
     () =>
       filterProducts(products, {
         search,
-        category: "",
+        category,
         brand,
         minPrice,
         maxPrice,
@@ -255,6 +270,7 @@ export default function CatalogPanel({
     [
       products,
       search,
+      category,
       brand,
       minPrice,
       maxPrice,
@@ -305,6 +321,9 @@ export default function CatalogPanel({
     const next = new URL(url, "https://litbuyfinds.local");
     const nextQ = next.searchParams.get("q") ?? "";
     const nextBrand = next.searchParams.get("brand") ?? "";
+    const nextCategory = inlineCategories
+      ? (next.searchParams.get("category") ?? "")
+      : "";
     const staysOnCatalog =
       next.pathname === basePath ||
       (basePath === "/" && (next.pathname === "/" || next.pathname === ""));
@@ -312,6 +331,7 @@ export default function CatalogPanel({
     setSearch(nextQ);
     setQuery(nextQ);
     setBrand(nextBrand);
+    if (inlineCategories) setCategory(nextCategory);
     setPage(1);
     if (staysOnCatalog) {
       requestScrollToResults();
@@ -447,14 +467,26 @@ export default function CatalogPanel({
         <div className="space-y-6 border-b border-border pb-6">
           <FilterChips
             title="Categories"
-            allHref="/"
-            allActive={pathname === "/" && !onCategoryPage && !onFeaturedPage}
+            allHref={
+              inlineCategories
+                ? buildUrl(basePath, params, { category: "" })
+                : "/"
+            }
+            allActive={
+              inlineCategories
+                ? !category
+                : pathname === "/" && !onCategoryPage && !onFeaturedPage
+            }
             onNavigate={navigate}
             items={categories.map((item) => ({
               label: item.name,
               count: item.count,
-              href: item.href,
-              active: pathname === item.href,
+              href: inlineCategories
+                ? buildUrl(basePath, params, { category: item.slug })
+                : item.href,
+              active: inlineCategories
+                ? category === item.slug
+                : pathname === item.href,
             }))}
           />
 

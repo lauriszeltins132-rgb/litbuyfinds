@@ -1,5 +1,6 @@
 import Breadcrumbs from "@/components/Breadcrumbs";
 import DiscoveryPageShell from "@/components/discovery/DiscoveryPageShell";
+import SpreadsheetFullCatalog from "@/components/SpreadsheetFullCatalog";
 import SchemaScript from "@/components/SchemaScript";
 import type { SeoLandingConfig } from "@/lib/seo-landing-pages";
 import RelatedPages from "@/components/RelatedPages";
@@ -85,6 +86,7 @@ export default function SeoLandingLayout({ config }: SeoLandingLayoutProps) {
         categoryLinks={isSpreadsheetHub ? SPREADSHEET_CATEGORY_LINKS : []}
         brandLinks={isSpreadsheetHub ? SPREADSHEET_BRAND_LINKS : []}
         browseCategories={isSpreadsheetHub ? SPREADSHEET_CATEGORY_LINKS : []}
+        fullCatalog={isSpreadsheetHub ? <SpreadsheetFullCatalog /> : undefined}
         actionLinks={
           isSpreadsheetHub
             ? [
