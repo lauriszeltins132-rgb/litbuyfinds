@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import Link from "next/link";
 import ContentFreshness, {
   type ContentFreshnessVariant,
@@ -50,6 +51,11 @@ type DiscoveryPageShellProps = {
   browseCategories?: string[];
   /** Optional agent logo for agent spreadsheet / finds landings. */
   agentId?: AgentId;
+  /**
+   * Replaces the curated "All picks" grid. Used by /litbuy-spreadsheet to
+   * mount the existing full catalog without changing other discovery pages.
+   */
+  fullCatalog?: ReactNode;
 };
 
 export default function DiscoveryPageShell({
@@ -71,6 +77,7 @@ export default function DiscoveryPageShell({
   browseSlug,
   browseCategories = [],
   agentId,
+  fullCatalog,
 }: DiscoveryPageShellProps) {
   const heroIntro = getHeroIntro(intro);
   const qcCount = products.filter((product) => product.qc_link).length;
@@ -165,7 +172,9 @@ export default function DiscoveryPageShell({
           )
         : null}
 
-      {hasPrimaryProducts ? (
+      {fullCatalog ? (
+        fullCatalog
+      ) : hasPrimaryProducts ? (
         <section className="px-4 pb-6 pt-2 sm:px-6">
           <div className="mx-auto max-w-7xl">
             <h2 className="text-lg font-black sm:text-xl">All picks</h2>
