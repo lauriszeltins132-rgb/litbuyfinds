@@ -9,7 +9,10 @@ export default function SpreadsheetFullCatalog() {
   return (
     <>
       <BrowseCatalogPrefetch />
-      <section className="scroll-mt-24 px-4 pt-2 sm:px-6">
+      <section
+        id="all-litbuy-spreadsheet-finds"
+        className="scroll-mt-24 px-4 pt-2 sm:px-6"
+      >
         <div className="mx-auto max-w-7xl pb-2">
           <h2 className="text-2xl font-black">All LitBuy spreadsheet finds</h2>
           <p className="mt-1 text-sm text-muted">
@@ -30,6 +33,7 @@ export default function SpreadsheetFullCatalog() {
           basePath="/litbuy-spreadsheet"
           catalogSource={BROWSE_CATALOG_URL}
           inlineCategories
+          scrollAnchorId="all-litbuy-spreadsheet-finds"
         />
       </Suspense>
     </>
