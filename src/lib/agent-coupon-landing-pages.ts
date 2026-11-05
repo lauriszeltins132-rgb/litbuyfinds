@@ -398,7 +398,21 @@ function buildPageConfig(
     keywords: buildKeywords(agent),
     ...(isLitbuy
       ? {
-          sections: LITBUY_COUPON_SECTIONS,
+          sections:
+            variant.slug === "litbuy-coupon-code"
+              ? [
+                  ...LITBUY_COUPON_SECTIONS,
+                  {
+                    heading: "Invite code vs coupon code",
+                    paragraphs: [
+                      "A LitBuy coupon code covers welcome and checkout offers. The LitBuy invite code is the registration field — also called an invitation code, referral code, or signup code. Enter it when you create the account, or open the verified registration link so it attaches for you.",
+                    ],
+                    links: [
+                      { href: "/litbuy-invite-code", label: "LitBuy invite code" },
+                    ],
+                  },
+                ]
+              : LITBUY_COUPON_SECTIONS,
           faqs: [...LITBUY_COUPON_FAQS],
         }
       : {}),
