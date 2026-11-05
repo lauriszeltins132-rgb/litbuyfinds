@@ -94,6 +94,19 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
         ],
       },
       {
+        heading: "Browse the complete LitBuy spreadsheet",
+        paragraphs: [
+          `The LitBuy spreadsheet contains ${SPREADSHEET_STATS.totalFindsLabel} current product finds, updated from the catalog on each sync (last sync ${SPREADSHEET_STATS.lastSyncLabel}). Browse all LitBuy spreadsheet finds in the grid on this page, and search by brand, category, price, or QC availability.`,
+          "QC photos stay on the rows that have them. Use the QC badges and the QC finds database when you want a LitBuy spreadsheet with QC — the same LitBuy spreadsheet is the full catalog underneath.",
+        ],
+        links: [
+          { href: "/brands", label: "Browse by brand" },
+          { href: "/categories", label: "Browse by category" },
+          { href: "/litbuy-qc", label: "QC finds in the spreadsheet" },
+          { href: "/litbuy-invite-code", label: "LitBuy invite code" },
+        ],
+      },
+      {
         heading: "How to use it",
         paragraphs: [
           "1) Open View LitBuy Spreadsheet for the Google Sheet. 2) Search LitBuy Finds by brand or category. 3) Open a product page for photos and any QC reference. 4) Follow the agent buy link to confirm live price and size.",
@@ -157,6 +170,10 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
         answer: `Yes. The LitBuy Finds catalog syncs from spreadsheet imports — last sync ${SPREADSHEET_STATS.lastSyncLabel}. New rows appear in Latest Finds after each import.`,
       },
       {
+        question: "How often is the LitBuy spreadsheet updated?",
+        answer: `The LitBuy spreadsheet updates with each catalog sync. LitBuy Finds syncs the catalog daily; the date on this page is the current copy (last sync ${SPREADSHEET_STATS.lastSyncLabel}). New rows show up in the LitBuy spreadsheet and in Latest Finds after that import.`,
+      },
+      {
         question: "Does the LitBuy spreadsheet include QC photos?",
         answer: `Many rows include QC references. LitBuy Finds surfaces ${SPREADSHEET_STATS.qcFindsLabel} QC-linked listings with badges on product pages. Reference QC shows batch examples; warehouse QC on your agent photographs your exact item after purchase.`,
       },
@@ -213,6 +230,7 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
       { href: "/latest-finds", label: "Latest finds hub" },
       { href: "/litbuy-spreadsheet-2026", label: "Spreadsheet 2026 guide" },
       { href: "/best-litbuy-spreadsheet", label: "Best LitBuy spreadsheet" },
+      { href: "/litbuy-invite-code", label: "LitBuy invite code" },
       { href: "/shoe-spreadsheet", label: "Shoe spreadsheet" },
       { href: "/streetwear-spreadsheet", label: "Streetwear spreadsheet" },
       { href: "/rep-finds", label: "Rep finds" },
@@ -296,7 +314,7 @@ export const SEO_LANDING_PAGES: Record<string, SeoLandingConfig> = {
           { href: "/collections/best-qc-approved-finds", label: "QC collection" },
           { href: "/top-qc-finds", label: "Top QC finds" },
           { href: "/latest-finds", label: "Latest finds" },
-          { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
+          { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet with QC" },
           { href: "/sneaker-finds", label: "Sneaker finds hub" },
         ],
       },
