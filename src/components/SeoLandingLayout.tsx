@@ -11,6 +11,10 @@ import {
   buildWebPageSchema,
 } from "@/lib/schema";
 import { LITBUY_GOOGLE_SPREADSHEET_URL } from "@/lib/litbuy-spreadsheet-url";
+import {
+  orderSpreadsheetMobileFirst,
+  spreadsheetMobileExtras,
+} from "@/lib/spreadsheet-mobile-order";
 
 type SeoLandingLayoutProps = {
   config: SeoLandingConfig;
@@ -36,6 +40,10 @@ const SPREADSHEET_BRAND_LINKS = [
 
 export default function SeoLandingLayout({ config }: SeoLandingLayoutProps) {
   const products = config.getProducts();
+  const featuredProducts =
+    config.slug === "litbuy-spreadsheet"
+      ? orderSpreadsheetMobileFirst(spreadsheetMobileExtras()).slice(0, 48)
+      : products;
   const faqs = config.faqs.length > 0 ? config.faqs : undefined;
   const isSpreadsheetHub = config.slug === "litbuy-spreadsheet";
   const breadcrumbs = isSpreadsheetHub
@@ -76,7 +84,7 @@ export default function SeoLandingLayout({ config }: SeoLandingLayoutProps) {
         badge={config.badge}
         h1={config.h1}
         intro={config.intro}
-        products={products}
+        products={featuredProducts}
         productSectionTitle={config.productSectionTitle}
         sections={config.sections}
         faqs={faqs}

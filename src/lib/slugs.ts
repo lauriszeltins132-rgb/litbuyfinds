@@ -1,6 +1,11 @@
 import type { Product } from "./types";
 import { getEffectiveProductTitle } from "./product-title-quality";
 import { products } from "./products";
+import { spreadsheetMobileExtras } from "./spreadsheet-mobile-order";
+
+const mobileProductsById = new Map(
+  spreadsheetMobileExtras().map((product) => [product.id, product])
+);
 
 export function slugify(text: string): string {
   return text
@@ -22,7 +27,8 @@ export function getProductBySlug(slug: string): Product | undefined {
   const id = slug.split("-").pop();
   if (!id) return undefined;
 
-  const byId = products.find((product) => product.id === id);
+  const byId =
+    products.find((product) => product.id === id) ?? mobileProductsById.get(id);
   if (byId) return byId;
 
   return products.find((product) => getProductSlug(product) === slug);
