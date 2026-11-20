@@ -54,27 +54,25 @@ export default async function HomePage() {
       <DiscoveryHero compact />
 
       <DiscoveryRail
+        title="Latest Finds"
+        subtitle="Newest drops from the LitBuy spreadsheet sync"
+        href="/latest-finds"
+        products={rails.latestFinds}
+        preloadImages
+        freshness="latest-updated"
+        tight
+      />
+
+      <DiscoveryRail
         title={getDailyFindsTitle()}
         subtitle="Most viewed and clicked in the last 24 hours"
         href="/trending-today"
         products={rails.popularToday}
         showTrendingScore
-        preloadImages
         freshness="updated-daily"
-        tight
       />
 
       <HomepageFindsDatabaseHub />
-
-      <RevealOnScroll>
-        <DiscoveryRail
-          title="Latest Finds"
-          subtitle="Newest drops from the LitBuy spreadsheet sync"
-          href="/latest-finds"
-          products={rails.latestFinds}
-          freshness="latest-updated"
-        />
-      </RevealOnScroll>
 
       <HomepageDiscoveryTools />
 
