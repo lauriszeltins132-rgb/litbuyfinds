@@ -8,6 +8,10 @@ import type { CategoryInfo, Product } from "@/lib/types";
 import { buildPageHref } from "@/lib/catalog-url";
 import { CATALOG_PAGE_SIZE } from "@/lib/catalog-page-size";
 import { filterProducts } from "@/lib/filters";
+import {
+  mergeSpreadsheetMobileProducts,
+  orderSpreadsheetMobileFirst,
+} from "@/lib/spreadsheet-mobile-order";
 import { POPULAR_SEARCHES } from "@/lib/constants";
 import {
   getBrowseCatalogCache,
@@ -116,7 +120,13 @@ export default function CatalogPanel({
     Boolean(catalogSource && !getBrowseCatalogCache())
   );
 
-  const products = catalogSource ? (catalogData?.products ?? []) : productsProp;
+  const products = useMemo(() => {
+    const loaded = catalogSource
+      ? (catalogData?.products ?? [])
+      : productsProp;
+    if (basePath !== "/litbuy-spreadsheet") return loaded;
+    return mergeSpreadsheetMobileProducts(loaded);
+  }, [basePath, catalogSource, catalogData?.products, productsProp]);
   const categories = catalogSource
     ? (catalogData?.categories ?? [])
     : categoriesProp;
@@ -254,21 +264,8 @@ export default function CatalogPanel({
 
   const savedIds = useMemo(() => new Set(wishlist), [wishlist]);
 
-  const filtered = useMemo(
-    () =>
-      filterProducts(products, {
-        search,
-        category,
-        brand,
-        minPrice,
-        maxPrice,
-        sort,
-        qcOnly,
-        savedOnly,
-        savedIds,
-      }),
-    [
-      products,
+  const filtered = useMemo(() => {
+    const result = filterProducts(products, {
       search,
       category,
       brand,
@@ -278,8 +275,22 @@ export default function CatalogPanel({
       qcOnly,
       savedOnly,
       savedIds,
-    ]
-  );
+    });
+    if (basePath !== "/litbuy-spreadsheet" || sort !== "featured") return result;
+    return orderSpreadsheetMobileFirst(result);
+  }, [
+    products,
+    search,
+    category,
+    brand,
+    minPrice,
+    maxPrice,
+    sort,
+    qcOnly,
+    savedOnly,
+    savedIds,
+    basePath,
+  ]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
