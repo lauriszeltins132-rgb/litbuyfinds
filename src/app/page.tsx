@@ -21,6 +21,7 @@ import RecentlyViewedRail from "@/components/RecentlyViewedRail";
 import ProductGridSkeleton from "@/components/ProductGridSkeleton";
 import SchemaScript from "@/components/SchemaScript";
 import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/constants";
+import { prioritizeHomepageMobileRails } from "@/lib/homepage-mobile-priority";
 import { getHomepageRails } from "@/lib/homepage-rails";
 import {
   getDailyFindsTitle,
@@ -37,7 +38,7 @@ export const revalidate = 3600;
 
 export default async function HomePage() {
   const categories = getCategories();
-  const rails = getHomepageRails(12);
+  const rails = prioritizeHomepageMobileRails(getHomepageRails(12), 12);
 
   return (
     <>

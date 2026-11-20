@@ -2,17 +2,34 @@ import mobilePriority from "@/data/spreadsheet-mobile-priority.json";
 import type { Product } from "./types";
 
 /**
- * Current Mobile-tab products for /litbuy-spreadsheet only.
+ * Current Mobile-tab products.
+ * `orderedIds` stays in sheet order (row 1 → row 129).
+ * Display priority is the reverse: the newest rows lead.
  * Historical /finds order stays on the shared browse catalog.
  */
 const orderedIds = mobilePriority.orderedIds as string[];
 const priorityProducts = mobilePriority.products as Product[];
-const rank = new Map(orderedIds.map((id, index) => [id, index]));
+const productsById = new Map(
+  priorityProducts.map((product) => [product.id, product])
+);
+const rank = new Map(
+  orderedIds.map((id, index) => [id, orderedIds.length - 1 - index])
+);
 
 export const SPREADSHEET_MOBILE_TAB = mobilePriority.tab;
 
 export function spreadsheetMobileExtras(): Product[] {
   return priorityProducts;
+}
+
+/** Mobile products from the newest sheet row to the earliest. */
+export function spreadsheetMobileProductsNewestFirst(): Product[] {
+  const newest: Product[] = [];
+  for (let index = orderedIds.length - 1; index >= 0; index -= 1) {
+    const product = productsById.get(orderedIds[index]);
+    if (product) newest.push(product);
+  }
+  return newest;
 }
 
 /** Append Mobile products that are not already in the shared browse catalog. */
@@ -25,7 +42,7 @@ export function mergeSpreadsheetMobileProducts(catalog: Product[]): Product[] {
 
 /**
  * Featured order on /litbuy-spreadsheet: every current Mobile product first,
- * in sheet order, then the historical catalog in its existing order.
+ * newest sheet row first, then the historical catalog in its existing order.
  */
 export function orderSpreadsheetMobileFirst(products: Product[]): Product[] {
   const head: Product[] = [];
