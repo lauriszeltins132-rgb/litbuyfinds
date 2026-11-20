@@ -343,7 +343,7 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
           "LitBuy AI understands budgets, colors, and haul requests — returning only real catalog products with validated prices and links.",
         ],
         links: [
-          { href: "/litbuy-spreadsheet", label: "LitBuy Spreadsheet" },
+          { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet with QC" },
           { href: "/litbuy-finds", label: "LitBuy Finds" },
           { href: "/ai", label: "LitBuy AI" },
         ],
@@ -419,6 +419,7 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
           "If a “best spreadsheet” list only dumps an outdated file URL with no QC or category lanes, treat it as incomplete — verify live prices and photos before you pay.",
         ],
         links: [
+          { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet with QC" },
           { href: "/latest-finds", label: "Latest spreadsheet finds" },
           { href: "/litbuy-qc", label: "QC finds database" },
           { href: "/litbuy-spreadsheet-2026", label: "Spreadsheet 2026 guide" },
@@ -472,6 +473,7 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
     ],
     relatedLinks: [
       { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet (canonical)" },
+      { href: "/litbuy-invite-code", label: "LitBuy registration code" },
       { href: "/litbuy-spreadsheet-2026", label: "Spreadsheet 2026" },
       { href: "/litbuy-finds", label: "LitBuy finds" },
       { href: "/latest-finds", label: "Latest finds" },
@@ -892,6 +894,15 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
         links: [
           { href: "/litbuy-coupons", label: "LitBuy coupons" },
           { href: "/how-to-buy", label: "How to buy" },
+        ],
+      },
+      {
+        heading: "Registration code vs a shipping coupon",
+        paragraphs: [
+          "A shipping coupon is applied when you pay international freight. A LitBuy invite code — also called a registration code or signup code — is entered earlier, when you create the LitBuy account. Open the invite guide if the invitation field is what you need.",
+        ],
+        links: [
+          { href: "/litbuy-invite-code", label: "LitBuy signup code" },
         ],
       },
       {
