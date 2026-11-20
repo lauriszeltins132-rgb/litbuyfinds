@@ -1,11 +1,21 @@
 /** Scroll to the browse-all-finds grid (homepage catalog). */
-export function scrollToCatalogResults(behavior: ScrollBehavior = "smooth") {
+export function scrollToCatalogResults(
+  behavior: ScrollBehavior = "smooth",
+  anchorId?: string
+) {
   const run = () => {
+    const anchored = anchorId ? document.getElementById(anchorId) : null;
     const target =
+      anchored ??
       document.getElementById("catalog-product-grid") ??
       document.getElementById("browse");
     if (!target) return false;
-    target.scrollIntoView({ behavior, block: "start" });
+    const motion: ScrollBehavior =
+      anchorId &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "auto"
+        : behavior;
+    target.scrollIntoView({ behavior: motion, block: "start" });
     return true;
   };
 
