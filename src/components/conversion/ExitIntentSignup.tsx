@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import RegisterLink from "@/components/RegisterLink";
 import { useConversion } from "@/context/ConversionContext";
-import { CONVERSION_DISMISS_KEYS } from "@/lib/conversion";
+import { CONVERSION_DISMISS_KEYS, OFFER_POPUP_OWNS_NUDGES } from "@/lib/conversion";
 import {
   LITBUY_ACCOUNT_BENEFITS,
   REGISTER_EXIT_CTA_LABEL,
@@ -15,7 +15,7 @@ export default function ExitIntentSignup() {
   const dismissed = isNudgeDismissed(CONVERSION_DISMISS_KEYS.exitIntent);
 
   useEffect(() => {
-    if (dismissed) return;
+    if (OFFER_POPUP_OWNS_NUDGES || dismissed) return;
 
     const onMouseOut = (event: MouseEvent) => {
       if (event.relatedTarget || event.clientY > 24) return;
@@ -26,7 +26,7 @@ export default function ExitIntentSignup() {
     return () => window.removeEventListener("mouseout", onMouseOut);
   }, [dismissed]);
 
-  if (!visible || dismissed) return null;
+  if (OFFER_POPUP_OWNS_NUDGES || !visible || dismissed) return null;
 
   return (
     <div className="fixed inset-0 z-[190] flex items-center justify-center p-4">

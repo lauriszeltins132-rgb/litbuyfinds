@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import ProductShippingEstimate from "@/components/ProductShippingEstimate";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Product } from "@/lib/types";
 import type { ProductFacts } from "@/lib/product-details";
@@ -13,6 +14,8 @@ import ProductPurchaseSignals from "@/components/ProductPurchaseSignals";
 import ProductMobileStickyBuy from "@/components/ProductMobileStickyBuy";
 import QcAccessGate from "@/components/conversion/QcAccessGate";
 import { formatProductPrice, getPriceStatus } from "@/lib/pricing";
+import { formatPrice } from "@/lib/currency";
+import { trackContextual } from "@/lib/analytics-events";
 import { getProductBadges } from "@/lib/product-badges";
 import { getProductFreshnessLabel } from "@/lib/product-freshness";
 import { getRnScore } from "@/lib/rn-score";
@@ -55,7 +58,7 @@ export default function ProductDetailView({
   engagementSaves = 0,
   engagementTrending = false,
 }: ProductDetailViewProps) {
-  const { currency } = usePreferences();
+  const { currency, agentId } = usePreferences();
   const { isInWishlist, toggleWishlist } = useWishlist();
   const [copied, setCopied] = useState(false);
   const [showStickyBuy, setShowStickyBuy] = useState(false);
@@ -114,6 +117,15 @@ export default function ProductDetailView({
           {formatProductPrice(product.price, currency)}
         </span>
       </div>
+      {getPriceStatus(product.price) === "exact" && product.price !== null ? (
+        <p className="text-xs text-muted">
+          {currency === "CNY"
+            ? `Catalog USD ${formatPrice(product.price, "USD")}`
+            : `About ${formatPrice(product.price, "CNY")} CNY`}
+          {" · "}
+          converted with the site rate, not the seller’s original price.
+        </p>
+      ) : null}
       <p className="text-xs text-muted">
         Confirm live price on your preferred agent before checkout.
       </p>
@@ -126,18 +138,43 @@ export default function ProductDetailView({
       <BuyingAgentPanel product={product} />
       <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
         {product.affiliate_link ? (
-          <BuyWithAgentButton product={product} location="product_page" />
+          <BuyWithAgentButton
+            product={product}
+            location="product_page"
+            productPage
+            className="w-full sm:w-auto"
+          />
         ) : null}
         {qcHref ? (
           <QcAccessGate
             qcLink={qcHref}
             productName={facts.displayName}
             onTrackQc={() =>
-              trackProductContext("qc_click", product, "product_page")
+              trackProductContext("qc_click", product, "product_page", agentId)
             }
           />
         ) : null}
       </div>
+      {agentId === "litbuy" ? (
+        <Link
+          href="/litbuy-invite-code"
+          onClick={() =>
+            trackContextual("invite_link_click", {
+              location: "product_buy",
+              productId: product.id,
+              agent: agentId,
+            })
+          }
+          className="text-sm font-semibold text-accent hover:underline"
+        >
+          New to LitBuy? Claim the current signup offer →
+        </Link>
+      ) : null}
+      <ProductShippingEstimate
+        productId={product.id}
+        category={product.category}
+        agentId={agentId}
+      />
     </div>
   );
 

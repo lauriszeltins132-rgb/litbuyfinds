@@ -4,9 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useWishlist } from "@/context/WishlistContext";
+import { useCoupon } from "@/context/CouponContext";
 import { REGISTER_HEADER_CTA_LABEL, SITE_NAME } from "@/lib/constants";
 import CommunityLinks from "./CommunityLinks";
-import RegisterLink from "./RegisterLink";
 import GlobalSearch from "./GlobalSearch";
 import AgentSelector from "./agents/AgentSelector";
 
@@ -25,6 +25,7 @@ const navLinks = [
 export default function SiteHeader() {
   const pathname = usePathname();
   const { wishlist } = useWishlist();
+  const { openCouponForce } = useCoupon();
 
   return (
     <>
@@ -74,12 +75,13 @@ export default function SiteHeader() {
             <AgentSelector variant="mobile" className="sm:hidden" />
             <AgentSelector variant="header" className="hidden sm:block" />
             <GlobalSearch className="hidden sm:inline-flex" />
-            <RegisterLink
-              location="header"
+            <button
+              type="button"
+              onClick={() => openCouponForce("header")}
               className="inline-flex shrink-0 rounded-full bg-accent px-2 py-1.5 text-[10px] font-black leading-none text-background sm:px-3 sm:py-2 sm:text-sm lg:px-4"
             >
               {REGISTER_HEADER_CTA_LABEL}
-            </RegisterLink>
+            </button>
           </div>
         </div>
       </header>

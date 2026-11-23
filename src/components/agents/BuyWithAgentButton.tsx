@@ -21,6 +21,8 @@ type BuyWithAgentButtonProps = {
   className?: string;
   compact?: boolean;
   appearance?: "primary" | "secondary";
+  /** Product-page label. LitBuy reads “Buy on LitBuy”; other agents stay “Buy with …”. */
+  productPage?: boolean;
 };
 
 export default function BuyWithAgentButton({
@@ -30,17 +32,20 @@ export default function BuyWithAgentButton({
   className = "",
   compact = false,
   appearance = "primary",
+  productPage = false,
 }: BuyWithAgentButtonProps) {
   const { agentId } = usePreferences();
   const { openAgentModal } = useAgentModal();
   const agent = getAgentById(agentId);
   const buyUrl = buildAgentProductUrl(product, agentId);
 
-  const label = agent.recommended
-    ? compact
-      ? "Buy"
-      : `Buy with ${agent.name}`
-    : `Buy with ${agent.name}`;
+  const label = productPage && agent.id === "litbuy"
+    ? "Buy on LitBuy"
+    : agent.recommended
+      ? compact
+        ? "Buy"
+        : `Buy with ${agent.name}`
+      : `Buy with ${agent.name}`;
 
   const baseClass = compact
     ? "rounded-full bg-accent px-3 py-1.5 text-[11px] font-black text-background"
@@ -63,7 +68,8 @@ export default function BuyWithAgentButton({
       return;
     }
 
-    trackProductContext("buy_click", product, location);
+    trackProductContext("buy_click", product, location, agentId);
+    trackProductContext("product_buy_click", product, location, agentId);
   }
 
   if (showAgentPicker) {

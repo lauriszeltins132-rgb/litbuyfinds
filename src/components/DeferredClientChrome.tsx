@@ -12,6 +12,10 @@ const CouponModal = dynamic(() => import("@/components/CouponModal"), {
 const CouponAutoOpen = dynamic(() => import("@/components/CouponAutoOpen"), {
   ssr: false,
 });
+const OfferPopupTriggers = dynamic(
+  () => import("@/components/conversion/OfferPopupTriggers"),
+  { ssr: false }
+);
 const AiLauncher = dynamic(() => import("@/components/ai/AiLauncher"), {
   ssr: false,
 });
@@ -21,6 +25,7 @@ export default function DeferredClientChrome() {
     <>
       <CouponModal />
       <CouponAutoOpen />
+      <OfferPopupTriggers />
       <ConversionLayer />
       <AiLauncher />
     </>

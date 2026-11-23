@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useCoupon } from "@/context/CouponContext";
 import { useConversion } from "@/context/ConversionContext";
-import { COUPON_AUTOOPEN_VIEW_THRESHOLD } from "@/lib/conversion";
+import { COUPON_AUTOOPEN_VIEW_THRESHOLD, OFFER_POPUP_OWNS_NUDGES } from "@/lib/conversion";
 
 const OPEN_DELAY_MS = 1200;
 
@@ -14,7 +14,7 @@ export default function CouponAutoOpen() {
   const triggered = useRef(false);
 
   useEffect(() => {
-    if (triggered.current) return;
+    if (OFFER_POPUP_OWNS_NUDGES || triggered.current) return;
     if (uniqueProductViews < COUPON_AUTOOPEN_VIEW_THRESHOLD) return;
 
     triggered.current = true;

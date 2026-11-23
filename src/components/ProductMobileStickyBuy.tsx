@@ -37,8 +37,9 @@ export default function ProductMobileStickyBuy({
         <BuyWithAgentButton
           product={product}
           location="product_page"
+          productPage
           compact
-          className="shrink-0 px-5 py-2.5"
+          className="min-h-11 shrink-0 px-4"
         />
       </div>
     </div>

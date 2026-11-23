@@ -3,6 +3,12 @@ export const WISHLIST_UNLOCK_THRESHOLD = 3;
 export const PRODUCT_VIEW_NUDGE_THRESHOLD = 20;
 export const COUPON_AUTOOPEN_VIEW_THRESHOLD = 8;
 
+/**
+ * CouponModal owns the offer popup. The older exit-intent card and homepage
+ * scroll card stay in the tree so they can be turned back on by flipping this.
+ */
+export const OFFER_POPUP_OWNS_NUDGES = true;
+
 export const CONVERSION_DISMISS_KEYS = {
   unlockVerified: "litbuy-dismiss-unlock-verified",
   browseNudge: "litbuy-dismiss-browse-nudge",
