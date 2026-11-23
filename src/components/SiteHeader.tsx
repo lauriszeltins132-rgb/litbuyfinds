@@ -78,7 +78,7 @@ export default function SiteHeader() {
             <GlobalSearch className="hidden sm:inline-flex" />
             <button
               type="button"
-              onClick={() => openCouponForce("header")}
+              onClick={() => openCouponForce("manual_header")}
               className="inline-flex shrink-0 rounded-full bg-accent px-2 py-1.5 text-[10px] font-black leading-none text-background sm:px-3 sm:py-2 sm:text-sm lg:px-4"
             >
               {LITBUY_SHIPPING_OFFER_LABEL}

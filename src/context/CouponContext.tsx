@@ -58,7 +58,7 @@ export function CouponProvider({ children }: { children: React.ReactNode }) {
     return true;
   }, []);
 
-  const openCouponForce = useCallback((nextSource = "header") => {
+  const openCouponForce = useCallback((nextSource = "manual_header") => {
     markSessionShown();
     setSource(nextSource);
     setIsOpen(true);
