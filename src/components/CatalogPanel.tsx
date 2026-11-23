@@ -56,11 +56,35 @@ type CatalogPanelProps = {
    * to category pages. Default preserves homepage and category-page behavior.
    */
   inlineCategories?: boolean;
+  /** Scroll here on page changes instead of the product grid. */
+  scrollAnchorId?: string;
 };
 
 function currentParams(searchParams: URLSearchParams) {
   const record: Record<string, string> = {};
   searchParams.forEach((value, key) => {
+    record[key] = value;
+  });
+  return record;
+}
+
+/**
+ * Record a catalog page in the address bar without an App Router navigation.
+ * Next.js patches `history.pushState` and, for history entries it did not
+ * create, restores the whole route. That re-render drops the local page and
+ * makes Next look frozen. Entries that already carry Next's history marker
+ * stay a plain URL update.
+ */
+function pushCatalogHistory(url: string) {
+  const current = window.history.state;
+  const nextState: Record<string, unknown> =
+    current && typeof current === "object" ? { ...current } : {};
+  window.history.pushState(nextState, "", url);
+}
+
+function locationParams(): Record<string, string> {
+  const record: Record<string, string> = {};
+  new URLSearchParams(window.location.search).forEach((value, key) => {
     record[key] = value;
   });
   return record;
@@ -106,6 +130,7 @@ export default function CatalogPanel({
   basePath = "/",
   catalogSource,
   inlineCategories = false,
+  scrollAnchorId,
 }: CatalogPanelProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -247,6 +272,10 @@ export default function CatalogPanel({
     }
   }, [filterKey]);
 
+  function scrollCatalog() {
+    scrollToCatalogResults(scrollAnchorId ? "auto" : "smooth", scrollAnchorId);
+  }
+
   useEffect(() => {
     const onPopState = () => {
       const nextPage = Math.max(
@@ -255,12 +284,12 @@ export default function CatalogPanel({
           1
       );
       setPage(nextPage);
-      scrollToCatalogResults();
+      scrollToCatalogResults(scrollAnchorId ? "auto" : "smooth", scrollAnchorId);
     };
 
     window.addEventListener("popstate", onPopState);
     return () => window.removeEventListener("popstate", onPopState);
-  }, []);
+  }, [scrollAnchorId]);
 
   const savedIds = useMemo(() => new Set(wishlist), [wishlist]);
 
@@ -309,8 +338,8 @@ export default function CatalogPanel({
     if (scrollRequestId === 0) return;
     if (catalogLoading || isPending) return;
     pendingScrollRef.current = false;
-    scrollToCatalogResults();
-  }, [scrollRequestId, catalogLoading, isPending, filterKey, paginated]);
+    scrollToCatalogResults(scrollAnchorId ? "auto" : "smooth", scrollAnchorId);
+  }, [scrollRequestId, catalogLoading, isPending, filterKey, paginated, scrollAnchorId]);
 
   function goToPage(nextPage: number) {
     const clamped = Math.max(1, Math.min(nextPage, totalPages));
@@ -319,9 +348,9 @@ export default function CatalogPanel({
     setPage(clamped);
     prevPageRef.current = clamped;
 
-    const nextUrl = buildPageHref(basePath, params, clamped);
-    window.history.pushState({ catalogPage: clamped }, "", nextUrl);
-    scrollToCatalogResults();
+    const nextUrl = buildPageHref(basePath, locationParams(), clamped);
+    pushCatalogHistory(nextUrl);
+    scrollCatalog();
   }
 
   useEffect(() => {
