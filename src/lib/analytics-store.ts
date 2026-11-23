@@ -35,6 +35,9 @@ type EventBody = {
   productName?: string;
   brand?: string;
   category?: string;
+  href?: string;
+  variant?: string;
+  agent?: string;
 };
 
 const STORE_PATH = path.join(process.cwd(), "data/analytics-stats.json");
@@ -195,6 +198,19 @@ export function recordEvent(body: EventBody) {
       break;
     case "popup_close":
       bumpPlacement(store, `${body.location}_close`, "clicks");
+      break;
+    case "coupon_modal_view":
+    case "product_page_view":
+    case "shipping_estimate_view":
+      bumpPlacement(store, body.location ?? body.event, "impressions");
+      break;
+    case "coupon_modal_close":
+    case "coupon_modal_signup_click":
+    case "product_buy_click":
+    case "agent_changed":
+    case "shipping_destination_changed":
+    case "invite_link_click":
+      bumpPlacement(store, body.location ?? body.event, "clicks");
       break;
     default:
       break;

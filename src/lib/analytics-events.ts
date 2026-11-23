@@ -1,5 +1,6 @@
 import { track } from "@vercel/analytics";
 import { extractBrand } from "./brands";
+import { isMobileViewport } from "./is-mobile-viewport";
 import type { Product } from "./types";
 
 export type ConversionEvent =
@@ -19,7 +20,16 @@ export type ConversionEvent =
   | "brand_click"
   | "collection_click"
   | "popup_impression"
-  | "popup_close";
+  | "popup_close"
+  | "coupon_modal_view"
+  | "coupon_modal_close"
+  | "coupon_modal_signup_click"
+  | "product_page_view"
+  | "product_buy_click"
+  | "agent_changed"
+  | "shipping_estimate_view"
+  | "shipping_destination_changed"
+  | "invite_link_click";
 
 export type ConversionPayload = {
   location?: string;
@@ -30,6 +40,7 @@ export type ConversionPayload = {
   query?: string;
   href?: string;
   variant?: string;
+  agent?: string;
 };
 
 function cleanPayload(payload: ConversionPayload) {
@@ -59,21 +70,41 @@ export function trackConversion(
   payload: ConversionPayload = {}
 ) {
   const data = cleanPayload(payload);
-  track(event, data);
+  try {
+    track(event, data);
+  } catch {
+    // Vendor analytics must not block the first-party event.
+  }
   sendToApi(event, payload);
 }
 
-export function trackProductContext(
-  event: "buy_click" | "qc_click",
-  product: Product,
-  location: string
+export function trackContextual(
+  event: ConversionEvent,
+  payload: ConversionPayload = {}
 ) {
   trackConversion(event, {
+    ...payload,
+    href:
+      payload.href ??
+      (typeof window !== "undefined" ? window.location.pathname : undefined),
+    variant:
+      payload.variant ?? (isMobileViewport() ? "mobile" : "desktop"),
+  });
+}
+
+export function trackProductContext(
+  event: "buy_click" | "qc_click" | "product_buy_click",
+  product: Product,
+  location: string,
+  agent?: string
+) {
+  trackContextual(event, {
     location,
     productId: product.id,
     productName: product.product_name,
     brand: extractBrand(product.product_name) ?? undefined,
     category: product.category,
+    agent,
   });
 }
 

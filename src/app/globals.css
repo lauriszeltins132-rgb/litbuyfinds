@@ -1700,11 +1700,7 @@ body::before {
 }
 
 .member-benefits-strip {
-  background: linear-gradient(
-    145deg,
-    rgba(16, 16, 20, 0.72) 0%,
-    rgba(12, 14, 12, 0.55) 100%
-  );
+  background: var(--color-panel);
 }
 
 /* Conversion funnel — contextual, dismissible nudges */

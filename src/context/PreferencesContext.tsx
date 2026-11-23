@@ -11,6 +11,7 @@ import {
 import type { AgentId, CurrencyCode } from "@/lib/constants";
 import { DEFAULT_AGENT_ID, isAgentId } from "@/lib/agents";
 import { BUYING_AGENTS } from "@/lib/agents";
+import { trackContextual } from "@/lib/analytics-events";
 
 type PreferencesContextValue = {
   currency: CurrencyCode;
@@ -64,7 +65,15 @@ export function PreferencesProvider({
   }, []);
 
   const setAgentId = useCallback((next: AgentId) => {
-    setAgentIdState(next);
+    setAgentIdState((current) => {
+      if (current !== next) {
+        trackContextual("agent_changed", {
+          location: "agent_selector",
+          agent: next,
+        });
+      }
+      return next;
+    });
   }, []);
 
   const value = useMemo(

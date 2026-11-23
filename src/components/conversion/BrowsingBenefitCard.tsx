@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import RegisterLink from "@/components/RegisterLink";
 import { useConversion } from "@/context/ConversionContext";
-import { CONVERSION_DISMISS_KEYS } from "@/lib/conversion";
+import { CONVERSION_DISMISS_KEYS, OFFER_POPUP_OWNS_NUDGES } from "@/lib/conversion";
 import {
   MOBILE_POPUP_BADGE,
   MOBILE_POPUP_BENEFITS,
@@ -60,7 +60,7 @@ export default function BrowsingBenefitCard() {
   }, [pathname]);
 
   useEffect(() => {
-    if (pathname !== "/") return;
+    if (OFFER_POPUP_OWNS_NUDGES || pathname !== "/") return;
 
     const threshold = isMobile ? SCROLL_THRESHOLD_MOBILE : SCROLL_THRESHOLD_DESKTOP;
 
@@ -82,7 +82,7 @@ export default function BrowsingBenefitCard() {
   }, [isMobile, pathname]);
 
   useEffect(() => {
-    if (pathname !== "/" || dismissed || scrollReadyAt.current === null) return;
+    if (OFFER_POPUP_OWNS_NUDGES || pathname !== "/" || dismissed || scrollReadyAt.current === null) return;
 
     const timer = window.setInterval(() => {
       if (scrollReadyAt.current === null) return;
@@ -101,7 +101,7 @@ export default function BrowsingBenefitCard() {
     trackPopupImpression(POPUP_LOCATION, variant);
   }, [visible, dismissed, variant]);
 
-  if (pathname !== "/" || !visible || dismissed) return null;
+  if (OFFER_POPUP_OWNS_NUDGES || pathname !== "/" || !visible || dismissed) return null;
 
   const ctaLabel = variant === "a" ? MOBILE_POPUP_CTA_A : MOBILE_POPUP_CTA_B;
   const registerLocation = `${POPUP_LOCATION}_${variant}`;

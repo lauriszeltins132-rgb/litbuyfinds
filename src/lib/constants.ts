@@ -53,7 +53,6 @@ export const LITBUY_SIGNUP_URL = `https://litbuy.com/register?inviteCode=${LITBU
 
 /** Benefit-driven CTAs site-wide */
 export const REGISTER_CTA_LABEL = "Register & Get Shipping Discount";
-export const REGISTER_HEADER_CTA_LABEL = "30% Off Shipping";
 export const REGISTER_MODAL_CTA_LABEL = "Start Your LitBuy Haul";
 export const REGISTER_STICKY_CTA_LABEL = "Unlock Verified Links";
 export const MOBILE_POPUP_CTA_A = "Register & Save 30%";

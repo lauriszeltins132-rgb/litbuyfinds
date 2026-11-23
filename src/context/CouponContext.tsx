@@ -10,12 +10,15 @@ import {
 
 type CouponContextValue = {
   isOpen: boolean;
-  openCoupon: () => void;
-  closeCoupon: () => void;
+  source: string;
+  openCoupon: (source?: string) => boolean;
+  openCouponForce: (source?: string) => void;
+  closeCoupon: (reason?: string) => void;
 };
 
 const CouponContext = createContext<CouponContextValue | null>(null);
 const DISMISS_KEY = "litbuy-finds-offer-dismissed";
+const SESSION_KEY = "litbuy-offer-popup-session";
 const DISMISS_MS = 14 * 24 * 60 * 60 * 1000;
 
 function isDismissedRecently(): boolean {
@@ -30,15 +33,38 @@ function isDismissedRecently(): boolean {
   }
 }
 
+function markSessionShown() {
+  try {
+    sessionStorage.setItem(SESSION_KEY, "1");
+  } catch {
+    // ignore
+  }
+}
+
 export function CouponProvider({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [source, setSource] = useState("engagement");
 
-  const openCoupon = useCallback(() => {
-    if (isDismissedRecently()) return;
+  const openCoupon = useCallback((nextSource = "engagement") => {
+    if (isDismissedRecently()) return false;
+    try {
+      if (sessionStorage.getItem(SESSION_KEY) === "1") return false;
+    } catch {
+      // ignore
+    }
+    markSessionShown();
+    setSource(nextSource);
+    setIsOpen(true);
+    return true;
+  }, []);
+
+  const openCouponForce = useCallback((nextSource = "manual_header") => {
+    markSessionShown();
+    setSource(nextSource);
     setIsOpen(true);
   }, []);
 
-  const closeCoupon = useCallback(() => {
+  const closeCoupon = useCallback((_reason?: string) => {
     setIsOpen(false);
     try {
       localStorage.setItem(DISMISS_KEY, String(Date.now()));
@@ -48,8 +74,8 @@ export function CouponProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const value = useMemo(
-    () => ({ isOpen, openCoupon, closeCoupon }),
-    [isOpen, openCoupon, closeCoupon]
+    () => ({ isOpen, source, openCoupon, openCouponForce, closeCoupon }),
+    [isOpen, source, openCoupon, openCouponForce, closeCoupon]
   );
 
   return (

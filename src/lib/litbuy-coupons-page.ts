@@ -30,6 +30,25 @@ export const LITBUY_COUPONS_OFFER = {
     "Offers apply to eligible new LitBuy accounts. Confirm the live coupon total on LitBuy checkout before paying.",
 } as const;
 
+/** Percent token taken only from `shippingDiscount`, e.g. "40%". */
+export const LITBUY_SHIPPING_OFFER_PERCENT =
+  LITBUY_COUPONS_OFFER.shippingDiscount.replace(/\s*OFF$/i, "");
+
+/** Short nav label. The percent comes only from `shippingDiscount`. */
+export const LITBUY_SHIPPING_OFFER_LABEL =
+  `Up to ${LITBUY_SHIPPING_OFFER_PERCENT} Off Shipping`;
+
+export const LITBUY_CLAIM_COUPON_LABEL = `Claim Your ${LITBUY_SHIPPING_OFFER_PERCENT} Coupon`;
+
+/** Share of shipping still paid after the published "up to N%" offer. */
+export function litbuyShippingKeepRatio(): number {
+  const match = /(\d+(?:\.\d+)?)\s*%/.exec(LITBUY_COUPONS_OFFER.shippingDiscount);
+  if (!match) return 1;
+  const percent = Number(match[1]);
+  if (!Number.isFinite(percent) || percent <= 0 || percent >= 100) return 1;
+  return 1 - percent / 100;
+}
+
 export type LitbuyCouponRow = {
   coupon: string;
   discount: string;

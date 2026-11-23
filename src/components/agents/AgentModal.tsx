@@ -48,7 +48,8 @@ export default function AgentModal({
     setAgentId(nextAgentId);
 
     if (product) {
-      trackProductContext("buy_click", product, "agent_modal");
+      trackProductContext("buy_click", product, "agent_modal", nextAgentId);
+      trackProductContext("product_buy_click", product, "agent_modal", nextAgentId);
       const url = buildAgentProductUrl(product, nextAgentId);
       if (redirectOnSelect && url) {
         window.open(url, "_blank", "noopener,noreferrer");
