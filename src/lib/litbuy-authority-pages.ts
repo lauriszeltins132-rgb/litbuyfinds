@@ -356,6 +356,7 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
         links: [
           { href: "/litbuy-spreadsheet", label: "Main LitBuy spreadsheet" },
           { href: "/how-to-use-litbuy", label: "How to use LitBuy" },
+          { href: "/litbuy-invite-code", label: "Sign up to LitBuy" },
           { href: "/trending-litbuy-finds", label: "Trending finds" },
         ],
       },
@@ -447,6 +448,7 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
           { href: "/litbuy-spreadsheet", label: "Main LitBuy spreadsheet" },
           { href: "/how-to-use-litbuy", label: "How to use LitBuy" },
           { href: "/litbuy-coupons", label: "LitBuy coupons" },
+          { href: "/litbuy-invite-code", label: "Create a LitBuy account" },
         ],
       },
     ],
@@ -606,6 +608,16 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
           { href: "/litbuy-qc-photos", label: "QC photos" },
         ],
       },
+      {
+        heading: "How registration works",
+        paragraphs: [
+          "If you decide LitBuy is the agent you want, registration happens on LitBuy’s own site. A new account can enter an invite code during signup. People also call that field an invitation code, a referral code, or a signup code.",
+          "LitBuy Finds keeps the code and the steps on one page. Open it when you are ready to register. You can keep reading this page without creating an account.",
+        ],
+        links: [
+          { href: "/litbuy-invite-code", label: "LitBuy invitation code" },
+        ],
+      },
     ],
     faqs: [
       {
@@ -619,7 +631,10 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
           "Marketplace listings vary. LitBuy Finds does not authenticate goods. Use QC and seller information to set expectations.",
       },
     ],
-    relatedLinks: CORE_RELATED,
+    relatedLinks: [
+      { href: "/litbuy-invite-code", label: "Sign up to LitBuy" },
+      ...CORE_RELATED,
+    ],
     publishedTime: PUBLISHED,
     modifiedTime: MODIFIED,
   },
@@ -891,6 +906,7 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
         ],
         links: [
           { href: "/litbuy-coupons", label: "LitBuy coupons" },
+          { href: "/litbuy-invite-code", label: "LitBuy registration code" },
           { href: "/how-to-buy", label: "How to buy" },
         ],
       },
@@ -1172,6 +1188,70 @@ export const AUTHORITY_PAGES: Record<string, AuthorityPage> = {
       { href: "/how-to-use-litbuy", label: "How to use LitBuy" },
       { href: "/guides", label: "All guides" },
       ...CORE_RELATED.slice(0, 5),
+    ],
+    publishedTime: PUBLISHED,
+    modifiedTime: MODIFIED,
+  },
+
+  "litbuy-links": {
+    slug: "litbuy-links",
+    path: "/litbuy-links",
+    title: "LitBuy Links | Product URLs and Where They Open",
+    metaDescription:
+      "How LitBuy links work on LitBuy Finds: open a product, follow the buy link to LitBuy, and use the invite page only if you still need an account.",
+    badge: "Links",
+    h1: "LitBuy links",
+    directAnswer:
+      "A LitBuy link on this site opens that product on LitBuy so you can check the live price, size, and warehouse flow. If you already have an account, continue on LitBuy. If you do not, the invite page has the signup code and steps.",
+    summary:
+      "Product, then the LitBuy link, then LitBuy. New visitors can open the invite page before ordering. Existing accounts can skip it.",
+    sections: [
+      {
+        heading: "From a product to LitBuy",
+        paragraphs: [
+          "Open a find, then use the LitBuy buy link on the product page. That link is the product on LitBuy, with the site’s existing invite parameter so a new registration stays attributed.",
+          "Confirm the live listing before you pay. Catalog prices and photos can lag behind the seller.",
+        ],
+        links: [
+          { href: "/finds", label: "Browse finds" },
+          { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+        ],
+      },
+      {
+        heading: "If you already shop on LitBuy",
+        paragraphs: [
+          "Stay on the product link. You do not need to pass through signup again to view a listing you can already order.",
+        ],
+      },
+      {
+        heading: "If you still need an account",
+        paragraphs: [
+          "Create the account on LitBuy before you try to order. The invite page shows the code LitBuy Finds uses, where it goes, and what to check after registration. Coupon tables stay on the coupons page.",
+        ],
+        links: [
+          { href: "/litbuy-invite-code", label: "LitBuy invite code" },
+          { href: "/litbuy-coupons", label: "LitBuy coupons" },
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: "Do LitBuy links require a new account?",
+        answer:
+          "No. Existing LitBuy accounts can open the product link and continue. New visitors can create an account from the invite page first.",
+      },
+      {
+        question: "Where do I get the LitBuy signup code?",
+        answer:
+          "The signup code and registration steps are on /litbuy-invite-code. This page only points you there.",
+      },
+    ],
+    relatedLinks: [
+      { href: "/litbuy-invite-code", label: "Create a LitBuy account" },
+      { href: "/finds", label: "Finds database" },
+      { href: "/litbuy-spreadsheet", label: "LitBuy spreadsheet" },
+      { href: "/litbuy-coupons", label: "LitBuy coupons" },
+      { href: "/how-to-use-litbuy", label: "How to use LitBuy" },
     ],
     publishedTime: PUBLISHED,
     modifiedTime: MODIFIED,

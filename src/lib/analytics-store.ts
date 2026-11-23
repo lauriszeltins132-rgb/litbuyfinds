@@ -25,7 +25,20 @@ export type AnalyticsStore = {
   products: Record<string, ProductClicks>;
   brands: Record<string, number>;
   signupPlacements: Record<string, PlacementStats>;
+  invitePageViews: number;
+  inviteCodeCopies: number;
+  signupClicks: number;
+  inviteEvents: InviteEventRecord[];
   updatedAt: string;
+};
+
+type InviteEventRecord = {
+  event: "invite_page_view" | "invite_code_copy" | "litbuy_signup_click";
+  location?: string;
+  page?: string;
+  device?: string;
+  referrer?: string;
+  at: string;
 };
 
 type EventBody = {
@@ -35,6 +48,9 @@ type EventBody = {
   productName?: string;
   brand?: string;
   category?: string;
+  href?: string;
+  variant?: string;
+  query?: string;
 };
 
 const STORE_PATH = path.join(process.cwd(), "data/analytics-stats.json");
@@ -56,8 +72,20 @@ function emptyStore(): AnalyticsStore {
     products: {},
     brands: {},
     signupPlacements: {},
+    invitePageViews: 0,
+    inviteCodeCopies: 0,
+    signupClicks: 0,
+    inviteEvents: [],
     updatedAt: new Date().toISOString(),
   };
+}
+
+function pushInviteEvent(store: AnalyticsStore, entry: InviteEventRecord) {
+  if (!Array.isArray(store.inviteEvents)) store.inviteEvents = [];
+  store.inviteEvents.push(entry);
+  if (store.inviteEvents.length > 40) {
+    store.inviteEvents.splice(0, store.inviteEvents.length - 40);
+  }
 }
 
 function bumpPlacement(
@@ -196,6 +224,42 @@ export function recordEvent(body: EventBody) {
     case "popup_close":
       bumpPlacement(store, `${body.location}_close`, "clicks");
       break;
+    case "invite_page_view":
+      store.invitePageViews = (store.invitePageViews ?? 0) + 1;
+      bumpPlacement(store, body.location, "impressions");
+      pushInviteEvent(store, {
+        event: "invite_page_view",
+        location: body.location,
+        page: body.href,
+        device: body.variant,
+        referrer: body.query,
+        at: new Date().toISOString(),
+      });
+      break;
+    case "invite_code_copy":
+      store.inviteCodeCopies = (store.inviteCodeCopies ?? 0) + 1;
+      bumpPlacement(store, body.location ? `copy:${body.location}` : undefined, "clicks");
+      pushInviteEvent(store, {
+        event: "invite_code_copy",
+        location: body.location,
+        page: body.href,
+        device: body.variant,
+        referrer: body.query,
+        at: new Date().toISOString(),
+      });
+      break;
+    case "litbuy_signup_click":
+      store.signupClicks = (store.signupClicks ?? 0) + 1;
+      bumpPlacement(store, body.location, "clicks");
+      pushInviteEvent(store, {
+        event: "litbuy_signup_click",
+        location: body.location,
+        page: body.href,
+        device: body.variant,
+        referrer: body.query,
+        at: new Date().toISOString(),
+      });
+      break;
     default:
       break;
   }
@@ -302,6 +366,9 @@ export function getAnalyticsSummary() {
       qcClicks: store.qcClicks,
       discordClicks: store.discordClicks,
       telegramClicks: store.telegramClicks,
+      invitePageViews: store.invitePageViews ?? 0,
+      inviteCodeCopies: store.inviteCodeCopies ?? 0,
+      signupClicks: store.signupClicks ?? 0,
     },
     topProducts,
     topBrands,

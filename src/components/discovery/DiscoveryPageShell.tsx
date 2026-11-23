@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
+import InviteFunnelLink from "@/components/InviteFunnelLink";
+import type { SignupCtaLocation } from "@/lib/analytics-events";
 import ContentFreshness, {
   type ContentFreshnessVariant,
 } from "@/components/ContentFreshness";
@@ -28,6 +30,8 @@ export type DiscoveryPageActionLink = {
   external?: boolean;
   /** Emphasize primary CTA styling. */
   primary?: boolean;
+  /** Records a signup-path click. The href stays an internal resource page. */
+  trackLocation?: SignupCtaLocation;
 };
 
 type DiscoveryPageShellProps = {
@@ -129,6 +133,18 @@ export default function DiscoveryPageShell({
                     >
                       {action.label}
                     </a>
+                  );
+                }
+                if (action.trackLocation) {
+                  return (
+                    <InviteFunnelLink
+                      key={action.href + action.label}
+                      href={action.href}
+                      location={action.trackLocation}
+                      className={className}
+                    >
+                      {action.label}
+                    </InviteFunnelLink>
                   );
                 }
                 return (

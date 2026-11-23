@@ -398,7 +398,21 @@ function buildPageConfig(
     keywords: buildKeywords(agent),
     ...(isLitbuy
       ? {
-          sections: LITBUY_COUPON_SECTIONS,
+          sections:
+            variant.slug === "litbuy-coupon-code"
+              ? [
+                  ...LITBUY_COUPON_SECTIONS,
+                  {
+                    heading: "Need an account before the coupon?",
+                    paragraphs: [
+                      "A coupon code and a signup code are different. If you do not have a LitBuy account yet, create one from the invite page, then return here for coupon wording. Existing accounts can stay on this page and confirm the live offer at checkout.",
+                    ],
+                    links: [
+                      { href: "/litbuy-invite-code", label: "LitBuy invite code" },
+                    ],
+                  },
+                ]
+              : LITBUY_COUPON_SECTIONS,
           faqs: [...LITBUY_COUPON_FAQS],
         }
       : {}),
