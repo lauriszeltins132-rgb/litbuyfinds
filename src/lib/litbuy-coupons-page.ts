@@ -30,6 +30,10 @@ export const LITBUY_COUPONS_OFFER = {
     "Offers apply to eligible new LitBuy accounts. Confirm the live coupon total on LitBuy checkout before paying.",
 } as const;
 
+/** Short nav label. The percent comes only from `shippingDiscount`. */
+export const LITBUY_SHIPPING_OFFER_LABEL =
+  `Up to ${LITBUY_COUPONS_OFFER.shippingDiscount.replace(/\s*OFF$/i, "")} Off Shipping`;
+
 export type LitbuyCouponRow = {
   coupon: string;
   discount: string;

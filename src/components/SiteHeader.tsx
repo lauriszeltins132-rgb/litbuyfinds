@@ -5,7 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useWishlist } from "@/context/WishlistContext";
 import { useCoupon } from "@/context/CouponContext";
-import { REGISTER_HEADER_CTA_LABEL, SITE_NAME } from "@/lib/constants";
+import { SITE_NAME } from "@/lib/constants";
+import { LITBUY_SHIPPING_OFFER_LABEL } from "@/lib/litbuy-coupons-page";
 import CommunityLinks from "./CommunityLinks";
 import GlobalSearch from "./GlobalSearch";
 import AgentSelector from "./agents/AgentSelector";
@@ -80,7 +81,7 @@ export default function SiteHeader() {
               onClick={() => openCouponForce("header")}
               className="inline-flex shrink-0 rounded-full bg-accent px-2 py-1.5 text-[10px] font-black leading-none text-background sm:px-3 sm:py-2 sm:text-sm lg:px-4"
             >
-              {REGISTER_HEADER_CTA_LABEL}
+              {LITBUY_SHIPPING_OFFER_LABEL}
             </button>
           </div>
         </div>

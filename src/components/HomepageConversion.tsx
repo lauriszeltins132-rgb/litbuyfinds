@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { LITBUY_SIGNUP_URL, REGISTER_HEADER_CTA_LABEL } from "@/lib/constants";
+import { LITBUY_SIGNUP_URL } from "@/lib/constants";
+import { LITBUY_SHIPPING_OFFER_LABEL } from "@/lib/litbuy-coupons-page";
 
 export default function HomepageConversion() {
   return (
@@ -38,7 +39,7 @@ export default function HomepageConversion() {
 
         <div className="rounded-2xl border border-border bg-surface/30 p-5">
           <p className="text-xs font-bold uppercase tracking-[0.16em] text-accent">
-            {REGISTER_HEADER_CTA_LABEL}
+            {LITBUY_SHIPPING_OFFER_LABEL}
           </p>
           <p className="mt-2 text-sm leading-relaxed text-muted">
             Create a free LitBuy account for shipping coupons, QC access, and order tracking.
