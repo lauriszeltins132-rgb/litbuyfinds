@@ -174,6 +174,7 @@ export default function ProductDetailView({
         productId={product.id}
         category={product.category}
         agentId={agentId}
+        priceUsd={product.price}
       />
     </div>
   );

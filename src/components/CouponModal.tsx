@@ -4,13 +4,18 @@ import { useEffect, useRef } from "react";
 import RegisterLink from "@/components/RegisterLink";
 import { useCoupon } from "@/context/CouponContext";
 import { trackContextual } from "@/lib/analytics-events";
-import { LITBUY_COUPONS_OFFER } from "@/lib/litbuy-coupons-page";
+import {
+  LITBUY_CLAIM_COUPON_LABEL,
+  LITBUY_COUPONS_OFFER,
+  LITBUY_INVITE_CODE,
+  LITBUY_SHIPPING_OFFER_PERCENT,
+} from "@/lib/litbuy-coupons-page";
 
 const SUPPORTING_BENEFITS = [
-  "QC photos",
-  "Warehouse and order tracking",
-  "Save finds",
-  "Compare sellers",
+  `Up to ${LITBUY_SHIPPING_OFFER_PERCENT} off eligible international shipping`,
+  `Welcome coupon pack up to ${LITBUY_COUPONS_OFFER.welcomePack}`,
+  "QC photos before shipping",
+  "Warehouse & order tracking",
 ] as const;
 
 export default function CouponModal() {
@@ -39,55 +44,71 @@ export default function CouponModal() {
       <button
         type="button"
         aria-label="Close"
-        className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/55"
         onClick={() => dismiss("backdrop")}
       />
 
       <div
-        className="coupon-enter panel-shell relative max-h-[calc(100dvh-1.5rem)] w-full max-w-md overflow-y-auto rounded-3xl border border-border/80 bg-surface p-5 sm:p-6"
+        className="coupon-enter relative max-h-[calc(100dvh-1.5rem)] w-full max-w-md overflow-y-auto rounded-3xl bg-panel shadow-[0_18px_50px_rgba(26,25,22,0.16)]"
         role="dialog"
         aria-modal="true"
         aria-labelledby="coupon-offer-title"
       >
-        <button
-          type="button"
-          onClick={() => dismiss("close")}
-          aria-label="Close"
-          className="absolute right-3 top-3 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-border/80 bg-background/80 text-sm text-muted backdrop-blur hover:text-foreground"
-        >
-          ×
-        </button>
+        <div className="relative overflow-hidden bg-gradient-to-br from-[#9ed63a] via-accent to-[#5d9012] px-5 pb-6 pt-5 text-[#142006]">
+          <button
+            type="button"
+            onClick={() => dismiss("close")}
+            aria-label="Close"
+            className="absolute right-3 top-3 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-background text-base text-foreground"
+          >
+            ×
+          </button>
+          <p className="text-[11px] font-bold uppercase tracking-[0.22em]">
+            Special offer
+          </p>
+          <div className="mt-2 flex items-end gap-3 pr-12">
+            <p className="text-7xl font-black leading-none tracking-tight sm:text-8xl">
+              {LITBUY_SHIPPING_OFFER_PERCENT}
+            </p>
+            <p className="pb-1 text-lg font-black uppercase leading-tight tracking-tight sm:text-xl">
+              Off
+              <br />
+              shipping
+            </p>
+          </div>
+        </div>
 
-        <p className="text-xs font-bold uppercase tracking-[0.18em] text-accent">
-          Special offer
-        </p>
-        <p className="mt-3 text-4xl font-black tracking-tight text-foreground">
-          {LITBUY_COUPONS_OFFER.shippingDiscount}
-        </p>
-        <h2 id="coupon-offer-title" className="mt-1 text-xl font-black text-foreground">
-          LitBuy international shipping
-        </h2>
-        <p className="mt-3 text-sm leading-relaxed text-muted">
-          Create a free LitBuy account and claim the current offer. Eligible new
-          accounts can also see a welcome coupon pack of up to{" "}
-          {LITBUY_COUPONS_OFFER.welcomePack}. {LITBUY_COUPONS_OFFER.disclaimer}{" "}
-          The shipping offer does not change the item price.
-        </p>
-        <ul className="mt-4 space-y-2">
-          {SUPPORTING_BENEFITS.map((benefit) => (
-            <li
-              key={benefit}
-              className="flex items-start gap-2 text-sm text-foreground/90"
-            >
-              <span className="text-accent" aria-hidden>
-                ✓
-              </span>
-              {benefit}
-            </li>
-          ))}
-        </ul>
+        <div className="px-5 py-5">
+          <h2
+            id="coupon-offer-title"
+            className="text-lg font-black leading-snug text-foreground"
+          >
+            Claim your {LITBUY_SHIPPING_OFFER_PERCENT} LitBuy shipping coupon
+          </h2>
+          <p className="mt-2 text-sm leading-relaxed text-muted">
+            Create a free LitBuy account with invite code {LITBUY_INVITE_CODE} and
+            unlock the current new-user offer.
+          </p>
 
-        <div className="mt-5 space-y-3">
+          <ul className="mt-4 space-y-2">
+            {SUPPORTING_BENEFITS.map((benefit) => (
+              <li
+                key={benefit}
+                className="flex items-start gap-2 text-sm font-medium text-foreground"
+              >
+                <span className="mt-0.5 text-accent" aria-hidden>
+                  ✓
+                </span>
+                {benefit}
+              </li>
+            ))}
+          </ul>
+
+          <p className="mt-4 text-[11px] leading-relaxed text-muted">
+            Offer applies to eligible new LitBuy accounts. Confirm the live coupon
+            and shipping total at LitBuy checkout.
+          </p>
+
           <RegisterLink
             location="coupon_modal"
             onClick={() => {
@@ -96,14 +117,14 @@ export default function CouponModal() {
               });
               closeCoupon("signup");
             }}
-            className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-accent px-4 py-3.5 text-sm font-black text-background transition hover:bg-accent-hover"
+            className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-full bg-accent px-4 text-base font-black text-background transition hover:bg-accent-hover"
           >
-            Claim the current offer
+            {LITBUY_CLAIM_COUPON_LABEL}
           </RegisterLink>
           <button
             type="button"
             onClick={() => dismiss("maybe_later")}
-            className="inline-flex min-h-11 w-full items-center justify-center rounded-full border border-border-strong py-3 text-sm font-bold text-foreground transition hover:border-accent/40 hover:text-accent"
+            className="mt-2 w-full py-2 text-sm font-semibold text-muted hover:text-foreground"
           >
             Maybe later
           </button>

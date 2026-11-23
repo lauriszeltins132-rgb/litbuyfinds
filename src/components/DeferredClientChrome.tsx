@@ -1,14 +1,12 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import CouponModal from "@/components/CouponModal";
 
 const ConversionLayer = dynamic(
   () => import("@/components/conversion/ConversionLayer"),
   { ssr: false }
 );
-const CouponModal = dynamic(() => import("@/components/CouponModal"), {
-  ssr: false,
-});
 const CouponAutoOpen = dynamic(() => import("@/components/CouponAutoOpen"), {
   ssr: false,
 });

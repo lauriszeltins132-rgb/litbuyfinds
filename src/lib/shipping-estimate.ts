@@ -28,3 +28,26 @@ export function estimateCategoryWeight(category: string): {
   const match = WEIGHTS.find((entry) => entry.test.test(value));
   return match ?? { kg: 0.5, kind: "this type of item" };
 }
+
+/**
+ * Rough illustrative freight assumption for this site.
+ * Not a verified LitBuy rate, and not destination-specific.
+ */
+export const ILLUSTRATIVE_SHIPPING_USD_PER_KG = { low: 9, high: 10 } as const;
+
+function roundUsd(value: number): number {
+  return Math.round(value * 100) / 100;
+}
+
+export function illustrativeShippingUsd(kg: number): {
+  low: number;
+  high: number;
+  mid: number;
+} {
+  const { low: lowRate, high: highRate } = ILLUSTRATIVE_SHIPPING_USD_PER_KG;
+  return {
+    low: roundUsd(kg * lowRate),
+    high: roundUsd(kg * highRate),
+    mid: roundUsd(kg * ((lowRate + highRate) / 2)),
+  };
+}
