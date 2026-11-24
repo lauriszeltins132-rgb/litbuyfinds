@@ -19,7 +19,10 @@ export type ConversionEvent =
   | "brand_click"
   | "collection_click"
   | "popup_impression"
-  | "popup_close";
+  | "popup_close"
+  | "coupon_page_view"
+  | "coupon_hero_signup_click"
+  | "coupon_sticky_signup_click";
 
 export type ConversionPayload = {
   location?: string;
@@ -59,7 +62,11 @@ export function trackConversion(
   payload: ConversionPayload = {}
 ) {
   const data = cleanPayload(payload);
-  track(event, data);
+  try {
+    track(event, data);
+  } catch {
+    // Vendor analytics must not block the page or the first-party event.
+  }
   sendToApi(event, payload);
 }
 
