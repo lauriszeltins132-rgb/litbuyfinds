@@ -26,6 +26,9 @@ const ALLOWED_EVENTS = new Set<ConversionEvent>([
   "collection_click",
   "popup_impression",
   "popup_close",
+  "coupon_page_view",
+  "coupon_hero_signup_click",
+  "coupon_sticky_signup_click",
 ]);
 
 const MAX_STRING = 160;
@@ -104,6 +107,8 @@ export async function POST(request: Request) {
       productName: clip(record.productName, MAX_STRING),
       brand: clip(record.brand, 80),
       category: clip(record.category, 80),
+      href: clip(record.href, 120),
+      variant: clip(record.variant, 16),
     });
     return Response.json({ ok: true });
   } catch {

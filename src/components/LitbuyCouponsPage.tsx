@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import CouponPageOffer from "@/components/conversion/CouponPageOffer";
 import RegisterLink from "@/components/RegisterLink";
 import SchemaScript from "@/components/SchemaScript";
 import {
@@ -66,6 +67,8 @@ export default function LitbuyCouponsPage() {
               </Link>
               .
             </p>
+
+            <CouponPageOffer />
 
             <div className="mt-6 grid gap-3 sm:grid-cols-2">
               <div className="rounded-2xl border border-accent/35 bg-background/70 px-5 py-4 text-center">

@@ -35,6 +35,8 @@ type EventBody = {
   productName?: string;
   brand?: string;
   category?: string;
+  href?: string;
+  variant?: string;
 };
 
 const STORE_PATH = path.join(process.cwd(), "data/analytics-stats.json");
@@ -58,6 +60,10 @@ function emptyStore(): AnalyticsStore {
     signupPlacements: {},
     updatedAt: new Date().toISOString(),
   };
+}
+
+function couponPlacement(body: EventBody): string {
+  return [body.location, body.variant, body.href].filter(Boolean).join(" · ");
 }
 
 function bumpPlacement(
@@ -195,6 +201,13 @@ export function recordEvent(body: EventBody) {
       break;
     case "popup_close":
       bumpPlacement(store, `${body.location}_close`, "clicks");
+      break;
+    case "coupon_page_view":
+      bumpPlacement(store, couponPlacement(body), "impressions");
+      break;
+    case "coupon_hero_signup_click":
+    case "coupon_sticky_signup_click":
+      bumpPlacement(store, couponPlacement(body), "clicks");
       break;
     default:
       break;
