@@ -32,6 +32,7 @@ type DiscoveryRailProps = {
   freshness?: ContentFreshnessVariant;
   /** Tighter vertical spacing for above-the-fold rails. */
   tight?: boolean;
+  salesSurface?: "featured" | "catalog_card" | "popular_this_week";
 };
 
 export default function DiscoveryRail({
@@ -43,6 +44,7 @@ export default function DiscoveryRail({
   preloadImages = false,
   freshness,
   tight = false,
+  salesSurface,
 }: DiscoveryRailProps) {
   const [selected, setSelected] = useState<Product | null>(null);
   const [railNearViewport, setRailNearViewport] = useState(preloadImages);
@@ -158,6 +160,7 @@ export default function DiscoveryRail({
                   priority={priority}
                   suspendImage={!railNearViewport}
                   imageObserveRoot={imageObserveRoot}
+                  salesSurface={salesSurface}
                 />
               </div>
             );

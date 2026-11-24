@@ -126,7 +126,11 @@ export default function ProductDetailView({
       <BuyingAgentPanel product={product} />
       <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
         {product.affiliate_link ? (
-          <BuyWithAgentButton product={product} location="product_page" />
+          <BuyWithAgentButton
+            product={product}
+            location="product_page"
+            salesEvent="product_buy_click"
+          />
         ) : null}
         {qcHref ? (
           <QcAccessGate

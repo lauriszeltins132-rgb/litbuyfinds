@@ -26,6 +26,15 @@ const ALLOWED_EVENTS = new Set<ConversionEvent>([
   "collection_click",
   "popup_impression",
   "popup_close",
+  "spreadsheet_page_view",
+  "spreadsheet_product_click",
+  "spreadsheet_buy_click",
+  "spreadsheet_qc_click",
+  "product_page_view",
+  "product_buy_click",
+  "agent_changed",
+  "invite_page_view",
+  "litbuy_signup_click",
 ]);
 
 const MAX_STRING = 160;
@@ -84,6 +93,7 @@ export async function POST(request: Request) {
     "query",
     "href",
     "variant",
+    "agent",
     "ts",
   ]);
   for (const key of Object.keys(record)) {
@@ -104,6 +114,10 @@ export async function POST(request: Request) {
       productName: clip(record.productName, MAX_STRING),
       brand: clip(record.brand, 80),
       category: clip(record.category, 80),
+      href: clip(record.href, 120),
+      variant: clip(record.variant, 16),
+      query: clip(record.query, 40),
+      agent: clip(record.agent, 32),
     });
     return Response.json({ ok: true });
   } catch {

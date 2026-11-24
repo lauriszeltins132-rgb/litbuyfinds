@@ -2,12 +2,14 @@ import { Suspense } from "react";
 import BrowseCatalogPrefetch from "@/components/BrowseCatalogPrefetch";
 import CatalogPanel from "@/components/CatalogPanel";
 import ProductGridSkeleton from "@/components/ProductGridSkeleton";
+import SpreadsheetSales from "@/components/conversion/SpreadsheetSales";
 import { BROWSE_CATALOG_URL } from "@/lib/browse-catalog";
 
 /** Full homepage catalog, mounted under the spreadsheet featured picks. */
 export default function SpreadsheetFullCatalog() {
   return (
     <>
+      <SpreadsheetSales />
       <BrowseCatalogPrefetch />
       <section className="scroll-mt-24 px-4 pt-2 sm:px-6">
         <div className="mx-auto max-w-7xl pb-2">
@@ -30,6 +32,7 @@ export default function SpreadsheetFullCatalog() {
           basePath="/litbuy-spreadsheet"
           catalogSource={BROWSE_CATALOG_URL}
           inlineCategories
+          salesSurface="catalog_card"
         />
       </Suspense>
     </>

@@ -34,6 +34,7 @@ export async function GET(request: Request) {
     registerCtr: summary.registerCtr,
     buyCtr: summary.buyCtr,
     topSignupPlacements: summary.topSignupPlacements,
+    salesFunnel: summary.salesFunnel,
     updatedAt: summary.updatedAt,
   });
 }

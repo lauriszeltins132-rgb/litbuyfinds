@@ -8,19 +8,21 @@ import {
 import type { Product } from "@/lib/types";
 import { usePreferences } from "@/context/PreferencesContext";
 import { useAgentModal } from "@/context/AgentModalContext";
-import { trackProductContext } from "@/lib/analytics-events";
+import { spreadsheetBrowseQuery, trackProductContext } from "@/lib/analytics-events";
 import AgentLogo from "./AgentLogo";
-
-type BuyLocation = "product_card" | "product_page" | "product_modal" | "daily_drop";
 
 type BuyWithAgentButtonProps = {
   product: Product;
-  location: BuyLocation;
+  location: string;
   /** Open agent picker before redirect (catalog cards) */
   showAgentPicker?: boolean;
   className?: string;
   compact?: boolean;
   appearance?: "primary" | "secondary";
+  /** Skip the picker and open this agent directly. */
+  forceAgent?: AgentId;
+  labelOverride?: string;
+  salesEvent?: "spreadsheet_buy_click" | "product_buy_click";
 };
 
 export default function BuyWithAgentButton({
@@ -30,17 +32,24 @@ export default function BuyWithAgentButton({
   className = "",
   compact = false,
   appearance = "primary",
+  forceAgent,
+  labelOverride,
+  salesEvent,
 }: BuyWithAgentButtonProps) {
   const { agentId } = usePreferences();
   const { openAgentModal } = useAgentModal();
-  const agent = getAgentById(agentId);
-  const buyUrl = buildAgentProductUrl(product, agentId);
+  const resolvedAgent = forceAgent ?? agentId;
+  const agent = getAgentById(resolvedAgent);
+  const buyUrl = buildAgentProductUrl(product, resolvedAgent);
+  const picker = showAgentPicker && !forceAgent;
 
-  const label = agent.recommended
-    ? compact
-      ? "Buy"
-      : `Buy with ${agent.name}`
-    : `Buy with ${agent.name}`;
+  const label =
+    labelOverride ??
+    (agent.recommended
+      ? compact
+        ? "Buy"
+        : `Buy with ${agent.name}`
+      : `Buy with ${agent.name}`);
 
   const baseClass = compact
     ? "rounded-full bg-accent px-3 py-1.5 text-[11px] font-black text-background"
@@ -52,8 +61,24 @@ export default function BuyWithAgentButton({
     return null;
   }
 
+  function trackBuy() {
+    if (salesEvent === "spreadsheet_buy_click") {
+      trackProductContext("spreadsheet_buy_click", product, location, {
+        query: "spreadsheet",
+      });
+      return;
+    }
+    if (salesEvent === "product_buy_click") {
+      trackProductContext("product_buy_click", product, location, {
+        query: spreadsheetBrowseQuery(),
+      });
+      return;
+    }
+    trackProductContext("buy_click", product, location);
+  }
+
   function handleBuyClick(event: React.MouseEvent) {
-    if (showAgentPicker) {
+    if (picker) {
       event.preventDefault();
       openAgentModal({
         product,
@@ -63,10 +88,10 @@ export default function BuyWithAgentButton({
       return;
     }
 
-    trackProductContext("buy_click", product, location);
+    trackBuy();
   }
 
-  if (showAgentPicker) {
+  if (picker) {
     return (
       <button
         type="button"
