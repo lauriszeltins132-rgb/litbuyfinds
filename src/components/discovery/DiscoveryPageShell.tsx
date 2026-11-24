@@ -154,6 +154,7 @@ export default function DiscoveryPageShell({
           products={displayedProducts.slice(0, 12)}
           preloadImages
           tight
+          salesSurface={path === "/litbuy-spreadsheet" ? "featured" : undefined}
         />
       ) : null}
 

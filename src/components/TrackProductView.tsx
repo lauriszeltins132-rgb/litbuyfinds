@@ -16,11 +16,16 @@ export default function TrackProductView({ product }: TrackProductViewProps) {
   useEffect(() => {
     recordProductView(product.id);
     trackConversion("product_view", {
-      location: `/find/${product.id}`,
+      location: "product_page",
       productId: product.id,
       productName: product.product_name,
       brand: extractBrand(product.product_name) ?? undefined,
       category: product.category,
+    });
+    trackConversion("product_page_view", {
+      location: "product_page",
+      productId: product.id,
+      href: `/find/${product.id}`,
     });
   }, [product, recordProductView]);
 

@@ -56,6 +56,8 @@ type CatalogPanelProps = {
    * to category pages. Default preserves homepage and category-page behavior.
    */
   inlineCategories?: boolean;
+  /** Direct LitBuy buy on cards. Spreadsheet only. */
+  salesSurface?: "catalog_card";
 };
 
 function currentParams(searchParams: URLSearchParams) {
@@ -106,6 +108,7 @@ export default function CatalogPanel({
   basePath = "/",
   catalogSource,
   inlineCategories = false,
+  salesSurface,
 }: CatalogPanelProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -543,7 +546,12 @@ export default function CatalogPanel({
           ) : isPending ? (
             <ProductGridSkeleton count={8} />
           ) : paginated.length > 0 ? (
-            <ProductGrid products={paginated} instant priorityCount={4} />
+            <ProductGrid
+              products={paginated}
+              instant
+              priorityCount={4}
+              salesSurface={salesSurface}
+            />
           ) : (
             <div className="rounded-2xl border border-border bg-surface/30 px-6 py-10 text-center">
               <p className="text-base font-bold text-foreground">No finds matched</p>

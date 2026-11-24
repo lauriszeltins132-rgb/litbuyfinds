@@ -24,6 +24,26 @@ type Summary = {
     ctr: number;
   }[];
   updatedAt: string;
+  salesFunnel?: {
+    spreadsheetPageViews: number;
+    spreadsheetProductClicks: number;
+    spreadsheetBuyClicks: number;
+    productPageViews: number;
+    productBuyClicks: number;
+    signupClicks: number;
+    invitePageViews: number;
+    productInteractionRate: number;
+    spreadsheetBuyCtr: number;
+    productPageBuyRate: number;
+    signupClickRate: number;
+    topBuyProducts: {
+      id: string;
+      name: string;
+      buyClicks: number;
+      productClicks: number;
+      buyCtr: number;
+    }[];
+  };
 };
 
 export default function StatsDashboard() {
@@ -77,8 +97,57 @@ export default function StatsDashboard() {
     { label: "Page views", value: summary.totals.pageViews },
   ];
 
+  const funnel = summary.salesFunnel;
+
   return (
     <div className="space-y-8">
+      {funnel ? (
+        <section className="rounded-2xl border border-border bg-surface/40 p-6">
+          <h2 className="text-lg font-black">Last 7 days</h2>
+          <p className="mt-1 text-sm text-muted">
+            Outbound purchase intent. These clicks are not completed LitBuy orders.
+          </p>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              ["Spreadsheet visitors", funnel.spreadsheetPageViews],
+              ["Spreadsheet product clicks", funnel.spreadsheetProductClicks],
+              ["Spreadsheet Buy clicks", funnel.spreadsheetBuyClicks],
+              ["Product-page Buy clicks", funnel.productBuyClicks],
+              ["LitBuy signup clicks", funnel.signupClicks],
+              ["Product interaction rate", `${funnel.productInteractionRate}%`],
+              ["Spreadsheet outbound Buy CTR", `${funnel.spreadsheetBuyCtr}%`],
+              ["Product-page Buy rate", `${funnel.productPageBuyRate}%`],
+              ["Invite/signup click rate", `${funnel.signupClickRate}%`],
+            ].map(([label, value]) => (
+              <div key={label} className="rounded-2xl border border-border/80 bg-background/60 p-4">
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-muted">
+                  {label}
+                </p>
+                <p className="mt-2 text-2xl font-black text-foreground">{value}</p>
+              </div>
+            ))}
+          </div>
+          <h3 className="mt-6 text-base font-black">Top 10 products by LitBuy Buy clicks</h3>
+          <ul className="mt-3 space-y-2">
+            {funnel.topBuyProducts.length === 0 ? (
+              <li className="text-sm text-muted">No LitBuy buy clicks in the last 7 days.</li>
+            ) : (
+              funnel.topBuyProducts.map((product) => (
+                <li
+                  key={product.id}
+                  className="flex flex-wrap items-center justify-between gap-3 text-sm"
+                >
+                  <span className="font-medium text-foreground">{product.name}</span>
+                  <span className="text-muted">
+                    {product.buyClicks} buy clicks · {product.productClicks} product clicks ·{" "}
+                    {product.productClicks > 0 ? `${product.buyCtr}% buy CTR` : "buy CTR —"}
+                  </span>
+                </li>
+              ))
+            )}
+          </ul>
+        </section>
+      ) : null}
       <p className="text-xs text-muted">
         Last updated {new Date(summary.updatedAt).toLocaleString()} · Refreshes
         every 30s · Also visible in Vercel Analytics → Events

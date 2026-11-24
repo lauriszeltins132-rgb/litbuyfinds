@@ -361,6 +361,23 @@ body::before {
   text-align: center;
 }
 
+.product-card-actions--direct .product-card-actions__toolbar {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.product-card-actions--direct .product-card-actions__primary {
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.product-card-buy--direct {
+  flex: 1 0 100%;
+  width: 100%;
+  min-height: 2rem;
+  white-space: nowrap;
+}
+
 @media (min-width: 640px) {
   .product-card-icon-btn {
     width: 2rem;

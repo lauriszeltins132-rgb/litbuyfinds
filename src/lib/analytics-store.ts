@@ -13,6 +13,24 @@ type PlacementStats = {
   clicks: number;
 };
 
+type DayProduct = {
+  name: string;
+  clicks: number;
+  spreadsheetBuys: number;
+  productPageBuys: number;
+};
+
+type DayBucket = {
+  spreadsheetPageViews: number;
+  spreadsheetProductClicks: number;
+  spreadsheetBuyClicks: number;
+  productPageViews: number;
+  productBuyClicks: number;
+  signupClicks: number;
+  invitePageViews: number;
+  products: Record<string, DayProduct>;
+};
+
 export type AnalyticsStore = {
   pageViews: number;
   productViews: number;
@@ -25,6 +43,7 @@ export type AnalyticsStore = {
   products: Record<string, ProductClicks>;
   brands: Record<string, number>;
   signupPlacements: Record<string, PlacementStats>;
+  days?: Record<string, DayBucket>;
   updatedAt: string;
 };
 
@@ -35,6 +54,10 @@ type EventBody = {
   productName?: string;
   brand?: string;
   category?: string;
+  href?: string;
+  variant?: string;
+  query?: string;
+  agent?: string;
 };
 
 const STORE_PATH = path.join(process.cwd(), "data/analytics-stats.json");
@@ -56,8 +79,66 @@ function emptyStore(): AnalyticsStore {
     products: {},
     brands: {},
     signupPlacements: {},
+    days: {},
     updatedAt: new Date().toISOString(),
   };
+}
+
+function emptyDay(): DayBucket {
+  return {
+    spreadsheetPageViews: 0,
+    spreadsheetProductClicks: 0,
+    spreadsheetBuyClicks: 0,
+    productPageViews: 0,
+    productBuyClicks: 0,
+    signupClicks: 0,
+    invitePageViews: 0,
+    products: {},
+  };
+}
+
+function dayKey(ts = Date.now()) {
+  return new Date(ts).toISOString().slice(0, 10);
+}
+
+function currentDay(store: AnalyticsStore): DayBucket {
+  if (!store.days) store.days = {};
+  const key = dayKey();
+  if (!store.days[key]) store.days[key] = emptyDay();
+  const cutoff = Date.now() - 8 * 24 * 60 * 60 * 1000;
+  for (const existing of Object.keys(store.days)) {
+    const stamp = Date.parse(`${existing}T00:00:00.000Z`);
+    if (Number.isFinite(stamp) && stamp < cutoff) delete store.days[existing];
+  }
+  return store.days[key];
+}
+
+function dayProduct(day: DayBucket, body: EventBody): DayProduct {
+  const id = body.productId || "unknown";
+  const existing = day.products[id] ?? {
+    name: body.productName || "Find",
+    clicks: 0,
+    spreadsheetBuys: 0,
+    productPageBuys: 0,
+  };
+  if (body.productName) existing.name = body.productName;
+  day.products[id] = existing;
+  return existing;
+}
+
+function recentDays(store: AnalyticsStore): DayBucket[] {
+  const days = store.days ?? {};
+  const buckets: DayBucket[] = [];
+  for (let offset = 0; offset < 7; offset += 1) {
+    const key = dayKey(Date.now() - offset * 24 * 60 * 60 * 1000);
+    if (days[key]) buckets.push(days[key]);
+  }
+  return buckets;
+}
+
+function rate(part: number, whole: number) {
+  if (whole <= 0) return 0;
+  return Number(((part / whole) * 100).toFixed(2));
 }
 
 function bumpPlacement(
@@ -196,6 +277,53 @@ export function recordEvent(body: EventBody) {
     case "popup_close":
       bumpPlacement(store, `${body.location}_close`, "clicks");
       break;
+    case "spreadsheet_page_view":
+      currentDay(store).spreadsheetPageViews += 1;
+      break;
+    case "spreadsheet_product_click": {
+      const day = currentDay(store);
+      day.spreadsheetProductClicks += 1;
+      if (body.productId) dayProduct(day, body).clicks += 1;
+      break;
+    }
+    case "spreadsheet_buy_click": {
+      const day = currentDay(store);
+      day.spreadsheetBuyClicks += 1;
+      store.buyClicks += 1;
+      if (body.productId) dayProduct(day, body).spreadsheetBuys += 1;
+      if (body.productId && body.productName) {
+        bumpProduct(store, body.productId, body.productName, body.brand ?? "Unknown");
+      }
+      break;
+    }
+    case "spreadsheet_qc_click":
+      store.qcClicks += 1;
+      break;
+    case "product_page_view":
+      currentDay(store).productPageViews += 1;
+      break;
+    case "product_buy_click": {
+      const day = currentDay(store);
+      day.productBuyClicks += 1;
+      store.buyClicks += 1;
+      if (body.productId) {
+        const entry = dayProduct(day, body);
+        entry.productPageBuys += 1;
+        if (body.query === "spreadsheet") entry.spreadsheetBuys += 1;
+      }
+      if (body.productId && body.productName) {
+        bumpProduct(store, body.productId, body.productName, body.brand ?? "Unknown");
+      }
+      break;
+    }
+    case "litbuy_signup_click":
+      currentDay(store).signupClicks += 1;
+      break;
+    case "invite_page_view":
+      currentDay(store).invitePageViews += 1;
+      break;
+    case "agent_changed":
+      break;
     default:
       break;
   }
@@ -308,6 +436,86 @@ export function getAnalyticsSummary() {
     registerCtr,
     buyCtr,
     topSignupPlacements,
+    salesFunnel: getSalesFunnel(store),
     updatedAt: store.updatedAt,
+  };
+}
+
+export function getPopularSpreadsheetIds(limit = 12): string[] {
+  const totals = new Map<string, number>();
+  for (const day of recentDays(getStore())) {
+    for (const [id, value] of Object.entries(day.products)) {
+      if (value.spreadsheetBuys <= 0) continue;
+      totals.set(id, (totals.get(id) ?? 0) + value.spreadsheetBuys);
+    }
+  }
+  return [...totals.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, limit)
+    .map(([id]) => id);
+}
+
+function getSalesFunnel(store: AnalyticsStore) {
+  const days = recentDays(store);
+  const totals = days.reduce(
+    (sum, day) => ({
+      spreadsheetPageViews: sum.spreadsheetPageViews + day.spreadsheetPageViews,
+      spreadsheetProductClicks: sum.spreadsheetProductClicks + day.spreadsheetProductClicks,
+      spreadsheetBuyClicks: sum.spreadsheetBuyClicks + day.spreadsheetBuyClicks,
+      productPageViews: sum.productPageViews + day.productPageViews,
+      productBuyClicks: sum.productBuyClicks + day.productBuyClicks,
+      signupClicks: sum.signupClicks + day.signupClicks,
+      invitePageViews: sum.invitePageViews + day.invitePageViews,
+    }),
+    {
+      spreadsheetPageViews: 0,
+      spreadsheetProductClicks: 0,
+      spreadsheetBuyClicks: 0,
+      productPageViews: 0,
+      productBuyClicks: 0,
+      signupClicks: 0,
+      invitePageViews: 0,
+    }
+  );
+
+  const products = new Map<string, DayProduct>();
+  for (const day of days) {
+    for (const [id, value] of Object.entries(day.products)) {
+      const existing = products.get(id) ?? {
+        name: value.name,
+        clicks: 0,
+        spreadsheetBuys: 0,
+        productPageBuys: 0,
+      };
+      existing.name = value.name || existing.name;
+      existing.clicks += value.clicks;
+      existing.spreadsheetBuys += value.spreadsheetBuys;
+      existing.productPageBuys += value.productPageBuys;
+      products.set(id, existing);
+    }
+  }
+
+  const topBuyProducts = [...products.entries()]
+    .map(([id, value]) => {
+      const buyClicks = value.spreadsheetBuys + value.productPageBuys;
+      return {
+        id,
+        name: value.name,
+        buyClicks,
+        productClicks: value.clicks,
+        buyCtr: rate(buyClicks, value.clicks),
+      };
+    })
+    .filter((item) => item.buyClicks > 0)
+    .sort((a, b) => b.buyClicks - a.buyClicks)
+    .slice(0, 10);
+
+  return {
+    ...totals,
+    productInteractionRate: rate(totals.spreadsheetProductClicks, totals.spreadsheetPageViews),
+    spreadsheetBuyCtr: rate(totals.spreadsheetBuyClicks, totals.spreadsheetPageViews),
+    productPageBuyRate: rate(totals.productBuyClicks, totals.productPageViews),
+    signupClickRate: rate(totals.signupClicks, totals.invitePageViews),
+    topBuyProducts,
   };
 }

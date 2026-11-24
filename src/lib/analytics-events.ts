@@ -19,7 +19,16 @@ export type ConversionEvent =
   | "brand_click"
   | "collection_click"
   | "popup_impression"
-  | "popup_close";
+  | "popup_close"
+  | "spreadsheet_page_view"
+  | "spreadsheet_product_click"
+  | "spreadsheet_buy_click"
+  | "spreadsheet_qc_click"
+  | "product_page_view"
+  | "product_buy_click"
+  | "agent_changed"
+  | "invite_page_view"
+  | "litbuy_signup_click";
 
 export type ConversionPayload = {
   location?: string;
@@ -30,7 +39,29 @@ export type ConversionPayload = {
   query?: string;
   href?: string;
   variant?: string;
+  agent?: string;
 };
+
+const COMPACT_VERCEL_EVENTS = new Set<ConversionEvent>([
+  "spreadsheet_page_view",
+  "spreadsheet_product_click",
+  "spreadsheet_buy_click",
+  "spreadsheet_qc_click",
+  "product_page_view",
+  "product_buy_click",
+  "agent_changed",
+  "invite_page_view",
+  "litbuy_signup_click",
+]);
+
+/** Vercel Pro custom events stay on two properties: product_id and location. */
+function vercelPayload(event: ConversionEvent, payload: ConversionPayload) {
+  if (!COMPACT_VERCEL_EVENTS.has(event)) return cleanPayload(payload);
+  const compact: Record<string, string> = {};
+  if (payload.location) compact.location = payload.location;
+  if (payload.productId) compact.product_id = payload.productId;
+  return compact;
+}
 
 function cleanPayload(payload: ConversionPayload) {
   return Object.fromEntries(
@@ -58,15 +89,39 @@ export function trackConversion(
   event: ConversionEvent,
   payload: ConversionPayload = {}
 ) {
-  const data = cleanPayload(payload);
-  track(event, data);
+  try {
+    track(event, vercelPayload(event, payload));
+  } catch {
+    // Vendor analytics must not block the page or the first-party event.
+  }
   sendToApi(event, payload);
 }
 
+const SPREADSHEET_SOURCE_KEY = "litbuy-sales-source";
+
+export function markSpreadsheetBrowse() {
+  try {
+    sessionStorage.setItem(SPREADSHEET_SOURCE_KEY, "spreadsheet");
+  } catch {
+    // ignore
+  }
+}
+
+export function spreadsheetBrowseQuery(): string | undefined {
+  try {
+    return sessionStorage.getItem(SPREADSHEET_SOURCE_KEY) === "spreadsheet"
+      ? "spreadsheet"
+      : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 export function trackProductContext(
-  event: "buy_click" | "qc_click",
+  event: "buy_click" | "qc_click" | "spreadsheet_product_click" | "spreadsheet_buy_click" | "spreadsheet_qc_click" | "product_buy_click",
   product: Product,
-  location: string
+  location: string,
+  extra: ConversionPayload = {}
 ) {
   trackConversion(event, {
     location,
@@ -74,11 +129,14 @@ export function trackProductContext(
     productName: product.product_name,
     brand: extractBrand(product.product_name) ?? undefined,
     category: product.category,
+    href: typeof window !== "undefined" ? window.location.pathname : undefined,
+    ...extra,
   });
 }
 
 export function trackRegisterClick(location: string) {
   trackConversion("register_click", { location });
+  trackConversion("litbuy_signup_click", { location });
 }
 
 export function trackRegisterImpression(location: string) {

@@ -13,7 +13,7 @@ import { EMPTY_IMAGE_FALLBACKS } from "@/hooks/useProductImageLoader";
 import BrandMark from "./BrandMark";
 import { usePreferences } from "@/context/PreferencesContext";
 import { useWishlist } from "@/context/WishlistContext";
-import { trackProductContext, trackSaveClick } from "@/lib/analytics-events";
+import { markSpreadsheetBrowse, trackProductContext, trackSaveClick } from "@/lib/analytics-events";
 import LitBuyMicroCta from "./LitBuyMicroCta";
 import ProductBadges from "./ProductBadges";
 import ProductCardImage from "./ProductCardImage";
@@ -31,6 +31,8 @@ type ProductCardProps = {
   suspendImage?: boolean;
   /** IntersectionObserver root for horizontal rails. */
   imageObserveRoot?: Element | null;
+  /** Spreadsheet card: direct LitBuy buy and spreadsheet funnel events. */
+  salesSurface?: "featured" | "catalog_card" | "popular_this_week";
 };
 
 /**
@@ -77,6 +79,7 @@ function ProductCard({
   priority = false,
   suspendImage = false,
   imageObserveRoot = null,
+  salesSurface,
 }: ProductCardProps) {
   const { isInWishlist, toggleWishlist } = useWishlist();
   const [copied, setCopied] = useState(false);
@@ -111,6 +114,12 @@ function ProductCard({
     if (onOpen) onOpen(product);
   }
 
+  function trackCardOpen() {
+    if (!salesSurface) return;
+    markSpreadsheetBrowse();
+    trackProductContext("spreadsheet_product_click", product, salesSurface);
+  }
+
   return (
     <article
       className={`product-card group flex h-full flex-col overflow-hidden active:scale-[0.99] ${
@@ -120,6 +129,7 @@ function ProductCard({
       <div className="product-card-media">
         <Link
           href={productHref}
+          onClick={trackCardOpen}
           className="product-image-shell product-image-shell--card product-image-hover relative block aspect-square overflow-hidden"
         >
           <ProductCardImage
@@ -148,7 +158,7 @@ function ProductCard({
         }`}
       >
         <div className="product-card-copy flex min-h-0 flex-1 flex-col gap-1.5">
-          <Link href={productHref} className="text-left">
+          <Link href={productHref} onClick={trackCardOpen} className="text-left">
             <h3
               className={`product-card-title line-clamp-2 font-bold leading-snug text-foreground ${
                 compact ? "min-h-[2.35rem] text-xs" : "min-h-[2.5rem] text-sm"
@@ -185,17 +195,22 @@ function ProductCard({
         <div
           className={`product-card-actions mt-auto ${
             compact ? "product-card-actions--compact" : ""
-          } ${showMicroCta ? "product-card-actions--with-footer" : ""}`}
+          } ${showMicroCta && !salesSurface ? "product-card-actions--with-footer" : ""} ${
+            salesSurface ? "product-card-actions--direct" : ""
+          }`}
         >
           <div className="product-card-actions__toolbar">
             <div className="product-card-actions__primary">
               {hasBuyLink ? (
                 <BuyWithAgentButton
                   product={product}
-                  location="product_card"
-                  showAgentPicker
+                  location={salesSurface ?? "product_card"}
+                  showAgentPicker={!salesSurface}
+                  forceAgent={salesSurface ? "litbuy" : undefined}
+                  labelOverride={salesSurface ? "Buy on LitBuy" : undefined}
+                  salesEvent={salesSurface ? "spreadsheet_buy_click" : undefined}
                   compact
-                  className="product-card-buy"
+                  className={`product-card-buy ${salesSurface ? "product-card-buy--direct" : ""}`}
                 />
               ) : (
                 <button
@@ -207,12 +222,28 @@ function ProductCard({
                 </button>
               )}
 
+              {salesSurface ? (
+                <Link
+                  href={productHref}
+                  onClick={trackCardOpen}
+                  className="product-card-action product-card-action--secondary"
+                >
+                  Details
+                </Link>
+              ) : null}
+
               {hasQc ? (
                 <a
                   href={qcHref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={() => trackProductContext("qc_click", product, "product_card")}
+                  onClick={() =>
+                    trackProductContext(
+                      salesSurface ? "spreadsheet_qc_click" : "qc_click",
+                      product,
+                      salesSurface ?? "product_card"
+                    )
+                  }
                   className="product-card-action product-card-action--secondary"
                 >
                   QC
@@ -255,7 +286,7 @@ function ProductCard({
             </div>
           </div>
 
-          {showMicroCta ? (
+          {showMicroCta && !salesSurface ? (
             <div className="product-card-footer">
               <LitBuyMicroCta location="product_card_litbuy" />
             </div>

@@ -15,6 +15,7 @@ type ProductGridProps = {
   instant?: boolean;
   /** How many cards get high-priority image loading (default 4). */
   priorityCount?: number;
+  salesSurface?: "featured" | "catalog_card" | "popular_this_week";
 };
 
 export default memo(function ProductGrid({
@@ -22,6 +23,7 @@ export default memo(function ProductGrid({
   emptyMessage = "No products match your filters.",
   instant = false,
   priorityCount = 4,
+  salesSurface,
 }: ProductGridProps) {
   const [selected, setSelected] = useState<Product | null>(null);
   const handleOpen = useCallback((product: Product) => setSelected(product), []);
@@ -82,6 +84,7 @@ export default memo(function ProductGrid({
             onOpen={handleOpen}
             showTrendingScore
             priority={index < priorityCount}
+            salesSurface={salesSurface}
           />
         ))}
       </div>

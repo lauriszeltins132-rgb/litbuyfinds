@@ -9,7 +9,7 @@ import {
 } from "@/lib/agents";
 import type { Product } from "@/lib/types";
 import { usePreferences } from "@/context/PreferencesContext";
-import { trackProductContext } from "@/lib/analytics-events";
+import { trackConversion, trackProductContext } from "@/lib/analytics-events";
 import AgentLogo from "./AgentLogo";
 
 type AgentModalProps = {
@@ -45,6 +45,12 @@ export default function AgentModal({
   if (!open) return null;
 
   function handleSelect(nextAgentId: AgentId) {
+    if (nextAgentId !== agentId) {
+      trackConversion("agent_changed", {
+        location: "agent_modal",
+        agent: nextAgentId,
+      });
+    }
     setAgentId(nextAgentId);
 
     if (product) {
