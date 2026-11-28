@@ -2604,3 +2604,74 @@ body::before {
     animation: none;
   }
 }
+
+/* ------------------------------------------------------------------
+ * Phase 1 mobile UI fixes (CSS only, appended so open PRs merge cleanly)
+ * ------------------------------------------------------------------ */
+
+@media (max-width: 639px) {
+  /* 1. Back button covered the header logo on product pages.
+   *    Move it to the bottom-left thumb zone, level with the LitBuy AI
+   *    button, which is already clear of the dock and sticky Buy bar. */
+  .floating-back-btn {
+    top: auto;
+    bottom: calc(7.75rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* 2 + 3. Dock labels were 7.4px (dock height kept so sticky bars and
+   *        page padding still line up); background was
+   *        see-through enough for page text to show behind the labels. */
+  .mobile-dock {
+    background: rgba(252, 252, 250, 0.96);
+  }
+
+  .mobile-dock__search,
+  .mobile-dock__link {
+    padding-block: 0.05rem;
+  }
+
+  .mobile-dock__icon {
+    font-size: 0.875rem;
+  }
+
+  .mobile-dock__label {
+    font-size: 0.625rem;
+  }
+
+  /* 4. Compact rail cards (~168px wide): Buy + QC + three icon buttons
+   *    did not fit in one row and overlapped. Let the icons wrap to a
+   *    second row. Spreadsheet "direct" cards (PR #109) are excluded. */
+  .product-card-actions--compact:not(.product-card-actions--direct)
+    .product-card-actions__toolbar {
+    flex-wrap: wrap;
+    row-gap: 0.375rem;
+  }
+
+  .product-card-actions--compact:not(.product-card-actions--direct)
+    .product-card-actions__primary {
+    flex: 1 0 100%;
+  }
+
+  .product-card-actions--compact:not(.product-card-actions--direct)
+    .product-card-actions__secondary {
+    flex: 1 0 100%;
+    justify-content: flex-start;
+  }
+
+  /* 5. Header Discord/Telegram icons were 26x26px. Keep the look, extend
+   *    the tap area vertically to the 44px header height (no horizontal
+   *    growth, so the two icons never share a tap area). */
+  .community-btn--icon {
+    position: relative;
+  }
+
+  .community-btn--icon::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 2.75rem;
+    transform: translateY(-50%);
+  }
+}
