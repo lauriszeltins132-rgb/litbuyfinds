@@ -46,21 +46,24 @@ export default function LitbuyCouponsPage() {
       <SchemaScript data={buildBreadcrumbSchema(breadcrumbs, LITBUY_COUPONS_PATH)} />
       <SchemaScript data={buildFaqSchema([...LITBUY_COUPONS_FAQS])} />
 
-      <Breadcrumbs items={breadcrumbs} currentPath={LITBUY_COUPONS_PATH} />
+      <Breadcrumbs items={breadcrumbs} currentPath={LITBUY_COUPONS_PATH} compact />
 
-      <article className="px-4 py-8 sm:px-6">
+      <article className="px-4 py-4 sm:px-6 sm:py-8">
         <div className="mx-auto max-w-3xl">
           {/* Hero — Best LitBuy Coupon */}
-          <section className="overflow-hidden rounded-3xl border border-accent/25 bg-gradient-to-br from-accent/10 via-surface to-background p-6 sm:p-10">
+          <section className="overflow-hidden rounded-3xl border border-accent/25 bg-gradient-to-br from-accent/10 via-surface to-background p-4 sm:p-10">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
               Best LitBuy coupon
             </p>
-            <h1 className="mt-3 text-3xl font-black tracking-tight sm:text-4xl">
+            <h1 className="mt-2 text-3xl font-black tracking-tight sm:mt-3 sm:text-4xl">
               {LITBUY_COUPONS_METADATA.h1}
             </h1>
-            <p className="mt-5 text-base leading-relaxed text-foreground">
+            <p className="mt-3 text-base leading-relaxed text-foreground sm:mt-5">
               {LITBUY_COUPONS_METADATA.heroIntro}
             </p>
+
+            <CouponPageOffer />
+
             <p className="mt-3 text-sm leading-relaxed text-muted">
               Community coupon and shipping updates are also posted in the{" "}
               <Link href="/litbuy-discord" className="font-semibold text-accent hover:underline">
@@ -68,8 +71,6 @@ export default function LitbuyCouponsPage() {
               </Link>
               .
             </p>
-
-            <CouponPageOffer />
 
             <div className="mt-6 grid gap-3 sm:grid-cols-2">
               <div className="rounded-2xl border border-accent/35 bg-background/70 px-5 py-4 text-center">

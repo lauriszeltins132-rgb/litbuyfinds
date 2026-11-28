@@ -93,19 +93,19 @@ export default function CouponPageOffer() {
     <>
       <div
         ref={offerRef}
-        className="mt-4 rounded-2xl border border-accent/30 bg-panel px-3.5 py-3 shadow-[0_8px_24px_rgba(26,25,22,0.05)] sm:mt-5 sm:px-5 sm:py-4"
+        className="mt-3 rounded-2xl border border-accent/30 bg-panel px-3.5 py-2.5 shadow-[0_8px_24px_rgba(26,25,22,0.05)] sm:mt-5 sm:px-5 sm:py-4"
       >
         <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-accent">
           Current new user offer
         </p>
-        <p className="mt-1 text-[1.35rem] font-black uppercase leading-[1.05] tracking-tight text-foreground sm:text-4xl">
+        <p className="mt-0.5 text-[1.28rem] font-black uppercase leading-none tracking-tight text-foreground sm:mt-1 sm:text-3xl sm:leading-none">
           Up to {SHIPPING_PERCENT} off shipping
         </p>
-        <p className="mt-1.5 text-[13px] leading-snug text-muted sm:mt-2 sm:text-sm">
+        <p className="mt-1 text-[13px] leading-snug text-muted sm:mt-2 sm:text-sm">
           Plus a welcome coupon pack of up to {LITBUY_COUPONS_OFFER.welcomePack} for
           eligible new LitBuy accounts.
         </p>
-        <p className="mt-2 text-sm font-bold text-foreground sm:mt-3">
+        <p className="mt-1.5 text-sm font-bold text-foreground sm:mt-3">
           Invite code{" "}
           <span className="rounded-md bg-accent/15 px-2 py-0.5 font-black tracking-wide text-accent">
             {LITBUY_INVITE_CODE}
@@ -114,7 +114,7 @@ export default function CouponPageOffer() {
         <RegisterLink
           location="litbuy_coupons_offer"
           onClick={() => trackCoupon("coupon_hero_signup_click", "coupon_hero")}
-          className="mt-2.5 inline-flex min-h-11 w-full items-center justify-center rounded-full bg-accent px-4 text-sm font-black text-background transition hover:bg-accent-hover sm:mt-3 sm:min-h-12"
+          className="mt-2 inline-flex min-h-11 w-full items-center justify-center rounded-full bg-accent px-4 text-sm font-black text-background transition hover:bg-accent-hover sm:mt-3 sm:min-h-12"
         >
           {CLAIM_LABEL}
         </RegisterLink>
