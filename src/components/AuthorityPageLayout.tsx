@@ -1,11 +1,14 @@
 import Link from "next/link";
 import SmartLink from "@/components/SmartLink";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import InviteFunnelLink from "@/components/InviteFunnelLink";
+import InviteSignupPanel from "@/components/InviteSignupPanel";
 import SchemaScript from "@/components/SchemaScript";
 import {
   LITBUY_AUTHORITY_LINKS,
   LITBUY_HUB_FOOTER_LINKS,
 } from "@/lib/litbuy-authority-hub";
+import { LITBUY_COUPONS_OFFER } from "@/lib/litbuy-coupons-page";
 import type { AuthorityPage } from "@/lib/litbuy-authority-pages";
 import {
   buildArticleSchema,
@@ -50,6 +53,12 @@ export default function AuthorityPageLayout({ page }: AuthorityPageLayoutProps) 
           <h1 className="mt-3 text-3xl font-black tracking-tight sm:text-4xl">
             {page.h1}
           </h1>
+          {page.slug === "litbuy-invite-code" ? (
+            <InviteSignupPanel
+              headline={LITBUY_COUPONS_OFFER.headline}
+              disclaimer={LITBUY_COUPONS_OFFER.disclaimer}
+            />
+          ) : null}
           <p className="mt-5 text-base leading-relaxed text-foreground">
             {page.directAnswer}
           </p>
@@ -114,6 +123,45 @@ export default function AuthorityPageLayout({ page }: AuthorityPageLayoutProps) 
               );
             })}
           </div>
+
+          {page.slug === "is-litbuy-legit" ? (
+            <aside className="mt-10 rounded-2xl border border-border bg-surface/40 p-4 sm:p-5">
+              <h2 className="text-xl font-black text-foreground">
+                Creating an account
+              </h2>
+              <p className="mt-3 text-base leading-relaxed text-muted">
+                Registration happens on LitBuy. A new account can enter an invite
+                code during signup. LitBuy Finds keeps the code, the field, and the
+                signup steps on one page. You can also keep reading without
+                registering.
+              </p>
+              <InviteFunnelLink
+                href="/litbuy-invite-code"
+                location="legit_page"
+                className="mt-4 inline-flex text-sm font-bold text-accent hover:underline"
+              >
+                LitBuy invite code
+              </InviteFunnelLink>
+            </aside>
+          ) : null}
+
+          {page.slug === "litbuy-links" ? (
+            <aside className="mt-10 rounded-2xl border border-border bg-surface/40 p-4 sm:p-5">
+              <h2 className="text-lg font-black text-foreground">New to LitBuy?</h2>
+              <p className="mt-3 text-base leading-relaxed text-muted">
+                If you already have an account, open the product link and continue
+                on LitBuy. If you still need an account, the invite page shows the
+                code and the signup steps before you order.
+              </p>
+              <InviteFunnelLink
+                href="/litbuy-invite-code"
+                location="litbuy_links_page"
+                className="mt-4 inline-flex text-sm font-bold text-accent hover:underline"
+              >
+                Create a LitBuy account
+              </InviteFunnelLink>
+            </aside>
+          ) : null}
 
           {page.faqs && page.faqs.length > 0 ? (
             <section className="mt-12 border-t border-border pt-10">

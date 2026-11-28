@@ -12,6 +12,9 @@ type Summary = {
     qcClicks: number;
     discordClicks: number;
     telegramClicks: number;
+    invitePageViews?: number;
+    inviteCodeCopies?: number;
+    signupClicks?: number;
   };
   topProducts: { id: string; name: string; brand: string; clicks: number }[];
   topBrands: { name: string; clicks: number }[];
@@ -75,13 +78,17 @@ export default function StatsDashboard() {
     { label: "Discord clicks", value: summary.totals.discordClicks },
     { label: "Telegram clicks", value: summary.totals.telegramClicks },
     { label: "Page views", value: summary.totals.pageViews },
+    { label: "Invite page views", value: summary.totals.invitePageViews ?? 0 },
+    { label: "Invite code copies", value: summary.totals.inviteCodeCopies ?? 0 },
+    { label: "Signup clicks", value: summary.totals.signupClicks ?? 0 },
   ];
 
   return (
     <div className="space-y-8">
       <p className="text-xs text-muted">
         Last updated {new Date(summary.updatedAt).toLocaleString()} · Refreshes
-        every 30s · Also visible in Vercel Analytics → Events
+        every 30s · Signup clicks are outbound or invite-page clicks, not completed
+        LitBuy registrations · Also visible in Vercel Analytics → Events
       </p>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

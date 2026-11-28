@@ -246,6 +246,7 @@ export const LITBUY_COUPON_SUPPORT_PAGES: Record<string, AuthorityPage> = {
         links: [
           { href: LITBUY_COUPONS_PATH, label: "Main LitBuy coupons page" },
           { href: "/litbuy-coupon-codes", label: "Coupon codes guide" },
+          { href: "/litbuy-invite-code", label: "LitBuy signup code" },
         ],
       },
       {
@@ -400,12 +401,8 @@ export const LITBUY_COUPON_SUPPORT_PAGES: Record<string, AuthorityPage> = {
     directAnswer:
       `A LitBuy invite code (also searched as LitBuy invitation code, LitBuy referral code, LitBuy registration code, or LitBuy signup code) is entered during account registration. On LitBuy Finds the verified invite is ${LITBUY_INVITE_CODE} — attached automatically when you open our registration link. Eligible new accounts can unlock the ${LITBUY_COUPONS_OFFER.headline} bundle; always confirm the live total on LitBuy checkout.`,
     summary:
-      "Invite codes attach at signup. Coupon packs and shipping discounts appear after registration for eligible accounts. The main savings hub remains /litbuy-coupons.",
+      `The LitBuy Finds invite code is ${LITBUY_INVITE_CODE}. Enter it while creating the account, then check the offer LitBuy shows. Coupon tables stay on /litbuy-coupons.`,
     parentCrumb: COUPON_PARENT,
-    primaryCta: {
-      href: LITBUY_COUPON_SIGNUP_URL,
-      label: "Register with LitBuy invite code",
-    },
     sections: [
       {
         heading: "What a LitBuy invite / invitation code is",
@@ -419,10 +416,10 @@ export const LITBUY_COUPON_SUPPORT_PAGES: Record<string, AuthorityPage> = {
         ],
       },
       {
-        heading: "Where and when you enter it",
+        heading: "How to create the account",
         paragraphs: [
-          "1) Open the Claim / Register button on this page (or the coupons hub). 2) Create your LitBuy account on the official registration screen. 3) The invite attaches at signup — you should not need a separate “mystery code” from forums. 4) After signup, check your LitBuy wallet or promotions panel for welcome coupons. 5) Shipping discounts apply later when you pay international freight, not on each Weidian item price.",
-          "If LitBuy shows an invitation field empty, use the verified link again rather than guessing codes from screenshots.",
+          `Open the LitBuy signup page from the button above. Enter your email and account details. Confirm invitation code ${LITBUY_INVITE_CODE} is filled in — the signup link includes it, and you can paste it if the field is empty. Complete registration, then check the coupons and offers on the new account.`,
+          `Eligible new accounts can see ${LITBUY_COUPONS_OFFER.headline}. ${LITBUY_COUPONS_OFFER.disclaimer}`,
         ],
         links: [
           { href: "/how-to-use-litbuy", label: "How to use LitBuy" },
@@ -455,13 +452,46 @@ export const LITBUY_COUPON_SUPPORT_PAGES: Record<string, AuthorityPage> = {
     ],
     faqs: [
       {
+        question: "What is the LitBuy invite code?",
+        answer: `It is the code entered when you create a LitBuy account. LitBuy Finds uses ${LITBUY_INVITE_CODE}. The signup button on this page opens LitBuy with that code already attached.`,
+      },
+      {
         question: "What is a LitBuy invitation code?",
-        answer: `A LitBuy invitation code is the registration / referral field used when creating a LitBuy account. LitBuy Finds tracks invite ${LITBUY_INVITE_CODE} via the verified signup link so eligible new users can unlock welcome coupons and shipping savings — confirm live on LitBuy checkout.`,
+        answer: `A LitBuy invitation code is the same registration field. The code published here is ${LITBUY_INVITE_CODE}. After you register, confirm whatever offer LitBuy shows for the new account.`,
       },
       {
         question: "Where do I enter a LitBuy invite code?",
         answer:
           "Enter it during LitBuy account registration (or open the verified LitBuy Finds registration link so the invite attaches automatically). It is not typically typed as a freight coupon after your haul is already packed.",
+      },
+      {
+        question: "Is an invite code the same as a referral code?",
+        answer: `On LitBuy, invite code, invitation code, and referral code refer to the same signup field. The LitBuy Finds code is ${LITBUY_INVITE_CODE}. A coupon code is separate and is handled on the coupons page.`,
+      },
+      {
+        question: "Can I use the code when signing up?",
+        answer: `Yes. Enter ${LITBUY_INVITE_CODE} on the LitBuy registration form, or open the signup button so the code is already in the link.`,
+      },
+      {
+        question: "What is the LitBuy registration code?",
+        answer: `The registration code, also called a signup code, is ${LITBUY_INVITE_CODE}. Use it only while creating the account.`,
+      },
+      {
+        question: "Does the LitBuy invite code give a discount?",
+        answer: `The code registers the new account through LitBuy Finds. Eligible accounts can see ${LITBUY_COUPONS_OFFER.headline}. ${LITBUY_COUPONS_OFFER.disclaimer} This page does not replace the coupons hub.`,
+      },
+      {
+        question: "Can existing users add an invite code?",
+        answer:
+          "The invite field is part of registration. If you already have a LitBuy account, check the offers already on that account. Creating a second account just to add a code is not the path this page describes.",
+      },
+      {
+        question: "What is the LitBuy invite code for 2026?",
+        answer: `For 2026, LitBuy Finds still publishes ${LITBUY_INVITE_CODE}. Old forum screenshots can be out of date. Register from this page and read the offer LitBuy shows after signup.`,
+      },
+      {
+        question: "What LitBuy invitation code do people ask for on Reddit?",
+        answer: `Reddit threads often ask for a LitBuy invitation code. Use ${LITBUY_INVITE_CODE} from this page rather than a code copied from an old post, then confirm the live offer on LitBuy.`,
       },
       {
         question: "Is a LitBuy invite code the same as a coupon code?",
@@ -471,10 +501,6 @@ export const LITBUY_COUPON_SUPPORT_PAGES: Record<string, AuthorityPage> = {
       {
         question: "Can I use a LitBuy invite code and coupon together?",
         answer: `Yes in the usual new-user path: register with the verified invite (${LITBUY_INVITE_CODE}), then use any welcome coupons and shipping discount LitBuy shows for your account. Always verify the live total before paying.`,
-      },
-      {
-        question: "What LitBuy invite code should I use in 2026?",
-        answer: `Use the verified registration link LitBuy Finds tracks (invite ${LITBUY_INVITE_CODE}) and re-check offers on /litbuy-coupons. Random pasted codes from forums are often expired.`,
       },
       {
         question: "Where is the main LitBuy coupons page?",

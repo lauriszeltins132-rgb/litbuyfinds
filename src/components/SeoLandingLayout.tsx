@@ -112,6 +112,11 @@ export default function SeoLandingLayout({ config }: SeoLandingLayoutProps) {
                   href: "/finds",
                   label: "Search Catalog",
                 },
+                {
+                  href: "/litbuy-invite-code",
+                  label: "Sign up to LitBuy",
+                  trackLocation: "spreadsheet_resource",
+                },
               ]
             : []
         }

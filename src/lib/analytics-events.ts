@@ -1,5 +1,6 @@
 import { track } from "@vercel/analytics";
 import { extractBrand } from "./brands";
+import { isMobileViewport } from "./is-mobile-viewport";
 import type { Product } from "./types";
 
 export type ConversionEvent =
@@ -19,7 +20,17 @@ export type ConversionEvent =
   | "brand_click"
   | "collection_click"
   | "popup_impression"
-  | "popup_close";
+  | "popup_close"
+  | "invite_page_view"
+  | "invite_code_copy"
+  | "litbuy_signup_click";
+
+export type SignupCtaLocation =
+  | "invite_page_hero"
+  | "invite_page_steps"
+  | "legit_page"
+  | "litbuy_links_page"
+  | "spreadsheet_resource";
 
 export type ConversionPayload = {
   location?: string;
@@ -142,4 +153,34 @@ export function trackTelegramClick(location: string) {
 
 export function trackBrokenImage(imageUrl: string, location: string) {
   trackConversion("broken_image", { location, productName: imageUrl.slice(0, 120) });
+}
+
+function inviteContext(location: SignupCtaLocation): ConversionPayload {
+  if (typeof window === "undefined") return { location };
+  let referrer = "";
+  try {
+    referrer = document.referrer ? new URL(document.referrer).hostname : "";
+  } catch {
+    referrer = "";
+  }
+  if (referrer.includes("@")) referrer = "";
+  const device = isMobileViewport() ? "mobile" : "desktop";
+  return {
+    location,
+    href: window.location.pathname,
+    variant: device,
+    query: referrer,
+  };
+}
+
+export function trackInvitePageView(location: SignupCtaLocation = "invite_page_hero") {
+  trackConversion("invite_page_view", inviteContext(location));
+}
+
+export function trackInviteCodeCopy(location: SignupCtaLocation = "invite_page_hero") {
+  trackConversion("invite_code_copy", inviteContext(location));
+}
+
+export function trackLitbuySignupClick(location: SignupCtaLocation) {
+  trackConversion("litbuy_signup_click", inviteContext(location));
 }
