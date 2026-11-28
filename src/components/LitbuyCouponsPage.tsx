@@ -11,6 +11,7 @@ import {
   LITBUY_COUPONS_METADATA,
   LITBUY_COUPONS_OFFER,
   LITBUY_COUPONS_PATH,
+  LITBUY_COUPON_SIGNUP_URL,
   LITBUY_COUPONS_TRUST_SIGNALS,
   LITBUY_INVITE_CODE,
   getLitbuyCouponRows,
@@ -191,6 +192,45 @@ export default function LitbuyCouponsPage() {
             </p>
           </section>
 
+          <section className="mt-12">
+            <h2 className="text-xl font-black text-foreground">
+              Is the LitBuy 40% Off Coupon for Products or Shipping?
+            </h2>
+            <p className="mt-3 text-base leading-relaxed text-muted">
+              The current verified new-user offer is up to 40% off eligible
+              international shipping. It is not a discount on the item price you
+              see in the catalog. A product keeps its listed price; when the
+              offer applies, the percentage reduces the freight line for an
+              eligible new account.
+            </p>
+            <p className="mt-3 text-base leading-relaxed text-muted">
+              How much you actually save depends on the destination, the parcel
+              weight, the shipping line you pick, and whether the account
+              qualifies. It is not promised on every shipment, and it is not a
+              permanent rate. Open LitBuy checkout and confirm the live shipping
+              total before you pay.
+            </p>
+          </section>
+
+          <section className="mt-12">
+            <h2 className="text-xl font-black text-foreground">
+              Does LitBuy Offer Free Shipping Coupons?
+            </h2>
+            <p className="mt-3 text-base leading-relaxed text-muted">
+              We do not list a blanket free-shipping coupon, and there is no
+              verified offer that makes every parcel free. The current new-user
+              offer we can confirm is up to 40% off eligible international
+              shipping, plus a welcome coupon pack of up to{" "}
+              {LITBUY_COUPONS_OFFER.welcomePack} on eligible new accounts.
+            </p>
+            <p className="mt-3 text-base leading-relaxed text-muted">
+              What you pay to ship still depends on the parcel and the shipping
+              line you choose. Coupons can lower that freight total, but they do
+              not replace it. Check the live shipping price and any coupon value
+              on LitBuy checkout before you submit the parcel.
+            </p>
+          </section>
+
           {/* Agent coupon updates */}
           <section className="mt-12">
             <h2 className="text-xl font-black text-foreground">
@@ -342,6 +382,25 @@ export default function LitbuyCouponsPage() {
               applied at checkout for shipping or service fees. LitBuy often
               bundles registration benefits with referral links, so one verified
               signup URL covers both for new users.
+            </p>
+            <h3 className="mt-6 text-lg font-black text-foreground">
+              Sign-up, invite, and influencer codes
+            </h3>
+            <p className="mt-3 text-base leading-relaxed text-muted">
+              Shoppers also look for a sign-up code, an invite code, a referral
+              code, or an influencer code. Those names usually describe the same
+              registration offer, not four separate discounts. LitBuy Finds does
+              not have a different influencer code. The verified invite code is{" "}
+              {LITBUY_INVITE_CODE}, and it is attached when you register at{" "}
+              {LITBUY_COUPON_SIGNUP_URL}. For how that code is applied at signup,
+              see the{" "}
+              <Link
+                href="/litbuy-invite-code"
+                className="font-semibold text-accent hover:underline"
+              >
+                current LitBuy invite code
+              </Link>
+              .
             </p>
           </section>
 
